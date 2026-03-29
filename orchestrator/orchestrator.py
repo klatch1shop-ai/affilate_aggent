@@ -60,37 +60,39 @@ def route_task(command: str) -> dict:
     queues = {a: get_queue_length(f"queue:{a}") for a in AGENT_QUEUES}
 
     llm = get_llm()
-    prompt = PromptTemplate(
-        input_variables=["command","skills","snapshot","agents","queues"],
-        template="""Ти — Головний Оркестратор мультиагентної системи дропшипінгу.
+    # Простий прямий промпт без template для кращої відповіді від Ollama
+    full_prompt = f"""### Instruction:
+You are a routing system. Analyze the admin command and return ONLY a JSON object.
+Available agents: scraper, marketing, developer, finance, efficiency
 
-{skills}
+Command: {command}
 
-Поточний стан системи:
-Агенти: {agents}
-Черги: {queues}
-Snapshot: {snapshot}
+Agent descriptions:
+- scraper: parse prices and products from Prom/Rozetka/Epicentr marketplaces
+- marketing: analyze trends, competitors, find new products
+- developer: write code, API integrations, CRM
+- finance: calculate margins, financial reports, risks
+- efficiency: monitor system performance, find anomalies
 
-Команда адміністратора: {command}
+### Response (JSON only, no other text):
+{{"agent": "agent_name", "task_type": "task_type", "description": "what to do", "priority": 7, "context": {{}}}}
 
-Визнач якому агенту передати задачу і що саме зробити.
-Відповідай ТІЛЬКИ JSON без іншого тексту:
-{{"agent": "назва", "task_type": "тип", "description": "опис", "priority": 1-10, "context": {{}}}}
+### Assistant:
+{{"""
 
-Доступні агенти: scraper, marketing, developer, finance, efficiency"""
-    )
-    chain = prompt | llm
-    result = chain.invoke({
-        "command": command,
-        "skills": skills_context,
-        "snapshot": json.dumps(snapshot, ensure_ascii=False),
-        "agents": json.dumps(agents_status, ensure_ascii=False),
-        "queues": json.dumps(queues)
-    })
+    result = llm.invoke(full_prompt)
     try:
-        start = result.find("{")
-        end = result.rfind("}") + 1
-        decision = json.loads(result[start:end])
+        # Очистити відповідь і знайти JSON
+        clean = result.strip()
+        # Якщо починається без { — додати
+        if clean and not clean.startswith("{"):
+            clean = "{" + clean
+        # Прибрати все після останньої }
+        end = clean.rfind("}") + 1
+        clean = clean[:end]
+        # Прибрати null і сміття після JSON
+        clean = clean.split("\nnull")[0].split("\n\n")[0]
+        decision = json.loads(clean)
         
         # Оновити snapshot
         snap = get_system_snapshot()
