@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent System</title>
+<style>
+/* ── Reset ── */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f1117;color:#e2e8f0;min-height:100vh;font-size:14px}
+
+/* ── Navigation ── */
+.nav{background:#1a1d2e;border-bottom:1px solid #2d3748;padding:0 24px;display:flex;align-items:center;height:54px;position:sticky;top:0;z-index:200;gap:0}
+.nav-logo{font-size:15px;font-weight:700;color:#fff;margin-right:28px;white-space:nowrap;letter-spacing:-.3px}
+.nav-logo span{color:#667eea}
+.nav-tabs{display:flex;gap:2px;flex:1}
+.nav-tab{padding:7px 15px;border-radius:7px;border:none;background:none;color:#718096;font-size:13px;cursor:pointer;transition:all .15s;font-family:inherit;font-weight:500}
+.nav-tab:hover{background:#252a40;color:#e2e8f0}
+.nav-tab.active{background:#252a40;color:#fff}
+.nav-badge{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#c53030;color:#fff;font-size:10px;font-weight:700;margin-left:5px;vertical-align:middle}
+.nav-badge:empty{display:none}
+.nav-right{display:flex;align-items:center;gap:8px;font-size:12px}
+.ws-dot{width:7px;height:7px;border-radius:50%;background:#4a5568;flex-shrink:0}
+.ws-dot.ok{background:#68d391;box-shadow:0 0 6px #68d391;animation:pulse 2s infinite}
+.ws-dot.err{background:#fc8181}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+#ws-label{color:#718096;font-size:12px}
+
+/* ── Pages ── */
+.page{display:none;padding:24px;max-width:1400px;margin:0 auto}
+.page.active{display:block}
+
+/* ── Cards ── */
+.card{background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;padding:20px}
+.card-title{font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+/* ── Grid ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:860px){.g2,.g4{grid-template-columns:1fr}}
+
+/* ── Stat cards ── */
+.stat-card{background:#1a1d2e;border:1px solid #2d3748;border-radius:10px;padding:16px 20px;text-align:center}
+.stat-val{font-size:30px;font-weight:700;color:#667eea;line-height:1}
+.stat-lbl{font-size:11px;color:#718096;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+
+/* ── Badges ── */
+.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.badge-idle{background:#1a3a2a;color:#68d391}
+.badge-busy{background:#3a3a1a;color:#f6e05e}
+.badge-error{background:#3a1a1a;color:#fc8181}
+.badge-offline{background:#252a40;color:#718096}
+.badge-prom{background:#1a2a4a;color:#60a5fa}
+.badge-rozetka{background:#2a1a3a;color:#c084fc}
+.badge-epicentr{background:#3a1a1a;color:#f87171}
+
+/* ── Buttons ── */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s,opacity .15s;font-family:inherit;white-space:nowrap}
+.btn-primary{background:#667eea;color:#fff}.btn-primary:hover{background:#5a67d8}
+.btn-outline{background:none;border:1px solid #4a5568;color:#a0aec0}.btn-outline:hover{border-color:#667eea;color:#667eea}
+.btn-success{background:#276749;color:#fff}.btn-success:hover{background:#22543d}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ── Inputs ── */
+.input{width:100%;background:#252a40;border:1px solid #3d4460;border-radius:8px;padding:9px 12px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit;transition:border-color .15s}
+.input:focus{border-color:#667eea}
+.input::placeholder{color:#4a5568}
+.label{font-size:12px;color:#718096;margin-bottom:5px;display:block}
+.form-row{margin-bottom:14px}
+
+/* ══════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════ */
+.cmd-bar{background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;gap:8px}
+.agent-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e2336}
+.agent-row:last-child{border:none}
+.q-row{display:flex;align-items:center;gap:8px;padding:7px 0}
+.q-name{font-size:12px;color:#a0aec0;width:96px;flex-shrink:0}
+.q-bar{flex:1;background:#2d3748;border-radius:3px;height:5px}
+.q-fill{height:5px;border-radius:3px;background:#667eea;transition:width .4s}
+.q-cnt{font-size:11px;color:#718096;width:18px;text-align:right}
+.log-row{padding:7px 0;border-bottom:1px solid #1e2336;font-size:12px;line-height:1.5}
+.log-row:last-child{border:none}
+.log-time{color:#4a5568;margin-right:6px;font-variant-numeric:tabular-nums}
+.log-agent{color:#667eea;margin-right:6px}
+.log-msg{color:#a0aec0}
+.alert-row{padding:9px 0;border-bottom:1px solid #1e2336}
+.alert-row:last-child{border:none}
+.alert-title{font-size:13px;font-weight:500;margin-bottom:3px}
+.alert-body{font-size:11px;color:#718096}
+.lv-INFO{color:#68d391}.lv-WARNING{color:#f6e05e}.lv-ERROR{color:#fc8181}
+.updated-ts{font-size:11px;color:#4a5568;text-align:right;margin-top:10px}
+
+/* ══════════════════════════════════════
+   CHAT
+══════════════════════════════════════ */
+.chat-wrap{display:grid;grid-template-columns:1fr 210px;gap:16px;height:calc(100vh - 100px);min-height:440px}
+@media(max-width:700px){.chat-wrap{grid-template-columns:1fr;height:auto}}
+.chat-main{display:flex;flex-direction:column;background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;overflow:hidden}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-thumb{background:#3d4460;border-radius:2px}
+.chat-status-bar{padding:8px 16px;border-top:1px solid #1e2336;font-size:12px;color:#4a5568;min-height:36px;display:flex;align-items:center;gap:8px;background:#141620}
+.chat-input-row{padding:12px 14px;border-top:1px solid #2d3748;display:flex;gap:8px}
+.chat-textarea{flex:1;background:#252a40;border:1px solid #3d4460;border-radius:8px;padding:10px 13px;color:#e2e8f0;font-size:14px;outline:none;resize:none;font-family:inherit;max-height:120px;line-height:1.4;transition:border-color .15s}
+.chat-textarea:focus{border-color:#667eea}
+
+/* Messages */
+.msg{max-width:78%;display:flex;flex-direction:column;gap:3px}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.agent{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
+.msg.user .msg-bubble{background:#4c5fd5;color:#fff;border-radius:12px 12px 3px 12px}
+.msg.agent .msg-bubble{background:#252d42;color:#e2e8f0;border-radius:12px 12px 12px 3px}
+.msg.agent.INFO .msg-bubble{border-left:3px solid #68d391}
+.msg.agent.ERROR .msg-bubble{border-left:3px solid #fc8181;background:#2a1e2e}
+.msg.agent.WARNING .msg-bubble{border-left:3px solid #f6e05e}
+.msg-meta{font-size:10px;color:#4a5568;display:flex;align-items:center;gap:5px}
+.msg-agent-badge{font-size:10px;font-weight:600;color:#a0aec0;padding:1px 6px;background:#1e2538;border-radius:4px}
+
+/* Typing indicator */
+.typing-dots{display:flex;gap:3px;align-items:center}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:#667eea;animation:tdot .9s ease infinite}
+.typing-dot:nth-child(2){animation-delay:.18s}
+.typing-dot:nth-child(3){animation-delay:.36s}
+@keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* Chat sidebar */
+.chat-sidebar{background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;padding:16px;overflow-y:auto}
+.sidebar-agent{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1e2336}
+.sidebar-agent:last-child{border:none}
+.sidebar-agent-name{font-size:13px}
+
+/* ══════════════════════════════════════
+   PRODUCTS
+══════════════════════════════════════ */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.fg{display:flex;flex-direction:column;gap:4px;min-width:110px}
+.fg.wide{flex:1;min-width:200px}
+.fg .label{margin:0}
+.f-input{background:#252a40;border:1px solid #3d4460;border-radius:7px;padding:7px 10px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit;width:100%;transition:border-color .15s}
+.f-input:focus{border-color:#667eea}
+.tbl-wrap{background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #2d3748;background:#141620;white-space:nowrap}
+tbody tr{border-bottom:1px solid #1e2336;transition:background .1s}
+tbody tr:last-child{border:none}
+tbody tr:hover{background:#1e2336}
+td{padding:10px 14px;font-size:13px;vertical-align:middle}
+.prod-title-cell{max-width:260px}
+.prod-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;display:block}
+.prod-title a{color:#e2e8f0;text-decoration:none}
+.prod-title a:hover{color:#667eea;text-decoration:underline}
+.price-val{font-weight:600;color:#68d391;font-variant-numeric:tabular-nums}
+.old-price{color:#718096;text-decoration:line-through;font-size:12px;display:block;font-variant-numeric:tabular-nums}
+.stock-y{color:#68d391;font-size:12px}.stock-n{color:#fc8181;font-size:12px}
+.cat-cell{color:#718096;font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid #2d3748;font-size:12px;color:#718096}
+.pag-btns{display:flex;gap:3px;align-items:center;flex-wrap:wrap}
+.pag-btn{padding:4px 9px;border-radius:6px;border:1px solid #3d4460;background:none;color:#a0aec0;cursor:pointer;font-size:12px;transition:all .15s;font-family:inherit}
+.pag-btn:hover:not(:disabled),.pag-btn.cur{background:#667eea;border-color:#667eea;color:#fff}
+.pag-btn:disabled{opacity:.35;cursor:not-allowed}
+.pag-sep{color:#4a5568;padding:0 2px}
+.empty-td{padding:44px 24px;text-align:center;color:#4a5568;font-size:13px}
+
+/* ══════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════ */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.settings-grid{grid-template-columns:1fr}}
+.scard{background:#1a1d2e;border:1px solid #2d3748;border-radius:12px;padding:22px}
+.scard-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.scard-title{font-size:15px;font-weight:600;color:#fff}
+.conn-dot{width:9px;height:9px;border-radius:50%;background:#3d4460;flex-shrink:0;transition:background .3s}
+.conn-dot.ok{background:#68d391;box-shadow:0 0 7px #68d391}
+.conn-dot.err{background:#fc8181;box-shadow:0 0 7px #fc8181}
+.scard-actions{display:flex;gap:8px;margin-top:4px}
+.feedback{font-size:12px;padding:7px 10px;border-radius:7px;margin-top:10px;display:none;line-height:1.4}
+.feedback.ok{background:#1a3a2a;color:#68d391;display:block}
+.feedback.err{background:#3a1a1a;color:#fc8181;display:block}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════
+     NAVIGATION
+══════════════════════ -->
+<nav class="nav">
+  <div class="nav-logo">Agent<span>System</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab" data-page="dashboard">Dashboard</button>
+    <button class="nav-tab" data-page="chat">Чат</button>
+    <button class="nav-tab" data-page="products">Товари</button>
+    <button class="nav-tab" data-page="settings">Налаштування</button>
+  </div>
+  <div class="nav-right">
+    <div class="ws-dot" id="ws-dot"></div>
+    <span id="ws-label">Підключення...</span>
+  </div>
+</nav>
+
+<!-- ══════════════════════
+     PAGE: DASHBOARD
+══════════════════════ -->
+<div id="p-dashboard" class="page">
+  <div class="cmd-bar">
+    <input class="input" id="cmd-input"
+      placeholder="Відправити команду оркестратору..."
+      onkeydown="if(event.key==='Enter')sendCmd()">
+    <button class="btn btn-primary" onclick="sendCmd()">Відправити</button>
+  </div>
+
+  <div class="g4" style="margin-bottom:18px">
+    <div class="stat-card"><div class="stat-val" id="s-agents">—</div><div class="stat-lbl">Агентів онлайн</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-alerts">—</div><div class="stat-lbl">Нових сповіщень</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-products">—</div><div class="stat-lbl">Товарів в БД</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-queues">—</div><div class="stat-lbl">Задач в чергах</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">Агенти</div>
+      <div id="agents-list"><div style="color:#4a5568">Завантаження...</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Черги завдань</div>
+      <div id="queues-list"></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">
+        Сповіщення
+        <button class="btn btn-sm btn-outline" onclick="markRead()">Прочитати все</button>
+      </div>
+      <div id="alerts-list"><div style="color:#4a5568">Немає сповіщень</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Лог подій</div>
+      <div id="logs-list"></div>
+    </div>
+  </div>
+
+  <div class="updated-ts" id="updated"></div>
+</div>
+
+<!-- ══════════════════════
+     PAGE: CHAT
+══════════════════════ -->
+<div id="p-chat" class="page">
+  <div class="chat-wrap">
+    <!-- Messages area -->
+    <div class="chat-main">
+      <div class="chat-msgs" id="chat-msgs">
+        <div data-placeholder style="text-align:center;color:#4a5568;padding:40px 20px;font-size:13px;line-height:1.7">
+          Напиши команду оркестратору.<br>
+          Агенти відповідатимуть в реальному часі.
+        </div>
+      </div>
+      <div class="chat-status-bar" id="chat-status-bar">
+        <span id="chat-status-text" style="color:#4a5568">Очікування команди</span>
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-textarea" id="chat-input" rows="1"
+          placeholder="Відправити команду... (Enter — надіслати, Shift+Enter — новий рядок)"
+          onkeydown="chatKeydown(event)"></textarea>
+        <button class="btn btn-primary" onclick="sendChatCmd()">Відправити</button>
+      </div>
+    </div>
+
+    <!-- Agents sidebar -->
+    <div class="chat-sidebar">
+      <div class="card-title" style="margin-bottom:12px">Агенти</div>
+      <div id="chat-agents"><div style="color:#4a5568;font-size:13px">Очікування...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+     PAGE: PRODUCTS
+══════════════════════ -->
+<div id="p-products" class="page">
+  <div class="filter-bar">
+    <div class="fg wide">
+      <span class="label">Пошук товару</span>
+      <input class="f-input" id="f-search" type="text"
+        placeholder="Введи назву..." oninput="debounceLoad()">
+    </div>
+    <div class="fg">
+      <span class="label">Маркетплейс</span>
+      <select class="f-input" id="f-mp" onchange="loadProducts(1)">
+        <option value="">Всі</option>
+      </select>
+    </div>
+    <div class="fg" style="min-width:90px">
+      <span class="label">Ціна від</span>
+      <input class="f-input" id="f-pmin" type="number" placeholder="0" oninput="debounceLoad()">
+    </div>
+    <div class="fg" style="min-width:90px">
+      <span class="label">Ціна до</span>
+      <input class="f-input" id="f-pmax" type="number" placeholder="∞" oninput="debounceLoad()">
+    </div>
+    <div class="fg" style="min-width:110px">
+      <span class="label">В наявності</span>
+      <select class="f-input" id="f-stock" onchange="loadProducts(1)">
+        <option value="">Всі</option>
+        <option value="true">Так</option>
+        <option value="false">Ні</option>
+      </select>
+    </div>
+    <div style="align-self:flex-end">
+      <button class="btn btn-outline btn-sm" onclick="clearFilters()">Скинути</button>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Назва товару</th>
+          <th>Маркетплейс</th>
+          <th>Ціна</th>
+          <th>Стара ціна</th>
+          <th>Категорія</th>
+          <th>В наявності</th>
+          <th>Дії</th>
+        </tr>
+      </thead>
+      <tbody id="products-tbody">
+        <tr><td colspan="8" class="empty-td">Завантаження...</td></tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span id="prod-info" style="color:#718096">Товарів: —</span>
+      <div class="pag-btns" id="pag-btns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+     PAGE: SETTINGS
+══════════════════════ -->
+<div id="p-settings" class="page">
+  <div class="settings-grid">
+
+    <!-- Prom.ua -->
+    <div class="scard">
+      <div class="scard-header">
+        <div class="conn-dot" id="dot-prom"></div>
+        <div class="scard-title">Prom.ua API</div>
+      </div>
+      <div class="form-row">
+        <label class="label">API Токен</label>
+        <input class="input" id="prom-token" type="password" placeholder="Bearer токен від кабінету Prom...">
+      </div>
+      <div class="scard-actions">
+        <button class="btn btn-outline btn-sm" onclick="checkMP('prom')">Перевірити</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSetting('prom')">Зберегти</button>
+      </div>
+      <div class="feedback" id="fb-prom"></div>
+    </div>
+
+    <!-- Rozetka -->
+    <div class="scard">
+      <div class="scard-header">
+        <div class="conn-dot" id="dot-rozetka"></div>
+        <div class="scard-title">Rozetka Seller</div>
+      </div>
+      <div class="form-row">
+        <label class="label">Email / Логін</label>
+        <input class="input" id="rozetka-login" type="text" placeholder="seller@email.com">
+      </div>
+      <div class="form-row">
+        <label class="label">Пароль</label>
+        <input class="input" id="rozetka-password" type="password" placeholder="Пароль кабінету продавця">
+      </div>
+      <div class="scard-actions">
+        <button class="btn btn-outline btn-sm" onclick="checkMP('rozetka')">Перевірити</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSetting('rozetka')">Зберегти</button>
+      </div>
+      <div class="feedback" id="fb-rozetka"></div>
+    </div>
+
+    <!-- Epicentr -->
+    <div class="scard">
+      <div class="scard-header">
+        <div class="conn-dot" id="dot-epicentr"></div>
+        <div class="scard-title">Епіцентр</div>
+      </div>
+      <div class="form-row">
+        <label class="label">Email / Логін</label>
+        <input class="input" id="epicentr-login" type="text" placeholder="user@email.com">
+      </div>
+      <div class="form-row">
+        <label class="label">Пароль</label>
+        <input class="input" id="epicentr-password" type="password" placeholder="Пароль">
+      </div>
+      <div class="scard-actions">
+        <button class="btn btn-outline btn-sm" onclick="checkMP('epicentr')">Перевірити</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSetting('epicentr')">Зберегти</button>
+      </div>
+      <div class="feedback" id="fb-epicentr"></div>
+    </div>
+
+    <!-- Anthropic -->
+    <div class="scard">
+      <div class="scard-header">
+        <div class="conn-dot" id="dot-anthropic"></div>
+        <div class="scard-title">Claude API (Anthropic)</div>
+      </div>
+      <div class="form-row">
+        <label class="label">API Key</label>
+        <input class="input" id="anthropic-key" type="password" placeholder="sk-ant-api03-...">
+      </div>
+      <div class="scard-actions">
+        <button class="btn btn-primary btn-sm" onclick="saveSetting('anthropic')">Зберегти</button>
+      </div>
+      <div class="feedback" id="fb-anthropic"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════
+     JAVASCRIPT
+══════════════════════ -->
+<script>
+'use strict';
+
+// ── State ────────────────────────────────────────────────────────────────────
+const HOST = location.host;
+let dashWs = null, chatWs = null;
+let prodPage = 1, prodLimit = 50;
+let filterTimer = null;
+
+// ── Routing ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.nav-tab').forEach(t =>
+  t.addEventListener('click', () => showPage(t.dataset.page))
+);
+
+function showPage(name) {
+  const valid = ['dashboard', 'chat', 'products', 'settings'];
+  if (!valid.includes(name)) name = 'dashboard';
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.page === name)
+  );
+  document.getElementById('p-' + name).classList.add('active');
+  history.replaceState(null, '', '/' + (name === 'dashboard' ? '' : name));
+
+  if (name === 'products') loadProducts(1);
+  if (name === 'settings') loadSettings();
+  if (name === 'chat' && !chatWs) initChatWs();
+}
+
+// Init from URL
+{
+  const p = location.pathname.replace(/^\//, '') || 'dashboard';
+  showPage(p);
+}
+
+// ── Dashboard WebSocket ──────────────────────────────────────────────────────
+function initDashWs() {
+  dashWs = new WebSocket(`ws://${HOST}/ws`);
+
+  dashWs.onopen = () => {
+    document.getElementById('ws-dot').className = 'ws-dot ok';
+    document.getElementById('ws-label').textContent = 'Підключено';
+  };
+  dashWs.onclose = () => {
+    document.getElementById('ws-dot').className = 'ws-dot err';
+    document.getElementById('ws-label').textContent = 'Відключено';
+    dashWs = null;
+    setTimeout(initDashWs, 3000);
+  };
+  dashWs.onmessage = e => {
+    try { renderDash(JSON.parse(e.data)); } catch (_) {}
+  };
+}
+initDashWs();
+
+function renderDash(d) {
+  if (d.error) return;
+  const agents = d.agents || [];
+  const stE = { idle: '🟢', busy: '🟡', error: '🔴', offline: '⚫' };
+
+  $('s-agents').textContent   = agents.filter(a => a.status !== 'offline').length;
+  $('s-alerts').textContent   = d.unread_alerts || 0;
+  $('s-products').textContent = (d.products || []).reduce((s, p) => s + (p.cnt || 0), 0);
+  $('s-queues').textContent   = Object.values(d.queues || {}).reduce((s, v) => s + v, 0);
+
+  $('agents-list').innerHTML = agents.length
+    ? agents.map(a => `
+        <div class="agent-row">
+          <span>${esc(a.name)}</span>
+          <span class="badge badge-${a.status}">${stE[a.status] || '⚪'} ${a.status}</span>
+        </div>`).join('')
+    : '<div style="color:#4a5568;font-size:13px">Агентів не знайдено</div>';
+
+  const queues = d.queues || {};
+  const maxQ = Math.max(...Object.values(queues), 1);
+  $('queues-list').innerHTML = Object.entries(queues).map(([n, c]) => `
+    <div class="q-row">
+      <span class="q-name">${esc(n)}</span>
+      <div class="q-bar"><div class="q-fill" style="width:${Math.min(c / maxQ * 100, 100)}%"></div></div>
+      <span class="q-cnt">${c}</span>
+    </div>`).join('');
+
+  const lvI = { INFO: 'ℹ️', WARNING: '⚠️', ERROR: '❌' };
+  $('alerts-list').innerHTML = (d.alerts || []).slice(0, 10).map(a => `
+    <div class="alert-row">
+      <div class="alert-title"><span class="lv-${a.level}">${lvI[a.level] || '📌'}</span> ${esc(a.title)}</div>
+      ${a.message ? `<div class="alert-body">${esc(a.message.substring(0, 100))}</div>` : ''}
+    </div>`).join('') || '<div style="color:#4a5568;font-size:13px">Сповіщень немає</div>';
+
+  $('logs-list').innerHTML = (d.logs || []).slice(0, 18).map(l => `
+    <div class="log-row">
+      <span class="log-time">${l.created_at ? l.created_at.substring(11, 19) : ''}</span>
+      <span class="log-agent">[${esc(l.agent || '?')}]</span>
+      <span class="log-msg">${esc((l.message || '').substring(0, 70))}</span>
+    </div>`).join('');
+
+  $('updated').textContent = 'Оновлено: ' + new Date().toLocaleTimeString('uk-UA');
+}
+
+async function sendCmd() {
+  const el = $('cmd-input');
+  const cmd = el.value.trim();
+  if (!cmd) return;
+  el.value = '';
+  await post('/api/command', { command: cmd });
+}
+
+async function markRead() {
+  await fetch('/api/alerts/read', { method: 'POST' });
+}
+
+// ── Chat ─────────────────────────────────────────────────────────────────────
+function initChatWs() {
+  chatWs = new WebSocket(`ws://${HOST}/ws/chat`);
+
+  chatWs.onclose = () => {
+    chatWs = null;
+    if (document.getElementById('p-chat').classList.contains('active'))
+      setTimeout(initChatWs, 2000);
+  };
+
+  chatWs.onmessage = e => {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.type === 'update') {
+        renderChatAgents(data.agents || []);
+        (data.logs || []).forEach(log => appendChatMsg('agent', log));
+      }
+    } catch (_) {}
+  };
+}
+
+function appendChatMsg(role, log) {
+  const wrap = $('chat-msgs');
+  const ph = wrap.querySelector('[data-placeholder]');
+  if (ph) ph.remove();
+
+  const div = document.createElement('div');
+  const lvClass = log.level || '';
+  const timeStr = log.created_at
+    ? new Date(log.created_at).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })
+    : new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+
+  if (role === 'user') {
+    div.className = 'msg user';
+    div.innerHTML = `
+      <div class="msg-bubble">${esc(log.message || log)}</div>
+      <div class="msg-meta">${timeStr}</div>`;
+  } else {
+    div.className = `msg agent ${lvClass}`;
+    div.innerHTML = `
+      <div class="msg-meta">
+        ${log.agent_name ? `<span class="msg-agent-badge">${esc(log.agent_name)}</span>` : ''}
+        <span style="color:${lvColor(lvClass)};font-size:10px">${lvClass}</span>
+      </div>
+      <div class="msg-bubble">${esc(log.message || '')}</div>
+      <div class="msg-meta">${timeStr}</div>`;
+  }
+
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function appendUserMsg(text) {
+  appendChatMsg('user', { message: text });
+}
+
+function renderChatAgents(agents) {
+  const stE = { idle: '🟢', busy: '🟡', error: '🔴', offline: '⚫' };
+  $('chat-agents').innerHTML = agents.map(a => `
+    <div class="sidebar-agent">
+      <span class="sidebar-agent-name">${esc(a.name)}</span>
+      <span class="badge badge-${a.status}">${stE[a.status] || '⚪'} ${a.status}</span>
+    </div>`).join('');
+
+  const busy = agents.filter(a => a.status === 'busy');
+  const bar = $('chat-status-bar');
+  if (busy.length) {
+    bar.innerHTML = `
+      <div class="typing-dots">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+      <span style="color:#a0aec0">${busy.map(a => esc(a.name)).join(', ')} обробляє...</span>`;
+  } else {
+    bar.innerHTML = '<span id="chat-status-text" style="color:#4a5568">Агенти вільні</span>';
+  }
+}
+
+async function sendChatCmd() {
+  const el = $('chat-input');
+  const cmd = el.value.trim();
+  if (!cmd) return;
+  el.value = '';
+  el.style.height = 'auto';
+  appendUserMsg(cmd);
+  await post('/api/command', { command: cmd });
+  if (!chatWs) initChatWs();
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatCmd();
+  }
+  // auto-grow
+  setTimeout(() => {
+    e.target.style.height = 'auto';
+    e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+  }, 0);
+}
+
+function lvColor(lv) {
+  return lv === 'ERROR' ? '#fc8181' : lv === 'WARNING' ? '#f6e05e' : '#68d391';
+}
+
+// ── Products ─────────────────────────────────────────────────────────────────
+async function loadProducts(page) {
+  prodPage = page;
+  const params = new URLSearchParams({ page, limit: prodLimit });
+  const s  = val('f-search');  if (s)      params.set('search', s);
+  const m  = val('f-mp');      if (m)      params.set('marketplace', m);
+  const pm = val('f-pmin');    if (pm)     params.set('price_min', pm);
+  const px = val('f-pmax');    if (px)     params.set('price_max', px);
+  const st = val('f-stock');   if (st)     params.set('in_stock', st);
+
+  $('products-tbody').innerHTML = `<tr><td colspan="8" class="empty-td">Завантаження...</td></tr>`;
+
+  const res  = await fetch('/api/products?' + params);
+  const data = await res.json();
+
+  if (data.error) {
+    $('products-tbody').innerHTML = `<tr><td colspan="8" class="empty-td">Помилка: ${esc(data.error)}</td></tr>`;
+    return;
+  }
+
+  renderProducts(data.products || []);
+  renderPagination(data.total || 0, page, data.limit || prodLimit);
+  $('prod-info').textContent = `Товарів: ${data.total || 0}`;
+
+  // Refresh marketplace dropdown
+  const sel = $('f-mp');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Всі</option>';
+  (data.marketplaces || []).forEach(m => {
+    const o = document.createElement('option');
+    o.value = m; o.textContent = m;
+    if (m === cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+function renderProducts(products) {
+  if (!products.length) {
+    $('products-tbody').innerHTML = `<tr><td colspan="8" class="empty-td">Товарів не знайдено</td></tr>`;
+    return;
+  }
+  const offset = (prodPage - 1) * prodLimit;
+  $('products-tbody').innerHTML = products.map((p, i) => {
+    const mp  = (p.marketplace || '').toLowerCase();
+    const mpBadge = `<span class="badge badge-${mp}">${esc(p.marketplace || '—')}</span>`;
+    const price   = p.price    != null ? `<span class="price-val">${fmtPrice(p.price)} ₴</span>` : '—';
+    const old     = p.old_price != null ? `<span class="old-price">${fmtPrice(p.old_price)} ₴</span>` : '';
+    const stock   = p.in_stock  ? `<span class="stock-y">✓ Є</span>` : `<span class="stock-n">✗ Нема</span>`;
+    const cat     = p.category  ? `<span class="cat-cell" title="${esc(p.category)}">${esc(p.category.substring(0, 28))}</span>` : '—';
+    const titleEl = p.url
+      ? `<a class="prod-title" href="${esc(p.url)}" target="_blank" title="${esc(p.title || '')}">${esc(p.title || '—')}</a>`
+      : `<span class="prod-title" title="${esc(p.title || '')}">${esc(p.title || '—')}</span>`;
+
+    return `<tr>
+      <td style="color:#4a5568;font-variant-numeric:tabular-nums">${offset + i + 1}</td>
+      <td class="prod-title-cell">${titleEl}</td>
+      <td>${mpBadge}</td>
+      <td>${price}${old}</td>
+      <td>${old ? old : '—'}</td>
+      <td>${cat}</td>
+      <td>${stock}</td>
+      <td>
+        <button class="btn btn-sm btn-success" onclick="uploadProm(event,${p.id})"
+          title="Завантажити на Prom.ua">↑ Prom</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderPagination(total, page, limit) {
+  const pages = Math.ceil(total / limit) || 1;
+  if (pages <= 1) { $('pag-btns').innerHTML = ''; return; }
+
+  let h = `<button class="pag-btn" onclick="loadProducts(${page - 1})" ${page <= 1 ? 'disabled' : ''}>‹</button>`;
+  const lo = Math.max(1, page - 2), hi = Math.min(pages, page + 2);
+  if (lo > 1)  h += `<button class="pag-btn" onclick="loadProducts(1)">1</button>${lo > 2 ? '<span class="pag-sep">…</span>' : ''}`;
+  for (let i = lo; i <= hi; i++)
+    h += `<button class="pag-btn${i === page ? ' cur' : ''}" onclick="loadProducts(${i})">${i}</button>`;
+  if (hi < pages) h += `${hi < pages - 1 ? '<span class="pag-sep">…</span>' : ''}<button class="pag-btn" onclick="loadProducts(${pages})">${pages}</button>`;
+  h += `<button class="pag-btn" onclick="loadProducts(${page + 1})" ${page >= pages ? 'disabled' : ''}>›</button>`;
+  $('pag-btns').innerHTML = h;
+}
+
+async function uploadProm(ev, id) {
+  const btn = ev.currentTarget;
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const res  = await fetch(`/api/products/${id}/upload-prom`, { method: 'POST' });
+    const data = await res.json();
+    btn.textContent = data.status === 'ok' ? '✓ Надіслано' : '✗ Помилка';
+    if (data.status !== 'ok') console.error(data.message);
+  } catch (e) {
+    btn.textContent = '✗ Помилка';
+  }
+  setTimeout(() => { btn.disabled = false; btn.textContent = orig; }, 3000);
+}
+
+function debounceLoad() {
+  clearTimeout(filterTimer);
+  filterTimer = setTimeout(() => loadProducts(1), 380);
+}
+
+function clearFilters() {
+  ['f-search', 'f-pmin', 'f-pmax'].forEach(id => { document.getElementById(id).value = ''; });
+  $('f-mp').value = ''; $('f-stock').value = '';
+  loadProducts(1);
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+async function loadSettings() {
+  const d = await (await fetch('/api/settings')).json();
+
+  if (d.prom?.has_data) {
+    dot('prom', 'ok');
+    if (d.prom.token) $('prom-token').placeholder = d.prom.token + '  (збережено)';
+  }
+  if (d.rozetka?.has_data) {
+    dot('rozetka', 'ok');
+    if (d.rozetka.login) $('rozetka-login').value = d.rozetka.login;
+  }
+  if (d.epicentr?.has_data) {
+    dot('epicentr', 'ok');
+    if (d.epicentr.login) $('epicentr-login').value = d.epicentr.login;
+  }
+  if (d.anthropic?.has_data) {
+    dot('anthropic', 'ok');
+    if (d.anthropic.token) $('anthropic-key').placeholder = d.anthropic.token + '  (збережено)';
+  }
+}
+
+async function saveSetting(mp) {
+  const body = {};
+  if (mp === 'prom')     { const t = val('prom-token');       if (t) body.prom_token = t; }
+  if (mp === 'rozetka')  { const l = val('rozetka-login'), p = val('rozetka-password'); if (l) body.rozetka_login = l; if (p) body.rozetka_password = p; }
+  if (mp === 'epicentr') { const l = val('epicentr-login'), p = val('epicentr-password'); if (l) body.epicentr_login = l; if (p) body.epicentr_password = p; }
+  if (mp === 'anthropic'){ const k = val('anthropic-key');    if (k) body.anthropic_key = k; }
+
+  if (!Object.keys(body).length) { fb(mp, 'err', 'Заповни поля перед збереженням'); return; }
+
+  const d = await post('/api/settings', body);
+  if (d.status === 'ok') { fb(mp, 'ok', '✓ Збережено'); dot(mp, 'ok'); }
+  else fb(mp, 'err', d.message || 'Помилка збереження');
+}
+
+async function checkMP(mp) {
+  const body = {};
+  if (mp === 'prom')    { const t = val('prom-token'); if (t) body.token = t; }
+  else { const l = val(`${mp}-login`), p = val(`${mp}-password`); if (l) body.login = l; if (p) body.password = p; }
+
+  fb(mp, 'ok', 'Перевіряю...');
+  const d = await post(`/api/settings/check/${mp}`, body);
+
+  if (d.status === 'ok') { fb(mp, 'ok', d.message); dot(mp, 'ok'); }
+  else { fb(mp, 'err', d.message); dot(mp, 'err'); }
+}
+
+function dot(mp, state) {
+  const el = document.getElementById(`dot-${mp}`);
+  if (!el) return;
+  el.className = 'conn-dot' + (state ? ' ' + state : '');
+}
+
+function fb(mp, type, msg) {
+  const el = document.getElementById(`fb-${mp}`);
+  if (!el) return;
+  el.className = `feedback ${type}`;
+  el.textContent = msg;
+  if (type === 'ok') setTimeout(() => { el.className = 'feedback'; }, 4500);
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function $(id) { return document.getElementById(id); }
+function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+function esc(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function fmtPrice(n) { return Number(n).toLocaleString('uk-UA', { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
+async function post(url, body) {
+  const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return r.json();
+}
+</script>
+</body>
+</html>

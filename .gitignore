@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+logs/*.log
+logs/*.pid
+data/code/
+credentials/
+*.tar.gz
+.claude/
