@@ -12,7 +12,7 @@ from shared.utils.db import log_event, update_agent_status, create_alert, get_co
 from shared.utils.redis_queue import pop_task
 
 AGENT_NAME = "developer"
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
+OLLAMA_MODEL = os.getenv("DEV_OLLAMA_MODEL", "deepseek-coder-v2")
 
 def get_llm():
     return OllamaLLM(model=OLLAMA_MODEL, base_url="http://localhost:11434", temperature=0.2)
