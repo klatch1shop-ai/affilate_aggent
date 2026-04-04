@@ -30,7 +30,7 @@ echo $! > logs/efficiency.pid
 echo "Efficiency agent started"
 
 echo ""
-nohup python3 agents/dev/dev_agent.py --listen > logs/developer.log 2&1 &
+nohup python3 agents/dev/dev_agent.py --listen > logs/developer.log 2>&1 &
 echo $! > logs/developer.pid
 echo "Developer agent started"
 echo "All agents started!"
