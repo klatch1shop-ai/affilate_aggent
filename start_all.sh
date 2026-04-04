@@ -33,5 +33,8 @@ echo ""
 nohup python3 agents/dev/dev_agent.py --listen > logs/developer.log 2>&1 &
 echo $! > logs/developer.pid
 echo "Developer agent started"
+nohup python3 agents/checker/acceptance_checker.py --listen > logs/checker.log 2>&1 &
+echo $! > logs/checker.pid
+echo "Checker agent started"
 echo "All agents started!"
 echo "Telegram bot: @agent_system_TEKKEN_bot"
