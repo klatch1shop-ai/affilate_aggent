@@ -27,14 +27,60 @@ except ImportError:
 
 # ── Очищення HTML ────────────────────────────────────────
 
+import html as _html_module
+
 # Видаляє будь-які HTML-теги, залишає лише текстовий вміст
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
 
+def decode_html_entities(text: str) -> str:
+    """&mdash; → —, &rsquo; → ', &nbsp; → ' ', тощо."""
+    return _html_module.unescape(text or "")
+
 def strip_html(text: str) -> str:
-    """<a href="...">текст</a>  →  текст"""
+    """<a href="...">текст</a>  →  текст; також декодує HTML-ентіті."""
     clean = _HTML_TAG_RE.sub("", text)
+    clean = decode_html_entities(clean)
     clean = re.sub(r"\s{2,}", " ", clean).strip()
     return clean
+
+
+# ── Видалення рекламних фраз ─────────────────────────────
+
+AD_PHRASES = [
+    "почуваєшся майстром",
+    "почувствуешь себя мастером",
+    "профессионалами для профессионалов",
+    "професіоналами для професіоналів",
+    "гарантія успіху",
+    "гарантия успеха",
+    "незамінний помічник",
+    "незаменимый помощник",
+    "широкий термін служби",
+    "широкий срок службы",
+    "використовуючи інструменти toptul",
+    "используя инструменты toptul",
+    "створені професіоналами",
+    "созданы профессионалами",
+]
+
+_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
+
+def remove_ad_phrases(text: str) -> tuple[str, int]:
+    """Видаляє речення що містять рекламні фрази.
+    Повертає (очищений текст, кількість видалених речень)."""
+    if not text:
+        return text, 0
+    sentences = _SENTENCE_RE.split(text)
+    clean = []
+    removed = 0
+    lower_phrases = AD_PHRASES  # вже в нижньому регістрі
+    for s in sentences:
+        s_lower = s.lower()
+        if any(ph in s_lower for ph in lower_phrases):
+            removed += 1
+        else:
+            clean.append(s)
+    return " ".join(clean).strip(), removed
 
 
 # ── Форматування назви ────────────────────────────────────
@@ -52,6 +98,71 @@ def format_name(raw: str) -> str:
     # Нормалізуємо пробіли
     name = re.sub(r"\s{2,}", " ", name).strip()
     return name
+
+
+# ── Видалення категорій ───────────────────────────────────
+
+REMOVE_CATEGORY_KEYWORDS = [
+    "зарядные станции",
+    "пусковые и зарядные",
+]
+
+def remove_categories(root, keywords: list[str]) -> int:
+    """Видаляє offers чиї категорії містять будь-яке з ключових слів (без урахування регістру).
+    Повертає кількість видалених offers."""
+    # Будуємо карту categoryId → назва
+    cat_names: dict[str, str] = {}
+    for cat in root.iter("category"):
+        cid = cat.get("id")
+        if cid:
+            cat_names[cid] = (cat.text or "").lower()
+
+    # Знаходимо id категорій що підпадають під видалення
+    blocked_ids: set[str] = set()
+    for cid, name in cat_names.items():
+        if any(kw in name for kw in keywords):
+            blocked_ids.add(cid)
+
+    # Видаляємо offers
+    removed = 0
+    for offers_parent in root.iter():
+        to_remove = []
+        for child in list(offers_parent):
+            if child.tag == "offer":
+                cat_el = child.find("categoryId")
+                if cat_el is not None and cat_el.text in blocked_ids:
+                    to_remove.append(child)
+        for child in to_remove:
+            offers_parent.remove(child)
+            removed += 1
+
+    return removed
+
+
+# ── Переклад категорій ────────────────────────────────────
+
+CATEGORY_TRANSLATIONS = {
+    "Головки торцевые": "Головки торцеві",
+    "Форсунки и ремкомплекты для краскопультов": "Форсунки та ремкомплекти для фарбопультів",
+    "Головки торцевые ударные": "Головки торцеві ударні",
+    "Краскопульты пневматические": "Фарбопульти пневматичні",
+    "Цанговые соединения": "Цангові з'єднання",
+    "Ключи комбинированные": "Ключі комбіновані",
+    "Трещотки, воротки": "Тріскачки воротки",
+    "Наборы инструмента в ложементах": "Набори інструменту в ложементах",
+    "Отвертки": "Викрутки",
+    "Плоскогубцы": "Плоскогубці",
+}
+
+def translate_categories(root) -> int:
+    """Перекладає назви категорій за словником. Повертає кількість перекладених."""
+    translated = 0
+    for cat in root.iter("category"):
+        original = (cat.text or "").strip()
+        if original in CATEGORY_TRANSLATIONS:
+            cat.text = CATEGORY_TRANSLATIONS[original]
+            translated += 1
+    return translated
 
 
 # ── Основна обробка ───────────────────────────────────────
@@ -74,6 +185,8 @@ def process(input_path: Path, output_path: Path, errors_path: Path):
     fixed_stock = 0
     fixed_photos = 0
     fixed_html = 0
+    fixed_ad_offers = 0
+    fixed_ad_sentences = 0
     name_counts: Counter = Counter()
     name_to_ids: dict[str, list] = {}
 
@@ -92,11 +205,22 @@ def process(input_path: Path, output_path: Path, errors_path: Path):
             name_el.text = format_name(name_el.text)
 
         # 3. Очищення HTML з description / description_ua ───
+        offer_ad_sentences = 0
         for field in ("description", "description_ua"):
             el = offer.find(field)
-            if el is not None and el.text and "<" in el.text:
-                el.text = strip_html(el.text)
-                fixed_html += 1
+            if el is not None and el.text:
+                original = el.text
+                if "<" in original:
+                    el.text = strip_html(el.text)
+                    fixed_html += 1
+                else:
+                    el.text = decode_html_entities(el.text)
+                # Видалення рекламних фраз
+                el.text, removed = remove_ad_phrases(el.text)
+                offer_ad_sentences += removed
+        if offer_ad_sentences:
+            fixed_ad_offers += 1
+            fixed_ad_sentences += offer_ad_sentences
 
         # 4. Дублі фото ─────────────────────────────────────
         pictures = offer.findall("picture")
@@ -118,6 +242,12 @@ def process(input_path: Path, output_path: Path, errors_path: Path):
 
     # 5. Визначаємо неунікальні назви
     duplicated_names = {n: ids for n, ids in name_to_ids.items() if name_counts[n] > 1}
+
+    # 6. Видалення заборонених категорій ────────────────────
+    removed_offers = remove_categories(root, REMOVE_CATEGORY_KEYWORDS)
+
+    # 7. Переклад категорій ─────────────────────────────────
+    translated_cats = translate_categories(root)
 
     # ── Запис errors.txt ─────────────────────────────────
     with errors_path.open("w", encoding="utf-8") as ef:
@@ -159,6 +289,10 @@ def process(input_path: Path, output_path: Path, errors_path: Path):
     print(f"  Додано stock_qty   : {fixed_stock}")
     print(f"  Очищено HTML опис  : {fixed_html}")
     print(f"  Видалено дублів фото: {fixed_photos}")
+    print(f"  Видалено офферів   : {removed_offers} (заборонені категорії)")
+    print(f"  Перекладено кат.   : {translated_cats}")
+    print(f"  Офферів з рекламою : {fixed_ad_offers}")
+    print(f"  Рекламних речень   : {fixed_ad_sentences} видалено")
     print(f"  Неунікальних назв  : {len(duplicated_names)}")
     print("-" * 50)
     print(f"  Вихідний файл      : {output_path}")
