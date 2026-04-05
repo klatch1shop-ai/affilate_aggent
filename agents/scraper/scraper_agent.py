@@ -166,6 +166,62 @@ async def parse_prom(search_query: str, max_items: int = 10) -> list:
 
     return results
 
+# ── Prom.ua REST API ─────────────────────────────────────
+
+async def prom_api_get_products(max_items: int = None) -> list:
+    import aiohttp
+    token = os.getenv("PROM_API_TOKEN")
+    if not token:
+        logger.error("[SCRAPER] PROM_API_TOKEN not set")
+        return []
+
+    api_url = "https://my.prom.ua/api/v1/products/list"
+    headers = {"Authorization": f"Bearer {token}"}
+    all_products = []
+    page_from_id = None
+
+    async with aiohttp.ClientSession() as session:
+        while True:
+            params = {"limit": 100}
+            if page_from_id is not None:
+                params["page_from_id"] = page_from_id
+
+            async with session.get(api_url, headers=headers, params=params) as resp:
+                if resp.status != 200:
+                    text = await resp.text()
+                    logger.error(f"[SCRAPER] Prom API HTTP {resp.status}: {text[:200]}")
+                    break
+                data = await resp.json()
+
+            page = data.get("products", [])
+            if not page:
+                break
+
+            prev_count = len(all_products)
+            for p in page:
+                all_products.append({
+                    "marketplace": "prom",
+                    "title": p.get("name", "N/A"),
+                    "price": float(p.get("price") or 0),
+                    "url": p.get("url", ""),
+                })
+
+            new_count = len(all_products)
+            if (new_count // 500) > (prev_count // 500):
+                logger.info(f"[SCRAPER] Prom API: {new_count} products fetched so far...")
+
+            if max_items and new_count >= max_items:
+                all_products = all_products[:max_items]
+                break
+
+            if len(page) < 100:
+                break
+
+            page_from_id = page[-1]["id"]
+
+    logger.info(f"[SCRAPER] Prom API: done, total {len(all_products)} products")
+    return all_products
+
 # ── Збереження в БД ──────────────────────────────────────
 
 def save_products(products: list):
@@ -205,6 +261,9 @@ async def handle_task(task: dict):
         if "електронік" in description.lower():
             url = "https://rozetka.com.ua/ua/electronics/c4627901/"
         products = await parse_rozetka(url, max_items=10)
+
+    elif task_type == "prom_api":
+        products = await prom_api_get_products()
 
     elif "prom" in description.lower():
         query = description.replace("prom", "").strip()
