@@ -46,11 +46,11 @@ VIEWPORTS = [
 
 # ── Stealth-браузер ───────────────────────────────────────
 
-async def build_stealth_context(playwright):
+async def build_stealth_context(playwright, headless: bool = True):
     from playwright_stealth import Stealth
 
     browser = await playwright.chromium.launch(
-        headless=True,
+        headless=headless,
         args=[
             "--no-sandbox",
             "--disable-blink-features=AutomationControlled",
@@ -214,7 +214,7 @@ async def get_total_pages(page) -> int:
 
 # ── Головний скрапер ──────────────────────────────────────
 
-async def scrape_seller(seller: str, max_pages: int | None = None) -> list[dict]:
+async def scrape_seller(seller: str, max_pages: int | None = None, headless: bool = True) -> list[dict]:
     from playwright.async_api import async_playwright
 
     base_url = SELLER_URL.format(seller=seller)
@@ -224,7 +224,7 @@ async def scrape_seller(seller: str, max_pages: int | None = None) -> list[dict]
     seller_api_id: str | None = None
 
     async with async_playwright() as p:
-        browser, context = await build_stealth_context(p)
+        browser, context = await build_stealth_context(p, headless=headless)
         page = await context.new_page()
         # Застосовуємо stealth до сторінки
         if hasattr(context, '_stealth'):
@@ -424,11 +424,15 @@ def main():
         "--no-save", action="store_true",
         help="Не зберігати в БД, тільки вивести в консоль",
     )
+    parser.add_argument(
+        "--headful", action="store_true",
+        help="Запустити браузер у видимому режимі (для ручного проходження Cloudflare)",
+    )
     args = parser.parse_args()
 
-    logger.info(f"Старт: seller={args.seller}, max_pages={args.pages or 'всі'}")
+    logger.info(f"Старт: seller={args.seller}, max_pages={args.pages or 'всі'}, headless={not args.headful}")
 
-    products = asyncio.run(scrape_seller(args.seller, max_pages=args.pages))
+    products = asyncio.run(scrape_seller(args.seller, max_pages=args.pages, headless=not args.headful))
 
     if not products:
         logger.warning("Товарів не знайдено — перевір selector або доступність сайту")
