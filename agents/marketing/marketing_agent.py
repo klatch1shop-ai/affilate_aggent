@@ -126,11 +126,11 @@ async def run_competitor_analysis(category: str = "електроніка"):
     cur.execute("""
         SELECT marketplace, COUNT(*) as count,
                AVG(price) as avg_price, MIN(price) as min_price, MAX(price) as max_price
-        FROM products WHERE category ILIKE %s
+        FROM scraped_products WHERE category ILIKE %s
         GROUP BY marketplace
     """, (f"%{category}%",))
     stats = [dict(r) for r in cur.fetchall()]
-    cur.execute("SELECT title, price, marketplace, url FROM products WHERE category ILIKE %s ORDER BY price ASC LIMIT 20", (f"%{category}%",))
+    cur.execute("SELECT title, price, marketplace, url FROM scraped_products WHERE category ILIKE %s ORDER BY price ASC LIMIT 20", (f"%{category}%",))
     products = [dict(r) for r in cur.fetchall()]
     cur.close(); conn.close()
 

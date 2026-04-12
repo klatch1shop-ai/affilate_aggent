@@ -40,10 +40,10 @@ def get_products_stats() -> dict:
                 MIN(price) as min_price,
                 MAX(price) as max_price,
                 COUNT(*) FILTER (WHERE in_stock = true) as in_stock
-            FROM products GROUP BY marketplace
+            FROM scraped_products GROUP BY marketplace
         """)
         stats = [dict(r) for r in cur.fetchall()]
-        cur.execute("SELECT COUNT(*) as total FROM products")
+        cur.execute("SELECT COUNT(*) as total FROM scraped_products")
         total = cur.fetchone()
         cur.close(); conn.close()
         for s in stats:

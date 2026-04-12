@@ -1,6 +1,7 @@
 #!/bin/bash
 cd /home/tekken/agent-system
 source venv/bin/activate
+export $(grep -v "^#" .env | xargs)
 
 echo "Starting Agent System..."
 

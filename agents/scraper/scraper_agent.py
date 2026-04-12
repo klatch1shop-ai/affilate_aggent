@@ -233,7 +233,7 @@ def save_products(products: list):
     for p in products:
         try:
             cur.execute("""
-                INSERT INTO products (marketplace, title, price, url)
+                INSERT INTO scraped_products (marketplace, title, price, url)
                 VALUES (%s, %s, %s, %s)
                 ON CONFLICT DO NOTHING
             """, (p["marketplace"], p["title"], p["price"], p["url"]))
