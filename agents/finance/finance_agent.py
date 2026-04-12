@@ -15,7 +15,7 @@ AGENT_NAME = "finance"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
 def get_llm(model=None):
-    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.1)
+    return model or os.getenv("OLLAMA_MODEL", "llama3.2:3b")
 
 def get_usd_rate() -> float:
     try:

@@ -15,7 +15,7 @@ AGENT_NAME = "marketing"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
 def get_llm(model=None):
-    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.3)
+    return model or os.getenv("OLLAMA_MODEL", "llama3.2:3b")
 
 def get_google_trends(keywords: list, geo: str = "UA") -> dict:
     try:

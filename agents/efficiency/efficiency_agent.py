@@ -15,7 +15,7 @@ AGENT_NAME = "efficiency"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
 def get_llm(model=None):
-    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.2)
+    return model or os.getenv("OLLAMA_MODEL", "llama3.2:3b")
 
 def collect_system_metrics() -> dict:
     try:
