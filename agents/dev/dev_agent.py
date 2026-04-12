@@ -2,29 +2,26 @@ import os, sys, json, asyncio
 from datetime import datetime
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
+from shared.utils.ollama_worker import request_llm
 from shared.utils.db import log_event, update_agent_status, create_alert, get_connection
 from shared.utils.redis_queue import pop_task
 
 AGENT_NAME = "developer"
 OLLAMA_MODEL = os.getenv("DEV_OLLAMA_MODEL", "deepseek-coder-v2")
 
-def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.2)
+def get_llm(model=None):
+    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.2)
 
 def write_code(task_description: str, language: str = "python") -> str:
-    llm = get_llm()
-    prompt = PromptTemplate(
-        input_variables=["task","language"],
-        template="""Ти — senior розробник. Напиши повний робочий код.
+    model = os.getenv("OLLAMA_DEV_MODEL", "deepseek-coder:6.7b-instruct-q4_K_M")
+    prompt = f"""Ти — senior розробник. Напиши повний робочий код.
 
 Мова: {language}
-Задача: {task}
+Задача: {task_description}
 
 Вимоги:
 - Чистий, робочий код
@@ -33,32 +30,11 @@ def write_code(task_description: str, language: str = "python") -> str:
 - Готовий до використання
 
 Поверни ТІЛЬКИ код без пояснень."""
-    )
-    chain = prompt | llm
-    return chain.invoke({"task": task_description, "language": language})
-
-def save_code(filename: str, code: str, description: str):
-    os.makedirs("data/code", exist_ok=True)
-    filepath = f"data/code/{filename}"
-    with open(filepath, "w") as f:
-        f.write(code)
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        INSERT INTO event_logs (agent_id, level, message, metadata)
-        SELECT a.id, 'INFO', %s, %s FROM agents a WHERE a.name = %s
-    """, (f"Code written: {filename}",
-          json.dumps({"filename": filename, "description": description, "lines": len(code.splitlines())}),
-          AGENT_NAME))
-    conn.commit(); cur.close(); conn.close()
-    logger.success(f"[DEV] Code saved: {filepath} ({len(code.splitlines())} lines)")
-    return filepath
+    return request_llm(model, prompt, timeout=180)
 
 def analyze_code(code: str) -> str:
-    llm = get_llm()
-    prompt = PromptTemplate(
-        input_variables=["code"],
-        template="""Проаналізуй код і дай короткий звіт:
+    model = os.getenv("OLLAMA_DEV_MODEL", "deepseek-coder:6.7b-instruct-q4_K_M")
+    prompt = f"""Проаналізуй код і дай короткий звіт:
 1. Що робить цей код
 2. Можливі проблеми
 3. Рекомендації щодо покращення
@@ -67,9 +43,7 @@ def analyze_code(code: str) -> str:
 {code}
 
 Відповідай українською мовою."""
-    )
-    chain = prompt | llm
-    return chain.invoke({"code": code})
+    return request_llm(model, prompt, timeout=180)
 
 async def handle_task(task: dict):
     desc = task.get("description", "")

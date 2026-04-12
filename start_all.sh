@@ -37,6 +37,9 @@ echo "Developer agent started"
 nohup python3 agents/checker/acceptance_checker.py --listen > logs/checker.log 2>&1 &
 echo $! > logs/checker.pid
 echo "Checker agent started"
+nohup python3 shared/utils/ollama_worker.py > logs/ollama_worker.log 2>&1 &
+echo $! > logs/ollama_worker.pid
+echo "Ollama worker started"
 echo "All agents started!"
 echo "Telegram bot: @agent_system_TEKKEN_bot"
 

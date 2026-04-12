@@ -2,20 +2,19 @@ import os, sys, json, asyncio
 from datetime import datetime
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
+from shared.utils.ollama_worker import request_llm
 from shared.utils.db import log_event, update_agent_status, create_alert, get_connection
 from shared.utils.redis_queue import pop_task, push_task
 
 AGENT_NAME = "marketing"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
-def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.3)
+def get_llm(model=None):
+    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.3)
 
 def get_google_trends(keywords: list, geo: str = "UA") -> dict:
     try:
@@ -53,16 +52,14 @@ def get_related_queries(keyword: str, geo: str = "UA") -> list:
 
 def analyze_with_llm(data: dict, task_desc: str) -> str:
     try:
-        llm = get_llm()
-        prompt = PromptTemplate(
-            input_variables=["data", "task"],
-            template="""Ти — експерт з маркетингу та дропшипінгу в Україні.
+        model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        prompt = f"""Ти — експерт з маркетингу та дропшипінгу в Україні.
 Проаналізуй дані та дай конкретні рекомендації.
 
-Задача: {task}
+Задача: {task_desc}
 
 Дані:
-{data}
+{json.dumps(data, ensure_ascii=False)}
 
 Дай відповідь у форматі:
 1. Ключові висновки (3-5 пунктів)
@@ -70,10 +67,7 @@ def analyze_with_llm(data: dict, task_desc: str) -> str:
 3. Ризики та застереження
 
 Відповідай українською мовою."""
-        )
-        chain = prompt | llm
-        result = chain.invoke({"data": json.dumps(data, ensure_ascii=False), "task": task_desc})
-        return result
+        return request_llm(model, prompt)
     except Exception as e:
         logger.error(f"[MARKETING] LLM error: {e}")
         return f"Помилка аналізу: {e}"

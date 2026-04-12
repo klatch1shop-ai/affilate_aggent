@@ -2,20 +2,19 @@ import os, sys, json, asyncio
 from datetime import datetime
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
+from shared.utils.ollama_worker import request_llm
 from shared.utils.db import log_event, update_agent_status, create_alert, get_connection
 from shared.utils.redis_queue import pop_task, get_queue_length
 
 AGENT_NAME = "efficiency"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
-def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.2)
+def get_llm(model=None):
+    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.2)
 
 def collect_system_metrics() -> dict:
     try:
@@ -74,13 +73,11 @@ def collect_system_metrics() -> dict:
 
 def analyze_performance(metrics: dict) -> str:
     try:
-        llm = get_llm()
-        prompt = PromptTemplate(
-            input_variables=["metrics"],
-            template="""Ти — системний аналітик мультиагентної системи автоматизації бізнесу.
+        model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        prompt = f"""Ти — системний аналітик мультиагентної системи автоматизації бізнесу.
 
 Проаналізуй метрики системи за останні 24 години:
-{metrics}
+{json.dumps(metrics, ensure_ascii=False, default=str)}
 
 Дай структурований звіт:
 1. Загальний стан системи (здорова/є проблеми/критично)
@@ -90,9 +87,7 @@ def analyze_performance(metrics: dict) -> str:
 5. Рекомендації щодо нових скілів або правил для агентів
 
 Відповідай українською. Будь конкретним і actionable."""
-        )
-        chain = prompt | llm
-        return chain.invoke({"metrics": json.dumps(metrics, ensure_ascii=False, default=str)})
+        return request_llm(model, prompt)
     except Exception as e:
         return f"Помилка аналізу: {e}"
 

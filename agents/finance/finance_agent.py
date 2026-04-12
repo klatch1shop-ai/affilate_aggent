@@ -2,20 +2,19 @@ import os, sys, json, asyncio
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
+from shared.utils.ollama_worker import request_llm
 from shared.utils.db import log_event, update_agent_status, create_alert, get_connection
 from shared.utils.redis_queue import pop_task
 
 AGENT_NAME = "finance"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
-def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.1)
+def get_llm(model=None):
+    return model or os.getenv('OLLAMA_MODEL', 'llama3.2:3b'), temperature=0.1)
 
 def get_usd_rate() -> float:
     try:
@@ -121,15 +120,13 @@ def weekly_report() -> dict:
 
 def analyze_with_llm(data: dict, task: str) -> str:
     try:
-        llm = get_llm()
-        prompt = PromptTemplate(
-            input_variables=["data","task"],
-            template="""Ти — фінансовий аналітик дропшипінг-бізнесу в Україні.
+        model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        prompt = f"""Ти — фінансовий аналітик дропшипінг-бізнесу в Україні.
 
 Задача: {task}
 
 Дані:
-{data}
+{json.dumps(data, ensure_ascii=False, default=str)}
 
 Дай структурований аналіз:
 1. Фінансовий стан системи
@@ -138,9 +135,7 @@ def analyze_with_llm(data: dict, task: str) -> str:
 4. Рекомендації для збільшення прибутку
 
 Відповідай українською мовою. Будь конкретним."""
-        )
-        chain = prompt | llm
-        return chain.invoke({"data": json.dumps(data, ensure_ascii=False, default=str), "task": task})
+        return request_llm(model, prompt)
     except Exception as e:
         return f"Помилка аналізу: {e}"
 

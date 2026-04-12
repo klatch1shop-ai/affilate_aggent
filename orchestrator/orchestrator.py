@@ -1,12 +1,11 @@
 import os, sys, json, time
 from dotenv import load_dotenv
 from loguru import logger
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../.env"))
 
+from shared.utils.ollama_worker import request_llm
 from shared.utils.db import log_event, create_alert, update_agent_status, get_connection
 from shared.utils.redis_queue import push_task, pop_task, get_queue_length
 from shared.utils.skill_loader import load_all_skills, get_skills_context
@@ -22,8 +21,6 @@ AGENT_QUEUES = {
     "efficiency": "queue:efficiency",
 }
 
-def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.1)
 
 def get_system_snapshot() -> dict:
     try:
@@ -59,7 +56,7 @@ def route_task(command: str) -> dict:
     agents_status = get_agents_status()
     queues = {a: get_queue_length(f"queue:{a}") for a in AGENT_QUEUES}
 
-    llm = get_llm()
+    model = os.getenv('OLLAMA_MODEL', 'llama3.2:3b')
     # Простий прямий промпт без template для кращої відповіді від Ollama
     full_prompt = f"""### Instruction:
 You are a routing system. Analyze the admin command and return ONLY a JSON object.
@@ -80,7 +77,7 @@ Agent descriptions:
 ### Assistant:
 {{"""
 
-    result = llm.invoke(full_prompt)
+    result = request_llm(model, full_prompt)
     try:
         # Очистити відповідь і знайти JSON
         clean = result.strip()
