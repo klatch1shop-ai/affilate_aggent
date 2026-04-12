@@ -10,10 +10,23 @@ from shared.utils.db import get_connection
 TOKEN = os.getenv("PROM_API_TOKEN")
 API_URL = "https://my.prom.ua/api/v1/products/list"
 
+def get_our_skus() -> set:
+    """Отримуємо SKU які є в нашій БД"""
+    from shared.utils.db import get_connection
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT sku FROM my_products WHERE sku IS NOT NULL")
+    skus = {r["sku"] for r in cur.fetchall()}
+    cur.close(); conn.close()
+    logger.info(f"[PROM] Our SKUs in DB: {len(skus)}")
+    return skus
+
 async def fetch_all_products() -> list:
     headers = {"Authorization": f"Bearer {TOKEN}"}
+    our_skus = get_our_skus()
     all_products = []
     page_from_id = None
+    found = 0
 
     async with aiohttp.ClientSession() as session:
         while True:
@@ -32,14 +45,25 @@ async def fetch_all_products() -> list:
             if not page:
                 break
 
-            all_products.extend(page)
-            logger.info(f"[PROM] Fetched {len(all_products)} products...")
+            for p in page:
+                sku = p.get("sku","").strip()
+                if sku in our_skus:
+                    all_products.append(p)
+                    found += 1
+
+            if found % 500 == 0 and found > 0:
+                logger.info(f"[PROM] Found {found} matching products...")
 
             if len(page) < 100:
                 break
             page_from_id = page[-1]["id"]
 
-    logger.success(f"[PROM] Total: {len(all_products)} products")
+            # Якщо знайшли всі наші товари — зупиняємось
+            if found >= len(our_skus):
+                logger.info("[PROM] All our SKUs found, stopping")
+                break
+
+    logger.success(f"[PROM] Total found: {len(all_products)} matching products")
     return all_products
 
 def import_to_db(products: list):
