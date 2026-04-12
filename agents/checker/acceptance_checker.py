@@ -45,6 +45,52 @@ def check_result(task_description: str, result: str, agent_name: str) -> dict:
         logger.error(f"[CHECKER] Error: {e}")
         return {"passed": True, "score": 5, "issues": [], "recommendation": "Could not verify"}
 
+
+def create_skill_from_failure(agent_name: str, task: str, result: str, issues: list):
+    """Автоматично створює новий skill коли агент провалив задачу"""
+    try:
+        model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        issues_text = "\n".join(issues) if issues else "невідомі проблеми"
+        prompt = f"""Ти — експерт з написання інструкцій для AI агентів.
+
+Агент "{agent_name}" провалив задачу:
+Задача: {task}
+Результат: {result[:300]}
+Проблеми: {issues_text}
+
+Напиши короткий skill (інструкцію) у форматі Markdown яка допоможе агенту краще виконувати подібні задачі.
+
+Структура:
+# Назва skill
+## Коли використовувати
+## Інструкції
+## Заборонено
+
+Максимум 20 рядків. Тільки Markdown."""
+
+        skill_content = request_llm(model, prompt)
+        if not skill_content or len(skill_content) < 50:
+            return
+
+        # Зберігаємо skill файл
+        import re, time
+        skill_dir = os.path.join(os.path.dirname(__file__), "../../shared/skills", agent_name)
+        os.makedirs(skill_dir, exist_ok=True)
+        skill_name = f"auto_{agent_name}_{int(time.time())}"
+        skill_path = os.path.join(skill_dir, f"{skill_name}.md")
+        with open(skill_path, "w") as f:
+            f.write(skill_content)
+
+        # Реіндексуємо skills
+        from shared.utils.skills_indexer import index_all_skills
+        index_all_skills()
+
+        logger.success(f"[CHECKER] New skill created: {skill_name}")
+        log_event(AGENT_NAME, "INFO", f"Auto-skill created for {agent_name}", {"skill": skill_name})
+
+    except Exception as e:
+        logger.error(f"[CHECKER] Skill creation error: {e}")
+
 async def handle_task(task: dict):
     logger.info(f"[CHECKER] Checking: {task.get('description','')[:60]}")
     update_agent_status(AGENT_NAME, "busy")
@@ -56,6 +102,11 @@ async def handle_task(task: dict):
         create_alert(AGENT_NAME, f"Check failed: {agent_name}",
             f"Score: {check.get('score')}/10. {check.get('recommendation','')}", "WARNING")
         logger.warning(f"[CHECKER] FAIL: {check}")
+        if check.get("score", 10) < 5:
+            create_skill_from_failure(
+                agent_name, description, result_text,
+                check.get("issues", [])
+            )
     else:
         log_event(AGENT_NAME, "INFO", f"Check passed: {agent_name} score={check.get('score')}")
         logger.success(f"[CHECKER] PASS score={check.get('score')}")

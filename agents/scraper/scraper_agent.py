@@ -232,11 +232,14 @@ def save_products(products: list):
     saved = 0
     for p in products:
         try:
+            import hashlib
+            ext_id = hashlib.md5(f"{p.get('marketplace','')}:{p.get('url','')}{p.get('title','')}".encode()).hexdigest()[:16]
             cur.execute("""
-                INSERT INTO scraped_products (marketplace, title, price, url)
-                VALUES (%s, %s, %s, %s)
-                ON CONFLICT DO NOTHING
-            """, (p["marketplace"], p["title"], p["price"], p["url"]))
+                INSERT INTO scraped_products (external_id, marketplace, title, price, url)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (external_id, marketplace) DO UPDATE
+                SET price = EXCLUDED.price, title = EXCLUDED.title, scraped_at = NOW()
+            """, (ext_id, p["marketplace"], p["title"], p["price"], p["url"]))
             saved += 1
         except Exception as e:
             logger.warning(f"Save error: {e}")

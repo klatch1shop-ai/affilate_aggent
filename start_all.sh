@@ -4,6 +4,8 @@ source venv/bin/activate
 export $(grep -v "^#" .env | xargs)
 
 echo "Starting Agent System..."
+python3 shared/utils/skills_indexer.py > logs/skills_indexer.log 2>&1
+echo "Skills indexed"
 
 # Запустити оркестратор
 nohup python3 orchestrator/orchestrator.py --listen > logs/orchestrator.log 2>&1 &
