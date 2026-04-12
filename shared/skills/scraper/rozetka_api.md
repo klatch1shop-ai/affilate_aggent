@@ -1,77 +1,94 @@
-# Rozetka API — документація
+# Rozetka Seller API — повна документація
 
-## Публічний пошуковий API (без токена)
+## API токен
+- URL: https://api-seller.rozetka.com.ua/apidoc/
+- Авторизація: POST логін+пароль → Bearer token (живе 24 години)
+- Також: окремий API-токен в Налаштування → Безпека API
 
-### Пошук товарів
-GET https://search.rozetka.com.ua/ua/search/api/v6/
-Параметри:
-- text: пошуковий запит
-- page: номер сторінки (від 1)
-- per_page: кількість (max 60)
-- section_id: ID категорії
-- price_from / price_to: ціновий діапазон
-- sort: popularity / price_asc / price_desc / novelty
+## Авторизація
+```python
+import requests, base64
 
-### Товари категорії
-GET https://xl-catalog-api.rozetka.com.ua/v4/goods/get
-Параметри:
-- category_id: ID категорії
-- per_page: кількість
-- page: сторінка
-- sort: popularity
+def get_rozetka_token(login: str, password: str) -> str:
+    url = "https://api-seller.rozetka.com.ua/sites"
+    data = {"username": login, "password": password}
+    resp = requests.post(url, json=data)
+    return resp.json().get("content", {}).get("access_token", "")
 
-### Популярні категорії Rozetka
-- 80004: Ноутбуки
-- 4627901: Електроніка  
-- 80165: Смартфони
-- 4638275: Навушники
-- 80075: Планшети
-- 638224: Смарт-годинники
-- 4638591: Павербанки
-- 80397: Телевізори
-
-### Формат відповіді товару
-```json
-{
-  "id": 123456,
-  "title": "Назва товару",
-  "price": 9999,
-  "old_price": 12999,
-  "href": "smartfon-apple-iphone-15-128gb-black-mqhp3",
-  "sell_status": "available",
-  "category_id": 80165,
-  "images": ["https://..."],
-  "producer": {"title": "Apple"}
-}
+headers = {"Authorization": f"Bearer {token}"}
 ```
 
-## Партнерський API (потрібна реєстрація)
-URL: https://partner.rozetka.com.ua
-- Завантаження товарів через XML/YML прайс-лист
-- Формат: Rozetka YML (схожий на Яндекс.Маркет)
-- Оновлення цін: через FTP або API
+## Що можна через API
+- Замовлення: отримати, змінити статус, ТТН
+- Товари: отримати інформацію
+- Повідомлення з покупцями
+- Відгуки
+- Служби доставки
+- Комплекти товарів
 
-### YML формат для завантаження
-```xml
-<offer id="123" available="true">
-  <url>https://your-site.com/product/123</url>
-  <price>999</price>
-  <currencyId>UAH</currencyId>
-  <categoryId>80165</categoryId>
-  <name>Назва товару</name>
-  <description>Опис</description>
-</offer>
-```
+## Замовлення — основний workflow
+1. GET замовлення в обробці: /orders?expand=status_available
+2. GET деталі замовлення: /orders/{id}?expand=status_available
+3. POST змінити статус + ТТН: /orders/{id}/status
 
-## Важливо для дропшипінгу
-- Комісія Rozetka: 12-15% залежно від категорії
-- Електроніка: 12%
-- Одяг/взуття: 15%
-- Час обробки замовлення: 24-48 годин
-- Обов'язкова наявність фото на білому фоні
+## XML прайс — вимоги (повні)
 
-## Захист від парсингу
-- CloudFlare захист на всіх сторінках
-- Rate limiting: ~30 запитів/хвилину
-- Потрібен User-Agent браузера
-- CAPTCHA при підозрілій активності
+### Обов'язкові теги offer:
+- id — латиниця+цифри, НІКОЛИ не змінювати після публікації
+- available — true/false
+- price — число в UAH
+- currencyId — UAH
+- categoryId — id з блоку categories
+- picture — мін.1 макс.15, тільки https, мін.400x400px
+- vendor — бренд (= бренд в name_ua)
+- stock_quantity — ціле число, 0=немає
+- name_ua — назва українською
+- description_ua — опис українською в CDATA
+- param name — характеристики
+
+### Назва (name_ua) — формат:
+Тип товару Бренд Модель Характеристики (Артикул)
+- Макс 255 символів, оптимально до 60
+- БЕЗ ком, крапок, тире (крім назви моделі)
+- БЕЗ реклами: "акція", "знижка", "топ", "новинка"
+- Починається з великої літери
+- Унікальна назва в прайсі
+
+### Опис (description_ua):
+- Тільки про конкретний товар
+- БЕЗ фото, відео, посилань, цін
+- БЕЗ інформації про магазин/доставку
+- Максимум 50000 символів
+- HTML в CDATA
+
+### Фото:
+- Мін 400x400px, оптимально 1000x1000px
+- Тільки https, без кирилиці в URL
+- Перше фото — фронтальний вид
+- БЕЗ рук, сторонніх предметів на першому фото
+- БЕЗ написів російською
+- Не дублювати фото
+
+### Категорії:
+- rz_id = ID категорії на сайті Розетки
+- Один тип товару = одна категорія
+- ID ніколи не змінювати після публікації
+
+### Параметри (param):
+- Назва і значення — ТІЛЬКИ УКРАЇНСЬКОЮ
+- Відповідають фільтрам категорії на сайті Розетки
+- Порожній param — заборонено
+
+### Заборонені категорії без узгодження:
+- Зарядні станції
+
+## Валідатор XML:
+https://seller.rozetka.com.ua/gomer/pricevalidate/check/index
+
+## Корисні посилання:
+- Вимоги до товарів: https://sellerhelp.rozetka.com.ua/st/ua/items
+- Назви: https://sellerhelp.rozetka.com.ua/p217-product-title.html
+- Фото: https://sellerhelp.rozetka.com.ua/p216-product-images.html
+- Параметри: https://sellerhelp.rozetka.com.ua/p210-product-characteristics.html
+- Опис: https://sellerhelp.rozetka.com.ua/p212-product-description.html
+- Категорії: https://sellerhelp.rozetka.com.ua/p179-correct-categories.html
