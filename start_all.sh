@@ -39,3 +39,7 @@ echo $! > logs/checker.pid
 echo "Checker agent started"
 echo "All agents started!"
 echo "Telegram bot: @agent_system_TEKKEN_bot"
+
+nohup python3 dashboard/api.py > logs/dashboard.log 2>&1 &
+echo $! > logs/dashboard.pid
+echo "Dashboard started"
