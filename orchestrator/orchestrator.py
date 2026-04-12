@@ -23,12 +23,12 @@ AGENT_QUEUES = {
 }
 
 def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url="http://localhost:11434", temperature=0.1)
+    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.1)
 
 def get_system_snapshot() -> dict:
     try:
         import redis as r
-        rd = r.Redis(host="localhost", port=6379, decode_responses=True)
+        rd = r.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", 6379)), decode_responses=True)
         snap = rd.get("system:snapshot")
         return json.loads(snap) if snap else {}
     except:
@@ -37,7 +37,7 @@ def get_system_snapshot() -> dict:
 def save_system_snapshot(snapshot: dict):
     try:
         import redis as r
-        rd = r.Redis(host="localhost", port=6379, decode_responses=True)
+        rd = r.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", 6379)), decode_responses=True)
         rd.set("system:snapshot", json.dumps(snapshot, ensure_ascii=False))
     except Exception as e:
         logger.error(f"Snapshot save error: {e}")

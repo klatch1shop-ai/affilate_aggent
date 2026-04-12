@@ -14,7 +14,7 @@ AGENT_NAME = "checker"
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 
 def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url="http://localhost:11434", temperature=0.1)
+    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.1)
 
 def check_result(task_description: str, result: str, agent_name: str) -> dict:
     context = get_context_for_task(task_description, agent_name)

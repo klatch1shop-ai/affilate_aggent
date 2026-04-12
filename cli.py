@@ -65,7 +65,7 @@ def print_status():
         cur.close(); conn.close()
 
         emoji = {"idle": green("● idle"), "busy": yellow("◉ busy"), "error": red("✗ error"), "offline": gray("○ offline")}
-        rd = r.Redis(host="localhost", port=6379, decode_responses=True)
+        rd = r.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", 6379)), decode_responses=True)
 
         print(bold("Агенти:"))
         for a in agents:

@@ -13,13 +13,13 @@ app = Server('agent-system-mcp')
 
 def get_db():
     return psycopg2.connect(
-        host='localhost', port=os.getenv('POSTGRES_PORT', 5432),
-        dbname=os.getenv('POSTGRES_DB'), user=os.getenv('POSTGRES_USER'),
-        password=os.getenv('POSTGRES_PASSWORD'), cursor_factory=RealDictCursor
+        host=os.getenv('DB_HOST'), port=os.getenv('DB_PORT', 5432),
+        dbname=os.getenv('DB_NAME'), user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'), cursor_factory=RealDictCursor
     )
 
 def get_redis():
-    return redis.Redis(host='localhost', port=int(os.getenv('REDIS_PORT', 6379)), decode_responses=True)
+    return redis.Redis(host=os.getenv('REDIS_HOST', 'localhost'), port=int(os.getenv('REDIS_PORT', 6379)), decode_responses=True)
 
 def dt_fix(rows):
     for r in rows:

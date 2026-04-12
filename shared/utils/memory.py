@@ -2,8 +2,11 @@ import os, hashlib, time
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 from loguru import logger
+from dotenv import load_dotenv
 
-client = QdrantClient(host="localhost", port=6333)
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
+
+client = QdrantClient(host=os.getenv("QDRANT_HOST", "localhost"), port=int(os.getenv("QDRANT_PORT", 6333)))
 COLLECTION = "agent_memory"
 VECTOR_SIZE = 384
 

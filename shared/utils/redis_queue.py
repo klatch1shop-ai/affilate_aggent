@@ -7,7 +7,7 @@ from loguru import logger
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
 r = redis.Redis(
-    host="localhost",
+    host=os.getenv("REDIS_HOST", "localhost"),
     port=int(os.getenv("REDIS_PORT", 6379)),
     decode_responses=True
 )

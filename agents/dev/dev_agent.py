@@ -15,7 +15,7 @@ AGENT_NAME = "developer"
 OLLAMA_MODEL = os.getenv("DEV_OLLAMA_MODEL", "deepseek-coder-v2")
 
 def get_llm():
-    return OllamaLLM(model=OLLAMA_MODEL, base_url="http://localhost:11434", temperature=0.2)
+    return OllamaLLM(model=OLLAMA_MODEL, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), temperature=0.2)
 
 def write_code(task_description: str, language: str = "python") -> str:
     llm = get_llm()
