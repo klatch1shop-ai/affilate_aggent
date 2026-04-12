@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
 from shared.utils.ollama_worker import request_llm
+from shared.utils.skills_indexer import search_skills
 from shared.utils.db import log_event, update_agent_status, create_alert
 from shared.utils.redis_queue import pop_task
 from shared.utils.memory import save_memory, get_context_for_task
@@ -17,7 +18,10 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "dolphin-llama3")
 def check_result(task_description: str, result: str, agent_name: str) -> dict:
     context = get_context_for_task(task_description, agent_name)
     model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+    skills = search_skills(task_description, agent="checker", limit=2)
     prompt = f"""Ти — перевіряючий агент. Перевір результат роботи агента.
+{skills}
+
 Задача: {task_description}
 Агент: {agent_name}
 Результат: {result[:500]}

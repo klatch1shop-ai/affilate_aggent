@@ -7,6 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
 from shared.utils.ollama_worker import request_llm
+from shared.utils.skills_indexer import search_skills
 from shared.utils.db import log_event, update_agent_status, create_alert, get_connection
 from shared.utils.redis_queue import pop_task, push_task
 
@@ -53,10 +54,12 @@ def get_related_queries(keyword: str, geo: str = "UA") -> list:
 def analyze_with_llm(data: dict, task_desc: str) -> str:
     try:
         model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        skills = search_skills(task_desc, agent="marketing", limit=2)
         prompt = f"""Ти — експерт з маркетингу та дропшипінгу в Україні.
 Проаналізуй дані та дай конкретні рекомендації.
 
 Задача: {task_desc}
+{skills}
 
 Дані:
 {json.dumps(data, ensure_ascii=False)}

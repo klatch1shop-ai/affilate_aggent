@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../.env"))
 
 from shared.utils.ollama_worker import request_llm
+from shared.utils.skills_indexer import search_skills
 from shared.utils.db import log_event, create_alert, update_agent_status, get_connection
 from shared.utils.redis_queue import push_task, pop_task, get_queue_length
 from shared.utils.skill_loader import load_all_skills, get_skills_context
@@ -57,6 +58,7 @@ def route_task(command: str) -> dict:
     queues = {a: get_queue_length(f"queue:{a}") for a in AGENT_QUEUES}
 
     model = os.getenv('OLLAMA_MODEL', 'llama3.2:3b')
+    skills = search_skills(command, agent='orchestrator', limit=2)
     # Простий прямий промпт без template для кращої відповіді від Ollama
     full_prompt = f"""### Instruction:
 You are a routing system. Analyze the admin command and return ONLY a JSON object.
