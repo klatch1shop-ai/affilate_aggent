@@ -106,7 +106,8 @@ def generate_xml(limit: int = 100, use_llm: bool = True, output_file: str = None
 
     cur.execute("""
         SELECT sku, name_uk, description_raw, description_epicentr,
-               category_epicentr, attributes, specs_json, status
+               category_epicentr, attributes, specs_json, status,
+               price_supplier, pictures, params, vendor, availability
         FROM my_products
         WHERE status IN ('new', 'processed', 'ready')
         AND sku IS NOT NULL
@@ -169,31 +170,35 @@ def generate_xml(limit: int = 100, use_llm: bool = True, output_file: str = None
         else:
             description = f"Професійний інструмент TOPTUL {sku}. Бренд TOPTUL — провідний виробник інструментів (Тайвань). Артикул: {sku}."
 
-        # Параметри з attributes/specs_json
+        # Параметри з поля params (імпортовано з Prom)
         params = []
-        attrs = p.get("attributes") or {}
-        specs = p.get("specs_json") or {}
-
-        all_specs = {**attrs, **specs}
-        for key, val in all_specs.items():
-            if val and str(val).strip() and str(val) != "0":
-                clean_key = key.replace("_", " ").title()
+        import json as _json2
+        params_data = p.get("params") or {}
+        if isinstance(params_data, str):
+            params_data = _json2.loads(params_data)
+        for key, val in params_data.items():
+            if key == "_values":
+                continue
+            if val and str(val).strip():
+                clean_key = str(key).strip()[:100]
                 clean_val = str(val).strip()[:500]
+                clean_val = clean_val.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
                 params.append(f'        <param name="{clean_key}">{clean_val}</param>')
-
         # Базові параметри якщо немає
         if not params:
-            params.append('        <param name="Бренд">TOPTUL</param>')
+            vendor = p.get("vendor") or "TOPTUL"
+            params.append(f'        <param name="Бренд">{vendor}</param>')
             params.append('        <param name="Країна виробник">Тайвань</param>')
 
-        # Фото з description_raw якщо є
+        # Фото з поля pictures (імпортовано з Prom)
         pictures = []
-        if p.get("description_raw"):
-            img_urls = re.findall(r'https?://[^\s"<>]+\.(?:jpg|jpeg|png|webp)', p["description_raw"])
-            for url in img_urls[:5]:
-                if "allegro" not in url and len(url) < 500:
-                    pictures.append(f'        <picture>{url}</picture>')
-
+        pics_data = p.get("pictures") or []
+        if isinstance(pics_data, str):
+            import json as _json
+            pics_data = _json.loads(pics_data)
+        for url in pics_data[:10]:
+            if url and url.startswith("http") and len(url) < 500:
+                pictures.append(f'        <picture>{url}</picture>')
         if not pictures:
             pictures.append(f'        <!-- no pictures for {sku} -->')
 
@@ -202,7 +207,7 @@ def generate_xml(limit: int = 100, use_llm: bool = True, output_file: str = None
 
         offer = [
             f'      <offer id="{sku}" available="true">',
-            f'        <price>0</price>',  # буде заповнено окремо
+            f'        <price>{int(p.get("price_supplier") or 0)}</price>',
             f'        <currencyId>UAH</currencyId>',
             f'        <categoryId>{cat_id}</categoryId>',
         ]
