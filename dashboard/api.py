@@ -73,7 +73,7 @@ def get_stats():
         logs = [dict(r) for r in cur.fetchall()]
         cur.execute(
             "SELECT marketplace, COUNT(*) as cnt, AVG(price) as avg_price "
-            "FROM products GROUP BY marketplace"
+            "FROM scraped_products GROUP BY marketplace"
         )
         products = [dict(r) for r in cur.fetchall()]
         cur.execute("SELECT COUNT(*) as cnt FROM alerts WHERE is_read=false")
@@ -152,21 +152,21 @@ def get_products(
 
         where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
 
-        cur.execute(f"SELECT COUNT(*) as total FROM products {where}", params)
+        cur.execute(f"SELECT COUNT(*) as total FROM my_products {where}", params)
         total = cur.fetchone()["total"]
 
         offset = (page - 1) * limit
         cur.execute(
             f"""SELECT id, external_id, marketplace, title, price, old_price,
                        url, category, seller, in_stock, data, scraped_at
-                FROM products {where}
+                FROM my_products {where}
                 ORDER BY scraped_at DESC NULLS LAST
                 LIMIT %s OFFSET %s""",
             params + [limit, offset],
         )
         products = fix_types([dict(r) for r in cur.fetchall()])
 
-        cur.execute("SELECT DISTINCT marketplace FROM products ORDER BY marketplace")
+        cur.execute("SELECT DISTINCT marketplace FROM scraped_products ORDER BY marketplace")
         marketplaces = [r["marketplace"] for r in cur.fetchall()]
 
         cur.close(); conn.close()
@@ -183,7 +183,7 @@ def upload_to_prom(product_id: int):
         conn = get_connection()
         cur = conn.cursor()
         cur.execute(
-            "SELECT id, title, price, url, category, marketplace FROM products WHERE id = %s",
+            "SELECT id, title, price, url, category, marketplace FROM my_products WHERE id = %s",
             (product_id,),
         )
         product = cur.fetchone()
