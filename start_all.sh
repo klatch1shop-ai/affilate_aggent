@@ -1,10 +1,10 @@
 #!/bin/bash
-cd /home/tekken/agent-system
+cd /home/tek/agent-system
 source venv/bin/activate
 export $(grep -v "^#" .env | xargs)
 
 echo "Starting Agent System..."
-python3 shared/utils/skills_indexer.py > logs/skills_indexer.log 2>&1
+echo "Skills indexer skipped on server"
 echo "Skills indexed"
 
 # Запустити оркестратор
