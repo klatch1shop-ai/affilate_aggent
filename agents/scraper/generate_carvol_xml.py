@@ -91,6 +91,7 @@ def generate_xml(output_file: str = "data/carvol_rozetka.xml"):
         lines.append(f'        <article>{article}</article>')
         lines.append(f'        <stock_quantity>{stock}</stock_quantity>')
         lines.append(f'        <name_ua>{name_ua}</name_ua>')
+        lines.append(f'        <name>{name_ua}</name>')
         if desc:
             lines.append(f'        <description_ua><![CDATA[<p>{desc}</p>]]></description_ua>')
         for k, v in params.items():
