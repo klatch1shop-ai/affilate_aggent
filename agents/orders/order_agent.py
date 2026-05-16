@@ -429,6 +429,7 @@ def notify_new_order(order: dict, items_info: list, payment_type: str):
     is_prepaid = any(w in payment_type.lower() for w in ['пром-оплата', 'онлайн', 'картк', 'liqpay'])
     
     if is_prepaid:
+        zakupka_total = sum(i.get('zakupka',0) * i.get('quantity',1) for i in items_info)
         tg(f"""⚠️ <b>ПРОМ-ОПЛАТА!</b> Замовлення #{order['id']}
 Покупець вже заплатив — потрібна передплата постачальнику!
 
@@ -438,7 +439,7 @@ def notify_new_order(order: dict, items_info: list, payment_type: str):
 📦 Товари:
 {items_text}
 
-🏦 Перекажи постачальнику перед відправкою!""")
+🏦 Перекажи постачальнику: ~{zakupka_total:.0f} грн\nopt@grandinstrument.ua""")
     else:
         all_ok = all(i['feed_available'] for i in items_info)
         status = '✅ Всі в наявності' if all_ok else '⚠️ Є проблеми з наявністю'
