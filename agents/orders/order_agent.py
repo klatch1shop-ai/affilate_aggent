@@ -41,6 +41,14 @@ SMTP_PASS = os.getenv('SMTP_PASS')
 SMTP_HOST = os.getenv('SMTP_HOST', 'smtp.gmail.com')
 SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
 
+def parse_price(val) -> float:
+    """Парсить ціну з будь-якого формату: '490 грн', 490, '490.0'"""
+    if val is None:
+        return 0.0
+    return float(str(val).replace(' грн','').replace(',','.').strip().split()[0])
+
+
+
 # === КЕШ ФІДУ ===
 _feed_cache = {'data': {}, 'updated': 0}
 
@@ -103,11 +111,23 @@ def get_new_orders() -> list:
         resp = requests.get(
             f'{PROM_BASE}/orders/list',
             headers=PROM_HEADERS,
-            params={'status': 'pending', 'limit': 50},
+            params={'limit': 50},
             timeout=30
         )
-        orders = resp.json().get('orders', [])
-        logger.info(f'Нових замовлень з Prom: {len(orders)}')
+        all_orders = resp.json().get('orders', [])
+        from datetime import datetime, timedelta, timezone
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+        orders = []
+        for o in all_orders:
+            if o.get('status') not in ('pending', 'paid'):
+                continue
+            try:
+                d = datetime.fromisoformat(o.get('date_created','').replace('Z','+00:00'))
+                if d > cutoff:
+                    orders.append(o)
+            except:
+                pass
+        logger.info(f'Нових замовлень: {len(orders)} з {len(all_orders)}')
         return orders
     except Exception as e:
         logger.error(f'Prom API помилка: {e}')
@@ -117,9 +137,9 @@ def confirm_order(order_id: int) -> bool:
     """Підтверджуємо замовлення на Prom"""
     try:
         resp = requests.post(
-            f'{PROM_BASE}/orders/{order_id}/set_status',
+            f'{PROM_BASE}/orders/set_status',
             headers=PROM_HEADERS,
-            json={'status': 'accepted'},
+            json={'ids': [order_id], 'status': 'accepted'},
             timeout=30
         )
         ok = resp.status_code == 200
@@ -185,11 +205,11 @@ def save_order(order: dict, items_info: list, all_available: bool):
         order['id'],
         'confirmed' if all_available else 'check_needed',
         f"{order.get('client_last_name','')} {order.get('client_first_name','')}".strip(),
-        order.get('client_phone', ''),
+        order.get('phone', '') or order.get('client_phone', ''),
         delivery_str,
         '',
         'Нова Пошта',
-        float(order.get('price', 0)),
+        parse_price(order.get('price', 0)),
         json.dumps(items_info, ensure_ascii=False),
         all_available
     ))
@@ -230,8 +250,8 @@ def create_order_excel(order: dict, items_info: list) -> str:
         wh_d = (delivery_raw.get('warehouse') or {}).get('description', '')
         delivery_str = f'{city_d} {wh_d}'.strip()
     customer = f"{order.get('client_last_name','')} {order.get('client_first_name','')}".strip()
-    phone = order.get('client_phone', '')
-    total = float(str(order.get('price', 0)).replace(' грн','').replace(',','.').split()[0])
+    phone = order.get('phone', '') or order.get('client_phone', '')
+    total = parse_price(order.get('price', 0))
     
     # Шапка
     ws.write('A1', 'Перевозчик', bold)
@@ -275,8 +295,12 @@ def send_to_supplier(order: dict, excel_path: str, items_info: list):
         wh_d = (delivery_raw.get('warehouse') or {}).get('description', '')
         delivery_str = f'{city_d} {wh_d}'.strip()
     customer = f"{order.get('client_last_name','')} {order.get('client_first_name','')}".strip()
-    phone = order.get('client_phone', '')
-    total = float(str(order.get('price', 0)).replace(' грн','').replace(',','.').split()[0])
+    phone = order.get('phone', '') or order.get('client_phone', '')
+    total = parse_price(order.get('price', 0))
+    payment = order.get('payment_option') or {}
+    payment_name = payment.get('name', '') if isinstance(payment, dict) else str(payment)
+    is_prepaid = any(w in payment_name.lower() for w in ['пром-оплата', 'онлайн', 'картк'])
+    payment_str = f'Передоплата (Пром-оплата) {total:.0f} грн' if is_prepaid else f'Наложенным платежом {total:.0f} грн'
     
     items_text = '\n'.join([
         f"{i+1}. {it['sku']} | {it['name'][:50]} | {it['quantity']} шт."
@@ -293,9 +317,8 @@ def send_to_supplier(order: dict, excel_path: str, items_info: list):
 
 Получатель: {customer}
 Телефон: {phone}
-Город: {city}
-Отделение НП: {warehouse}
-Оплата: Наложенным платежом {total:.0f} грн
+Доставка: {delivery_str}
+Оплата: {payment_str}
 
 Детали в приложении (Excel).
 
@@ -331,76 +354,6 @@ klatch1.shop"""
     conn.commit()
     cur.close(); conn.close()
     logger.success(f'Email відправлено на {SUPPLIER_EMAIL}')
-
-# =============================================
-# 6. ГОЛОВНИЙ ЦИКЛ
-# =============================================
-def process_orders():
-    init_db()
-    logger.info('=== Обробка замовлень Prom ===')
-    
-    orders = get_new_orders()
-    if not orders:
-        logger.info('Нових замовлень немає')
-        return
-    
-    for order in orders:
-        oid = order['id']
-        logger.info(f'--- Замовлення #{oid} ---')
-        
-        products = order.get('products', [])
-        items_info = []
-        all_available = True
-        
-        for product in products:
-            sku = (product.get('sku') or '').strip()
-            qty = product.get('quantity', 1)
-            avail = check_availability(sku)
-            
-            info = {
-                'sku': sku,
-                'name': product.get('name', ''),
-                'quantity': qty,
-                'prom_price': float(product.get('price', 0)),
-                'feed_available': avail['available'] if avail else False,
-                'feed_stock': avail['stock'] if avail else '—',
-                'zakupka': avail['zakupka'] if avail else 0,
-            }
-            items_info.append(info)
-            
-            if not avail or not avail['available']:
-                all_available = False
-                logger.warning(f'  ❌ {sku} — немає в наявності!')
-            else:
-                logger.info(f'  ✅ {sku} — є ({avail["stock"]})')
-        
-        # Тип оплати
-        payment = order.get('payment_option') or {}
-        payment_type = payment.get('name', 'Накладений платіж') if isinstance(payment, dict) else str(payment)
-        
-        # Зберігаємо в БД
-        save_order(order, items_info, all_available)
-        
-        # Telegram сповіщення
-        notify_new_order(order, items_info, payment_type)
-        
-        if all_available:
-            # Підтверджуємо на Prom
-            if confirm_order(oid):
-                try:
-                    excel = create_order_excel(order, items_info)
-                    send_to_supplier(order, excel, items_info)
-                    notify_order_sent(oid, excel)
-                    logger.success(f'✅ Замовлення #{oid} — оброблено повністю')
-                except Exception as e:
-                    logger.error(f'Помилка відправки: {e}')
-        else:
-            missing = [i['sku'] for i in items_info if not i['feed_available']]
-            notify_stock_problem(oid, missing)
-            logger.warning(f'⚠️ Замовлення #{oid} — відсутні: {missing}')
-
-if __name__ == '__main__':
-    process_orders()
 
 # =============================================
 # TELEGRAM СПОВІЩЕННЯ
@@ -464,3 +417,85 @@ def notify_order_sent(order_id: int, excel_file: str):
 Email: {SUPPLIER_EMAIL}
 Excel: {os.path.basename(excel_file)}
 ✅ Чекай підтвердження від Русанова""")
+# =============================================
+# 6. ГОЛОВНИЙ ЦИКЛ
+# =============================================
+def process_orders():
+    init_db()
+    logger.info('=== Обробка замовлень Prom ===')
+    
+    orders = get_new_orders()
+    if not orders:
+        logger.info('Нових замовлень немає')
+        return
+    
+    # Фільтруємо вже оброблені з БД
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT prom_order_id FROM orders WHERE supplier_email_sent=TRUE')
+    processed = {r['prom_order_id'] for r in cur.fetchall()}
+    cur.close(); conn.close()
+    orders = [o for o in orders if o['id'] not in processed]
+    logger.info(f'До обробки (нові): {len(orders)}')
+    if not orders:
+        logger.info('Всі замовлення вже оброблені')
+        return
+    
+    for order in orders:
+        oid = order['id']
+        logger.info(f'--- Замовлення #{oid} ---')
+        
+        products = order.get('products', [])
+        items_info = []
+        all_available = True
+        
+        for product in products:
+            sku = (product.get('sku') or '').strip()
+            qty = product.get('quantity', 1)
+            avail = check_availability(sku)
+            
+            info = {
+                'sku': sku,
+                'name': product.get('name', ''),
+                'quantity': qty,
+                'prom_price': float(str(product.get('price', 0)).replace(' грн','').replace(',','.').split()[0]),
+                'feed_available': avail['available'] if avail else False,
+                'feed_stock': avail['stock'] if avail else '—',
+                'zakupka': avail['zakupka'] if avail else 0,
+            }
+            items_info.append(info)
+            
+            if not avail or not avail['available']:
+                all_available = False
+                logger.warning(f'  ❌ {sku} — немає в наявності!')
+            else:
+                logger.info(f'  ✅ {sku} — є ({avail["stock"]})')
+        
+        # Тип оплати
+        payment = order.get('payment_option') or {}
+        payment_type = payment.get('name', 'Накладений платіж') if isinstance(payment, dict) else str(payment)
+        
+        # Зберігаємо в БД
+        save_order(order, items_info, all_available)
+        
+        # Telegram сповіщення
+        notify_new_order(order, items_info, payment_type)
+        
+        if all_available:
+            # Підтверджуємо на Prom
+            if confirm_order(oid):
+                try:
+                    excel = create_order_excel(order, items_info)
+                    send_to_supplier(order, excel, items_info)
+                    notify_order_sent(oid, excel)
+                    logger.success(f'✅ Замовлення #{oid} — оброблено повністю')
+                except Exception as e:
+                    logger.error(f'Помилка відправки: {e}')
+        else:
+            missing = [i['sku'] for i in items_info if not i['feed_available']]
+            notify_stock_problem(oid, missing)
+            logger.warning(f'⚠️ Замовлення #{oid} — відсутні: {missing}')
+
+if __name__ == '__main__':
+    process_orders()
+
