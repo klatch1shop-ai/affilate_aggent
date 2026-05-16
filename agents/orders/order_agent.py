@@ -60,13 +60,9 @@ def load_feed():
         
         cache = {}
         for offer in offers:
-            # Шукаємо артикул
-            sku = ''
-            for p in offer.findall('param'):
-                pname = (p.get('name') or '').lower()
-                if 'артикул' in pname or 'article' in pname:
-                    sku = (p.text or '').strip().upper()
-                    break
+            # SKU з vendorCode
+            sku_el = offer.find('vendorCode')
+            sku = (sku_el.text or '').strip() if sku_el is not None else ''
             if not sku:
                 sku = (offer.get('id') or '').upper()
             
