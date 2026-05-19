@@ -1,43 +1,48 @@
-import httpx
 import os
-from dotenv import load_dotenv
+import requests
 
-load_dotenv()
+def load_env():
+    if os.path.exists('.env'):
+        with open('.env', 'r', encoding='utf-8') as f:
+            for line in f:
+                if '=' in line and not line.startswith('#'):
+                    k, v = line.strip().split('=', 1)
+                    os.environ[k.strip()] = v.strip('"').strip("'").strip()
 
-TOKEN = os.getenv("EPICENTR_TOKEN")
-BASE_URL = os.getenv("EPICENTR_API_URL")
-
-headers = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36"
-}
-
-def check():
-    # Метод для перевірки токена (отримання власного профілю)
-    url = f"{BASE_URL}/cabinet/profile" 
-    print(f"🛰️ Тестуємо з'єднання: {url}")
+def test_real_oms_route():
+    load_env()
+    token = os.getenv("EPICENTR_TOKEN")
+    base_url = "https://merchant-api.epicentrm.com.ua"
     
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+
+    # Тестуємо реальний корінь OMS, який вказано в інструкції по статусах
+    url = f"{base_url}/v2/oms/orders"
+    
+    print(f"[🔍] Стукаємо в офіційний OMS за адресою: {url}")
     try:
-        with httpx.Client(timeout=30.0, follow_redirects=True) as client:
-            response = client.get(url, headers=headers)
-            if response.status_code == 200:
-                print("✅ Успіх! Зв'язок з Епіцентром встановлено.")
-                print("Дані профілю:", response.json())
-            elif response.status_code == 401:
-                print("❌ Помилка: Токен невірний або термін дії вичерпано (Unauthorized).")
-            else:
-                print(f"❌ Помилка API: {response.status_code}")
-                # Спробуємо інший ендпоінт, якщо цей закритий
-                print("Спробуємо отримати довідник категорій...")
-                cat_url = f"{BASE_URL}/directories/categories"
-                res_cat = client.get(cat_url, headers=headers)
-                print(f"Статус категорій: {res_cat.status_code}")
-                if res_cat.status_code == 200:
-                     print("✅ Категорії отримано!")
+        # Епіцентр може вимагати чіткі параметри пагінації для GET
+        params = {"limit": 10, "offset": 0}
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            print("[🍏 УСПІХ!] OMS модуль відповів кодом 200.")
+            print(f"Дані: {response.json()}")
+        elif response.status_code == 405:
+            print("[⚠️ МЕТОД ЗАБОРОНЕНО - 405]")
+            print("Ендпоінт /v2/oms/orders існує, але не приймає GET запити без конкретного ID замовлення!")
+            print("Це підтверджує інструкцію: Епіцентр вимагає роботу з конкретними {orderId}.")
+        elif response.status_code == 404:
+            print("[❌ 404] Сервер все одно не бачить цей шлях колекцій замовлень.")
+        else:
+            print(f"[ℹ️ Статус {response.status_code}]: {response.text}")
+            
     except Exception as e:
-        print(f"❌ Помилка: {e}")
+        print(f"[💥 ПОМИЛКА]: {e}")
 
 if __name__ == "__main__":
-    check()
+    test_real_oms_route()
