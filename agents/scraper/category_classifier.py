@@ -10,7 +10,7 @@ from dotenv import load_dotenv; load_dotenv('/home/tek/agent-system/.env')
 from shared.utils.db import get_connection
 import requests
 
-OLLAMA = 'http://192.168.3.24:11434'
+OLLAMA = 'http://100.126.131.55:11434'
 MODEL = 'llama3.2:3b'
 
 # Словник: підрядки назви → категорія Єпіцентру

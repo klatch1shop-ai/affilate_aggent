@@ -12,3 +12,4 @@ credentials/
 *.tar.gz
 .claude/
 data/*.xml
+logs/*.csv
