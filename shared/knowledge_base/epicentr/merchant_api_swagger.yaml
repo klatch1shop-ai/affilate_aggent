@@ -1,0 +1,4302 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Merchant API
+  description: >
+    <p>Публічне API дозволяє зареєстрованим компаніям отримувати віддалений
+    доступ до управління даними по замовленням в кабінеті через власний
+    програмний інтерфейс.</p>
+
+
+    <h3>Версія API</h3>
+
+    <p>
+      Документація публічного API epicentrm.com.ua версії 1.0.0 (закритий бета-тест для обмеженої кількості компаній).
+      Ми будемо раді отримати зворотний зв'язок із зауваженнями щодо його використання та побажаннями щодо покращення функціональності.
+      Прохання надсилати зворотний зв'язок на email merchant@epicentrk.ua з відповідною темою листа.
+    </p>
+
+
+    <h3>Що може публічне API?</h3>
+
+    <p>За допомогою API ви можете швидко опрацьовувати замовлення:</p>
+
+    <ul>
+      <li>змінювати статус замовлення</li>
+      <li>змінювати дані по клієнту</li>
+      <li>змінювати дані по доставці та способу оплати</li>
+      <li>додавати та видаляти товар</li>
+      <li>вносити ТТН для трекінгу та автоматичного завершення замовлення</li>
+      <li>отримувати та відправляти коментарі до замовлень</li>
+    </ul>
+
+
+    <h3>Як отримати доступ до API?</h3>
+
+    <p>
+      Щоб почати працювати через публічне API, вам необхідно згенерувати власний унікальний ключ (токен).
+      Для цього увійдіть до кабінету та перейдіть у вкладку API в Налаштуваннях компанії.
+      Всі запити через API виконуються за допомогою цього унікального ключа.
+    </p>
+
+
+    <h3>Формат дати й часу</h3>
+
+    <p>Усі поля дати й часу зазначаються в часовому поясі UTC.</p>
+
+
+    <h3>Приклади використання API:</h3>
+
+    <ul>
+      <li><a target="_blank" href="https://github.com/epicentrm/merchant-api/blob/main/api-samples/python.md">Python</a></li>
+      <li><a target="_blank" href="https://github.com/epicentrm/merchant-api/blob/main/api-samples/nodejs.md">Node.js</a></li>
+      <li><a target="_blank" href="https://github.com/epicentrm/merchant-api/blob/main/api-samples/php.md">PHP</a></li>
+      <li><a target="_blank" href="https://github.com/epicentrm/merchant-api/blob/main/api-samples/java.md">Java</a></li>
+    </ul>
+
+    <h3>Доступні методи API:</h3>
+paths:
+  "/v1/deliveries/shipments/companies/{companyId}/providers":
+    get:
+      operationId: getDeliveryProviders
+      summary: Отримати дані по провайдерам доставки компанії
+      description: Отримати дані по провайдерам доставки компанії
+      tags:
+        - DELIVERY
+      parameters:
+        - $ref: "#/components/parameters/companyId"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 2
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        enabled:
+                          type: boolean
+                          nullable: false
+                          example: true
+                        provider:
+                          $ref: "#/components/schemas/DeliveryProvider"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/deliveries/providers/{deliveryProvider}/participants/{participant}/settlements":
+    get:
+      operationId: getDeliveryProviderParticipantSettlements
+      summary: Отримати відділення доставок за провайдером і учасником
+      description: Отримати відділення доставок за провайдером і учасником
+      tags:
+        - DELIVERY
+      parameters:
+        - $ref: "#/components/parameters/deliveryProvider"
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/deliveryParticipant"
+        - $ref: "#/components/parameters/title"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliverySettlementsListModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+  "/v3/deliveries/providers/{deliveryProvider}/participants/{participant}/settlements/{settlementId}/offices":
+    get:
+      operationId: getDeliveryProviderParticipantSettlementsOffices
+      summary: Отримати відділення доставок за провайдером і учасником
+      description: Отримати відділення доставок за провайдером і учасником
+      tags:
+        - DELIVERY
+      parameters:
+        - $ref: "#/components/parameters/deliveryProvider"
+        - $ref: "#/components/parameters/acceptLanguage"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/deliveryParticipant"
+        - name: settlementId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: aa6682d3-ce98-4bea-80bd-20205dc63195
+        - name: filter[isActive]
+          in: query
+          required: false
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            format: int32
+            description: Search active or inactive post offices
+            example: 1
+            default: 1
+        - name: filter[title]
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 255
+            description: Search by a partial match in a post office title
+            example: Hubb
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliverySettlementsOfficesListModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+  "/v3/deliveries/{provider}/companies/{companyId}/invoice/{number}":
+    get:
+      operationId: getDeliveryInvoiceV3
+      summary: Отримати дані по створеній накладній в новому форматі
+      description: Отримати дані по створеній накладній в новому форматі
+      tags:
+        - DELIVERY
+      parameters:
+        - $ref: "#/components/parameters/invoiceProvider"
+        - $ref: "#/components/parameters/companyIdInPath"
+        - $ref: "#/components/parameters/deliveryNumber"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceFileReadModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v2/deliveries/pickup/companies/{companyId}/pickup-points/enabled":
+    get:
+      operationId: getSpecificCompanyPickupPointsListEnabled
+      summary: Отримати список пунктів самовивозу
+      description: Отримати список пунктів самовивозу
+      tags:
+        - DELIVERY
+      parameters:
+        - $ref: "#/components/parameters/companyId"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/CollectionResponse"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        description: List of items
+                        items:
+                          $ref: "#/components/schemas/PickupPointRead"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v2/oms/orders/{orderId}/comments":
+    post:
+      operationId: addCommentToOrder
+      summary: Додати коментар до замовлення
+      description: Додати коментар до замовлення
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  example: lorem ipsum
+      responses:
+        "204":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+    get:
+      operationId: getCommentsFromOrder
+      summary: Отримати список коментарів по замовленню
+      description: Отримати список коментарів по замовленню
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+        - $ref: "#/components/parameters/offset"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/CollectionResponse"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        description: List of comments
+                        items:
+                          type: object
+                          required:
+                            - content
+                            - firstName
+                            - lastName
+                            - avatar
+                            - userId
+                            - createdAt
+                          properties:
+                            content:
+                              type: string
+                              example: lorem ipsum
+                            firstName:
+                              type: string
+                              example: John
+                            lastName:
+                              type: string
+                              example: Doe
+                            avatar:
+                              type: string
+                              example: http://example.com/avatar.jpg
+                            userId:
+                              type: string
+                              example: "42"
+                            createdAt:
+                              type: string
+                              example: 2020-05-20T05:35:12+00:00
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v2/oms/orders/{orderId}/allowed-statuses":
+    get:
+      operationId: getOrderAllowedStatuses
+      summary: Отримати список доступних статусів для переведення замовлення
+      description: Отримати список доступних статусів для переведення замовлення
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrderAllowedStatus"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v2/oms/orders/{orderId}/change-status/to/{orderStatus}":
+    post:
+      operationId: changeOrderStatus
+      summary: Змінити статус замовлення
+      description: Змінити статус замовлення
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+        - name: orderStatus
+          in: path
+          required: true
+          description: Статус замовлення
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderChangeStatusWriteModel"
+            examples:
+              CancelWriteModel:
+                value:
+                  reason_code: Some reason
+                  translationKey: order.cancel_reason.product_not_available
+                  comment: Some comment
+              SentWriteModel:
+                value:
+                  provider: nova_poshta
+                  number: "100321569875"
+      responses:
+        "202":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v2/oms/orders/{orderId}/items/{offerId}":
+    delete:
+      operationId: deleteOrderItem
+      summary: Видалити товар з замовлення
+      description: Видалити товар з замовлення
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+        - $ref: "#/components/parameters/omsOfferId"
+      responses:
+        "204":
+          description: Операція успішна
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+  /v2/oms/order-cancel-reasons/customer:
+    get:
+      operationId: getInternalOrdersCancelReasonsByRole
+      summary: Отримати список причин скасування замовлення
+      description: Отримати список причин скасування замовлення
+      tags:
+        - OMS
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrderCancelReason"
+  "/v2/oms/orders/{orderId}/payment/generate-url":
+    post:
+      operationId: generatePaymentUrl
+      summary: Згенерувати посилання на оплату карткою онлайн
+      description: Згенерувати посилання на оплату карткою онлайн
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      responses:
+        "204":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+  "/v2/oms/orders/{orderId}/call-status":
+    post:
+      operationId: editOrderCallStatus
+      summary: Оновити статус дзвінка
+      description: Оновити статус дзвінка
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCallStatusInput"
+      responses:
+        "202":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  /v3/oms/orders:
+    get:
+      operationId: getOrdersV3
+      summary: Отримати список замовлень по заданим параметрам фільтрації
+      description: Отримати список замовлень по заданим параметрам фільтрації
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsFilterV3"
+        - $ref: "#/components/parameters/omsSort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/cursor"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderListModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  /v3/oms/orders/total:
+    get:
+      operationId: getOrdersTotalV3
+      summary: Отримати кількість замовлень по заданим параметрам фільтрації
+      description: Отримати кількість замовлень по заданим параметрам фільтрації
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsFilterV3"
+        - $ref: "#/components/parameters/omsSort"
+        - $ref: "#/components/parameters/cursor"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderListTotalModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/oms/orders/{orderId}/client-data":
+    post:
+      operationId: editOrderClientDataV3
+      summary: Update order client data
+      description: |
+        Update order client data:
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - email
+                - phone
+                - recipient
+              properties:
+                firstName:
+                  type: string
+                  example: Петро
+                  x-faker: internet.userName
+                lastName:
+                  type: string
+                  example: Петрушенко
+                  x-faker: internet.userName
+                patronymic:
+                  type: string
+                  example: Петрович
+                  x-faker: internet.userName
+                email:
+                  type: string
+                  example: test@test.com
+                phone:
+                  type: string
+                  example: "380661112233"
+                  x-faker: phone.phoneNumber
+                recipient:
+                  $ref: "#/components/schemas/OrderAddressV3/properties/recipient"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderAddressV3"
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+        "410":
+          description: item was deleted
+  "/v3/oms/orders/{orderId}/items/{offerId}":
+    put:
+      operationId: editOrderItemV3
+      summary: Змінити кількість товару в замовленні
+      description: Змінити кількість товару в замовленні
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+        - $ref: "#/components/parameters/omsOfferId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderItemInput"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderItemV3"
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/oms/orders/{orderId}/items":
+    post:
+      operationId: addOrderItemV3
+      summary: Додати товар в замовлення
+      description: Додати товар в замовлення
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+                - siteUrl
+              properties:
+                productId:
+                  type: string
+                  example: "2365141"
+                siteUrl:
+                  type: string
+                  example: https://test.domain/product
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderItemV3"
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/oms/orders/{orderId}/shipping/{deliveryProvider}":
+    post:
+      operationId: createOrderShipmentV3
+      summary: Create order shipment
+      description: Додати накладну
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+        - $ref: "#/components/parameters/deliveryProvider"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateShipmentModelV3"
+      responses:
+        "201":
+          description: Successful operation
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/oms/orders/{orderId}/delivery-data/{deliveryProvider}":
+    post:
+      operationId: editOrderDeliveryDataV3
+      summary: Змінити дані по доставці та способу оплати
+      description: Змінити дані по доставці та способу оплати
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+        - $ref: "#/components/parameters/deliveryProvider"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - settlementId
+                - officeId
+              properties:
+                settlementId:
+                  type: string
+                  format: uuid
+                  description: ID міста постачальника доставки
+                  example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+                officeId:
+                  type: string
+                  format: uuid
+                  description: ID поштового відділення постачальника доставки
+                  example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+                paymentProvider:
+                  type: string
+                  enum:
+                    - pay_on_pickup
+                    - pay_on_delivery
+                    - easypay
+                    - monobank
+                    - invoice
+      responses:
+        "202":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v5/oms/orders/{orderId}":
+    get:
+      operationId: getOrderDetailsV5
+      summary: Отримати дані по замовленню V5
+      description: |
+        Get order details V5:
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+        - $ref: "#/components/parameters/omsEnables"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                  - companyId
+                  - customerId
+                  - commentsCount
+                  - number
+                  - createdAt
+                  - statusCode
+                  - subtotal
+                  - payed
+                  - skipCustomerContact
+                  - items
+                  - address
+                  - cancel
+                  - company
+                  - settlement
+                  - office
+                  - legalEntityId
+                  - hasFeedback
+                  - callStatus
+                  - contractor
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Order id
+                    example: dec9761c-9ed0-403f-a01a-5e25154ebcab
+                    x-faker: datatype.uuid
+                  externalId:
+                    type: string
+                    nullable: true
+                    description: Order id from external system
+                    example: "888888"
+                    x-faker:
+                      helpers.arrayElement:
+                        - "12345"
+                  companyId:
+                    type: string
+                    format: uuid
+                    example: 1e0ca935-a61d-41bc-9bd3-8c2833b72f6d
+                  legalEntityId:
+                    type: number
+                    example: 2
+                    x-faker: datatype.number
+                  trustedCompany:
+                    type: boolean
+                    example: true
+                  customerId:
+                    type: string
+                    nullable: true
+                    format: uuid
+                    example: 6d9244a1-3c41-4568-acf9-144ebf634705
+                    x-faker: datatype.uuid
+                  assignee:
+                    $ref: "#/components/schemas/OrderAssignee"
+                  comment:
+                    type: string
+                    example: text comment
+                    x-faker: lorem.sentence
+                  commentsCount:
+                    type: number
+                    example: 42
+                    x-faker:
+                      datatype.number:
+                        min: 0
+                        max: 100
+                  number:
+                    type: string
+                    description: Order Number
+                    example: "1000000373"
+                    x-faker:
+                      helpers.arrayElement:
+                        - "12345"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: 2020-05-20T05:35:11+00:00
+                    x-faker: date.future
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2020-05-20T05:35:12+00:00
+                    x-faker: date.future
+                  statusCode:
+                    $ref: "#/components/schemas/OrderStatus"
+                  callStatus:
+                    nullable: true
+                    $ref: "#/components/schemas/OrderCallStatus"
+                  subtotal:
+                    type: number
+                    format: decimal
+                    example: 1201.5
+                    x-faker:
+                      datatype.number:
+                        min: 0
+                        max: 11000
+                        precision: 2
+                  payed:
+                    type: boolean
+                    example: true
+                  skipCustomerContact:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrderProductsItem"
+                  address:
+                    type: object
+                    required:
+                      - firstName
+                      - lastName
+                      - email
+                      - phone
+                      - shipment
+                      - isAlternateRecipient
+                      - recipient
+                    properties:
+                      firstName:
+                        type: string
+                        example: John
+                        x-faker: internet.userName
+                      lastName:
+                        type: string
+                        example: Galt
+                        x-faker: internet.userName
+                      patronymic:
+                        type: string
+                        example: Willson
+                        x-faker: internet.userName
+                      email:
+                        type: string
+                        example: test@test.com
+                        x-faker: internet.email
+                      phone:
+                        type: string
+                        example: "380661112233"
+                        x-faker: phone.phoneNumber
+                      shipment:
+                        $ref: "#/components/schemas/OrderShipment"
+                      isAlternateRecipient:
+                        type: boolean
+                        example: true
+                      recipient:
+                        $ref: "#/components/schemas/OrderAddressV3/properties/recipient"
+                      payerName:
+                        type: string
+                        nullable: true
+                        example: ТОВ Зоря
+                      govNumber:
+                        type: string
+                        nullable: true
+                        minimum: 8
+                        maximum: 10
+                        description: Company EDRPO or ITN
+                        example: "32855961"
+                  cancel:
+                    nullable: true
+                    type: object
+                    required:
+                      - previousStatusCode
+                      - initiatorCode
+                      - reasonCode
+                      - comment
+                      - reasonTranslationKey
+                      - createdAt
+                    properties:
+                      previousStatusCode:
+                        $ref: "#/components/schemas/OrderStatus"
+                      initiatorCode:
+                        $ref: "#/components/schemas/InitiatorCode"
+                      reasonCode:
+                        $ref: "#/components/schemas/ReasonCode"
+                      comment:
+                        type: string
+                        example: text comment
+                      reasonTranslationKey:
+                        type: string
+                        example: order.customer_cancel_reason.customer_changed_mind
+                      createdAt:
+                        type: string
+                        example: 2020-05-20T05:35:11+00:00
+                  company:
+                    nullable: true
+                    $ref: "#/components/schemas/Company"
+                    description: Optional property joined from mas-service
+                  company_shipments:
+                    nullable: true
+                    $ref: "#/components/schemas/DeliveryShipments"
+                    description: Shipment settings for company
+                  company_payments:
+                    nullable: true
+                    $ref: "#/components/schemas/Order/properties/company_payments"
+                    description: Payment settings for company
+                  settlement:
+                    nullable: true
+                    $ref: "#/components/schemas/DeliverySettlement"
+                    description: Optional property joined from delivery-service
+                  office:
+                    nullable: true
+                    $ref: "#/components/schemas/DeliveryOffice"
+                    description: Optional property joined from delivery-service
+                  hasFeedback:
+                    type: boolean
+                    example: true
+                  contractor:
+                    type: object
+                    required:
+                      - iban
+                      - govNumber
+                      - isVatpayer
+                      - name
+                    properties:
+                      iban:
+                        type: string
+                        nullable: true
+                        example: UA123456789012345678901234567
+                      govNumber:
+                        type: string
+                        nullable: true
+                        minimum: 8
+                        maximum: 10
+                        description: Company EDRPO or ITN
+                        example: "32855961"
+                      isVatpayer:
+                        type: boolean
+                        nullable: true
+                      name:
+                        type: string
+                        nullable: true
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+        "410":
+          description: item was deleted
+  "/v1/oms/orders/{orderId}/shipment-number":
+    delete:
+      operationId: removeOrderShipmentNumber
+      summary: Видалити номер ТТН
+      description: Видалити номер ТТН
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          $ref: "#/components/responses/invalidInput"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          $ref: "#/components/responses/notFound"
+    patch:
+      operationId: editOrderDeliveryNumberV1
+      summary: Додати номер ТТН
+      description: Додати номер ТТН
+      tags:
+        - OMS
+      parameters:
+        - $ref: "#/components/parameters/omsOrderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShipmentNumberEditV1"
+      responses:
+        "202":
+          description: Операція успішна
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/v3/payments/companies/{companyId}":
+    get:
+      operationId: getCompanyPaymentV3
+      summary: Отримати дані по налаштуванням способів оплати
+      description: Отримати дані по налаштуванням способів оплати
+      tags:
+        - Payment-V3
+      parameters:
+        - $ref: "#/components/parameters/companyIdInPath"
+      responses:
+        "200":
+          description: Операція успішна
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - companyId
+                  - paymentsSettings
+                properties:
+                  companyId:
+                    type: string
+                    format: uuid
+                    example: 8a1643e6-87b6-45fe-8d14-f3c54e221f5a
+                  paymentsSettings:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PaymentSettingModel"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+  /v2/pim/attribute-sets:
+    get:
+      operationId: getAttributeSetsV2
+      summary: Get list of attribute sets
+      description: Get list of attribute sets
+      tags:
+        - PIM
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - in: query
+          name: filter[codes][]
+          description: List of atttribute set codes
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PagedCollection"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        description: List of items
+                        items:
+                          $ref: "#/components/schemas/AttributeSetV2"
+        "403":
+          $ref: "#/components/responses/forbiddenInvalidCredentials"
+  "/v2/pim/attribute-sets/{attributeSetCode}/attributes/{attributeCode}/options":
+    get:
+      operationId: getAttributeOptionsV2
+      summary: Get list of attribute options
+      description: Get list of attribute options
+      tags:
+        - PIM
+      parameters:
+        - name: attributeSetCode
+          in: path
+          required: true
+          description: attribute set code
+          schema:
+            type: string
+        - name: attributeCode
+          in: path
+          required: true
+          description: attribute code
+          schema:
+            type: string
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PagedCollection"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        description: List of items
+                        items:
+                          $ref: "#/components/schemas/AttributeOptionListV2"
+        "403":
+          $ref: "#/components/responses/forbiddenInvalidCredentials"
+  /v2/pim/categories:
+    get:
+      operationId: getCategoriesV2
+      summary: Get list of categories
+      description: Get list of categories
+      tags:
+        - PIM
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - in: query
+          name: filter[hasChild]
+          description: Category has child filter
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PagedCollection"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        description: List of items
+                        items:
+                          $ref: "#/components/schemas/CategoryListV2"
+        "403":
+          $ref: "#/components/responses/forbiddenInvalidCredentials"
+components:
+  schemas:
+    Company:
+      type: object
+      required:
+        - id
+        - statusCode
+        - ownerId
+        - updatedBy
+        - version
+        - createdAt
+        - updatedAt
+        - feature
+        - mainAccount
+        - bonusAccount
+        - trusted
+        - legalEntityId
+      properties:
+        id:
+          type: string
+          description: Ідентифікатор компанії
+          example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+        name:
+          type: string
+          description: Найменування компанії
+          example: Hubber
+        statusCode:
+          type: string
+          enum:
+            - new
+            - active
+            - blocked
+            - blocked_by_balance
+            - contract_terminated
+          description: "Статус компанії "
+          example: new
+        ownerId:
+          type: string
+          description: Ідентифікатор власника компанії
+          example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+        updatedBy:
+          type: string
+          maxLength: 255
+          nullable: true
+          description: Оновлено
+          example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+        version:
+          type: integer
+          description: Версія ресурсу
+          example: 1
+        createdAt:
+          type: string
+          description: Створено в дату й час
+          example: 2020-10-10 19:00:00
+        updatedAt:
+          type: string
+          nullable: true
+          description: Оновлено о datetime
+          example: 2020-10-10 19:00:00
+        tariffId:
+          type: string
+          format: uuid
+          description: Ідентифікатор тарифу компанії
+          example: 7e4ae1c7-8f0b-4bd2-a7a4-efa8796cea2e
+        logo:
+          type: string
+          nullable: true
+          description: Ідентифікатор файлу логотипу
+          example: dd6aeb48-0051-40f8-ab47-6a2ee7cb9fe5
+        govNumber:
+          type: string
+          nullable: true
+          minimum: 8
+          maximum: 10
+          description: ЄДРПО або ІПН компанії
+          example: "32855961"
+        legalEntityId:
+          type: integer
+          nullable: true
+          description: Юридична особа
+          example: "1"
+        type:
+          type: string
+          enum:
+            - fop
+            - tov
+            - pp
+          nullable: true
+          description: Тип компанії
+          example: fop
+        iban:
+          type: string
+          nullable: true
+          description: Значення IBAN компанії
+          example: UA593510050000026201111111111
+        responsibleId:
+          type: string
+          nullable: true
+          description: Ідентифікатор відповідального менеджера
+          example: "24"
+        legalName:
+          type: string
+          description: Юридична назва компанії/фізичної особи-підприємця
+          example: Legal Corp
+        contractNumber:
+          type: string
+          description: Номер контракта
+          example: "0000000000000000"
+        contractDate:
+          type: string
+          description: "Дата договору:"
+          example: 2018-02-13T21:02:07+00:00
+        identityNumber:
+          type: string
+          description: Номер посвідчення особи (застосовується лише для фізичних
+            осіб-підприємців)
+          example: 000000000 OR АА0000
+        identityIssuedDate:
+          type: string
+          description: Дата видачі посвідчення особи (застосовується лише для фізичних
+            осіб-підприємців)
+          example: 2018-02-13T21:02:07+00:00
+        identityIssuedBy:
+          type: string
+          description: Посвідчення особи, видане (застосовується лише для фізичних
+            осіб-підприємців)
+          example: "1234"
+        legalAddressCity:
+          type: string
+          description: Адреса місцезнаходження
+          example: Наддніпрянське
+        legalAddressStreet:
+          type: string
+          description: Юридична адреса вул.
+          example: Парковая аллея
+        legalAddressHouseNumber:
+          type: string
+          description: Юридична адреса номер будинку
+          example: 9 3/4
+        legalAddressOffice:
+          type: string
+          description: Юридична адреса офіс/квартира номер
+          example: "11"
+        legalAddressPostalCode:
+          type: string
+          description: Юридична адреса поштовий індекс
+          example: "01000"
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyFile"
+          description: Файли документів компанії
+        address:
+          type: string
+          maxLength: 255
+          nullable: true
+          description: Адреса компанії в місті або регіоні
+          example: вул. Джобса 1
+          deprecated: true
+        location:
+          type: string
+          maxLength: 255
+          nullable: true
+          description: Місто або регіон компанії
+          example: Наддніпрянське
+          deprecated: true
+        mainAccount:
+          $ref: "#/components/schemas/CompanyMainAccount"
+          nullable: true
+        bonusAccount:
+          $ref: "#/components/schemas/CompanyBonusAccount"
+          nullable: true
+        responsible:
+          nullable: true
+          type: object
+          required:
+            - firstName
+            - lastName
+            - email
+            - phone
+          properties:
+            firstName:
+              type: string
+              example: Ivan
+            lastName:
+              type: string
+              nullable: true
+              example: Ivanovich
+            email:
+              type: string
+              example: test@test.com
+            phone:
+              type: string
+              nullable: true
+              example: 1234567890
+        shipment_settings:
+          $ref: "#/components/schemas/DeliveryShipments"
+        criticalLimit:
+          type: number
+          nullable: true
+          description: Критичний доступний рівень балансу
+          example: 100
+        feature:
+          $ref: "#/components/schemas/CompanyFeatureReadModel"
+        trusted:
+          type: boolean
+          example: true
+        isActive:
+          type: boolean
+        contentManagerId:
+          type: integer
+          nullable: true
+          description: "Контент-менеджер "
+          example: 100
+        isPrepayment:
+          type: boolean
+        lastChangedAt:
+          type: string
+          nullable: true
+          description: Дата і час останньої зміни статусу
+          example: 2020-10-10 19:00:00
+        isQuestionsActive:
+          type: boolean
+    CompanyMainAccount:
+      type: object
+      required:
+        - balance
+        - hold
+        - total
+      properties:
+        balance:
+          type: number
+          format: float
+          description: Доступний залишок
+          example: 1000
+        hold:
+          type: number
+          format: float
+          description: Утримана сума
+          example: 10
+        total:
+          type: number
+          format: float
+          description: Підсумковий баланс
+          example: 1010
+    CompanyBonusAccount:
+      type: object
+      required:
+        - balance
+        - hold
+        - total
+      properties:
+        balance:
+          type: number
+          format: float
+          description: Доступний залишок
+          example: 1000
+        hold:
+          type: number
+          format: float
+          description: Утримана сума
+          example: 10
+        total:
+          type: number
+          format: float
+          description: Підсумковий баланс
+          example: 1010
+    DeliveryShipments:
+      type: object
+      properties:
+        company_id:
+          type: string
+          format: uuid
+          example: aa6682d3-ce98-4bea-80bd-20205dc63195
+        category_id:
+          type: string
+          nullable: true
+          example: "345"
+        external_category_id:
+          type: string
+          nullable: true
+          example: "962"
+        shipments:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeliveryShipment"
+        type:
+          type: string
+          $ref: "#/components/schemas/DeliveryType"
+        created_at:
+          type: string
+          example: 2018-02-13T21:02:07+00:00
+        updated_at:
+          type: string
+          example: 2018-02-13T21:02:07+00:00
+        category:
+          type: object
+          allOf:
+            - type: object
+              properties:
+                id:
+                  type: integer
+                  example: 123
+                externalId:
+                  type: string
+                  example: 52c783d1-5811-4c92-8d05-1ba05c31143a
+                title:
+                  type: string
+                  example: Название категории
+                slug:
+                  type: string
+                  example: dignissimos
+                parentId:
+                  type: integer
+                  example: 120
+                createdAt:
+                  type: string
+                  example: 2020-10-10 19:00:00
+                updatedAt:
+                  type: string
+                  example: 2020-10-10 19:00:00
+                special:
+                  type: boolean
+                  description: Визначте, чи є категорія віртуальною чи реальною
+                  example: false
+                visible:
+                  type: boolean
+                  description: Показує або приховує категорію
+                  example: true
+            - type: object
+              properties:
+                attributeSets:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/AttributeSetItemV2"
+    DeliveryShipment:
+      type: object
+      required:
+        - provider
+        - enabled
+        - options
+      properties:
+        provider:
+          type: string
+          enum:
+            - nova_poshta
+            - ukrposhta
+            - pickup
+          example: ukrposhta
+        enabled:
+          type: boolean
+          example: true
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeliveryOption"
+        delivery_period:
+          type: integer
+          nullable: true
+          example: 14
+        created_at:
+          type: string
+          example: 2018-02-13T21:02:07+00:00
+        updated_at:
+          type: string
+          example: 2018-02-13T21:02:07+00:00
+    DeliveryOption:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/ShipmentOptionName"
+        enabled:
+          type: boolean
+          example: true
+        threshold:
+          type: number
+          example: 42
+    DeliveryType:
+      type: string
+      enum:
+        - default
+        - company
+        - category
+      example: company
+    DeliveryProvider:
+      type: string
+      enum:
+        - nova_poshta
+        - ukrposhta
+        - pickup
+        - meest
+      description: Тип постачальника
+      example: nova_poshta
+    DeliverySettlement:
+      oneOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+            title:
+              type: string
+              example: Київ
+            disabled:
+              type: boolean
+              example: false
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+            city_id:
+              type: number
+              example: 42
+            district_id:
+              type: number
+              example: 42
+            region_id:
+              type: number
+              example: 42
+            title:
+              type: string
+              example: Переліски - Вінницька обл. - Барський р-н
+            district:
+              type: string
+              example: Барський
+            region:
+              type: string
+              example: Вінницька
+            city:
+              type: string
+              example: Переліски
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+            title:
+              type: string
+              example: Переліски - Вінницька обл. - Барський р-н
+        - type: object
+          required:
+            - id
+            - external_Id
+            - title
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+              x-faker: datatype.uuid
+            external_Id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+              x-faker: datatype.uuid
+            title:
+              type: string
+              example: Київ
+              x-faker: address.city
+    DeliveryOffice:
+      oneOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            title:
+              type: string
+              example: 'Відділення №100 (до 30 кг на одне місце): вул. Інженерна, 1 (маг.
+                "Фуршет")'
+            address:
+              type: string
+              example: Київ, Інженерна, 1
+            disabled:
+              type: boolean
+              example: false
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            city_id:
+              type: number
+              example: 42
+            district_id:
+              type: number
+              example: 42
+            region_id:
+              type: number
+              example: 42
+            title:
+              type: string
+              example: Переліски - Вінницька обл. - Барський р-н
+            district:
+              type: string
+              example: Барський
+            region:
+              type: string
+              example: Вінницька
+            city:
+              type: string
+              example: Переліски
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+            company_id:
+              type: string
+              format: uuid
+              example: aa6682d3-ce98-4bea-80bd-20205dc63195
+            map_url:
+              type: string
+              example: https://exmaple.com/xxx
+            phone:
+              type: string
+              example: "380661112233"
+            photo:
+              type: string
+              example: https://exmaple.com/123.jpg
+            title:
+              type: string
+              example: Название
+            address_translations:
+              type: array
+              items:
+                type: object
+                properties:
+                  locale:
+                    type: string
+                    enum:
+                      - ru
+                      - ua
+                    example: ru
+                  value:
+                    type: string
+                    example: Адрес
+            schedule:
+              type: array
+              items:
+                type: object
+                properties:
+                  day:
+                    type: string
+                    enum:
+                      - sun
+                      - mon
+                      - tue
+                      - wed
+                      - thu
+                      - fri
+                      - sat
+                    example: mon
+                  enabled:
+                    type: boolean
+                    example: true
+                  from:
+                    type: string
+                    example: 08:00
+                  to:
+                    type: string
+                    example: 20:00
+            settlement:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 00021186-acfc-4fec-8a41-b2da2a2a0d64
+                title:
+                  type: string
+                  example: Киенка - Черниговская обл. - Черниговский р-н
+        - type: object
+          required:
+            - address
+            - externalId
+            - id
+            - latitude
+            - longitude
+            - settlement_id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            settlement_id:
+              type: string
+              format: uuid
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            externalId:
+              type: string
+              format: uuid
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            title:
+              type: string
+              example: 'Відділення №100 (до 30 кг на одне місце): вул. Інженерна, 1 (маг.
+                "Фуршет")'
+            address:
+              type: string
+              example: Київ, Інженерна, 1
+            latitude:
+              type: number
+              format: decimal
+              example: 42.99
+              x-faker: datatype.float
+            longitude:
+              type: number
+              format: decimal
+              example: 42.99
+              x-faker: datatype.float
+    PickupPointRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: aa6682d3-ce98-4bea-80bd-20205dc63195
+        company_id:
+          type: string
+          format: uuid
+          example: aa6682d3-ce98-4bea-80bd-20205dc63195
+        map_url:
+          type: string
+          example: https://exmaple.com/xxx
+        phone:
+          type: string
+          example: "380661112233"
+        photo:
+          type: string
+          example: https://exmaple.com/123.jpg
+        title:
+          type: string
+          example: Название
+        enabled:
+          type: boolean
+          example: true
+        is_draft:
+          type: boolean
+          example: false
+        address_translations:
+          type: array
+          items:
+            type: object
+            properties:
+              locale:
+                type: string
+                enum:
+                  - ru
+                  - ua
+                example: ru
+              value:
+                type: string
+                example: Адрес
+        schedule:
+          type: array
+          items:
+            $ref: "#/components/schemas/Schedule"
+        settlement_id:
+          type: string
+          example: 00021186-acfc-4fec-8a41-b2da2a2a0d64
+        settlement_translations:
+          type: array
+          items:
+            type: object
+            properties:
+              locale:
+                type: string
+                enum:
+                  - ru
+                  - ua
+                example: ru
+              value:
+                type: string
+                example: Киенка
+    Schedule:
+      properties:
+        day:
+          type: string
+          enum:
+            - sun
+            - mon
+            - tue
+            - wed
+            - thu
+            - fri
+            - sat
+          example: mon
+        enabled:
+          type: boolean
+          example: true
+        from:
+          type: string
+          example: 08:00
+        to:
+          type: string
+          example: 20:00
+    Currency:
+      type: string
+      enum:
+        - USD
+        - UAH
+      description: |-
+        Назва валюти:
+          * `USD` -доллар
+          * `UAH` - гривня
+      example: USD
+    CurrencySettingsReadModel:
+      type: object
+      properties:
+        currencyRates:
+          type: array
+          items:
+            type: object
+            properties:
+              rate:
+                type: number
+                description: Значення курсу валюти
+                example: 37.8
+              currency:
+                $ref: "#/components/schemas/Currency"
+        currencyConversion:
+          type: boolean
+    Order:
+      type: object
+      required:
+        - id
+        - companyId
+        - customerId
+        - commentsCount
+        - number
+        - createdAt
+        - statusCode
+        - subtotal
+        - payed
+        - skipCustomerContact
+        - items
+        - address
+        - cancel
+        - company
+        - settlement
+        - office
+        - legalEntityId
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID замовлення
+          example: dec9761c-9ed0-403f-a01a-5e25154ebcab
+        externalId:
+          type: string
+          nullable: true
+          description: Ідентифікатор замовлення із зовнішньої системи
+          example: "888888"
+        companyId:
+          type: string
+          format: uuid
+          example: 1e0ca935-a61d-41bc-9bd3-8c2833b72f6d
+        legalEntityId:
+          type: number
+          example: 2
+        trustedCompany:
+          type: boolean
+          example: true
+        customerId:
+          type: string
+          nullable: true
+          example: 6d9244a1-3c41-4568-acf9-144ebf634705
+        assignee:
+          $ref: "#/components/schemas/OrderAssignee"
+        comment:
+          type: string
+          example: text comment
+        commentsCount:
+          type: number
+          example: 42
+        number:
+          type: string
+          description: Номер замовлення
+          example: "1000000373"
+        createdAt:
+          type: string
+          example: 2020-05-20T05:35:11+00:00
+        updatedAt:
+          type: string
+          example: 2020-05-20T05:35:12+00:00
+        statusCode:
+          $ref: "#/components/schemas/OrderStatus"
+        callStatus:
+          nullable: true
+          $ref: "#/components/schemas/OrderCallStatus"
+        subtotal:
+          type: number
+          format: decimal
+          example: 1201.5
+        payed:
+          type: boolean
+          example: true
+        skipCustomerContact:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderProductsItem"
+        address:
+          $ref: "#/components/schemas/OrderAddress"
+        cancel:
+          type: object
+          properties:
+            previousStatusCode:
+              $ref: "#/components/schemas/OrderStatus"
+            initiatorCode:
+              $ref: "#/components/schemas/InitiatorCode"
+            reasonCode:
+              $ref: "#/components/schemas/ReasonCode"
+            comment:
+              type: string
+              example: text comment
+            reasonTranslationKey:
+              type: string
+              example: order.customer_cancel_reason.customer_changed_mind
+            createdAt:
+              type: string
+              example: 2020-05-20T05:35:11+00:00
+          nullable: true
+        company:
+          nullable: true
+          $ref: "#/components/schemas/Company"
+          description: Додаткове помешкання, приєднане до mas-service
+        company_shipments:
+          nullable: true
+          $ref: "#/components/schemas/DeliveryShipments"
+          description: Налаштування відправлення для компанії
+        company_payments:
+          nullable: true
+          description: Налаштування оплати для компанії
+          type: object
+          properties:
+            id:
+              type: string
+              description: Ідентифікатор документа
+              example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+            company_id:
+              type: string
+              description: Ідентифікатор компанії
+              example: f04030e9-fc19-44cf-80eb-68b7bff48410
+            deliveries:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Ідентифікатор документа
+                    example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+                  provider:
+                    type: string
+                    enum:
+                      - nova_poshta
+                      - ukrposhta
+                      - pickup
+                    example: ukrposhta
+                  payments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Ідентифікатор документа
+                          example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+                        provider:
+                          $ref: "#/components/schemas/OrderShipment/properties/paymentProvider"
+                        enabled:
+                          type: boolean
+                        commission:
+                          type: number
+                          example: 1.2
+                        view_order:
+                          type: integer
+                          example: 10
+            is_default:
+              type: boolean
+        settlement:
+          nullable: true
+          $ref: "#/components/schemas/DeliverySettlement"
+          description: Додаткове помешкання, приєднане до служби доставки
+        office:
+          nullable: true
+          $ref: "#/components/schemas/DeliveryOffice"
+          description: Додаткове помешкання, приєднане до служби доставки
+    OrderItemV3:
+      type: object
+      required:
+        - offerId
+        - productId
+        - sku
+        - title
+        - url
+        - price
+        - quantity
+        - subtotal
+        - ratio
+      properties:
+        offerId:
+          type: string
+          format: uuid
+          example: 24dd2af7-9f2c-4b38-9a30-722da8964ef4
+        productId:
+          type: string
+          example: "16"
+        productExternalId:
+          type: string
+          nullable: true
+          example: "9999999999"
+        sku:
+          type: string
+          example: "9999999999"
+        title:
+          type: string
+          example: My wonderful product
+        image:
+          type: string
+          nullable: true
+          format: uri
+          example: https://test.domain/pic.jpg
+        url:
+          type: string
+          format: uri
+          example: https://epicentrk.ua/ua/shop/.html
+        price:
+          type: number
+          format: decimal
+          example: 15.3
+        quantity:
+          type: number
+          example: 1
+        subtotal:
+          type: number
+          format: decimal
+          example: 15.3
+        measure:
+          type: string
+          nullable: true
+          example: kg
+        ratio:
+          type: number
+          example: 1
+        product:
+          $ref: "#/components/schemas/ProductItem"
+    OrderAllowedStatus:
+      type: object
+      properties:
+        code:
+          $ref: "#/components/schemas/OrderStatus"
+        title:
+          type: string
+    OrderChangeStatusWriteModel:
+      oneOf:
+        - $ref: "#/components/schemas/OrderCancelWriteModel"
+        - $ref: "#/components/schemas/OrderSentWriteModel"
+    OrderCancelWriteModel:
+      type: object
+      required:
+        - reason_code
+        - translationKey
+      properties:
+        reason_code:
+          type: string
+        comment:
+          type: string
+        translationKey:
+          type: string
+          enum:
+            - order.cancel_reason.order_not_actual
+            - order.cancel_reason.product_not_available
+            - order.cancel_reason.price_differs
+            - order.cancel_reason.delivery_not_available
+            - order.cancel_reason.customer_refused_at_office
+            - order.cancel_reason.product_not_available_from_seller
+            - order.customer_cancel_reason.customer_failed_to_contact
+            - order.customer_cancel_reason.customer_failed_to_contact_merchant
+            - order.customer_cancel_reason.customer_price_obsoleted
+            - order.customer_cancel_reason.customer_found_cheaper
+            - order.customer_cancel_reason.customer_shop_pickup_preferred_delivery_price_too_high
+            - order.customer_cancel_reason.customer_delivery_speed_too_slow
+            - order.customer_cancel_reason.customer_delivery_type_is_not_suitable
+            - order.customer_cancel_reason.customer_product_characteristics_are_not_suitable
+            - order.customer_cancel_reason.customer_several_packages_delivery_payment_is_not_suitable
+            - order.customer_cancel_reason.customer_credit_card_payment_is_preferred
+            - order.customer_cancel_reason.customer_get_loan_is_preferred_payment_type
+            - order.customer_cancel_reason.customer_account_payment_with_vat_is_preferred
+            - order.customer_cancel_reason.customer_account_payment_without_vat_is_preferred
+            - order.customer_cancel_reason.customer_order_duplicate
+            - order.customer_cancel_reason.customer_epic_warranty_is_preferred
+            - order.customer_cancel_reason.customer_changed_mind
+            - order.customer_cancel_reason.customer_canceled_at_delivery_office
+            - order.customer_cancel_reason.customer_no_payment
+            - order.customer_cancel_reason.customer_prepayment_required
+            - order.customer_cancel_reason.customer_long_cc_confirmation
+            - order.customer_cancel_reason.customer_long_merchant_confirmation
+            - order.customer_cancel_reason.customer_dissatisfied_with_the_shipping_cost
+            - order.customer_cancel_reason.customer_test
+            - order.customer_cancel_reason.customer_bought_elsewhere_as_a_gift
+            - order.customer_cancel_reason.customer_not_timely_confirmation_of_the_availability_of_goods
+            - order.customer_cancel_reason.customer_requires_advance_payment_which_is_not_indicated_on_the_website
+            - order.merchant_cancel_reason.merchant_product_is_not_available
+            - order.merchant_cancel_reason.merchant_price_obsoleted
+            - order.merchant_cancel_reason.merchant_product_is_defective
+            - order.customer_cancel_reason.customer_wanted_to_check_product
+            - order.customer_cancel_reason.customer_shop_pickup_preferred_delivery_speed_too_slow
+            - order.customer_cancel_reason.customer_other_reason
+            - order.customer_cancel_reason.customer_not_completed_within_the_specified_time
+            - order.customer_cancel_reason.customer_too_late_contact
+          example: order.customer_cancel_reason.customer_get_loan_is_preferred_payment_type
+    OrderSentWriteModel:
+      type: object
+      required:
+        - provider
+        - number
+      properties:
+        provider:
+          type: string
+          enum:
+            - nova_poshta
+            - ukrposhta
+            - pickup
+            - meest
+            - cvz_epicentr
+            - parcel_box_epicentr
+          description: Постачальник відправлень
+          example: nova_poshta
+        number:
+          type: string
+          description: Номер відправлення
+          example: "100321569875"
+    ShipmentNumberEditV1:
+      type: object
+      required:
+        - number
+      properties:
+        number:
+          type: string
+          description: Номер відправлення
+          example: "100321569875"
+    ShipmentOptionName:
+      type: string
+      enum:
+        - free_shipment
+        - free_shipment_order_total
+      description: |-
+        Назва варіантів доставки відправлення:
+          * `free_shipment` - Безкоштовна доставка за вартістю товару
+          * `free_shipment_order_total` - Безкоштовна доставка по сумме заказа
+      example: free_shipment
+    OrderStatus:
+      type: string
+      enum:
+        - new
+        - confirmed_by_merchant
+        - confirmed
+        - sent
+        - delivered
+        - completed
+        - closed
+        - canceled
+        - returned
+        - return_requested
+        - canceled_by_merchant
+        - completed_merchant_rejection
+        - closed_merchant_rejection
+      description: |
+        Типи замовлень:
+         * `new` - Новий
+         * `confirmed_by_merchant` - Підтверджено продавцем
+         * `confirmed` - Підтверджений
+         * `sent` - Відправлено
+         * `delivered` - Готовий до видачі
+         * `completed` - Завершено
+         * `closed` - Закрито
+         * `Canceled` - Скасовано
+         * `returned` - Повернутий
+         * `return_requested` - Запит на повернення
+         * `canceled_by_merchant` - Скасовано продавцем
+         * `completed_merchant_rejection` - Завершено (Відмова продавця)
+         * `closed_merchant_rejection` - Закрито (Відмова продавця)
+      example: sent
+    OrderCallStatusInput:
+      type: object
+      required:
+        - callStatus
+      properties:
+        callStatus:
+          $ref: "#/components/schemas/OrderCallStatus"
+    OrderCallStatus:
+      type: string
+      enum:
+        - success
+        - first_fail
+        - second_fail
+        - email_sent
+      example: success
+    OrderItemInput:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: number
+          example: 3
+    OrderItem:
+      type: object
+      properties:
+        offerId:
+          type: string
+          format: uuid
+          example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+        quantity:
+          type: number
+          example: 3
+        url:
+          type: string
+          example: https://test.domain/product
+    OrderProductsItem:
+      type: object
+      required:
+        - price
+        - quantity
+        - title
+        - sku
+        - productId
+        - offerId
+        - ratio
+        - measure
+      properties:
+        offerId:
+          type: string
+          format: uuid
+          example: 42404049-cc5a-4da9-ad4c-9b9096c2bed1
+        productId:
+          type: string
+          example: "16"
+        productExternalId:
+          type: string
+          example: 42404049-cc5a-4da9-ad4c-9b9096c2bed1
+        sku:
+          type: string
+          example: AASD31231231233
+        title:
+          type: string
+          example: My wonderful product
+        image:
+          type: string
+          example: https://test.domain/pic.jpg
+        url:
+          type: string
+          example: https://test.domain/product
+        price:
+          type: number
+          format: decimal
+          example: 400.5
+        quantity:
+          type: number
+          example: 3
+        subtotal:
+          type: number
+          format: decimal
+          example: 1201.5
+        measure:
+          type: string
+          nullable: true
+          description: Вимірювання продукту
+          example: шт.
+        ratio:
+          type: number
+          description: Співвідношення продуктів
+        product:
+          $ref: "#/components/schemas/ProductItem"
+    OrderListModel:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedCursorCollection"
+        - type: object
+          required:
+            - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Order"
+              description: -- СПИСОК ПРЕДМЕТІВ
+    OrderListTotalModel:
+      allOf:
+        - $ref: "#/components/schemas/CursorCollection"
+        - type: object
+          required:
+            - total
+          properties:
+            total:
+              type: integer
+              description: Загальна сума списку замовлень
+              example: 1250
+    OrderAddress:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Galt
+        patronymic:
+          type: string
+          example: Willson
+        email:
+          type: string
+          example: test@test.com
+        phone:
+          type: string
+          example: "380661112233"
+        shipment:
+          $ref: "#/components/schemas/OrderShipment"
+    OrderAddressV3:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+        - shipment
+        - isAlternateRecipient
+        - recipient
+      properties:
+        firstName:
+          type: string
+          example: John
+          x-faker: internet.userName
+        lastName:
+          type: string
+          example: Galt
+          x-faker: internet.userName
+        patronymic:
+          type: string
+          example: Willson
+          x-faker: internet.userName
+        email:
+          type: string
+          example: test@test.com
+          x-faker: internet.email
+        phone:
+          type: string
+          example: "380661112233"
+          x-faker: phone.phoneNumber
+        shipment:
+          $ref: "#/components/schemas/OrderShipment"
+        isAlternateRecipient:
+          type: boolean
+          example: true
+        recipient:
+          type: object
+          required:
+            - firstName
+            - lastName
+            - phone
+          properties:
+            firstName:
+              type: string
+              example: John
+              x-faker: internet.userName
+            lastName:
+              type: string
+              example: Galt
+              x-faker: internet.userName
+            patronymic:
+              type: string
+              example: Willson
+              x-faker: internet.userName
+            phone:
+              type: string
+              example: "380661112233"
+              x-faker: phone.phoneNumber
+    OrderShipment:
+      type: object
+      properties:
+        provider:
+          nullable: true
+          $ref: "#/components/schemas/DeliveryProvider"
+        paymentProvider:
+          type: string
+          enum:
+            - pay_on_pickup
+            - pay_on_delivery
+            - easypay
+        paymentStatus:
+          type: string
+          enum:
+            - none
+            - payment_waiting
+            - payment_canceled
+            - hold_set
+            - hold_unset
+            - hold_canceled
+        settlementId:
+          type: string
+          nullable: true
+          format: uuid
+          description: ID міста постачальника доставки
+          example: 42404049-cc5a-4da9-ad4c-9b9096c2bed1
+        officeId:
+          type: string
+          nullable: true
+          format: uuid
+          description: ID поштового відділення постачальника доставки
+          example: 42404049-cc5a-4da9-ad4c-9b9096c2bed1
+        number:
+          type: string
+          nullable: true
+          example: "1234567890"
+        isFree:
+          type: boolean
+          example: true
+        autogenerated:
+          type: boolean
+          example: true
+        deliveryPrice:
+          type: number
+          format: decimal
+          example: 42.99
+    OrderAssignee:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - avatar
+        - userId
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        avatar:
+          type: string
+          example: http://example.com/avatar.jpg
+        userId:
+          type: string
+          example: "42"
+    ReasonCode:
+      type: string
+      enum:
+        - order_not_actual
+        - product_not_available
+        - price_differs
+        - delivery_not_available
+      description: >-
+        Причини:
+          * `order_NOT_actual` - Замовлення вже не актуален для покупця
+          * `product_not_available` - Товара немає в наявності
+          * `price_differs` - ціна в заказе не відповідає актуальній ціні
+          * `delivery_not_available` - Продавець не здійснює доставку в регіон покупця
+      example: order_not_actual
+    OrderCancelReason:
+      type: object
+      properties:
+        code:
+          type: string
+          example: order_not_actual
+        title:
+          type: string
+          description: скасувати назву причини
+          example: Заказ уже не актуален для покупателя
+        translationKey:
+          type: string
+          example: order.cancel_reason.order_not_actual
+    InitiatorCode:
+      type: string
+      enum:
+        - call_center
+        - customer
+        - merchant
+      description: |-
+        Ініціатори:
+          * `call_center` - Колл-центр
+          * `customer` - Покупатель
+          * `merchant` - Продавець
+      example: call_center
+    OrderCreateShipmentModel:
+      type: object
+      required:
+        - sender
+        - postPayment
+        - items
+        - deliveryPayer
+        - isPostPayment
+        - insuredValue
+      properties:
+        sender:
+          $ref: "#/components/schemas/OrderCreateShipmentSenderModel"
+        postPayment:
+          type: boolean
+          description: Pay on pickup
+          example: false
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderCreateShipmentItemModel"
+        deliveryPayer:
+          $ref: "#/components/schemas/OrderCreateShipmentDeliveryPayerEnum"
+        isPostPayment:
+          type: boolean
+          description: Pay on pickup
+          example: false
+        insuredValue:
+          type: number
+          format: float
+          description: Shipment insurance (avg price)
+          example: 10.1
+        description:
+          type: string
+          description: Description
+          example: Description
+          x-faker: lorem.paragraph
+        codAmount:
+          type: number
+          format: float
+          description: Post payment amount (only if isPostPayment = true)
+          example: 10.1
+    OrderCreateShipmentModelV3:
+      type: object
+      required:
+        - sender
+        - items
+        - deliveryPayer
+        - isPostPayment
+      properties:
+        sender:
+          type: object
+          required:
+            - name
+            - lastName
+            - settlementId
+            - officeId
+            - phone
+            - provider
+          properties:
+            name:
+              type: string
+              description: Ім'я відправника
+              example: Іван
+              x-faker: internet.userName
+            lastName:
+              type: string
+              description: Прізвище відправника
+              example: Петренко
+              x-faker: internet.userName
+            middleName:
+              type: string
+              description: По батькові відправника
+              example: Іванович
+              x-faker: internet.userName
+            settlementId:
+              type: string
+              format: uuid
+              description: Місто клієнта
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            officeId:
+              type: string
+              format: uuid
+              description: Офіс клієнта (відділення)
+              example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+            phone:
+              type: string
+              description: Телефон відправника
+              example: "380661112233"
+              x-faker: phone.phoneNumber
+            provider:
+              description: Служба доставки
+              type: string
+              enum:
+                - meest
+                - nova_poshta
+                - ukrposhta
+                - pickup
+                - cvz_epicentr
+                - parcel_box_epicentr
+              example: meest
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - width
+              - height
+              - length
+              - weight
+            properties:
+              width:
+                type: number
+                format: float
+                example: 200.5
+              height:
+                type: number
+                format: float
+                example: 200.5
+              length:
+                type: number
+                format: float
+                example: 200.5
+              weight:
+                type: number
+                format: float
+                example: 200.5
+              insuredValue:
+                type: number
+                format: float
+                example: 200.5
+        deliveryPayer:
+          $ref: "#/components/schemas/OrderCreateShipmentDeliveryPayerEnum"
+        isPostPayment:
+          type: boolean
+          description: Pay on pickup
+          example: false
+          x-faker: datatype.boolean
+        description:
+          type: string
+          description: Description
+          example: Description
+          x-faker: lorem.paragraph
+        codAmount:
+          type: number
+          format: float
+          description: Post payment amount (only if isPostPayment = true)
+          example: 10.1
+    OrderCreateShipmentSenderModel:
+      type: object
+      required:
+        - name
+        - lastName
+        - settlementId
+        - officeId
+      properties:
+        name:
+          type: string
+          description: Ім'я відправника
+          example: John
+          x-faker: internet.userName
+        lastName:
+          type: string
+          description: Прізвище відправника
+          example: John
+          x-faker: internet.userName
+        middleName:
+          type: string
+          description: По батькові відправника
+          example: John
+          x-faker: internet.userName
+        settlementId:
+          type: string
+          format: uuid
+          description: Місто клієнта
+          example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+        officeId:
+          type: string
+          format: uuid
+          description: Офіс клієнта (відділення)
+          example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+        phone:
+          type: string
+          description: Телефон відправника
+          example: "380661112233"
+          x-faker: phone.phoneNumber
+    OrderCreateShipmentItemModel:
+      type: object
+      required:
+        - width
+        - height
+        - length
+        - weight
+      properties:
+        width:
+          type: number
+          format: float
+        height:
+          type: number
+          format: float
+        length:
+          type: number
+          format: float
+        weight:
+          type: number
+          format: float
+    OrderCreateShipmentDeliveryPayerEnum:
+      type: string
+      enum:
+        - merchant
+        - client
+      description: Хто оплатив доставку
+    ProductItemBase:
+      type: object
+      required:
+        - id
+        - translations
+        - companyId
+        - status
+        - statusId
+        - created_at
+      properties:
+        id:
+          type: integer
+          example: 123
+        status:
+          description: Статус
+          $ref: "#/components/schemas/ProductStatusCode"
+        slug:
+          type: string
+          description: URL-адреса slug
+          example: mplc-eksperiment-1eb356a2-fc6d-6570-963a-d7160c9bc022
+        completeness:
+          type: number
+          description: Повнота
+          example: 50
+        modelId:
+          type: integer
+          description: Ідентифікатор моделі
+          example: 2078674
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductMediaV2"
+        statusId:
+          description: Id Статусу продукту
+          $ref: "#/components/schemas/ProductStatusId"
+        attributeSet:
+          type: object
+          $ref: "#/components/schemas/AttributeSetItemV2"
+        company:
+          type: object
+          $ref: "#/components/schemas/Company"
+        currency_settings:
+          $ref: "#/components/schemas/CurrencySettingsReadModel"
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductCategoryV2"
+          description: Категорії товару
+        availabilityTransitions:
+          type: array
+          items:
+            type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          example: 2020-10-15T15:38:58+0000
+        updatedAt:
+          type: string
+          example: 2020-10-15T15:38:58+0000
+        publishedAt:
+          type: string
+          example: 2020-10-15T15:38:58+0000
+        sku:
+          type: string
+          description: Артикул
+          example: SD00038633|12345
+        offer:
+          type: object
+          $ref: "#/components/schemas/ProductOffer"
+        translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductTranslationRead"
+          description: Назва товару
+        attributeSetCode:
+          type: string
+          example: 1899
+        companyId:
+          type: string
+          example: ce4de88e-7515-442c-9fae-dd5c4aa3eb10
+        productInPromotion:
+          type: boolean
+          example: false
+        price:
+          type: number
+          example: 1
+        availability:
+          type: integer
+          example: 100
+    ProductItem:
+      allOf:
+        - $ref: "#/components/schemas/ProductItemBase"
+        - type: object
+          properties:
+            attributeValues:
+              type: array
+              items:
+                oneOf:
+                  - $ref: "#/components/schemas/ProductAttributeValueBoolean"
+                  - $ref: "#/components/schemas/ProductAttributeValueFloat"
+                  - $ref: "#/components/schemas/ProductAttributeValueInteger"
+                  - $ref: "#/components/schemas/ProductAttributeValueMultiselect"
+                  - $ref: "#/components/schemas/ProductAttributeValueSelect"
+                  - $ref: "#/components/schemas/ProductAttributeValueString"
+                  - $ref: "#/components/schemas/ProductAttributeValueText"
+                  - $ref: "#/components/schemas/ProductAttributeValueArray"
+            similarProducts:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductSimilarProduct"
+              description: Массив похожих товарів
+            productInPromotion:
+              type: boolean
+            isPrepayment:
+              type: boolean
+              example: false
+    ProductOfferBase:
+      type: object
+      required:
+        - prices
+        - active
+      properties:
+        prices:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - price
+                  - old_price
+                description: Тип ціни
+              value:
+                type: number
+                description: "Розмір: "
+                example: 120.1
+              convertedValue:
+                type: number
+                description: Перетворене значення
+                example: 120.1
+              currency:
+                $ref: "#/components/schemas/Currency"
+    ProductOffer:
+      allOf:
+        - $ref: "#/components/schemas/ProductOfferBase"
+        - type: object
+          required:
+            - id
+            - availability
+            - prices
+            - active
+            - quantities
+            - createdAt
+            - updatedAt
+          properties:
+            id:
+              type: string
+              description: Ідентифікатор пропозиції
+              example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+            availability:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Внутрішня назва вільних дат
+                  example: in_stock
+                title:
+                  type: string
+                  description: Представлення доступності для кінцевого користувача
+                  example: На складе
+            active:
+              type: boolean
+              description: Активний чи ні
+              example: true
+            createdAt:
+              type: string
+              description: Створено
+              example: 2018-02-13T21:02:07+00:00
+            updatedAt:
+              type: string
+              description: Оновлено
+              example: 2018-02-13T21:02:07+00:00
+    ProductSimilarProduct:
+      type: object
+      required:
+        - id
+        - similarity
+        - titles
+      properties:
+        id:
+          type: integer
+          example: 100232
+        similarity:
+          type: number
+          multipleOf: 0.01
+          example: 99.1
+        translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductTranslationRead"
+          description: Масив переводов названих товарів
+    ProductAttributeOptionV2:
+      type: object
+      required:
+        - id
+        - code
+        - order
+        - translations
+      properties:
+        id:
+          type: integer
+          example: 123
+        code:
+          type: string
+          example: white
+        deleted:
+          type: boolean
+          example: false
+        extra:
+          deprecated: true
+          type: object
+          description: Додаткова інформація
+        translations:
+          type: array
+          items:
+            type: object
+            required:
+              - value
+              - languageCode
+            properties:
+              value:
+                type: string
+                description: Відображуваний текст
+                example: Название на русском
+              languageCode:
+                type: string
+                description: 2-значний код мови (ru|ua)
+                example: ru
+          description: Масив переводов
+        viewOrder:
+          deprecated: true
+          type: integer
+          description: Сортировка
+          example: 500
+        order:
+          type: integer
+          description: Сортировка
+          example: 500
+    AttributeSetItemV2:
+      type: object
+      required:
+        - id
+        - code
+        - translations
+      properties:
+        id:
+          type: integer
+          example: 123
+        code:
+          type: string
+          example: white
+        translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductTranslationRead"
+          description: Масив переводов
+        parentId:
+          type: integer
+          example: 120
+        path:
+          type: array
+          items:
+            type: integer
+          description: Путь к родительській
+          example:
+            - 10
+        hasChild:
+          type: boolean
+          description: Має дочірні набори атрибутів
+    CategoriesTreeConfigFilter:
+      type: string
+      enum:
+        - with_prepayment
+        - without_prepayment
+      description: |-
+        Параметри фільтра дерева категорій:
+          * `with_prepayment` - З передоплатою
+          * `without_prepayment` - Без передоплати
+      example: without_prepayment
+    ProductCategoryV2:
+      allOf:
+        - type: object
+          required:
+            - id
+            - slug
+            - parentId
+            - path
+            - translations
+          properties:
+            id:
+              type: integer
+              example: 123
+            slug:
+              type: string
+              example: dignissimos
+            parentId:
+              type: integer
+              example: 120
+            path:
+              type: array
+              items:
+                type: integer
+                example:
+                  - 10
+                  - 20
+              description: Путь к родительської категорії
+            translations:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductTranslationRead"
+              description: Масив переводов
+            special:
+              type: boolean
+              description: Визначте, чи є категорія віртуальною чи реальною
+              example: false
+            visible:
+              type: boolean
+              description: Показує або приховує категорію
+              example: true
+            hasChild:
+              type: boolean
+              description: Показує, чи має категорія дочірні категорії
+              example: true
+            isPrepayment:
+              type: boolean
+              example: false
+        - type: object
+          required:
+            - id
+            - isMain
+            - slug
+            - path
+            - title
+          properties:
+            isMain:
+              type: boolean
+              example: false
+            isPrepayment:
+              type: boolean
+              description: Показує, чи ввімкнено передоплату для категорії товару
+              example: true
+    ProductMediaV2:
+      type: object
+      required:
+        - externalId
+        - source
+        - type
+        - order
+        - isMain
+      properties:
+        id:
+          type: integer
+          example: 123
+        externalId:
+          type: string
+          example: b9b14044-8ee8-435f-9660-76b0ca2b33fc
+        source:
+          type: string
+          example: https://cdn.epicentrk.ua/products/jSw/FDlSYFwN.jpg
+        image:
+          type: string
+          example: https://cdn.epicentrk.ua/products/jSw/FDlSYFwN.jpg
+        thumb:
+          type: string
+          example: https://cdn.epicentrk.ua/products/jSw/FDlSYFwN.jpg
+        isMain:
+          type: boolean
+          example: true
+        type:
+          type: string
+          enum:
+            - image
+            - image-link
+            - 3d-image-link
+        order:
+          type: integer
+          example: 200
+    ProductAttributeValueBase:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        code:
+          type: string
+          description: Код атрибута
+          example: "2345"
+    ProductAttributeValueBoolean:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - boolean
+            value:
+              type: boolean
+    ProductAttributeValueArray:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - array
+            value:
+              type: array
+              items:
+                type: string
+    ProductAttributeValueFloat:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - float
+            value:
+              type: number
+    ProductAttributeValueInteger:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - integer
+            value:
+              type: integer
+    ProductAttributeValueMultiselect:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - multiselect
+            value:
+              type: array
+              items:
+                type: string
+              description: Колекція значень
+            options:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductAttributeOptionV2"
+              description: Коллекция опций
+    ProductAttributeValueSelect:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - select
+            value:
+              type: string
+            options:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductAttributeOptionV2"
+              description: Коллекция опций
+    ProductAttributeValueString:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - string
+            value:
+              type: string
+    ProductAttributeValueText:
+      allOf:
+        - $ref: "#/components/schemas/ProductAttributeValueBase"
+        - type: object
+          required:
+            - id
+            - value
+            - code
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - text
+            value:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProductAttributeOptionV2/properties/translations/it\
+                  ems"
+              description: Масив переводов
+    PaginatedCollectionV2:
+      type: object
+      required:
+        - limit
+        - offset
+        - total
+      properties:
+        limit:
+          type: integer
+          description: Кількість товарів, які потрібно повернути
+          example: 25
+          default: 25
+        offset:
+          type: integer
+          description: Кількість елементів, які потрібно пропустити, перш ніж почати
+            збирати набір результатів
+          example: 1
+        total:
+          type: integer
+          description: Кількість повернених предметів
+          example: 1250
+    ProductStatusId:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+      x-enumNames:
+        - draft
+        - moderating
+        - published
+        - banned
+        - rework
+        - new
+        - enrich
+    ProductStatusCode:
+      type: string
+      enum:
+        - draft
+        - moderating
+        - published
+        - banned
+        - rework
+        - new
+        - enrich
+    ProductTranslationRead:
+      type: object
+      required:
+        - title
+        - languageCode
+      properties:
+        title:
+          type: string
+          description: Відображуваний текст
+          example: Название на русском
+        languageCode:
+          type: string
+          description: 2-значний код мови (ru|ua)
+          example: ru
+    PaginatedCollection:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Кількість товарів, які потрібно повернути
+          example: 25
+          default: 25
+        offset:
+          type: integer
+          description: Кількість елементів, які потрібно пропустити, перш ніж почати
+            збирати набір результатів
+          example: 1
+        total:
+          type: integer
+          description: Кількість повернених предметів
+          example: 1250
+    PaginatedCursorCollection:
+      type: object
+      properties:
+        current:
+          type: string
+          description: Курсор поточної сторінки
+        next:
+          type: string
+          description: Курсор наступної сторінки
+        prev:
+          type: string
+          description: Курсор попередньої сторінки
+        last:
+          type: string
+          description: Курсор останньої сторінки
+        limit:
+          type: integer
+          description: Ліміт. Елементів на сторінку
+          example: 20
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+    CollectionResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Кількість повернених предметів
+          example: 1
+    PagedCollection:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: current page
+          example: 1
+        pages:
+          type: integer
+          description: total number of pages
+          example: 1250
+    uuidListParam:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+            description: Деякі uuid
+            example: f04030e9-fc19-44cf-80eb-68b7bff4841d
+    Translation:
+      type: object
+      required:
+        - title
+        - languageCode
+      properties:
+        languageId:
+          type: integer
+          description: код мови
+          example: 1
+        languageCode:
+          type: string
+          description: 2-значний код мови
+          example: ru
+        title:
+          type: string
+          description: Відображуваний текст
+          example: Название на русском
+    JWTToken:
+      type: object
+      properties:
+        auth:
+          type: string
+          description: Токен для доступу до захищеної кінцевої точки
+          example: eyJhbGciOiJSUzI1NiIsI...
+        refresh:
+          type: string
+          description: Маркер для маркера доступу до оновлення
+          example: eyJhbGciOiJSUzI1NiIsI...
+    CompanyFile:
+      type: object
+      properties:
+        fileName:
+          type: string
+          maxLength: 255
+          example: filename.jpeg
+        uuid:
+          type: string
+          maxLength: 64
+          example: dd6aeb48-0051-40f8-ab47-6a2ee7cb9fe5
+    CompanyFeatureReadModel:
+      type: object
+      required:
+        - cancellationCommission
+        - companyInPromotion
+        - multiLang
+      properties:
+        cancellationCommission:
+          type: boolean
+          description: Комісія за зняття замовлень CANCELLED_BY_Merchant
+          example: true
+        companyInPromotion:
+          type: boolean
+          description: Прапор промоакції
+          example: true
+        multiLang:
+          type: boolean
+          description: Показує, чи увімкнено багатомовність для компанії
+          example: true
+    CursorCollection:
+      type: object
+      properties:
+        current:
+          type: string
+          description: Курсор поточної сторінки
+        next:
+          type: string
+          description: Курсор наступної сторінки
+        prev:
+          type: string
+          description: Курсор попередньої сторінки
+        last:
+          type: string
+          description: Курсор останньої сторінки
+    PaymentSettingModel:
+      type: object
+      properties:
+        companyId:
+          type: string
+          format: uuid
+          example: 8a1643e6-87b6-45fe-8d14-f3c54e221f5a
+        provider:
+          type: string
+          enum:
+            - easypay
+            - monobank
+        isConfigured:
+          type: boolean
+        isEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          example: 2024-10-23T23:00:00+00:00
+        updatedAt:
+          type: string
+          example: 2020-05-20T23:00:00+00:00
+    InvoiceFileReadModel:
+      type: object
+      properties:
+        file:
+          type: string
+          description: файл рахунку-фактури з кодуванням base64
+          example: MTIzNDI0MzI0
+    DeliveryParticipantEnum:
+      type: string
+      enum:
+        - sender
+        - receiver
+      description: |
+        Delivery Participiant providers:
+          * `sender` - Відправник
+          * `receiver` - Отримувач
+      example: sender
+    DeliverySettlementsModel:
+      oneOf:
+        - $ref: "#/components/schemas/DeliverySettlementsMeestModel"
+    DeliverySettlementsListModel:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedCollectionV2"
+        - type: object
+          required:
+            - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/DeliverySettlementsModel"
+              description: List of items
+    DeliverySettlementsMeestModel:
+      type: object
+      required:
+        - id
+        - external_Id
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: aa6682d3-ce98-4bea-80bd-20205dc63195
+          x-faker: datatype.uuid
+        external_Id:
+          type: string
+          format: uuid
+          example: aa6682d3-ce98-4bea-80bd-20205dc63195
+          x-faker: datatype.uuid
+        title:
+          type: string
+          example: Київ
+          x-faker: address.city
+    DeliverySettlementsOfficesModel:
+      oneOf:
+        - $ref: "#/components/schemas/DeliverySettlementsOfficesMeestModel"
+    DeliverySettlementsOfficesListModel:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedCollectionV2"
+        - type: object
+          required:
+            - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/DeliverySettlementsOfficesModel"
+              description: List of items
+    DeliverySettlementsOfficesMeestModel:
+      type: object
+      required:
+        - address
+        - externalId
+        - id
+        - latitude
+        - longitude
+        - settlement_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+        settlement_id:
+          type: string
+          format: uuid
+          example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+        externalId:
+          type: string
+          format: uuid
+          example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+        title:
+          type: string
+          example: 'Відділення №100 (до 30 кг на одне місце): вул. Інженерна, 1 (маг.
+            "Фуршет")'
+          x-faker: lorem.sentence
+        address:
+          type: string
+          example: Київ, Інженерна, 1
+          x-faker: lorem.sentence
+        latitude:
+          type: number
+          format: decimal
+          example: 42.99
+          x-faker: datatype.float
+        longitude:
+          type: number
+          format: decimal
+          example: 42.99
+          x-faker: datatype.float
+    AttributeSetV2:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Attribute set code
+          example: notebooks
+        translations:
+          type: array
+          items:
+            type: object
+            properties:
+              languageCode:
+                type: string
+                example: en
+              title:
+                type: string
+                example: Weight
+        attributes:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - type
+              - isSystem
+              - isRequired
+              - isModel
+              - isFilter
+              - translations
+            properties:
+              code:
+                type: string
+                example: weight
+              type:
+                type: string
+                example: integer
+              isSystem:
+                type: boolean
+                example: false
+              isRequired:
+                type: boolean
+                example: false
+              isModel:
+                type: boolean
+                example: false
+              isFilter:
+                type: boolean
+                example: false
+              translations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    languageCode:
+                      type: string
+                      example: en
+                    title:
+                      type: string
+                      example: Weight
+                    prefix:
+                      type: string
+                      example: prefix
+                    suffix:
+                      type: string
+                      example: suffix
+    AttributeSetShortV2:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Attribute set code
+          example: laptops
+    AttributeOptionListV2:
+      type: object
+      properties:
+        code:
+          type: string
+          example: option-code
+        translations:
+          type: array
+          items:
+            type: object
+            properties:
+              languageCode:
+                type: string
+                example: en
+              title:
+                type: string
+                example: Weight
+    CategoryListV2:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Category code
+          example: laptops
+        parentCode:
+          type: string
+          nullable: true
+          description: Parent category code
+          example: PC
+        hasChild:
+          type: boolean
+          example: false
+        attributeSets:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttributeSetShortV2"
+        translations:
+          type: array
+          items:
+            type: object
+            properties:
+              languageCode:
+                type: string
+                example: en
+              title:
+                type: string
+                example: Weight
+        deleted:
+          type: boolean
+          example: false
+  parameters:
+    acceptLanguage:
+      name: accept-language
+      in: header
+      required: false
+      schema:
+        type: string
+        enum:
+          - uk
+          - ru
+      description: Код мови
+    loggable:
+      name: Uber-Trace-Id
+      in: header
+      required: true
+      schema:
+        default: 1
+        type: string
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: Кількість елементів, які потрібно пропустити перед поверненням
+        результатів.
+      schema:
+        type: integer
+        minimum: 0
+        format: int32
+        default: 0
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Максимальна кількість товарів для повернення.
+      schema:
+        type: integer
+        minimum: 1
+        format: int32
+        default: 25
+    page:
+      name: page
+      in: query
+      description: Номер сторінки
+      schema:
+        type: integer
+        format: int32
+    perPage:
+      name: per-page
+      in: query
+      description: Кількість елементів на сторінку
+      schema:
+        type: integer
+        format: int32
+        default: 20
+    codeQuery:
+      name: code
+      in: query
+      required: true
+      description: Код
+      schema:
+        type: string
+        maxLength: 64
+    title:
+      name: title
+      in: query
+      required: false
+      description: Фільтр для поля заголовка (працює з заголовком acceptLanguage)
+      schema:
+        type: string
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Курсор для пагінації набору ключів
+      schema:
+        type: string
+    code:
+      name: code
+      in: path
+      required: true
+      description: Код опції
+      schema:
+        type: string
+    contractorId:
+      name: contractorId
+      in: path
+      required: true
+      description: Ідентифікатор підрядника
+      schema:
+        type: string
+    contractId:
+      name: contractId
+      in: path
+      required: true
+      description: Номер договору
+      schema:
+        type: string
+    categoryId:
+      name: categoryId
+      in: path
+      required: true
+      description: Категорія id
+      schema:
+        type: string
+    companyIdInPath:
+      name: companyId
+      in: path
+      required: true
+      description: Ідентифікатор компанії
+      schema:
+        type: string
+        format: uuid
+    deliveryProvider:
+      name: deliveryProvider
+      in: path
+      required: true
+      description: Постачальник доставки
+      schema:
+        type: string
+        enum:
+          - nova_poshta
+          - ukrposhta
+          - pickup
+          - meest
+          - cvz_epicentr
+          - parcel_box_epicentr
+        description: |
+          Постачальники послуг доставки:
+            * `nova_poshta` - Нова пошта
+            * `ukrposhta` - Укрпошта
+            * `pickup` - Самовивіз
+            * `meest` - Meest
+            * `cvz_epicentr` - Самовивіз Meest-Епіцентр
+            * `parcel_box_epicentr` - Meest-Епіцентр Поштомати
+        example: nova_poshta
+    shipmentProvider:
+      name: shipmentProvider
+      in: path
+      required: true
+      description: Постачальник відправлень
+      schema:
+        type: string
+    shipmentOption:
+      name: shipmentOption
+      in: path
+      required: true
+      description: Варіант відвантаження
+      schema:
+        type: string
+    deliverySettlementID:
+      name: settlementId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: aa6682d3-ce98-4bea-80bd-20205dc63195
+    id:
+      name: id
+      in: path
+      required: true
+      description: Внутрішній ідентифікатор
+      schema:
+        type: integer
+    idString:
+      name: id
+      in: path
+      required: true
+      description: Внутрішній ідентифікатор
+      schema:
+        type: string
+    externalId:
+      name: externalId
+      in: path
+      required: true
+      description: "Зовнішній ідентифікатор:"
+      schema:
+        type: string
+    productExternalId:
+      name: productExternalId
+      in: path
+      required: true
+      description: Зовнішній ідентифікатор продукту
+      schema:
+        type: string
+    attributeSetId:
+      name: attributeSetId
+      in: path
+      required: true
+      description: Ідентифікатор набору атрибутів
+      schema:
+        type: integer
+    attributeSetCode:
+      name: attributeSetCode
+      in: path
+      required: true
+      description: Код набору атрибутів
+      schema:
+        type: string
+    invoiceProvider:
+      name: provider
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - ukrposhta
+          - meest
+          - cvz_epicentr
+          - parcel_box_epicentr
+      description: |
+        Постачальники послуг доставки:
+          * `ukrposhta` - Укрпошта
+          * `meest` - Meest
+          * `cvz_epicentr` - Самовивіз Meest-Епіцентр
+          * `parcel_box_epicentr` - Meest-Епіцентр Поштомати
+      example: ukrposhta
+    deliverySettlementId:
+      $ref: "#/components/parameters/deliverySettlementID"
+    deliveryOfficeId:
+      name: officeId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: a7dd8890-00f7-4313-84d0-c07c094d0b49
+    pickupPointId:
+      name: pickupPointId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: aa6682d3-ce98-4bea-80bd-20205dc63195
+    offerFilters:
+      name: filter
+      in: query
+      required: false
+      description: Доступні фільтри для пропозицій
+      schema:
+        type: object
+        properties:
+          "filter[statusCode]":
+            type: string
+            maxLength: 32
+            description: Пошук за повним збігом коду статусу
+            example: new
+          "filter[sku]":
+            type: string
+            maxLength: 64
+            description: Пошук за повною відповідністю СКУ
+            example: AM123123
+          "filter[availability]":
+            type: string
+            maxLength: 32
+            description: Пошук за повною відповідністю внутрішньої назви вільних дат (з
+              урахуванням регістру)
+            example: in_stock
+    offerId:
+      name: offerId
+      in: path
+      required: true
+      description: Ідентифікатор пропозиції
+      schema:
+        type: string
+    offerProductId:
+      name: productId
+      in: path
+      required: true
+      description: Ідентифікатор продукту
+      schema:
+        type: string
+    orderId:
+      name: orderId
+      in: path
+      required: true
+      description: Внутрішній ідентифікатор
+      schema:
+        type: string
+        format: uuid
+    omsFilter:
+      name: filter[]
+      in: query
+      required: false
+      description: Доступні фільтри для замовлень
+      schema:
+        type: object
+        properties:
+          "filter[companyId]":
+            type: string
+            format: uuid
+            description: Фільтрувати замовлення за ідентифікатором компанії
+            example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+          "filter[legalEntityId]":
+            type: string
+            description: Фільтрувати замовлення за ідентифікатором юридичної особи
+            example: 2
+          "filter[responsibleId]":
+            type: string
+            description: Фільтрувати замовлення за ідентифікатором відповідального
+              (менеджера категорії)
+            example: 265
+          "filter[trustedCompany]":
+            type: string
+            enum:
+              - trusted
+              - untrusted
+            description: Фільтрувати замовлення за позначкою довіреної компанії
+          "filter[customerId]":
+            type: string
+            format: uuid
+            description: Фільтрувати замовлення за customerId
+            example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+          "filter[assigneeUserId]":
+            type: string
+            description: Фільтрувати замовлення за ідентифікатором користувача виконавця
+            example: "42"
+          "filter[externalId]":
+            type: string
+            format: uuid
+            description: Фільтрувати замовлення за зовнішнім ідентифікатором
+            example: 42404049-cc5a-4da9-ad4c-9b9096c2bed2
+          "filter[statusCode][]":
+            type: string
+            description: Фільтрувати замовлення за декількома кодами статусу
+            example: new
+          "filter[createdAt][from]":
+            type: string
+            description: Створено на початку діапазону
+            example: 2020-10-09
+          "filter[createdAt][to]":
+            type: string
+            description: Створено в кінці діапазону
+            example: 2020-10-10
+          "filter[number]":
+            type: string
+            description: Фільтрувати замовлення за номером
+            example: "1000000000"
+          "filter[fullName]":
+            type: string
+            description: Фільтрувати замовлення за fullName. Працюватиме як з "John Doe",
+              так і з "Doe John"
+            example: John Doe
+          "filter[phone]":
+            type: string
+            description: Фільтрувати замовлення за телефоном
+            example: "380661112233"
+          "filter[paymentProvider]":
+            $ref: "#/components/schemas/OrderShipment/properties/paymentProvider"
+          "filter[paymentStatus]":
+            $ref: "#/components/schemas/OrderShipment/properties/paymentStatus"
+    omsEnables:
+      name: _enables[]
+      in: query
+      required: false
+      description: Увімкнути додавання додаткових моделей до відповіді
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - products
+    omsFilterV3:
+      name: filter[]
+      in: query
+      required: false
+      description: Доступні фільтри для замовлень
+      schema:
+        type: object
+        properties:
+          "filter[trustedCompany]":
+            type: string
+            enum:
+              - trusted
+              - untrusted
+            description: Фільтрувати замовлення за позначкою довіреної компанії
+          "filter[statusCode][]":
+            type: string
+            description: Фільтрувати замовлення за декількома кодами статусу
+            example: new
+          "filter[createdAt][from]":
+            type: string
+            description: Створено на початку діапазону
+            example: 2020-10-09
+          "filter[createdAt][to]":
+            type: string
+            description: Створено в кінці діапазону
+            example: 2020-10-10
+          "filter[updatedAt][from]":
+            type: string
+            description: Оновлено на початку діапазону
+            example: 2020-10-09
+          "filter[updatedAt][to]":
+            type: string
+            description: Оновлено в кінці діапазону
+            example: 2020-10-10
+          "filter[number]":
+            type: string
+            description: Фільтрувати замовлення за номером
+            example: "1000000000"
+          "filter[fullName]":
+            type: string
+            description: Фільтрувати замовлення за fullName. Працюватиме як з "John Doe",
+              так і з "Doe John"
+            example: John Doe
+          "filter[phone]":
+            type: string
+            description: Фільтрувати замовлення за телефоном
+            example: "380661112233"
+          "filter[paymentProvider]":
+            $ref: "#/components/schemas/OrderShipment/properties/paymentProvider"
+          "filter[paymentStatus]":
+            $ref: "#/components/schemas/OrderShipment/properties/paymentStatus"
+          "filter[shipmentProvider]":
+            $ref: "#/components/schemas/DeliveryProvider"
+          "filter[search]":
+            type: string
+            example: pidguzky
+    omsSort:
+      name: sort[]
+      in: query
+      description: Список полів для сортування, поставте «-» перед назвою поля, щоб
+        використовувати напрямок сортування DESC
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - subtotal
+            - -subtotal
+            - createdAt
+            - -createdAt
+            - updatedAt
+            - -updatedAt
+            - statusCode
+            - -statusCode
+            - number
+            - -number
+            - fullName
+            - -fullName
+    omsOrderId:
+      name: orderId
+      in: path
+      required: true
+      description: ID замовлення
+      schema:
+        type: string
+        format: uuid
+    omsOfferId:
+      name: offerId
+      in: path
+      required: true
+      description: Ідентифікатор пропозиції
+      schema:
+        type: string
+        format: uuid
+    companyId:
+      name: companyId
+      in: path
+      required: true
+      description: Ідентифікатор компанії
+      schema:
+        type: string
+        format: uuid
+    deliveryNumber:
+      name: number
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "1111111111111"
+    deliveryParticipant:
+      name: participant
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/DeliveryParticipantEnum"
+  responses:
+    accepted:
+      description: Запит прийнято до обробки
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Successful operation
+              code:
+                type: integer
+                example: 0
+    notFound:
+      description: Вказаний ресурс не знайдено
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    unauthorized:
+      description: Не авторизовано
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    invalidInput:
+      description: Недійсні параметри запиту
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Sorry, something went wrong. We cannot complete this operation at this
+                  time. Code: Invalid request parameters."
+              code:
+                type: integer
+                example: 400
+              errors:
+                type: object
+                description: Перелік помилок валідації
+    forbidden:
+      description: Заборонено
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    incompatibleEntity:
+      description: Несумісний об 'єкт - помилка перевірки
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Рядок або масив з помилками перевірки
+                example: Validation error
+              code:
+                type: integer
+                example: 422
+    forbiddenInvalidCredentials:
+      description: Заборонено
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: access.denied
+              code:
+                type: integer
+                example: 403
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    wsse:
+      type: apiKey
+      in: header
+      name: X-WSSE
+security:
+  - jwt: []
+  - wsse: []
