@@ -13,3 +13,9 @@ credentials/
 .claude/
 data/*.xml
 logs/*.csv
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
