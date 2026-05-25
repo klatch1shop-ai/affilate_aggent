@@ -42,10 +42,19 @@ SMTP_HOST = os.getenv('SMTP_HOST', 'smtp.gmail.com')
 SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
 
 def parse_price(val) -> float:
-    """Парсить ціну з будь-якого формату: '490 грн', 490, '490.0'"""
+    """Парсить ціну з будь-якого формату: '490 грн', 490, '1 000 грн', '1,000.00'"""
     if val is None:
         return 0.0
-    return float(str(val).replace(' грн','').replace(',','.').strip().split()[0])
+    s = str(val)
+    s = s.replace(' грн', '').replace('грн', '')  # прибираємо 'грн'
+    s = s.replace('\xa0', '').replace('\u00a0', '')  # non-breaking space
+    # Якщо формат '1 000' або '1 000.50' — прибираємо пробіли між цифрами
+    import re
+    s = re.sub(r'(\d)\s+(\d)', r'\1\2', s)  # '1 000' → '1000'
+    s = s.replace(',', '.').strip()
+    # Беремо перший числовий токен
+    match = re.search(r'[\d]+(?:\.[\d]+)?', s)
+    return float(match.group()) if match else 0.0
 
 
 
@@ -261,7 +270,8 @@ def create_order_excel(order: dict, items_info: list) -> str:
     ws.write('A3', 'Коментарий', bold)
     ws.write('C3', f'{customer}  {phone}\n{delivery_str}', wrap_fmt)
     ws.set_row(2, 35)
-    ws.write('A4', f'Замовлення Prom #{order["id"]}')
+    marketplace = order.get('marketplace', 'Prom')
+    ws.write('A4', f'Замовлення {marketplace} #{order["id"]}')
     ws.write('C4', f'Дата: {datetime.now().strftime("%d.%m.%Y %H:%M")}')
     ws.write('A5', f'Код клієнта: {SUPPLIER_CODE}', red_bold)
     
@@ -300,7 +310,8 @@ def send_to_supplier(order: dict, excel_path: str, items_info: list):
     payment = order.get('payment_option') or {}
     payment_name = payment.get('name', '') if isinstance(payment, dict) else str(payment)
     is_prepaid = any(w in payment_name.lower() for w in ['пром-оплата', 'онлайн', 'картк'])
-    payment_str = f'Передоплата (Пром-оплата) {total:.0f} грн' if is_prepaid else f'Наложенным платежом {total:.0f} грн'
+    marketplace = order.get('marketplace', 'Prom')
+    payment_str = f'Передоплата ({marketplace}) {total:.0f} грн' if is_prepaid else f'Наложенным платежом {total:.0f} грн'
     
     items_text = '\n'.join([
         f"{i+1}. {it['sku']} | {it['name'][:50]} | {it['quantity']} шт."
