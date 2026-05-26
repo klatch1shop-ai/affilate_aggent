@@ -1,520 +1,485 @@
 """
-agents/orders/epicentr_order_agent.py
-========================================
-Агент обробки замовлень Єпіцентру через Merchant API.
-
-Алгоритм (кожні 5 хвилин):
-1. GET /v3/oms/orders?filter[statusCode][]=new  — нові замовлення
-2. Для кожного нового:
-   a) GET /v5/oms/orders/{id} — деталі
-   b) Перевірити наявність товарів у фіді TOPTUL
-   c) Якщо є → POST change-status/to/confirmed_by_merchant (отримуємо контакти)
-   d) Зберегти замовлення в БД
-   e) Відправити Email постачальнику (Грандінструмент)
-   f) Telegram сповіщення
-3. Якщо товару немає → canceled_by_merchant + причина product_not_available
-
-Запуск:
-    python3 agents/orders/epicentr_order_agent.py
-
-Як сервіс:
-    systemctl start epicentr-order-agent
+Агент обробки замовлень Єпіцентру — дропшипінг TOPTUL
+======================================================
+Цикл:
+1. Отримати нові замовлення з Єпіцентр OMS API
+2. Перевірити наявність у фіді TOPTUL (реальний час)
+3. Підтвердити замовлення на Єпіцентрі
+4. Сформувати Excel бланк → відправити на opt@grandinstrument.ua
+5. Сповістити в Telegram
 """
-
-import os, sys, time, json, requests
-from datetime import datetime, timezone
+import os, sys, json, time, requests, smtplib, asyncio
+import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 from loguru import logger
-
+import xlsxwriter
 sys.path.append('/home/tek/agent-system')
-from dotenv import load_dotenv
-load_dotenv('/home/tek/agent-system/.env')
+from dotenv import load_dotenv; load_dotenv('/home/tek/agent-system/.env')
 from shared.utils.db import get_connection
 
-# =============================================
-# КОНФІГУРАЦІЯ
-# =============================================
-
-EPICENTR_TOKEN   = os.getenv('EPICENTR_TOKEN', '')
-EPICENTR_BASE    = os.getenv('EPICENTR_API_URL', 'https://merchant-api.epicentrm.com.ua').rstrip('/')
+# === КОНСТАНТИ ===
+EPICENTR_TOKEN  = os.getenv('EPICENTR_TOKEN')
+EPICENTR_BASE   = 'https://merchant-api.epicentrm.com.ua'
 EPICENTR_HEADERS = {
     'Authorization': f'Bearer {EPICENTR_TOKEN}',
     'Content-Type':  'application/json',
-    'Accept-Language': 'uk',
 }
-
 TOPTUL_FEED = (
     'https://toptul.online/products_feed.xml?'
     'hash_tag=442309995a1416e3104d287504a1846f'
     '&label_ids=3882792&html_description=1&languages=uk,ru'
 )
-
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-TELEGRAM_ADMIN = os.getenv('TELEGRAM_ADMIN_ID')
 SUPPLIER_EMAIL = 'opt@grandinstrument.ua'
-FROM_EMAIL     = os.getenv('SMTP_FROM', 'klatch1.shop@gmail.com')
-
+SUPPLIER_CODE  = '000160594'
+SMTP_USER = os.getenv('SMTP_USER')
+SMTP_PASS = os.getenv('SMTP_PASS')
+SMTP_HOST = os.getenv('SMTP_HOST', 'smtp.gmail.com')
+SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
+TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
+TG_CHAT_ID   = os.getenv('TG_CHAT_ID')
 POLL_INTERVAL = 300  # 5 хвилин
-FEED_CACHE_TTL = 3600  # 1 година
+MARKETPLACE   = 'Єпіцентр'
 
-# =============================================
-# УТИЛІТИ
-# =============================================
+# === УТИЛІТИ ===
 
-def api_get(path: str, params: dict = None) -> dict:
-    try:
-        r = requests.get(f'{EPICENTR_BASE}{path}',
-                        headers=EPICENTR_HEADERS,
-                        params=params or {},
-                        timeout=30)
-        r.raise_for_status()
-        return r.json()
-    except Exception as e:
-        logger.error(f'[Єпіцентр API GET] {path}: {e}')
-        return {}
-
-
-def api_post(path: str, data: dict = None) -> tuple:
-    """Returns (status_code, response_dict)"""
-    try:
-        r = requests.post(f'{EPICENTR_BASE}{path}',
-                         headers=EPICENTR_HEADERS,
-                         json=data or {},
-                         timeout=30)
-        return r.status_code, (r.json() if r.content else {})
-    except Exception as e:
-        logger.error(f'[Єпіцентр API POST] {path}: {e}')
-        return 0, {}
-
-
-def tg(text: str):
+def tg(msg: str):
+    """Відправити повідомлення в Telegram."""
+    if not TG_BOT_TOKEN or not TG_CHAT_ID:
+        return
     try:
         requests.post(
-            f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage',
-            json={'chat_id': TELEGRAM_ADMIN, 'text': text, 'parse_mode': 'HTML'},
+            f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
+            json={'chat_id': TG_CHAT_ID, 'text': msg, 'parse_mode': 'HTML'},
             timeout=10
         )
     except Exception as e:
-        logger.error(f'Telegram: {e}')
+        logger.warning(f'TG помилка: {e}')
 
 
-# =============================================
-# КЕШ ФІДУ TOPTUL
-# =============================================
+def parse_price(val) -> float:
+    """Парсить ціну з будь-якого формату."""
+    if val is None:
+        return 0.0
+    import re
+    s = str(val).replace(' грн', '').replace('грн', '')
+    s = s.replace('\xa0', '').replace('\u00a0', '')
+    s = re.sub(r'(\d)\s+(\d)', r'\1\2', s)
+    s = s.replace(',', '.').strip()
+    match = re.search(r'[\d]+(?:\.[\d]+)?', s)
+    return float(match.group()) if match else 0.0
 
-_feed_cache = {'data': {}, 'loaded_at': 0}
 
+# === ФІД TOPTUL ===
 
-def get_feed() -> dict:
-    """Завантажує фід TOPTUL з кешуванням на 1 годину."""
-    now = time.time()
-    if now - _feed_cache['loaded_at'] < FEED_CACHE_TTL and _feed_cache['data']:
+_feed_cache = {'data': {}, 'updated': None}
+
+def get_feed_data(force=False) -> dict:
+    """Повертає словник {sku: {available, price, name}} з фіду TOPTUL."""
+    now = datetime.now()
+    if (not force and _feed_cache['updated'] and
+            (now - _feed_cache['updated']).seconds < 3600):
         return _feed_cache['data']
-
-    logger.info('[Єпіцентр] Завантажуємо фід TOPTUL...')
     try:
-        import xml.etree.ElementTree as ET
-        resp = requests.get(TOPTUL_FEED, timeout=120)
-        root = ET.fromstring(resp.content)
-        feed = {}
-        for offer in root.find('shop').find('offers').findall('offer'):
+        r = requests.get(TOPTUL_FEED, timeout=120)
+        root = ET.fromstring(r.content)
+        offers = root.find('shop').find('offers').findall('offer')
+        data = {}
+        for offer in offers:
             sku_el = offer.find('vendorCode')
-            sku = (sku_el.text or '').strip().upper() if sku_el is not None else ''
-            if not sku:
+            if sku_el is None:
                 continue
+            sku = (sku_el.text or '').strip().upper()
             price_el = offer.find('price')
-            feed[sku] = {
-                'price':     float(price_el.text) if price_el is not None else 0,
-                'available': offer.get('available', 'true') == 'true',
-                'stock':     getattr(offer.find('stock_quantity'), 'text', '*'),
+            name_el  = offer.find('name_ua') or offer.find('name')
+            data[sku] = {
+                'available': offer.get('available','false').lower() == 'true',
+                'price':     float(price_el.text or 0) if price_el is not None else 0,
+                'name':      (name_el.text or '') if name_el is not None else '',
             }
-        _feed_cache['data'] = feed
-        _feed_cache['loaded_at'] = now
-        logger.success(f'[Єпіцентр] Фід завантажено: {len(feed)} товарів')
-        return feed
+        _feed_cache['data']    = data
+        _feed_cache['updated'] = now
+        logger.info(f'Фід TOPTUL: {len(data)} SKU')
+        return data
     except Exception as e:
-        logger.error(f'[Єпіцентр] Помилка фіду: {e}')
+        logger.error(f'Помилка фіду: {e}')
         return _feed_cache['data']
 
 
-# =============================================
-# БД: ЗАМОВЛЕННЯ
-# =============================================
+# === ЄПІЦЕНТР OMS API ===
 
-def is_order_processed(epicentr_order_id: str) -> bool:
-    """Перевіряє чи замовлення вже оброблялось."""
+def get_new_orders() -> list:
+    """Отримати нові замовлення (статус new)."""
+    try:
+        r = requests.get(
+            f'{EPICENTR_BASE}/v3/oms/orders',
+            headers=EPICENTR_HEADERS,
+            params={'statusCode': 'new', 'limit': 50},
+            timeout=30
+        )
+        if r.status_code != 200:
+            logger.error(f'OMS помилка {r.status_code}: {r.text[:200]}')
+            return []
+        return r.json().get('items', [])
+    except Exception as e:
+        logger.error(f'get_new_orders: {e}')
+        return []
+
+
+def get_order_details(order_id: str) -> dict:
+    """Отримати повні деталі замовлення."""
+    try:
+        r = requests.get(
+            f'{EPICENTR_BASE}/v5/oms/orders/{order_id}',
+            headers=EPICENTR_HEADERS,
+            timeout=30
+        )
+        return r.json() if r.status_code == 200 else {}
+    except Exception as e:
+        logger.error(f'get_order_details: {e}')
+        return {}
+
+
+def accept_order(order_id: str) -> bool:
+    """Підтвердити замовлення (new → confirmed_by_merchant)."""
+    try:
+        # 1. Перевіряємо дозволені статуси
+        r = requests.get(
+            f'{EPICENTR_BASE}/v2/oms/orders/{order_id}/allowed-statuses',
+            headers=EPICENTR_HEADERS, timeout=15
+        )
+        if r.status_code == 200:
+            allowed = [s.get('code') for s in r.json().get('items', [])]
+            if 'confirmed_by_merchant' not in allowed:
+                logger.warning(f'Статус confirmed_by_merchant недоступний для {order_id}')
+                return False
+        # 2. Змінюємо статус
+        r2 = requests.post(
+            f'{EPICENTR_BASE}/v2/oms/orders/{order_id}/change-status/to/confirmed_by_merchant',
+            headers=EPICENTR_HEADERS,
+            json={'comment': 'Прийнято автоматично'},
+            timeout=15
+        )
+        return r2.status_code in (200, 202, 204)
+    except Exception as e:
+        logger.error(f'accept_order: {e}')
+        return False
+
+
+def cancel_order(order_id: str, reason: str = 'customer_not_timely_confirmation_of_the_availability_of_goods') -> bool:
+    """Скасувати замовлення (товар відсутній)."""
+    try:
+        r = requests.post(
+            f'{EPICENTR_BASE}/v2/oms/orders/{order_id}/change-status/to/canceled_by_merchant',
+            headers=EPICENTR_HEADERS,
+            json={'reason_code': reason, 'comment': 'Товар відсутній у постачальника'},
+            timeout=15
+        )
+        return r.status_code in (200, 202, 204)
+    except Exception as e:
+        logger.error(f'cancel_order: {e}')
+        return False
+
+
+def save_to_db(order: dict, status: str):
+    """Зберегти замовлення в БД."""
     try:
         conn = get_connection()
-        cur = conn.cursor()
-        cur.execute(
-            'SELECT id FROM orders WHERE epicentr_order_id=%s',
-            (epicentr_order_id,)
-        )
+        cur  = conn.cursor()
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS epicentr_processed_orders (
+                order_id    VARCHAR(100) PRIMARY KEY,
+                ext_id      VARCHAR(100),
+                status      VARCHAR(50),
+                total_price NUMERIC(12,2),
+                items       JSONB,
+                processed_at TIMESTAMP DEFAULT NOW()
+            )
+        ''')
+        items = json.dumps(order.get('items', []), ensure_ascii=False)
+        total = sum(i.get('subtotal', 0) for i in order.get('items', []))
+        cur.execute('''
+            INSERT INTO epicentr_processed_orders
+                (order_id, ext_id, status, total_price, items)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (order_id) DO UPDATE
+            SET status=EXCLUDED.status, processed_at=NOW()
+        ''', (order.get('id'), order.get('externalId'), status, total, items))
+        conn.commit()
+        cur.close(); conn.close()
+    except Exception as e:
+        logger.error(f'save_to_db: {e}')
+
+
+def is_already_processed(order_id: str) -> bool:
+    """Перевірити чи замовлення вже оброблялось."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute('''
+            SELECT 1 FROM epicentr_processed_orders
+            WHERE order_id = %s
+        ''', (order_id,))
         exists = cur.fetchone() is not None
         cur.close(); conn.close()
         return exists
-    except Exception as e:
-        logger.error(f'[БД] is_order_processed: {e}')
+    except:
         return False
 
 
-def save_order(order: dict, status: str, notes: str = ''):
-    """Зберігає замовлення в БД."""
-    try:
-        addr = order.get('address', {})
-        items = order.get('items', [])
-        shipment = addr.get('shipment', {})
+# === EXCEL БЛАНК ===
 
-        conn = get_connection()
-        cur = conn.cursor()
-        cur.execute('''
-            INSERT INTO orders (
-                epicentr_order_id, prom_order_id, status,
-                customer_name, customer_phone, customer_email,
-                total_price, delivery_provider,
-                products_json, notes, created_at
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
-            ON CONFLICT (epicentr_order_id) DO UPDATE SET
-                status=EXCLUDED.status,
-                notes=EXCLUDED.notes,
-                updated_at=NOW()
-        ''', (
-            order.get('id'),
-            order.get('number'),
-            status,
-            f"{addr.get('firstName','')} {addr.get('lastName','')}".strip(),
-            addr.get('phone', ''),
-            addr.get('email', ''),
-            float(order.get('subtotal', 0)),
-            shipment.get('provider', ''),
-            json.dumps(items, ensure_ascii=False),
-            notes,
-        ))
-        conn.commit(); cur.close(); conn.close()
-    except Exception as e:
-        logger.error(f'[БД] save_order: {e}')
+def create_order_excel(order: dict, items_info: list) -> str:
+    """Формат бланку Гранд Інструмент (аналог Prom)."""
+    order_id = order.get('id', 'unknown')[:8]
+    filename = f'/tmp/epicentr_order_{order_id}_{datetime.now().strftime("%Y%m%d_%H%M")}.xlsx'
 
+    wb = xlsxwriter.Workbook(filename)
+    ws = wb.add_worksheet('Замовлення')
 
-# =============================================
-# ПЕРЕВІРКА НАЯВНОСТІ ТОВАРІВ
-# =============================================
+    bold       = wb.add_format({'bold': True, 'font_size': 11})
+    header_fmt = wb.add_format({'bold': True, 'bg_color': '#1F4E79',
+                                'font_color': 'white', 'border': 1, 'align': 'center'})
+    cell_fmt   = wb.add_format({'border': 1})
+    sku_fmt    = wb.add_format({'border': 1, 'bold': True})
+    red_bold   = wb.add_format({'bold': True, 'font_color': 'red'})
+    wrap_fmt   = wb.add_format({'text_wrap': True})
 
-def check_items_availability(items: list, feed: dict) -> tuple:
-    """
-    Перевіряє наявність товарів у фіді TOPTUL.
+    ws.set_column('A:A', 5)
+    ws.set_column('B:B', 22)
+    ws.set_column('C:C', 55)
+    ws.set_column('D:D', 14)
 
-    NOTE: В Єпіцентрі SKU = їхній внутрішній ID (числовий).
-    Нам потрібен маппінг epicentr_product_id → наш_sku.
-    Якщо маппінгу немає — шукаємо по назві в my_products.
+    # Дані замовлення
+    addr    = order.get('address') or {}
+    ship    = addr.get('shipment') or {}
+    customer = f"{addr.get('lastName','')} {addr.get('firstName','')}".strip()
+    phone    = addr.get('phone', '')
+    city_id  = ship.get('settlementId', '')
+    office_n = ship.get('number', '')
+    delivery_str = f'Нова Пошта {office_n}'.strip() if office_n else 'Нова Пошта'
 
-    Returns: (all_available: bool, unavailable_items: list)
-    """
-    unavailable = []
+    total = sum(i.get('subtotal', 0) for i in order.get('items', []))
 
-    try:
-        conn = get_connection()
-        cur = conn.cursor()
+    # Шапка
+    ws.write('A1', 'Перевозчик', bold)
+    ws.write('C1', 'Новая Почта')
+    ws.write('A2', 'Оплата', bold)
+    ws.write('C2', f'Наложенным платежом {total:.0f} грн')
+    ws.write('A3', 'Комментарий', bold)
+    ws.write('C3', f'{customer}  {phone}\n{delivery_str}', wrap_fmt)
+    ws.set_row(2, 35)
+    ws.write('A4', f'Замовлення {MARKETPLACE} #{order.get("externalId") or order_id}')
+    ws.write('C4', f'Дата: {datetime.now().strftime("%d.%m.%Y %H:%M")}')
+    ws.write('A5', f'Код клієнта: {SUPPLIER_CODE}', red_bold)
 
-        for item in items:
-            epicentr_sku = str(item.get('sku', ''))
-            title = item.get('title', '')
+    # Заголовки
+    row = 6
+    for col, h in enumerate(['№', 'Артикул', 'Наименование', 'Количество']):
+        ws.write(row, col, h, header_fmt)
+    row += 1
 
-            # Шукаємо наш SKU по маппінгу
-            our_sku = None
+    # Товари
+    for idx, item in enumerate(items_info, 1):
+        ws.write(row, 0, idx, cell_fmt)
+        ws.write(row, 1, item.get('sku', ''), sku_fmt)
+        ws.write(row, 2, item.get('title', '')[:80], cell_fmt)
+        ws.write(row, 3, item.get('quantity', 1), cell_fmt)
+        row += 1
 
-            # Варіант 1: по epicentr_article або epicentr_product_id
-            cur.execute('''
-                SELECT our_sku FROM epicentr_sku_mapping
-                WHERE epicentr_article = %s OR epicentr_product_id::text = %s
-                LIMIT 1
-            ''', (epicentr_sku, epicentr_sku))
-            row = cur.fetchone()
-            if row:
-                our_sku = row['our_sku']
-
-            # Варіант 2: пряме співпадання SKU
-            if not our_sku:
-                cur.execute(
-                    'SELECT sku FROM my_products WHERE sku ILIKE %s LIMIT 1',
-                    (epicentr_sku,)
-                )
-                row = cur.fetchone()
-                if row:
-                    our_sku = row['sku']
-
-            # Варіант 3: пошук по назві
-            if not our_sku and title:
-                words = title.split()[:3]
-                search = ' & '.join(words)
-                cur.execute('''
-                    SELECT sku FROM my_products
-                    WHERE to_tsvector('simple', name_uk) @@ to_tsquery('simple', %s)
-                    LIMIT 1
-                ''', (search,))
-                row = cur.fetchone()
-                if row:
-                    our_sku = row['sku']
-
-            # Перевіряємо у фіді
-            if our_sku:
-                feed_info = feed.get(our_sku.upper())
-                if not feed_info or not feed_info.get('available', False):
-                    unavailable.append({
-                        'epicentr_sku': epicentr_sku,
-                        'our_sku': our_sku,
-                        'title': title,
-                        'reason': 'не в фіді' if not feed_info else 'недоступний'
-                    })
-            else:
-                logger.warning(f'[Єпіцентр] Не знайдено маппінг для SKU: {epicentr_sku} ({title[:30]})')
-                # Якщо немає маппінгу — вважаємо що є (не скасовуємо)
-
-        cur.close(); conn.close()
-
-    except Exception as e:
-        logger.error(f'[Єпіцентр] check_items: {e}')
-
-    return len(unavailable) == 0, unavailable
+    wb.close()
+    logger.info(f'Excel: {filename}')
+    return filename
 
 
-# =============================================
-# ПІДТВЕРДЖЕННЯ ЗАМОВЛЕННЯ
-# =============================================
+def send_to_supplier(order: dict, excel_path: str, items_info: list):
+    """Відправити бланк замовлення на пошту постачальника."""
+    addr     = order.get('address') or {}
+    customer = f"{addr.get('lastName','')} {addr.get('firstName','')}".strip()
+    phone    = addr.get('phone', '')
+    ship     = addr.get('shipment') or {}
+    office_n = ship.get('number', '')
+    delivery_str = f'Нова Пошта відд.{office_n}' if office_n else 'Нова Пошта'
+    total    = sum(i.get('subtotal', 0) for i in order.get('items', []))
+    order_id = order.get('externalId') or order.get('id', '')[:8]
 
-async def confirm_order(order_id: str) -> bool:
-    """Підтверджує замовлення (new → confirmed_by_merchant)."""
-    status_code, resp = api_post(
-        f'/v2/oms/orders/{order_id}/change-status/to/confirmed_by_merchant'
+    items_text = '\n'.join(
+        f"{i}. {item.get('sku','')} | {item.get('title','')[:50]} | {item.get('quantity',1)} шт."
+        for i, item in enumerate(items_info, 1)
     )
-    if status_code == 202:
-        logger.success(f'[Єпіцентр] Замовлення {order_id} підтверджено')
-        return True
-    else:
-        logger.error(f'[Єпіцентр] Помилка підтвердження {order_id}: {status_code} {resp}')
-        return False
 
+    body = f"""Добрый день!
 
-def cancel_order(order_id: str, reason: str = 'product_not_available',
-                 comment: str = '') -> bool:
-    """Скасовує замовлення продавцем."""
-    status_code, resp = api_post(
-        f'/v2/oms/orders/{order_id}/change-status/to/canceled_by_merchant',
-        data={
-            'reason_code': reason,
-            'comment': comment or f'Товар відсутній у постачальника',
-        }
-    )
-    if status_code == 202:
-        logger.success(f'[Єпіцентр] Замовлення {order_id} скасовано: {reason}')
-        return True
-    else:
-        logger.error(f'[Єпіцентр] Помилка скасування {order_id}: {status_code} {resp}')
-        return False
+Заказ #{order_id} от {datetime.now().strftime('%d.%m.%Y')}
+Код клиента: {SUPPLIER_CODE}
 
-
-# =============================================
-# EMAIL ПОСТАЧАЛЬНИКУ
-# =============================================
-
-def send_supplier_email(order: dict, items: list):
-    """Відправляє замовлення постачальнику Грандінструмент."""
-    import smtplib
-    from email.mime.text import MIMEText
-    from email.mime.multipart import MIMEMultipart
-
-    addr = order.get('address', {})
-    customer = f"{addr.get('firstName','')} {addr.get('lastName','')}".strip()
-    phone = addr.get('phone', '')
-    shipment = addr.get('shipment', {})
-    delivery = shipment.get('provider', '')
-    order_num = order.get('number', '')
-
-    items_text = '\n'.join([
-        f"  {i.get('sku','')} | {i.get('title','')[:50]} | {i.get('quantity',1)} шт | {i.get('price',0)} грн"
-        for i in items
-    ])
-
-    body = f"""Нове замовлення з Єпіцентру #{order_num}
-
-Замовник: {customer}
-Телефон: {phone}
-Доставка: {delivery}
-
-Товари:
+Товары:
 {items_text}
 
-Сума: {order.get('subtotal', 0)} грн
+Получатель: {customer}
+Телефон: {phone}
+Доставка: {delivery_str}
+Оплата: Наложенным платежом {total:.0f} грн
 
-Клієнт ID: {os.getenv('EPICENTR_CLIENT_CODE', '000160594')}
+Детали в приложении (Excel).
 
-Будь ласка, відправте товар.
+С уважением,
+klatch1.shop
 """
+    msg = MIMEMultipart()
+    msg['From']    = SMTP_USER
+    msg['To']      = SUPPLIER_EMAIL
+    msg['Subject'] = f'Заказ #{order_id} от {datetime.now().strftime("%d.%m.%Y")} ({MARKETPLACE})'
+    msg.attach(MIMEText(body, 'plain', 'utf-8'))
+
+    with open(excel_path, 'rb') as f:
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(f.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition',
+                        f'attachment; filename="{os.path.basename(excel_path)}"')
+        msg.attach(part)
 
     try:
-        msg = MIMEMultipart()
-        msg['From']    = FROM_EMAIL
-        msg['To']      = SUPPLIER_EMAIL
-        msg['Subject'] = f'Замовлення Єпіцентр #{order_num}'
-        msg.attach(MIMEText(body, 'plain', 'utf-8'))
-
-        smtp_host = os.getenv('SMTP_HOST', 'smtp.gmail.com')
-        smtp_port = int(os.getenv('SMTP_PORT', 587))
-        smtp_user = os.getenv('SMTP_USER', FROM_EMAIL)
-        smtp_pass = os.getenv('SMTP_PASSWORD', '')
-
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
             server.starttls()
-            server.login(smtp_user, smtp_pass)
+            server.login(SMTP_USER, SMTP_PASS)
             server.send_message(msg)
-
-        logger.success(f'[Єпіцентр] Email відправлено постачальнику: замовлення #{order_num}')
+        logger.success(f'Email відправлено: {order_id}')
         return True
     except Exception as e:
-        logger.error(f'[Єпіцентр] Email помилка: {e}')
+        logger.error(f'Email помилка: {e}')
         return False
 
 
-# =============================================
-# ОБРОБКА ОДНОГО ЗАМОВЛЕННЯ
-# =============================================
+# === ОБРОБКА ЗАМОВЛЕННЯ ===
 
-def process_order(order_summary: dict) -> str:
-    """
-    Обробляє одне замовлення.
-    Returns: 'confirmed' | 'canceled' | 'skipped' | 'error'
-    """
-    order_id  = order_summary.get('id', '')
-    order_num = order_summary.get('number', '')
-    status    = order_summary.get('statusCode', '')
+def process_order(order: dict, feed: dict):
+    """Обробити одне замовлення."""
+    order_id  = order.get('id', '')
+    ext_id    = order.get('externalId') or order_id[:8]
 
-    if status != 'new':
-        return 'skipped'
-
-    if is_order_processed(order_id):
-        logger.info(f'[Єпіцентр] #{order_num} вже оброблено')
-        return 'skipped'
-
-    # Отримуємо деталі V5
-    order = api_get(f'/v5/oms/orders/{order_id}')
-    if not order:
-        logger.error(f'[Єпіцентр] Не вдалось отримати деталі #{order_num}')
-        return 'error'
-
-    items   = order.get('items', [])
-    subtotal = float(order.get('subtotal', 0))
-    addr    = order.get('address', {})
-    skip    = order.get('skipCustomerContact', True)
-
-    logger.info(f'[Єпіцентр] Обробляємо #{order_num}: {len(items)} товарів, {subtotal} грн')
-
-    # Перевіряємо наявність у фіді
-    feed = get_feed()
-    all_available, unavailable = check_items_availability(items, feed)
-
-    if not all_available:
-        # Скасовуємо — товару немає
-        names = ', '.join([i['title'][:30] for i in unavailable])
-        logger.warning(f'[Єпіцентр] #{order_num} скасовуємо — немає: {names}')
-
-        canceled = cancel_order(
-            order_id,
-            reason='product_not_available',
-            comment=f'Товар відсутній: {names[:200]}'
-        )
-        save_order(order, 'canceled_no_stock',
-                  f'Відсутні: {names}')
-
-        tg(
-            f'❌ <b>Єпіцентр #{order_num}</b>\n'
-            f'Скасовано — немає в наявності:\n'
-            f'{names}\n'
-            f'Сума: {subtotal} грн'
-        )
-        return 'canceled'
-
-    # Підтверджуємо замовлення
-    status_code, _ = api_post(
-        f'/v2/oms/orders/{order_id}/change-status/to/confirmed_by_merchant'
-    )
-    if status_code != 202:
-        logger.error(f'[Єпіцентр] #{order_num} помилка підтвердження: {status_code}')
-        return 'error'
-
-    # Отримуємо оновлені деталі з контактами клієнта
-    order_confirmed = api_get(f'/v5/oms/orders/{order_id}')
-    if order_confirmed:
-        order = order_confirmed
-
-    addr  = order.get('address', {})
-    phone = addr.get('phone', '')
-
-    # Зберігаємо в БД
-    save_order(order, 'confirmed', 'Підтверджено автоматично')
-
-    # Email постачальнику
-    send_supplier_email(order, items)
-
-    # Telegram
-    items_text = '\n'.join([
-        f"  • {i.get('title','')[:40]} × {i.get('quantity',1)} = {i.get('price',0)*i.get('quantity',1):.0f} грн"
-        for i in items
-    ])
-    shipment = addr.get('shipment', {})
-
-    tg(
-        f'✅ <b>Єпіцентр #{order_num}</b>\n'
-        f'👤 {addr.get("firstName","")} {addr.get("lastName","")}\n'
-        f'📞 {phone}\n'
-        f'🚚 {shipment.get("provider","")}\n'
-        f'💰 {subtotal} грн\n\n'
-        f'{items_text}'
-    )
-
-    logger.success(f'[Єпіцентр] #{order_num} підтверджено і відправлено постачальнику')
-    return 'confirmed'
-
-
-# =============================================
-# ГОЛОВНИЙ ЦИКЛ
-# =============================================
-
-def run_once():
-    """Один цикл перевірки нових замовлень."""
-    logger.info('[Єпіцентр] Перевіряємо нові замовлення...')
-
-    data = api_get('/v3/oms/orders', {
-        'filter[statusCode][]': 'new',
-        'limit': 50,
-    })
-
-    orders = data.get('items', [])
-    if not orders:
-        logger.info('[Єпіцентр] Нових замовлень немає')
+    if is_already_processed(order_id):
         return
 
-    logger.info(f'[Єпіцентр] Знайдено нових замовлень: {len(orders)}')
+    logger.info(f'Обробляємо {MARKETPLACE} замовлення #{ext_id}')
 
-    stats = {'confirmed': 0, 'canceled': 0, 'error': 0}
-    for order in orders:
-        result = process_order(order)
-        if result in stats:
-            stats[result] += 1
-        time.sleep(1)  # пауза між замовленнями
+    # Деталі замовлення
+    details = get_order_details(order_id)
+    if not details:
+        logger.error(f'Не вдалось отримати деталі {order_id}')
+        return
 
-    logger.info(f'[Єпіцентр] Цикл завершено: {stats}')
+    items = details.get('items', [])
+    if not items:
+        logger.warning(f'Замовлення {ext_id} — немає товарів')
+        return
 
+    # Перевіряємо наявність кожного товару
+    items_info   = []
+    all_available = True
+
+    for item in items:
+        # SKU береться з productExternalId або з маппінгу
+        product_ext_id = item.get('productExternalId') or item.get('sku', '')
+        sku = product_ext_id.upper()
+
+        # Шукаємо наш SKU через epicentr_sku_mapping
+        our_sku = sku
+        try:
+            conn = get_connection()
+            cur  = conn.cursor()
+            cur.execute(
+                'SELECT our_sku FROM epicentr_sku_mapping WHERE epicentr_article = %s',
+                (product_ext_id,)
+            )
+            row = cur.fetchone()
+            if row:
+                our_sku = row['our_sku'].upper()
+            cur.close(); conn.close()
+        except:
+            pass
+
+        feed_item = feed.get(our_sku, {})
+        available = feed_item.get('available', False)
+
+        if not available:
+            all_available = False
+            logger.warning(f'  {our_sku} — відсутній у фіді')
+
+        items_info.append({
+            'sku':       our_sku,
+            'title':     item.get('title', ''),
+            'quantity':  item.get('quantity', 1),
+            'price':     item.get('price', 0),
+            'subtotal':  item.get('subtotal', 0),
+            'available': available,
+        })
+
+    total = sum(i.get('subtotal', 0) for i in items)
+    addr  = details.get('address') or {}
+    customer = f"{addr.get('lastName','')} {addr.get('firstName','')}".strip()
+    phone    = addr.get('phone', '')
+
+    if not all_available:
+        # Скасовуємо
+        unavailable = [i['sku'] for i in items_info if not i['available']]
+        cancel_order(order_id)
+        save_to_db(details, 'cancelled_no_stock')
+        tg(f"""❌ <b>{MARKETPLACE} замовлення #{ext_id} — товар відсутній!</b>
+Клієнт: {customer} {phone}
+Відсутні: {', '.join(unavailable)}
+Замовлення скасовано автоматично.""")
+        logger.warning(f'Замовлення #{ext_id} скасовано — немає товару')
+        return
+
+    # Підтверджуємо
+    if accept_order(order_id):
+        logger.success(f'Замовлення #{ext_id} підтверджено на {MARKETPLACE}')
+    else:
+        logger.error(f'Не вдалось підтвердити #{ext_id}')
+        return
+
+    # Формуємо Excel і відправляємо
+    excel = create_order_excel(details, items_info)
+    email_sent = send_to_supplier(details, excel, items_info)
+
+    save_to_db(details, 'accepted')
+
+    tg(f"""📧 <b>{MARKETPLACE} замовлення #{ext_id} відправлено постачальнику</b>
+Клієнт: {customer} {phone}
+Товарів: {len(items_info)}
+💰 Сума: {total:.0f} грн
+📧 Email: {'✅' if email_sent else '❌'}""")
+
+
+# === ГОЛОВНИЙ ЦИКЛ ===
 
 def main():
-    logger.info('=== Epicentr Order Agent старт ===')
-    tg('🟢 <b>Epicentr Order Agent</b> запущено')
+    logger.add('/tmp/epicentr_order_agent.log', rotation='10 MB', level='INFO')
+    logger.info(f'{MARKETPLACE} Order Agent запущено')
+    tg(f'🚀 <b>{MARKETPLACE} Order Agent запущено</b>')
 
     while True:
         try:
-            run_once()
-        except Exception as e:
-            logger.error(f'[Єпіцентр] Критична помилка циклу: {e}')
-            tg(f'🔴 <b>Epicentr Order Agent</b> помилка:\n{e}')
+            logger.info('Перевіряємо нові замовлення...')
+            feed   = get_feed_data()
+            orders = get_new_orders()
 
-        logger.info(f'[Єпіцентр] Очікуємо {POLL_INTERVAL}с...')
+            if orders:
+                logger.info(f'Знайдено {len(orders)} нових замовлень')
+                for order in orders:
+                    process_order(order, feed)
+            else:
+                logger.debug('Нових замовлень немає')
+
+        except Exception as e:
+            logger.error(f'Помилка циклу: {e}')
+            tg(f'⚠️ <b>{MARKETPLACE} Order Agent помилка:</b> {e}')
+
         time.sleep(POLL_INTERVAL)
 
 
