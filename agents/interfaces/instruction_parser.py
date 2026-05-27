@@ -114,6 +114,15 @@ class InstructionParser:
             self._save_to_db(skill_file, instruction, user_id, added_text)
 
             logger.success(f'[InstructionParser] Правило додано в {skill_file}')
+
+            # Переіндексуємо Qdrant щоб новий скіл одразу став доступний
+            try:
+                from shared.utils.skills_indexer import index_all_skills
+                index_all_skills()
+                logger.info('[InstructionParser] Skills re-indexed after /learn')
+            except Exception as e:
+                logger.warning(f'[InstructionParser] Re-index failed: {e}')
+
             return {
                 'success': True,
                 'skill_file': skill_file,
