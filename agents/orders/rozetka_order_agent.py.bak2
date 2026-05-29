@@ -46,7 +46,7 @@ TG_BOT_TOKEN      = os.getenv('TG_BOT_TOKEN')
 TG_CHAT_ID        = os.getenv('TG_CHAT_ID')
 POLL_INTERVAL     = 300
 MARKETPLACE       = 'Розетка'
-FORBIDDEN_STATUSES = {40, 49, 6}  # 40=клієнт передумав, 49=небезпечний, 6=скасування
+FORBIDDEN_STATUSES = {40, 49, 26, 6}  # 40=клієнт передумав, 26/49=небезпечні, 6=скасування
 
 ORDERS_DIR = '/home/tek/agent-system/shared/feeds/orders'
 
@@ -120,7 +120,7 @@ def get_carvol_feed(force=False) -> dict:
 # === РОЗЕТКА API ===
 
 def get_new_orders() -> list:
-    """Отримати нові замовлення: types=4 + status=1 + status=26, без дублів."""
+    """Отримати нові замовлення: types=4 + status=1, без дублів."""
     params_base = {
         'expand': 'purchases,delivery,status_available,payment_type',
         'sort':   '-id',
@@ -128,7 +128,7 @@ def get_new_orders() -> list:
     }
     results = {}
 
-    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26)]:
+    for extra_key, extra_val in [('types', 4), ('status', 1)]:
         try:
             r = requests.get(
                 f'{ROZETKA_BASE}/orders/search',
