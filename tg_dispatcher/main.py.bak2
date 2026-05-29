@@ -22,7 +22,10 @@ Telegram ШІ-Диспетчер — головна точка входу.
 import os, sys, asyncio, logging
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message, Voice
+from aiogram.types import (
+    Message, Voice, CallbackQuery,
+    InlineKeyboardMarkup, InlineKeyboardButton,
+)
 from aiogram.filters import CommandStart, Command
 from aiogram.utils.markdown import bold, italic
 
@@ -30,8 +33,7 @@ from aiogram.utils.markdown import bold, italic
 load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'))
 
 TOKEN    = os.getenv('TELEGRAM_BOT_TOKEN', '')
-ADMIN_ID         = int(os.getenv('TELEGRAM_ADMIN_ID', '0'))
-CARVOL_TG_CHAT_ID = int(os.getenv('CARVOL_TG_CHAT_ID', '0'))
+ADMIN_ID = int(os.getenv('TELEGRAM_ADMIN_ID', '0'))
 
 logging.basicConfig(
     level=logging.INFO,
@@ -51,15 +53,10 @@ sys.path.insert(0, '/home/tek/agent-system')
 
 @dp.message.outer_middleware()
 async def security_middleware(handler, event, data):
-    user_id = event.from_user.id
-    if user_id == ADMIN_ID:
-        return await handler(event, data)
-    # Carvol може надсилати тільки document (PDF накладні)
-    if CARVOL_TG_CHAT_ID and user_id == CARVOL_TG_CHAT_ID:
-        if getattr(event, 'document', None):
-            return await handler(event, data)
-        return  # всі інші типи від Carvol — мовчки ігноруємо
-    logger.warning(f'Відхилено доступ від ID: {user_id} (@{event.from_user.username})')
+    if event.from_user.id != ADMIN_ID:
+        logger.warning(f'Відхилено доступ від ID: {event.from_user.id} (@{event.from_user.username})')
+        return
+    return await handler(event, data)
 
 
 # =============================================
@@ -204,180 +201,104 @@ async def cmd_learn(message: Message):
 
 
 # =============================================
-# PDF НАКЛАДНІ (ТТН від Carvol) — повністю автоматично
+# PDF НАКЛАДНІ (ТТН від Carvol)
 # =============================================
 
-def _fmt_source_info(ttn: str, data_source: str,
-                     ttn_info: dict | None, parsed: dict) -> str:
-    """Формує блок з даними для повідомлення адміну."""
-    # Беремо поля з НП API якщо є, інакше з PDF
-    np = ttn_info or {}
-    recipient = np.get('recipient_name') or parsed.get('recipient') or 'не знайдено'
-    phone     = np.get('recipient_phone') or parsed.get('phone')     or 'не знайдено'
-    city      = np.get('city')           or parsed.get('city')       or 'не знайдено'
-    warehouse = np.get('warehouse') or ''
-    city_line = f'{city} {warehouse}'.strip() if warehouse else city
+# Сховище pending-підтверджень: {message_id: {"parsed": dict, "matches": list}}
+_pending_ttn: dict = {}
 
-    source_icon = '🌐 НП API' if 'НП API' in data_source else '📄 PDF'
+
+def _build_parsed_info(parsed: dict) -> str:
     return (
-        f'📋 <b>Дані ({source_icon}):</b>\n'
-        f'ТТН: <code>{ttn}</code>\n'
-        f'Отримувач: {recipient}\n'
-        f'Телефон: <code>{phone}</code>\n'
-        f'Місто: {city_line}'
+        f'📋 <b>Дані з PDF:</b>\n'
+        f'ТТН: <code>{parsed["ttn"] or "не знайдено"}</code>\n'
+        f'Телефон: <code>{parsed["phone"] or "не знайдено"}</code>\n'
+        f'Отримувач: {parsed["recipient"] or "не знайдено"}\n'
+        f'Місто: {parsed["city"] or "не знайдено"}'
     )
 
 
 @dp.message(F.document)
 async def handle_document(message: Message):
-    """PDF накладна НП від Carvol або адміна — автоматичне встановлення ТТН."""
-    from_carvol    = CARVOL_TG_CHAT_ID and message.from_user.id == CARVOL_TG_CHAT_ID
-    target_chat_id = ADMIN_ID if from_carvol else message.chat.id
-
+    """Приймає PDF накладну НП від Carvol, парсить ТТН, матчить замовлення."""
     doc = message.document
     if not doc.mime_type or 'pdf' not in doc.mime_type.lower():
-        if not from_carvol:
-            await bot.send_message(target_chat_id, '📎 Підтримуються тільки PDF файли (накладні НП).')
+        await message.answer('📎 Підтримуються тільки PDF файли (накладні НП).')
         return
 
-    label      = '📄 Carvol надіслав накладну — обробляю...' if from_carvol else '📄 Обробляю PDF накладну...'
-    status_msg = await bot.send_message(target_chat_id, label)
-    pdf_path   = f'/tmp/ttn_{message.message_id}.pdf'
+    status_msg = await message.answer('📄 Обробляю PDF накладну...')
+    pdf_path = f'/tmp/ttn_{message.message_id}.pdf'
 
     try:
         file = await bot.get_file(doc.file_id)
         await bot.download_file(file.file_path, destination=pdf_path)
 
         from agents.orders.ttn_pdf_parser import parse_ttn_pdf, match_order_by_ttn_data
-        from agents.orders.np_api import get_ttn_info, match_order_by_np_data
-        from agents.orders.rozetka_order_agent import set_ttn, change_status, get_order_details
 
-        # --- Крок 1: парсинг PDF ---
         parsed = await asyncio.to_thread(parse_ttn_pdf, pdf_path)
-        ttn    = parsed.get('ttn')
+        parsed_info = _build_parsed_info(parsed)
 
-        if not ttn:
-            info = _fmt_source_info('не знайдено', 'PDF', None, parsed)
+        if not parsed['ttn']:
             await status_msg.edit_text(
-                f'⚠️ <b>ТТН не знайдено в PDF</b>\n\n{info}\n\n'
-                f'Вкажи вручну: /ttn ORDER_ID НОМЕР_ТТН',
+                f'⚠️ <b>ТТН не знайдено в PDF</b>\n\n{parsed_info}\n\n'
+                f'Вкажи ТТН вручну: /ttn ORDER_ID НОМЕР_ТТН',
                 parse_mode='HTML',
             )
             return
 
-        # --- Крок 2: НП API для уточнення даних ---
-        await status_msg.edit_text(
-            f'📄 ТТН <code>{ttn}</code> — перевіряю в НП API...',
-            parse_mode='HTML',
-        )
-
-        ttn_info    = await asyncio.to_thread(get_ttn_info, ttn, parsed.get('phone') or '')
-        np_ok       = not ttn_info.get('error') and (
-            ttn_info.get('recipient_name') or ttn_info.get('recipient_phone')
-        )
-        data_source = 'НП API' if np_ok else 'PDF'
-        source_info = _fmt_source_info(ttn, data_source, ttn_info if np_ok else None, parsed)
-
-        if ttn_info.get('error'):
-            logger.warning(f'НП API error для {ttn}: {ttn_info["error"]}')
-
-        # --- Крок 3: матчинг замовлення ---
-        matches = []
-        match_source = data_source
-
-        if np_ok:
-            matches = await asyncio.to_thread(match_order_by_np_data, ttn_info)
-            if not matches:
-                # fallback на PDF-дані
-                matches = await asyncio.to_thread(match_order_by_ttn_data, parsed)
-                match_source = 'PDF (fallback)'
-
-        if not matches:
-            matches = await asyncio.to_thread(match_order_by_ttn_data, parsed)
-            match_source = 'PDF'
+        matches = await asyncio.to_thread(match_order_by_ttn_data, parsed)
 
         if not matches:
             await status_msg.edit_text(
-                f'❌ <b>Замовлення не знайдено</b>\n\n{source_info}\n\n'
-                f'Джерело матчингу: {match_source}\n\n'
-                f'Вкажи вручну:\n<code>/ttn ORDER_ID {ttn}</code>',
+                f'❌ <b>Замовлення не знайдено</b>\n\n{parsed_info}\n\n'
+                f'Вкажи замовлення вручну:\n'
+                f'<code>/ttn ORDER_ID {parsed["ttn"]}</code>',
                 parse_mode='HTML',
             )
             return
 
-        # --- Кілька збігів — список без кнопок ---
-        if len(matches) > 1:
-            lines = '\n'.join(
-                f'  #{m["order_id"]} ({m["score"]:.0%}, by {m.get("match_by","?")})'
-                for m in matches[:5]
-            )
+        msg_key = message.message_id
+        _pending_ttn[msg_key] = {'parsed': parsed, 'matches': matches}
+
+        if len(matches) == 1:
+            order_id = matches[0]['order_id']
+            score = matches[0]['score']
+            kb = InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(
+                    text='✅ Так, встановити',
+                    callback_data=f'ttn_ok:{msg_key}:{order_id}',
+                ),
+                InlineKeyboardButton(
+                    text='❌ Ні',
+                    callback_data=f'ttn_no:{msg_key}',
+                ),
+            ]])
             await status_msg.edit_text(
-                f'🔍 <b>Знайдено {len(matches)} збігів</b> [{match_source}]\n\n'
-                f'{source_info}\n\n'
-                f'Збіги:\n{lines}\n\n'
-                f'Вкажи вручну:\n<code>/ttn ORDER_ID {ttn}</code>',
+                f'{parsed_info}\n\n'
+                f'🎯 Знайдено замовлення <b>#{order_id}</b> '
+                f'(впевненість {score:.0%})\n\n'
+                f'Встановити ТТН <code>{parsed["ttn"]}</code> і '
+                f'змінити статус на «Передано в доставку»?',
                 parse_mode='HTML',
-            )
-            return
-
-        # --- Один збіг — автоматично ---
-        order_id = matches[0]['order_id']
-        score    = matches[0]['score']
-        match_by = matches[0].get('match_by', '?')
-
-        await status_msg.edit_text(
-            f'{source_info}\n\n'
-            f'⏳ #{order_id} (score {score:.0%}, by {match_by}) [{match_source}]\n'
-            f'Встановлюю ТТН...',
-            parse_mode='HTML',
-        )
-
-        # --- Крок 4: set_ttn + change_status(3) ---
-        ok_ttn    = await asyncio.to_thread(set_ttn, order_id, ttn)
-        ok_status = await asyncio.to_thread(change_status, order_id, 3) if ok_ttn else False
-
-        # --- Крок 5: верифікація GET /orders/{id} ---
-        await asyncio.sleep(2)
-        order_data   = await asyncio.to_thread(get_order_details, order_id)
-        actual_ttn   = (order_data.get('ttn') or '').strip()
-        ttn_verified = (actual_ttn == ttn)
-
-        if ok_ttn and ok_status and ttn_verified:
-            await status_msg.edit_text(
-                f'{source_info}\n\n'
-                f'✅ <b>Готово!</b>\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'ТТН <code>{ttn}</code> — встановлено та підтверджено (GET)\n'
-                f'Статус → «Передано в доставку»',
-                parse_mode='HTML',
-            )
-        elif ok_ttn and ok_status and not ttn_verified:
-            await status_msg.edit_text(
-                f'🚨 <b>ALARM! ТТН не збереглось у Розетці</b>\n\n'
-                f'{source_info}\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'set_ttn: ✅  |  change_status: ✅\n'
-                f'Верифікація GET: ❌ поле ttn = <code>{actual_ttn or "порожньо"}</code>\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
-                parse_mode='HTML',
-            )
-        elif ok_ttn and not ok_status:
-            v_icon = '✅' if ttn_verified else '❌'
-            await status_msg.edit_text(
-                f'⚠️ <b>ТТН встановлено, статус НЕ змінився</b>\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'ТТН <code>{ttn}</code>: {v_icon} (GET)\n'
-                f'Статус → 3: ❌ помилка API\n\nПеревір вручну.',
-                parse_mode='HTML',
+                reply_markup=kb,
             )
         else:
+            buttons = [
+                [InlineKeyboardButton(
+                    text=f'#{m["order_id"]}  ({m["score"]:.0%})',
+                    callback_data=f'ttn_ok:{msg_key}:{m["order_id"]}',
+                )]
+                for m in matches[:5]
+            ]
+            buttons.append([InlineKeyboardButton(
+                text='❌ Скасувати',
+                callback_data=f'ttn_no:{msg_key}',
+            )])
             await status_msg.edit_text(
-                f'🚨 <b>ALARM! Не вдалось встановити ТТН</b>\n\n'
-                f'{source_info}\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'set_ttn: ❌\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
+                f'{parsed_info}\n\n'
+                f'🔍 Знайдено <b>{len(matches)}</b> схожих замовлень. Вибери потрібне:',
                 parse_mode='HTML',
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons),
             )
 
     except Exception as e:
@@ -386,6 +307,61 @@ async def handle_document(message: Message):
     finally:
         if os.path.exists(pdf_path):
             os.remove(pdf_path)
+
+
+@dp.callback_query(F.data.startswith('ttn_ok:'))
+async def cb_ttn_ok(callback: CallbackQuery):
+    """Підтвердження встановлення ТТН."""
+    _, msg_key, order_id = callback.data.split(':')
+    msg_key, order_id = int(msg_key), int(order_id)
+
+    pending = _pending_ttn.pop(msg_key, None)
+    if not pending:
+        await callback.answer('Сесія закінчилась — надішли PDF ще раз.', show_alert=True)
+        return
+
+    ttn = pending['parsed']['ttn']
+    await callback.answer('⏳ Застосовую...')
+    await callback.message.edit_reply_markup(reply_markup=None)
+
+    try:
+        from agents.orders.rozetka_order_agent import set_ttn, change_status
+        ok_ttn = await asyncio.to_thread(set_ttn, order_id, ttn)
+        ok_status = await asyncio.to_thread(change_status, order_id, 3) if ok_ttn else False
+
+        if ok_ttn and ok_status:
+            await callback.message.edit_text(
+                f'{callback.message.text}\n\n'
+                f'✅ <b>Готово!</b>\n'
+                f'ТТН <code>{ttn}</code> встановлено для #<b>{order_id}</b>\n'
+                f'Статус змінено → «Передано в доставку»',
+                parse_mode='HTML',
+            )
+        elif ok_ttn:
+            await callback.message.edit_text(
+                f'{callback.message.text}\n\n'
+                f'⚠️ ТТН встановлено, але статус не змінився (помилка API).',
+                parse_mode='HTML',
+            )
+        else:
+            await callback.message.edit_text(
+                f'{callback.message.text}\n\n'
+                f'❌ Помилка: не вдалось встановити ТТН. Перевір ROZETKA_API_TOKEN.',
+                parse_mode='HTML',
+            )
+    except Exception as e:
+        logger.error(f'cb_ttn_ok error: {e}', exc_info=True)
+        await callback.message.answer(f'❌ Помилка: {e}')
+
+
+@dp.callback_query(F.data.startswith('ttn_no:'))
+async def cb_ttn_no(callback: CallbackQuery):
+    """Скасування встановлення ТТН."""
+    msg_key = int(callback.data.split(':')[1])
+    _pending_ttn.pop(msg_key, None)
+    await callback.answer('Скасовано.')
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await callback.message.answer('🚫 Операцію скасовано.')
 
 
 # =============================================

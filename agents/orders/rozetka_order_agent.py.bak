@@ -119,32 +119,27 @@ def get_carvol_feed(force=False) -> dict:
 # === РОЗЕТКА API ===
 
 def get_new_orders() -> list:
-    """Отримати нові замовлення: types=4 + status=1, без дублів."""
-    params_base = {
-        'expand': 'purchases,delivery,status_available,payment_type',
-        'sort':   '-id',
-        'page':   1,
-    }
-    results = {}
-
-    for extra_key, extra_val in [('types', 4), ('status', 1)]:
-        try:
-            r = requests.get(
-                f'{ROZETKA_BASE}/orders/search',
-                headers=rz_headers(),
-                verify=False,
-                params={**params_base, extra_key: extra_val},
-                timeout=30
-            )
-            if r.status_code == 200 and r.json().get('success'):
-                for o in r.json()['content'].get('orders', []):
-                    results[o['id']] = o
-            else:
-                logger.error(f'get_new_orders {extra_key}={extra_val}: {r.text[:200]}')
-        except Exception as e:
-            logger.error(f'get_new_orders {extra_key}={extra_val}: {e}')
-
-    return list(results.values())
+    """Отримати нові замовлення (types=4)."""
+    try:
+        r = requests.get(
+            f'{ROZETKA_BASE}/orders/search',
+            headers=rz_headers(),
+            verify=False,
+            params={
+                'types':  4,
+                'expand': 'purchases,delivery,status_available,payment_type',
+                'sort':   '-id',
+                'page':   1,
+            },
+            timeout=30
+        )
+        if r.status_code == 200 and r.json().get('success'):
+            return r.json()['content'].get('orders', [])
+        logger.error(f'get_new_orders: {r.text[:200]}')
+        return []
+    except Exception as e:
+        logger.error(f'get_new_orders: {e}')
+        return []
 
 
 def get_orders_by_status(status: int) -> list:
@@ -256,71 +251,8 @@ def set_ttn(order_id: int, ttn: str) -> bool:
 
 
 def confirm_order(order_id: int) -> bool:
-    """Підтвердити замовлення (status=2) — перевіряє доступні переходи."""
-    try:
-        r = requests.get(
-            f'{ROZETKA_BASE}/orders/{order_id}',
-            headers=rz_headers(),
-            verify=False,
-            params={'expand': 'status_available'},
-            timeout=30
-        )
-        if r.status_code != 200 or not r.json().get('success'):
-            logger.error(f'confirm_order GET #{order_id}: {r.text[:200]}')
-            return False
-        order_data     = r.json().get('content', {})
-        current_status = order_data.get('status')
-        available      = [s.get('id') for s in (order_data.get('status_available') or []) if s.get('id')]
-        logger.info(f'confirm_order #{order_id}: current={current_status}, available={available}')
-
-        if current_status in (2, 55):
-            logger.info(f'#{order_id} вже підтверджено (status={current_status})')
-            return True
-
-        if 2 in available:
-            r2   = requests.patch(
-                f'{ROZETKA_BASE}/orders/{order_id}',
-                headers=rz_headers(), verify=False,
-                json={'status': 2, 'comment': 'Підтверджено'}, timeout=15
-            )
-            data = r2.json()
-            if data.get('success'):
-                logger.success(f'Статус #{order_id} → 2 (підтверджено)')
-                return True
-            logger.warning(f'confirm_order PATCH 2 failed: {data}')
-            return False
-
-        if 55 in available:
-            r55   = requests.patch(
-                f'{ROZETKA_BASE}/orders/{order_id}',
-                headers=rz_headers(), verify=False,
-                json={'status': 55, 'comment': 'Підтверджено'}, timeout=15
-            )
-            data55 = r55.json()
-            if not data55.get('success'):
-                logger.warning(f'confirm_order PATCH 55 failed: {data55}')
-                return False
-            logger.info(f'Статус #{order_id} → 55, тепер → 2')
-            r2   = requests.patch(
-                f'{ROZETKA_BASE}/orders/{order_id}',
-                headers=rz_headers(), verify=False,
-                json={'status': 2, 'comment': 'Підтверджено'}, timeout=15
-            )
-            data2 = r2.json()
-            if data2.get('success'):
-                logger.success(f'Статус #{order_id} → 55 → 2 (підтверджено)')
-                return True
-            logger.warning(f'confirm_order PATCH 2 after 55 failed: {data2}')
-            return False
-
-        logger.warning(
-            f'confirm_order #{order_id}: перехід на 2 недоступний. '
-            f'current={current_status}, available={available}'
-        )
-        return False
-    except Exception as e:
-        logger.error(f'confirm_order: {e}')
-        return False
+    """Підтвердити замовлення (status=2)."""
+    return change_status(order_id, 2)
 
 
 def cancel_order(order_id: int, comment: str = 'Товар відсутній у постачальника') -> bool:

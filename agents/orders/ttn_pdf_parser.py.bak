@@ -1,0 +1,116 @@
+import re
+import sys
+import os
+import pdfplumber
+from difflib import SequenceMatcher
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+from shared.utils.db import get_connection
+
+
+def normalize_phone(phone: str) -> str:
+    """Normalize +380XXXXXXXXX or 380XXXXXXXXX to 0XXXXXXXXX."""
+    digits = re.sub(r"\D", "", phone)
+    if digits.startswith("380") and len(digits) == 12:
+        return "0" + digits[3:]
+    if digits.startswith("80") and len(digits) == 11:
+        return "0" + digits[2:]
+    if len(digits) == 10 and digits.startswith("0"):
+        return digits
+    return digits
+
+
+def parse_ttn_pdf(pdf_path: str) -> dict:
+    """Parse Nova Poshta waybill PDF, extract TTN, phone, recipient, city."""
+    result = {"ttn": None, "phone": None, "recipient": None, "city": None}
+
+    with pdfplumber.open(pdf_path) as pdf:
+        text = "\n".join(page.extract_text() or "" for page in pdf.pages)
+
+    # TTN — 14 consecutive digits
+    ttn_match = re.search(r"\b(\d{14})\b", text)
+    if ttn_match:
+        result["ttn"] = ttn_match.group(1)
+
+    # Phone — Ukrainian formats
+    phone_match = re.search(
+        r"(?:\+?380|0)\s*\(?\d{2}\)?\s*\d{3}[\s\-]?\d{2}[\s\-]?\d{2}", text
+    )
+    if phone_match:
+        result["phone"] = normalize_phone(phone_match.group(0))
+
+    # Recipient name — line after keywords "Отримувач" / "Одержувач" / "Recipient"
+    recipient_match = re.search(
+        r"(?:Отримувач|Одержувач|Recipient)[:\s]+([А-ЯІЇЄA-Z][а-яіїєa-z'А-ЯІЇЄA-Z\s\-]{3,50})",
+        text,
+    )
+    if recipient_match:
+        result["recipient"] = recipient_match.group(1).strip()
+
+    # City — line after "Місто" / "Населений пункт" / "Місто отримання"
+    city_match = re.search(
+        r"(?:Місто отримання|Місто|Населений пункт)[:\s]+([А-ЯІЇЄ][а-яіїє'\-А-ЯІЇЄ\s]{2,40})",
+        text,
+    )
+    if city_match:
+        result["city"] = city_match.group(1).strip().split("\n")[0]
+
+    return result
+
+
+def _similarity(a: str, b: str) -> float:
+    if not a or not b:
+        return 0.0
+    return SequenceMatcher(None, a.lower().strip(), b.lower().strip()).ratio()
+
+
+def match_order_by_ttn_data(parsed: dict) -> list:
+    """
+    Search rozetka_processed_orders for orders matching parsed TTN data.
+    Returns list of dicts with order_id and score.
+    """
+    phone = parsed.get("phone")
+    recipient = parsed.get("recipient")
+    city = parsed.get("city")
+    matches = []
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        # Primary match: exact phone
+        if phone:
+            cur.execute(
+                "SELECT order_id, recipient, city FROM rozetka_processed_orders WHERE phone = %s",
+                (phone,),
+            )
+            rows = cur.fetchall()
+            for row in rows:
+                score = 1.0
+                if recipient and row["recipient"]:
+                    score = max(score, _similarity(recipient, row["recipient"]))
+                matches.append({"order_id": row["order_id"], "score": round(score, 3)})
+
+        # Fallback: fuzzy match by recipient + city
+        if not matches and (recipient or city):
+            cur.execute(
+                "SELECT order_id, recipient, city FROM rozetka_processed_orders "
+                "WHERE recipient IS NOT NULL OR city IS NOT NULL"
+            )
+            rows = cur.fetchall()
+            for row in rows:
+                r_score = _similarity(recipient, row["recipient"]) if recipient else 0.0
+                c_score = _similarity(city, row["city"]) if city else 0.0
+                combined = (r_score + c_score) / 2
+                if combined >= 0.6:
+                    matches.append(
+                        {"order_id": row["order_id"], "score": round(combined, 3)}
+                    )
+            matches.sort(key=lambda x: x["score"], reverse=True)
+
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"match_order_by_ttn_data error: {e}", file=sys.stderr)
+
+    return matches

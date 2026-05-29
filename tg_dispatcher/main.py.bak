@@ -30,8 +30,7 @@ from aiogram.utils.markdown import bold, italic
 load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'))
 
 TOKEN    = os.getenv('TELEGRAM_BOT_TOKEN', '')
-ADMIN_ID         = int(os.getenv('TELEGRAM_ADMIN_ID', '0'))
-CARVOL_TG_CHAT_ID = int(os.getenv('CARVOL_TG_CHAT_ID', '0'))
+ADMIN_ID = int(os.getenv('TELEGRAM_ADMIN_ID', '0'))
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,8 +41,6 @@ logger = logging.getLogger(__name__)
 bot = Bot(token=TOKEN)
 dp  = Dispatcher()
 
-sys.path.insert(0, '/home/tek/agent-system')
-
 
 # =============================================
 # МІДЛВАР БЕЗПЕКИ — відхиляє всіх крім ADMIN
@@ -51,15 +48,10 @@ sys.path.insert(0, '/home/tek/agent-system')
 
 @dp.message.outer_middleware()
 async def security_middleware(handler, event, data):
-    user_id = event.from_user.id
-    if user_id == ADMIN_ID:
-        return await handler(event, data)
-    # Carvol може надсилати тільки document (PDF накладні)
-    if CARVOL_TG_CHAT_ID and user_id == CARVOL_TG_CHAT_ID:
-        if getattr(event, 'document', None):
-            return await handler(event, data)
-        return  # всі інші типи від Carvol — мовчки ігноруємо
-    logger.warning(f'Відхилено доступ від ID: {user_id} (@{event.from_user.username})')
+    if event.from_user.id != ADMIN_ID:
+        logger.warning(f'Відхилено доступ від ID: {event.from_user.id} (@{event.from_user.username})')
+        return
+    return await handler(event, data)
 
 
 # =============================================
@@ -79,8 +71,7 @@ async def cmd_start(message: Message):
         f'Або пиши/говори вільним текстом:\n'
         f'«Онови ціни в Єпіцентрі»\n'
         f'«Скільки замовлень сьогодні?»\n'
-        f'«Знайди ціни конкурентів на BAEA1217»\n\n'
-        f'📄 Надішли PDF накладну НП — автоматично встановлю ТТН.',
+        f'«Знайди ціни конкурентів на BAEA1217»',
         parse_mode='HTML'
     )
 
@@ -89,6 +80,7 @@ async def cmd_start(message: Message):
 async def cmd_status(message: Message):
     """Статус системи з БД."""
     try:
+        sys.path.append('/home/tek/agent-system')
         from shared.utils.db import get_connection
         conn = get_connection()
         cur  = conn.cursor()
@@ -120,6 +112,7 @@ async def cmd_status(message: Message):
 async def cmd_prices(message: Message):
     """Цінові алерти за сьогодні."""
     try:
+        sys.path.append('/home/tek/agent-system')
         from shared.utils.db import get_connection
         conn = get_connection()
         cur  = conn.cursor()
@@ -149,6 +142,7 @@ async def cmd_prices(message: Message):
 async def cmd_orders(message: Message):
     """Замовлення за останні 24 години."""
     try:
+        sys.path.append('/home/tek/agent-system')
         from shared.utils.db import get_connection
         conn = get_connection()
         cur  = conn.cursor()
@@ -188,6 +182,7 @@ async def cmd_learn(message: Message):
         return
 
     try:
+        sys.path.append('/home/tek/agent-system')
         from agents.interfaces.instruction_parser import InstructionParser
         parser = InstructionParser()
         result = await parser.apply_instruction(instruction, message.from_user.id)
@@ -204,191 +199,6 @@ async def cmd_learn(message: Message):
 
 
 # =============================================
-# PDF НАКЛАДНІ (ТТН від Carvol) — повністю автоматично
-# =============================================
-
-def _fmt_source_info(ttn: str, data_source: str,
-                     ttn_info: dict | None, parsed: dict) -> str:
-    """Формує блок з даними для повідомлення адміну."""
-    # Беремо поля з НП API якщо є, інакше з PDF
-    np = ttn_info or {}
-    recipient = np.get('recipient_name') or parsed.get('recipient') or 'не знайдено'
-    phone     = np.get('recipient_phone') or parsed.get('phone')     or 'не знайдено'
-    city      = np.get('city')           or parsed.get('city')       or 'не знайдено'
-    warehouse = np.get('warehouse') or ''
-    city_line = f'{city} {warehouse}'.strip() if warehouse else city
-
-    source_icon = '🌐 НП API' if 'НП API' in data_source else '📄 PDF'
-    return (
-        f'📋 <b>Дані ({source_icon}):</b>\n'
-        f'ТТН: <code>{ttn}</code>\n'
-        f'Отримувач: {recipient}\n'
-        f'Телефон: <code>{phone}</code>\n'
-        f'Місто: {city_line}'
-    )
-
-
-@dp.message(F.document)
-async def handle_document(message: Message):
-    """PDF накладна НП від Carvol або адміна — автоматичне встановлення ТТН."""
-    from_carvol    = CARVOL_TG_CHAT_ID and message.from_user.id == CARVOL_TG_CHAT_ID
-    target_chat_id = ADMIN_ID if from_carvol else message.chat.id
-
-    doc = message.document
-    if not doc.mime_type or 'pdf' not in doc.mime_type.lower():
-        if not from_carvol:
-            await bot.send_message(target_chat_id, '📎 Підтримуються тільки PDF файли (накладні НП).')
-        return
-
-    label      = '📄 Carvol надіслав накладну — обробляю...' if from_carvol else '📄 Обробляю PDF накладну...'
-    status_msg = await bot.send_message(target_chat_id, label)
-    pdf_path   = f'/tmp/ttn_{message.message_id}.pdf'
-
-    try:
-        file = await bot.get_file(doc.file_id)
-        await bot.download_file(file.file_path, destination=pdf_path)
-
-        from agents.orders.ttn_pdf_parser import parse_ttn_pdf, match_order_by_ttn_data
-        from agents.orders.np_api import get_ttn_info, match_order_by_np_data
-        from agents.orders.rozetka_order_agent import set_ttn, change_status, get_order_details
-
-        # --- Крок 1: парсинг PDF ---
-        parsed = await asyncio.to_thread(parse_ttn_pdf, pdf_path)
-        ttn    = parsed.get('ttn')
-
-        if not ttn:
-            info = _fmt_source_info('не знайдено', 'PDF', None, parsed)
-            await status_msg.edit_text(
-                f'⚠️ <b>ТТН не знайдено в PDF</b>\n\n{info}\n\n'
-                f'Вкажи вручну: /ttn ORDER_ID НОМЕР_ТТН',
-                parse_mode='HTML',
-            )
-            return
-
-        # --- Крок 2: НП API для уточнення даних ---
-        await status_msg.edit_text(
-            f'📄 ТТН <code>{ttn}</code> — перевіряю в НП API...',
-            parse_mode='HTML',
-        )
-
-        ttn_info    = await asyncio.to_thread(get_ttn_info, ttn, parsed.get('phone') or '')
-        np_ok       = not ttn_info.get('error') and (
-            ttn_info.get('recipient_name') or ttn_info.get('recipient_phone')
-        )
-        data_source = 'НП API' if np_ok else 'PDF'
-        source_info = _fmt_source_info(ttn, data_source, ttn_info if np_ok else None, parsed)
-
-        if ttn_info.get('error'):
-            logger.warning(f'НП API error для {ttn}: {ttn_info["error"]}')
-
-        # --- Крок 3: матчинг замовлення ---
-        matches = []
-        match_source = data_source
-
-        if np_ok:
-            matches = await asyncio.to_thread(match_order_by_np_data, ttn_info)
-            if not matches:
-                # fallback на PDF-дані
-                matches = await asyncio.to_thread(match_order_by_ttn_data, parsed)
-                match_source = 'PDF (fallback)'
-
-        if not matches:
-            matches = await asyncio.to_thread(match_order_by_ttn_data, parsed)
-            match_source = 'PDF'
-
-        if not matches:
-            await status_msg.edit_text(
-                f'❌ <b>Замовлення не знайдено</b>\n\n{source_info}\n\n'
-                f'Джерело матчингу: {match_source}\n\n'
-                f'Вкажи вручну:\n<code>/ttn ORDER_ID {ttn}</code>',
-                parse_mode='HTML',
-            )
-            return
-
-        # --- Кілька збігів — список без кнопок ---
-        if len(matches) > 1:
-            lines = '\n'.join(
-                f'  #{m["order_id"]} ({m["score"]:.0%}, by {m.get("match_by","?")})'
-                for m in matches[:5]
-            )
-            await status_msg.edit_text(
-                f'🔍 <b>Знайдено {len(matches)} збігів</b> [{match_source}]\n\n'
-                f'{source_info}\n\n'
-                f'Збіги:\n{lines}\n\n'
-                f'Вкажи вручну:\n<code>/ttn ORDER_ID {ttn}</code>',
-                parse_mode='HTML',
-            )
-            return
-
-        # --- Один збіг — автоматично ---
-        order_id = matches[0]['order_id']
-        score    = matches[0]['score']
-        match_by = matches[0].get('match_by', '?')
-
-        await status_msg.edit_text(
-            f'{source_info}\n\n'
-            f'⏳ #{order_id} (score {score:.0%}, by {match_by}) [{match_source}]\n'
-            f'Встановлюю ТТН...',
-            parse_mode='HTML',
-        )
-
-        # --- Крок 4: set_ttn + change_status(3) ---
-        ok_ttn    = await asyncio.to_thread(set_ttn, order_id, ttn)
-        ok_status = await asyncio.to_thread(change_status, order_id, 3) if ok_ttn else False
-
-        # --- Крок 5: верифікація GET /orders/{id} ---
-        await asyncio.sleep(2)
-        order_data   = await asyncio.to_thread(get_order_details, order_id)
-        actual_ttn   = (order_data.get('ttn') or '').strip()
-        ttn_verified = (actual_ttn == ttn)
-
-        if ok_ttn and ok_status and ttn_verified:
-            await status_msg.edit_text(
-                f'{source_info}\n\n'
-                f'✅ <b>Готово!</b>\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'ТТН <code>{ttn}</code> — встановлено та підтверджено (GET)\n'
-                f'Статус → «Передано в доставку»',
-                parse_mode='HTML',
-            )
-        elif ok_ttn and ok_status and not ttn_verified:
-            await status_msg.edit_text(
-                f'🚨 <b>ALARM! ТТН не збереглось у Розетці</b>\n\n'
-                f'{source_info}\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'set_ttn: ✅  |  change_status: ✅\n'
-                f'Верифікація GET: ❌ поле ttn = <code>{actual_ttn or "порожньо"}</code>\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
-                parse_mode='HTML',
-            )
-        elif ok_ttn and not ok_status:
-            v_icon = '✅' if ttn_verified else '❌'
-            await status_msg.edit_text(
-                f'⚠️ <b>ТТН встановлено, статус НЕ змінився</b>\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'ТТН <code>{ttn}</code>: {v_icon} (GET)\n'
-                f'Статус → 3: ❌ помилка API\n\nПеревір вручну.',
-                parse_mode='HTML',
-            )
-        else:
-            await status_msg.edit_text(
-                f'🚨 <b>ALARM! Не вдалось встановити ТТН</b>\n\n'
-                f'{source_info}\n\n'
-                f'Замовлення: <b>#{order_id}</b>\n'
-                f'set_ttn: ❌\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
-                parse_mode='HTML',
-            )
-
-    except Exception as e:
-        logger.error(f'handle_document error: {e}', exc_info=True)
-        await status_msg.edit_text(f'❌ Помилка обробки PDF: {e}')
-    finally:
-        if os.path.exists(pdf_path):
-            os.remove(pdf_path)
-
-
-# =============================================
 # ГОЛОСОВІ ПОВІДОМЛЕННЯ
 # =============================================
 
@@ -399,15 +209,18 @@ async def handle_voice(message: Message):
 
     file_path = f'/tmp/voice_{message.message_id}.ogg'
     try:
+        # Завантажуємо файл
         file = await bot.get_file(message.voice.file_id)
         await bot.download_file(file.file_path, destination=file_path)
 
+        # STT через faster-whisper
         try:
             from ai_brain.voice_handler import transcribe_audio_async
             text = await transcribe_audio_async(file_path)
 
             if text:
                 await status_msg.edit_text(f'📝 Почув:\n<i>{text}</i>', parse_mode='HTML')
+                # Обробляємо як текстову команду
                 message.text = text
                 await handle_text(message)
             else:
@@ -434,6 +247,7 @@ async def handle_text(message: Message):
     """Роутить вільний текст до відповідного агента."""
     text = message.text.lower().strip()
 
+    # Роутинг по ключових словах
     if any(w in text for w in ['єпіцентр', 'епіцентр', 'epicentr']):
         await route_epicentr(message, text)
     elif any(w in text for w in ['розетка', 'rozetka']):
@@ -447,6 +261,7 @@ async def handle_text(message: Message):
     elif any(w in text for w in ['конкурент', 'competitor']):
         await message.answer('🔍 Моніторинг конкурентів — в розробці')
     else:
+        # TODO: LangGraph агент
         await message.answer(
             f'🤔 Не зрозумів: «{message.text[:50]}»\n\n'
             f'Спробуй:\n'
@@ -454,14 +269,14 @@ async def handle_text(message: Message):
             f'• /prices — цінові алерти\n'
             f'• /orders — замовлення\n'
             f'• «Єпіцентр XLS» — скачати товари\n'
-            f'• «ціни конкурентів SKU» — перевірка\n'
-            f'• 📄 PDF накладна — встановити ТТН'
+            f'• «ціни конкурентів SKU» — перевірка'
         )
 
 
 async def route_epicentr(message: Message, text: str):
     if any(w in text for w in ['xls', 'скачай', 'вивантаж', 'export']):
         await message.answer('⏳ Скачую XLS товарів Єпіцентру...\n[Playwright запускається]')
+        # TODO: browser_mcp виклик
     elif any(w in text for w in ['ціни', 'оновити', 'import', 'завантаж']):
         await message.answer('⏳ Генерую XLS цін і завантажую в Єпіцентр...')
     elif any(w in text for w in ['api', 'endpoint']):
