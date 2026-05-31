@@ -44,6 +44,7 @@ SMTP_HOST         = os.getenv('SMTP_HOST', 'smtp.gmail.com')
 SMTP_PORT         = int(os.getenv('SMTP_PORT', '587'))
 TG_BOT_TOKEN      = os.getenv('TG_BOT_TOKEN')
 TG_CHAT_ID        = os.getenv('TG_CHAT_ID')
+CABINET_BASE    = 'https://cabinet-seller.rozetka.com.ua'
 POLL_INTERVAL     = 300
 MARKETPLACE       = 'Розетка'
 FORBIDDEN_STATUSES = {40, 49, 6}  # 40=клієнт передумав, 49=небезпечний, 6=скасування
@@ -128,7 +129,7 @@ def get_new_orders() -> list:
     }
     results = {}
 
-    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26)]:
+    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26), ('status', 55)]:
         try:
             r = requests.get(
                 f'{ROZETKA_BASE}/orders/search',
@@ -290,7 +291,7 @@ def confirm_order(order_id: int) -> bool:
             return False
         order_data     = r.json().get('content', {})
         current_status = order_data.get('status')
-        available_raw  = [s.get('id') for s in (order_data.get('status_available') or []) if s.get('id')]
+        available_raw  = [s.get('child_id') for s in (order_data.get('status_available') or []) if s.get('child_id')]
         # Ніколи не використовувати заборонені статуси
         available      = [s for s in available_raw if s not in FORBIDDEN_STATUSES]
         if available_raw != available:
@@ -319,6 +320,21 @@ def confirm_order(order_id: int) -> bool:
             f'current={current_status}, available={available}'
         )
         if current_status == 1:
+            # Спробуємо cabinet-seller PUT як fallback для статусу 1
+            logger.info(f'confirm_order #{order_id}: пробуємо cabinet-seller PUT...')
+            try:
+                rc = requests.put(
+                    f"{CABINET_BASE}/orders/{order_id}",
+                    headers=rz_headers(),
+                    verify=False,
+                    json={"status": 55, "ttn": "", "id": order_id},
+                    timeout=15
+                )
+                if rc.json().get("success"):
+                    logger.success(f'confirm_order #{order_id}: cabinet-seller 55 OK')
+                    return True
+            except Exception as ce:
+                logger.warning(f'confirm_order cabinet fallback: {ce}')
             return None  # sentinel: потрібне ручне підтвердження
         return False
     except Exception as e:
