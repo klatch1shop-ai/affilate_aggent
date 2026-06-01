@@ -121,7 +121,7 @@ def get_carvol_feed(force=False) -> dict:
 # === РОЗЕТКА API ===
 
 def get_new_orders() -> list:
-    """Отримати нові замовлення: types=4 + status=1 + status=26, без дублів."""
+    """Отримати нові замовлення: types=4 + status=1 + status=26 + status=55 + status=61, без дублів."""
     params_base = {
         'expand': 'purchases,delivery,status_available,payment_type',
         'sort':   '-id',
@@ -129,7 +129,7 @@ def get_new_orders() -> list:
     }
     results = {}
 
-    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26), ('status', 55)]:
+    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26), ('status', 55), ('status', 61)]:
         try:
             r = requests.get(
                 f'{ROZETKA_BASE}/orders/search',
@@ -299,7 +299,7 @@ def confirm_order(order_id: int) -> bool:
             logger.warning(f'confirm_order #{order_id}: заблоковано небезпечні статуси {blocked}')
         logger.info(f'confirm_order #{order_id}: current={current_status}, available={available}')
 
-        if current_status in (2, 55):
+        if current_status in (2, 55, 61):
             logger.info(f'#{order_id} вже підтверджено (status={current_status})')
             return True
 

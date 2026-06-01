@@ -336,6 +336,20 @@ async def handle_document(message: Message):
         ok_ttn    = await asyncio.to_thread(set_ttn, order_id, ttn)
         ok_status = await asyncio.to_thread(change_status, order_id, 3) if ok_ttn else False
 
+        if ok_ttn:
+            try:
+                from shared.utils.db import get_connection
+                conn = get_connection()
+                cur = conn.cursor()
+                cur.execute(
+                    "UPDATE rozetka_processed_orders SET ttn=%s, status='shipped' WHERE order_id=%s",
+                    (ttn, order_id)
+                )
+                conn.commit()
+                cur.close(); conn.close()
+            except Exception as db_err:
+                logger.error(f'DB update TTN failed for #{order_id}: {db_err}')
+
         # --- Крок 5: верифікація GET /orders/{id} ---
         await asyncio.sleep(2)
         order_data   = await asyncio.to_thread(get_order_details, order_id)
