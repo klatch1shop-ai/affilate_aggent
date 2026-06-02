@@ -44,8 +44,10 @@ SMTP_HOST         = os.getenv('SMTP_HOST', 'smtp.gmail.com')
 SMTP_PORT         = int(os.getenv('SMTP_PORT', '587'))
 TG_BOT_TOKEN      = os.getenv('TG_BOT_TOKEN')
 TG_CHAT_ID        = os.getenv('TG_CHAT_ID')
+CABINET_BASE    = 'https://cabinet-seller.rozetka.com.ua'
 POLL_INTERVAL     = 300
 MARKETPLACE       = 'Розетка'
+FORBIDDEN_STATUSES = {40, 49, 6}  # 40=клієнт передумав, 49=небезпечний, 6=скасування
 
 ORDERS_DIR = '/home/tek/agent-system/shared/feeds/orders'
 
@@ -119,27 +121,32 @@ def get_carvol_feed(force=False) -> dict:
 # === РОЗЕТКА API ===
 
 def get_new_orders() -> list:
-    """Отримати нові замовлення (types=4)."""
-    try:
-        r = requests.get(
-            f'{ROZETKA_BASE}/orders/search',
-            headers=rz_headers(),
-            verify=False,
-            params={
-                'types':  4,
-                'expand': 'purchases,delivery,status_available,payment_type',
-                'sort':   '-id',
-                'page':   1,
-            },
-            timeout=30
-        )
-        if r.status_code == 200 and r.json().get('success'):
-            return r.json()['content'].get('orders', [])
-        logger.error(f'get_new_orders: {r.text[:200]}')
-        return []
-    except Exception as e:
-        logger.error(f'get_new_orders: {e}')
-        return []
+    """Отримати нові замовлення: types=4 + status=1 + status=26 + status=55 + status=61, без дублів."""
+    params_base = {
+        'expand': 'purchases,delivery,status_available,payment_type',
+        'sort':   '-id',
+        'page':   1,
+    }
+    results = {}
+
+    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26), ('status', 55), ('status', 61)]:
+        try:
+            r = requests.get(
+                f'{ROZETKA_BASE}/orders/search',
+                headers=rz_headers(),
+                verify=False,
+                params={**params_base, extra_key: extra_val},
+                timeout=30
+            )
+            if r.status_code == 200 and r.json().get('success'):
+                for o in r.json()['content'].get('orders', []):
+                    results[o['id']] = o
+            else:
+                logger.error(f'get_new_orders {extra_key}={extra_val}: {r.text[:200]}')
+        except Exception as e:
+            logger.error(f'get_new_orders {extra_key}={extra_val}: {e}')
+
+    return list(results.values())
 
 
 def get_orders_by_status(status: int) -> list:
@@ -251,8 +258,88 @@ def set_ttn(order_id: int, ttn: str) -> bool:
 
 
 def confirm_order(order_id: int) -> bool:
-    """Підтвердити замовлення (status=2)."""
-    return change_status(order_id, 2)
+    """Підтвердити замовлення (status=2) — перевіряє доступні переходи."""
+    def _safe_patch(target_status: int, label: str) -> bool:
+        if target_status in FORBIDDEN_STATUSES:
+            logger.error(
+                f'confirm_order #{order_id}: відхилено PATCH на {target_status} '
+                f'— статус у FORBIDDEN_STATUSES {FORBIDDEN_STATUSES}'
+            )
+            return False
+        rp   = requests.patch(
+            f'{ROZETKA_BASE}/orders/{order_id}',
+            headers=rz_headers(), verify=False,
+            json={'status': target_status, 'comment': 'Підтверджено'}, timeout=15
+        )
+        data = rp.json()
+        if data.get('success'):
+            logger.success(f'Статус #{order_id} → {target_status} ({label})')
+            return True
+        logger.warning(f'confirm_order PATCH {target_status} failed: {data}')
+        return False
+
+    try:
+        r = requests.get(
+            f'{ROZETKA_BASE}/orders/{order_id}',
+            headers=rz_headers(),
+            verify=False,
+            params={'expand': 'status_available'},
+            timeout=30
+        )
+        if r.status_code != 200 or not r.json().get('success'):
+            logger.error(f'confirm_order GET #{order_id}: {r.text[:200]}')
+            return False
+        order_data     = r.json().get('content', {})
+        current_status = order_data.get('status')
+        available_raw  = [s.get('child_id') for s in (order_data.get('status_available') or []) if s.get('child_id')]
+        # Ніколи не використовувати заборонені статуси
+        available      = [s for s in available_raw if s not in FORBIDDEN_STATUSES]
+        if available_raw != available:
+            blocked = [s for s in available_raw if s in FORBIDDEN_STATUSES]
+            logger.warning(f'confirm_order #{order_id}: заблоковано небезпечні статуси {blocked}')
+        logger.info(f'confirm_order #{order_id}: current={current_status}, available={available}')
+
+        if current_status in (2, 55, 61):
+            logger.info(f'#{order_id} вже підтверджено (status={current_status})')
+            return True
+
+        # Зі статусу 1 дозволено лише переходи на 2 або 55
+        allowed_targets = {2, 55} - FORBIDDEN_STATUSES
+
+        if 2 in available and 2 in allowed_targets:
+            return _safe_patch(2, 'підтверджено')
+
+        if 55 in available and 55 in allowed_targets:
+            if not _safe_patch(55, 'проміжний 55'):
+                return False
+            logger.info(f'Статус #{order_id} → 55, тепер → 2')
+            return _safe_patch(2, 'підтверджено після 55')
+
+        logger.warning(
+            f'confirm_order #{order_id}: перехід на 2 недоступний. '
+            f'current={current_status}, available={available}'
+        )
+        if current_status == 1:
+            # Спробуємо cabinet-seller PUT як fallback для статусу 1
+            logger.info(f'confirm_order #{order_id}: пробуємо cabinet-seller PUT...')
+            try:
+                rc = requests.put(
+                    f"{CABINET_BASE}/orders/{order_id}",
+                    headers=rz_headers(),
+                    verify=False,
+                    json={"status": 55, "ttn": "", "id": order_id},
+                    timeout=15
+                )
+                if rc.json().get("success"):
+                    logger.success(f'confirm_order #{order_id}: cabinet-seller 55 OK')
+                    return True
+            except Exception as ce:
+                logger.warning(f'confirm_order cabinet fallback: {ce}')
+            return None  # sentinel: потрібне ручне підтвердження
+        return False
+    except Exception as e:
+        logger.error(f'confirm_order: {e}')
+        return False
 
 
 def cancel_order(order_id: int, comment: str = 'Товар відсутній у постачальника') -> bool:
@@ -297,6 +384,37 @@ def is_already_processed(order_id: int) -> bool:
         return exists
     except:
         return False
+
+
+def get_db_status(order_id: int):
+    """Повертає статус замовлення з БД або None якщо не знайдено."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute(
+            'CREATE TABLE IF NOT EXISTS rozetka_processed_orders '
+            '(order_id BIGINT PRIMARY KEY, status VARCHAR(50), '
+            'total_price NUMERIC(12,2), processed_at TIMESTAMP DEFAULT NOW())'
+        )
+        cur.execute('SELECT status FROM rozetka_processed_orders WHERE order_id = %s', (order_id,))
+        row = cur.fetchone()
+        cur.close(); conn.close()
+        return row[0] if row else None
+    except:
+        return None
+
+
+def delete_from_db(order_id: int):
+    """Видаляє замовлення з БД для повторної обробки."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute('DELETE FROM rozetka_processed_orders WHERE order_id = %s', (order_id,))
+        conn.commit()
+        cur.close(); conn.close()
+        logger.info(f'#{order_id} видалено з БД для повторної обробки')
+    except Exception as e:
+        logger.error(f'delete_from_db: {e}')
 
 
 def save_to_db(order: dict, status: str):
@@ -517,7 +635,19 @@ def process_order(order: dict, feed: dict):
         set_ttn() → статус 61 (автоматично) → change_status(3)
     """
     order_id = order.get('id')
-    if not order_id or is_already_processed(order_id):
+    if not order_id:
+        return
+
+    db_status = get_db_status(order_id)
+    if db_status == 'pending_manual':
+        current = get_order_details(order_id)
+        rz_status = current.get('status')
+        if rz_status == 1:
+            logger.debug(f'#{order_id} pending_manual — статус Розетки ще 1, пропускаємо')
+            return
+        logger.info(f'#{order_id} pending_manual — статус Розетки змінився на {rz_status}, обробляємо знову')
+        delete_from_db(order_id)
+    elif db_status is not None:
         return
 
     logger.info(f'Обробляємо {MARKETPLACE} #{order_id}')
@@ -574,7 +704,17 @@ def process_order(order: dict, feed: dict):
         return
 
     # Підтверджуємо (status=2)
-    if not confirm_order(order_id):
+    confirm_result = confirm_order(order_id)
+    if confirm_result is None:
+        save_to_db(details, 'pending_manual')
+        tg(
+            f'⚠️ Замовлення <b>#{order_id}</b> потребує ручного підтвердження '
+            f'в кабінеті Розетки.\n'
+            f'Клієнт: {ri["customer"]} {ri["phone"]} {ri["total"]:.0f} грн\n'
+            f'Після підтвердження агент обробить автоматично.'
+        )
+        return
+    if not confirm_result:
         logger.error(f'Не вдалось підтвердити #{order_id}')
         return
 

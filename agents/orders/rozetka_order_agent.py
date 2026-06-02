@@ -386,6 +386,37 @@ def is_already_processed(order_id: int) -> bool:
         return False
 
 
+def get_db_status(order_id: int):
+    """Повертає статус замовлення з БД або None якщо не знайдено."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute(
+            'CREATE TABLE IF NOT EXISTS rozetka_processed_orders '
+            '(order_id BIGINT PRIMARY KEY, status VARCHAR(50), '
+            'total_price NUMERIC(12,2), processed_at TIMESTAMP DEFAULT NOW())'
+        )
+        cur.execute('SELECT status FROM rozetka_processed_orders WHERE order_id = %s', (order_id,))
+        row = cur.fetchone()
+        cur.close(); conn.close()
+        return row["status"] if row else None
+    except:
+        return None
+
+
+def delete_from_db(order_id: int):
+    """Видаляє замовлення з БД для повторної обробки."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute('DELETE FROM rozetka_processed_orders WHERE order_id = %s', (order_id,))
+        conn.commit()
+        cur.close(); conn.close()
+        logger.info(f'#{order_id} видалено з БД для повторної обробки')
+    except Exception as e:
+        logger.error(f'delete_from_db: {e}')
+
+
 def save_to_db(order: dict, status: str):
     """Зберігає замовлення в БД включно з phone/recipient/city для TTN-матчингу."""
     try:
@@ -604,7 +635,19 @@ def process_order(order: dict, feed: dict):
         set_ttn() → статус 61 (автоматично) → change_status(3)
     """
     order_id = order.get('id')
-    if not order_id or is_already_processed(order_id):
+    if not order_id:
+        return
+
+    db_status = get_db_status(order_id)
+    if db_status == 'pending_manual':
+        current = get_order_details(order_id)
+        rz_status = current.get('status')
+        if rz_status == 1:
+            logger.debug(f'#{order_id} pending_manual — статус Розетки ще 1, пропускаємо')
+            return
+        logger.info(f'#{order_id} pending_manual — статус Розетки змінився на {rz_status}, обробляємо знову')
+        delete_from_db(order_id)
+    elif db_status is not None:
         return
 
     logger.info(f'Обробляємо {MARKETPLACE} #{order_id}')
@@ -658,6 +701,22 @@ def process_order(order: dict, feed: dict):
         tg(f'⏳ <b>{MARKETPLACE} #{order_id} — очікує оплату</b>\n'
            f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
            f'Тип: {payment_type} | 💰 {ri["total"]:.0f} грн')
+        return
+
+    # Статус 61 — ТТН вже встановлено (раніше оброблено або через бот);
+    # якщо є в БД як accepted — пропускаємо; якщо немає — відправляємо Excel і зберігаємо
+    if details.get('status') == 61:
+        if get_db_status(order_id) == 'accepted':
+            logger.debug(f'#{order_id} статус 61, вже в БД як accepted — пропускаємо')
+            return
+        excel   = create_order_excel(details, items_info)
+        tg_sent = send_excel_to_carvol_telegram(excel, order_id, items_info, details)
+        save_to_db(details, 'accepted')
+        sent_icon = '📲 Telegram' if tg_sent else '❌ не відправлено'
+        tg(f'📦 <b>{MARKETPLACE} #{order_id} статус 61 — збережено!</b>\n'
+           f'Клієнт: {ri["customer"]}\nТелефон: {ri["phone"]}\n'
+           f'💰 {ri["total"]:.0f} грн | Carvol: {sent_icon}')
+        logger.info(f'#{order_id} статус 61 — Excel відправлено, збережено як accepted')
         return
 
     # Підтверджуємо (status=2)
