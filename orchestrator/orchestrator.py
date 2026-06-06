@@ -51,6 +51,52 @@ def get_agents_status() -> dict:
     except:
         return {}
 
+def generate_and_save_skill(task_description: str, agent_name: str) -> str:
+    """Автоматично генерує новий скіл через LLM і зберігає в файл + Qdrant."""
+    model = os.getenv('OLLAMA_MODEL', 'llama3.2:3b')
+    prompt = f"""Create a skill file in Markdown for agent "{agent_name}".
+Task this skill solves: {task_description}
+
+Use this structure:
+# Skill name
+
+## Description
+When to use (1-2 sentences)
+
+## When to use
+- Situation 1
+- Situation 2
+
+## Instructions
+### Step 1
+...
+
+## Forbidden
+- What NOT to do
+
+Respond ONLY with the Markdown content, no other text."""
+
+    skill_content = request_llm(model, prompt)
+    if not skill_content or len(skill_content) < 50:
+        return ""
+
+    skills_dir = os.path.join(os.path.dirname(__file__), f"../shared/skills/{agent_name}")
+    os.makedirs(skills_dir, exist_ok=True)
+    safe_name = "".join(c if c.isalnum() else "_" for c in task_description[:30]).strip("_").lower()
+    skill_path = os.path.join(skills_dir, f"auto_{safe_name}.md")
+    with open(skill_path, "w", encoding="utf-8") as f:
+        f.write(skill_content)
+
+    try:
+        from shared.utils.skills_indexer import index_all_skills
+        index_all_skills()
+        logger.info(f"[ORCHESTRATOR] Auto-skill created: auto_{safe_name}.md for {agent_name}")
+    except Exception as e:
+        logger.warning(f"[ORCHESTRATOR] Skill index error: {e}")
+
+    return skill_content
+
+
 def route_task(command: str) -> dict:
     skills_context = load_all_skills("orchestrator")
     snapshot = get_system_snapshot()
@@ -59,12 +105,16 @@ def route_task(command: str) -> dict:
 
     model = os.getenv('OLLAMA_MODEL', 'llama3.2:3b')
     skills = search_skills(command, agent='orchestrator', limit=2)
+    if not skills.strip():
+        logger.info(f"[ORCHESTRATOR] No skills found, generating new skill...")
+        skills = generate_and_save_skill(command, 'orchestrator')
     # Простий прямий промпт без template для кращої відповіді від Ollama
     full_prompt = f"""### Instruction:
 You are a routing system. Analyze the admin command and return ONLY a JSON object.
 Available agents: scraper, marketing, developer, finance, efficiency
 
 Command: {command}
+{skills}
 
 Agent descriptions:
 - scraper: parse prices and products from Prom/Rozetka/Epicentr marketplaces
@@ -133,6 +183,15 @@ def process_command(command: str):
     }
 
     push_task(AGENT_QUEUES[agent], task)
+
+    # Зберігаємо в пам'ять
+    from shared.utils.memory import save_memory
+    save_memory(
+        agent_name=AGENT_NAME,
+        content=f"Команда: {command} → агент: {agent}, задача: {task['type']}",
+        metadata={"agent": agent, "task_type": task.get("type"), "decision": decision}
+    )
+
     log_event(AGENT_NAME, "INFO", f"Task -> {agent}: {task['type']}", decision)
     create_alert(AGENT_NAME, f"Задача → {agent}", decision.get("description",""), "INFO")
 

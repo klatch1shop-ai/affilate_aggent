@@ -1,0 +1,3546 @@
+{
+  "2609": {
+    "title": "Ручний інструмент",
+    "attributes": [
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      }
+    ]
+  },
+  "2567": {
+    "title": "Гайковерти",
+    "attributes": [
+      {
+        "code": "55",
+        "title": "Колекція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2070",
+        "title": "Модель акумулятора",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "10035",
+        "title": "Зарядна станція",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8833",
+        "title": "Розмір квадрата",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8308",
+        "title": "Призначення інструмента",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8305",
+        "title": "Потужність",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "10008",
+        "title": "Робоче оснащення",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8847",
+        "title": "Тип редуктора",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "1611",
+        "title": "Довжина кабелю",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "9285",
+        "title": "Регулятор обертів",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8830",
+        "title": "Тип посадкового місця",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8900",
+        "title": "Перемикач реверсу",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9411",
+        "title": "Тип двигуна",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8943",
+        "title": "Матеріал корпусу",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9196",
+        "title": "Підсвітка",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9275",
+        "title": "Імпульсний (ударний) режим",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9929",
+        "title": "Напруга акумулятора",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9998",
+        "title": "Ємність акумулятора",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "9999",
+        "title": "Кейс",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10000",
+        "title": "Торцеві головки",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "1606",
+        "title": "Витрати повітря",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "10057",
+        "title": "Розширена гарантія",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9304",
+        "title": "Регулятор частоти удару",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "1614",
+        "title": "Глибина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "9396",
+        "title": "Регулювання крутного моменту",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8486",
+        "title": "Вид живлення",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8433",
+        "title": "Тип інструмента",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8548",
+        "title": "Робоча напруга",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "10056",
+        "title": "Гарантія",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8541",
+        "title": "Макс. крутний момент",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "10040",
+        "title": "Кріплення на пояс (скоба)",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9280",
+        "title": "Режим зриву гайки",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9670",
+        "title": "Варіант пропозиції",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10036",
+        "title": "Додаткова ручка",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "2071",
+        "title": "Сумісні акумулятори",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9730",
+        "title": "Тип акумулятора",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "10046",
+        "title": "Вхідний штуцер",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10052",
+        "title": "Діаметр шланга",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "10026",
+        "title": "Додатковий акумулятор",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9464",
+        "title": "Потужність",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "762",
+        "title": "Вага",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8153",
+        "title": "Вид живлення",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "1605",
+        "title": "Ширина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "1590",
+        "title": "Макс. крутний момент",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1602",
+        "title": "Робочий тиск",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1591",
+        "title": "Макс. кількість обертів",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1603",
+        "title": "Висота",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1593",
+        "title": "Макс. кількість ударів",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1594",
+        "title": "Максимальний діаметр болта",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1595",
+        "title": "Потужність",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "1597",
+        "title": "Час зарядки",
+        "type": "float",
+        "required": false
+      }
+    ]
+  },
+  "2571": {
+    "title": "Відбійні молотки",
+    "attributes": [
+      {
+        "code": "7977",
+        "title": "Двигун",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8307",
+        "title": "Потужність двигуна",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8313",
+        "title": "Об'єм двигуна",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "8317",
+        "title": "Об'єм паливного бака",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8159",
+        "title": "Запатентовані системи, механізми",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "7981",
+        "title": "Розмір шестигранника",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7983",
+        "title": "Тип живлення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10792",
+        "title": "Розмір",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8310",
+        "title": "Напруга живлення",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8153",
+        "title": "Вид живлення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8339",
+        "title": "Тип патрона",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "55",
+        "title": "Колекція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8353",
+        "title": "Енергія удару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "153",
+        "title": "Особливості",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "8183",
+        "title": "Ударний механізм",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7978",
+        "title": "Кількість циліндрів",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8308",
+        "title": "Призначення інструмента",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "762",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8161",
+        "title": "Захист від пилу",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8305",
+        "title": "Потужність",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8296",
+        "title": "Матеріал корпусу",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8181",
+        "title": "Технічні особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8185",
+        "title": "Електронні системи",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "11196",
+        "title": "Регулювання кількості ударів",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4599",
+        "title": "Потужність",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8182",
+        "title": "Видалення пилу",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8167",
+        "title": "Кількість ударів",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8338",
+        "title": "Тип двигуна",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "776",
+        "title": "Додаткова гарантія",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "8160",
+        "title": "Захист від вібрації",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "7982",
+        "title": "Витрати палива",
+        "type": "float",
+        "required": false
+      }
+    ]
+  },
+  "2590": {
+    "title": "Біти для шуруповерта",
+    "attributes": [
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7416",
+        "title": "Тип біти",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "7410",
+        "title": "Розмір біти",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "7409",
+        "title": "Перехідник 3/8\" квадрат",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "7403",
+        "title": "Двостороння комбінована",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "7404",
+        "title": "Довжина бітотримача",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "7415",
+        "title": "Технічні особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "7407",
+        "title": "Перехідник 1/2\" квадрат",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8320",
+        "title": "Посадковий квадрат",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "7402",
+        "title": "Двостороння",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "7400",
+        "title": "Антикорозійне покриття",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9056",
+        "title": "Вид",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "7405",
+        "title": "Довжина біти",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "7938",
+        "title": "Кількість",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "7408",
+        "title": "Перехідник 1/4\" квадрат",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "55",
+        "title": "Колекція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7406",
+        "title": "Матеріал виробу",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8993",
+        "title": "Кількість у наборі",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      }
+    ]
+  },
+  "2610": {
+    "title": "Викрутки",
+    "attributes": [
+      {
+        "code": "7826",
+        "title": "Тип шліца",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8297",
+        "title": "Матеріал рукоятки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "11458",
+        "title": "Розмір наконечника",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "7936",
+        "title": "Довжина робоча",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "7825",
+        "title": "Тип викрутки",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "7819",
+        "title": "Вид викрутки",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "7824",
+        "title": "Технічні особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "7828",
+        "title": "Форма рукоятки",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7821",
+        "title": "Кількість",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "9352",
+        "title": "Довжина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "7935",
+        "title": "Довжина загальна",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      }
+    ]
+  },
+  "2612": {
+    "title": "Шарнірно-губцевий інструмент",
+    "attributes": [
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "5500",
+        "title": "Кількість",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "8731",
+        "title": "Типовий розмір",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "8728",
+        "title": "Накладки на ручки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8727",
+        "title": "Діаметр прорізу",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8726",
+        "title": "Вид",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "8729",
+        "title": "Тип покриття губок",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8730",
+        "title": "Типовий розмір",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      }
+    ]
+  },
+  "2613": {
+    "title": "Набори інструментів",
+    "attributes": [
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "515",
+        "title": "Кількість в наборі",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "11615",
+        "title": "Посадковий діаметр",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8607",
+        "title": "Сфера застосування",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8993",
+        "title": "Кількість у наборі",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": true
+      }
+    ]
+  },
+  "2617": {
+    "title": "Ключі та набори ключів",
+    "attributes": [
+      {
+        "code": "8379",
+        "title": "Спеціальний",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8384",
+        "title": "Форма рукоятки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8993",
+        "title": "Кількість у наборі",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8385",
+        "title": "Шестигранний (інбусовий)",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8380",
+        "title": "Технічні особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "13716",
+        "title": "Розмір",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8377",
+        "title": "Вид ключів",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "8381",
+        "title": "Торцювальний",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8297",
+        "title": "Матеріал рукоятки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8382",
+        "title": "Трубчастий",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8383",
+        "title": "Зусилля динамометричного ключа",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "11403",
+        "title": "Тип",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      }
+    ]
+  },
+  "2618": {
+    "title": "Воротки, тріскачки та головки",
+    "attributes": [
+      {
+        "code": "9001",
+        "title": "Перехідник",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8099",
+        "title": "Вид",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8320",
+        "title": "Посадковий квадрат",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "8993",
+        "title": "Кількість у наборі",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8998",
+        "title": "Максимальний діаметр",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "6696",
+        "title": "Розмір головки",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "8959",
+        "title": "Вид головки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "9003",
+        "title": "Рукоятка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8994",
+        "title": "Кількість зубців у механізмі тріскачки",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "9352",
+        "title": "Довжина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "8270",
+        "title": "Реверс",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8999",
+        "title": "Мінімальний діаметр",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8297",
+        "title": "Матеріал рукоятки",
+        "type": "multiselect",
+        "required": false
+      }
+    ]
+  },
+  "2924": {
+    "title": "Балонні та свічні ключі",
+    "attributes": [
+      {
+        "code": "6695",
+        "title": "Довжина ключа",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "6696",
+        "title": "Розмір головки",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "9442",
+        "title": "Тип",
+        "type": "select",
+        "required": true
+      }
+    ]
+  },
+  "4693": {
+    "title": "Викрутки акумуляторні",
+    "attributes": [
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "55",
+        "title": "Колекція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2129",
+        "title": "Особливості",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8308",
+        "title": "Призначення інструмента",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8339",
+        "title": "Тип патрона",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "9728",
+        "title": "Мінімальне число обертів (холостий хід)",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "7358",
+        "title": "Тип акумулятора",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8159",
+        "title": "Запатентовані системи, механізми",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8179",
+        "title": "Регулювання частоти обертання",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8181",
+        "title": "Технічні особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8186",
+        "title": "Електронні системи для акумулятора",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "776",
+        "title": "Додаткова гарантія",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8293",
+        "title": "Максимальний обертовий момент",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8883",
+        "title": "Ємність акумулятора",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "8309",
+        "title": "Напруга",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8305",
+        "title": "Потужність",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8153",
+        "title": "Вид живлення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "762",
+        "title": "Вага",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8154",
+        "title": "Час заряду",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8281",
+        "title": "Max число обертів (холостий хід)",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10792",
+        "title": "Розмір",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9748",
+        "title": "Кількість батарей",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      }
+    ]
+  },
+  "6865": {
+    "title": "Пневмогайковерти",
+    "attributes": [
+      {
+        "code": "9216",
+        "title": "Технічні особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "150",
+        "title": "Вага",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8166",
+        "title": "Кількість швидкостей",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8840",
+        "title": "Діаметр приєднання",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "9424",
+        "title": "Режим роботи",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "12680",
+        "title": "Розміри",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "8293",
+        "title": "Максимальний обертовий момент",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10860",
+        "title": "Реверс",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "118",
+        "title": "Максимальна швидкість обертання",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "8331",
+        "title": "Витрата повітря",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8339",
+        "title": "Тип патрона",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "8320",
+        "title": "Посадковий квадрат",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "8327",
+        "title": "Робочий тиск",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      }
+    ]
+  },
+  "1444": {
+    "title": "Знімачі універсальні",
+    "attributes": [
+      {
+        "code": "2471",
+        "title": "Довжина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "762",
+        "title": "Вага",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "2530",
+        "title": "Висота",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "51",
+        "title": "Вид",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "11571",
+        "title": "Розмір",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "52",
+        "title": "Матеріал",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "4118",
+        "title": "Кількість у наборі",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "5820",
+        "title": "Ширина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "11274",
+        "title": "Розміри",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "11760",
+        "title": "Максимальне зусилля",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "8450",
+        "title": "Ширина захвату",
+        "type": "float",
+        "required": false
+      }
+    ]
+  },
+  "4465": {
+    "title": "Інформаційні стенди",
+    "attributes": [
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "4905",
+        "title": "Матеріал",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "4814",
+        "title": "Висота",
+        "type": "array",
+        "required": true
+      },
+      {
+        "code": "3341",
+        "title": "Тип установки",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "78",
+        "title": "Колір виробника",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "50",
+        "title": "Тип",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "10773",
+        "title": "Конструкція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "1661",
+        "title": "Живлення",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "6641",
+        "title": "Технічний опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "55",
+        "title": "Колекція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "2471",
+        "title": "Довжина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "5820",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8532",
+        "title": "Діаметр",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      }
+    ]
+  },
+  "5962": {
+    "title": "Динамометричні ключі",
+    "attributes": [
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "7097",
+        "title": "Мінімальне зусилля",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8320",
+        "title": "Посадковий квадрат",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "6696",
+        "title": "Розмір головки",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "8345",
+        "title": "Упаковка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "9003",
+        "title": "Рукоятка",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "9151",
+        "title": "Максимальне зусилля",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9352",
+        "title": "Довжина",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "8484",
+        "title": "Особливості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8383",
+        "title": "Зусилля динамометричного ключа",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "9578",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      }
+    ]
+  },
+  "8534": {
+    "title": "Балансувальні верстати",
+    "attributes": [
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "9447",
+        "title": "Максимальна ширина колеса",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "10554",
+        "title": "Діаметр диска",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "12126",
+        "title": "Вага",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "11104",
+        "title": "Максимальна вага колеса",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "6742",
+        "title": "Ширина диска",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "6100",
+        "title": "Напруга живлення",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "7969",
+        "title": "Діаметр вала",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "9146",
+        "title": "Швидкість виміру",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "2340",
+        "title": "Точність балансування",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "1191",
+        "title": "Тип екрана",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "329",
+        "title": "Точність вимірювання",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "181",
+        "title": "Швидкість обертання",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "153",
+        "title": "Особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "7307",
+        "title": "Потужність двигуна",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "7242",
+        "title": "Максимальний діаметр колеса",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      }
+    ]
+  },
+  "8533": {
+    "title": "Верстати для шиномонтажу",
+    "attributes": [
+      {
+        "code": "9447",
+        "title": "Максимальна ширина колеса",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "12126",
+        "title": "Вага",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "11618",
+        "title": "Захват диска за зовнішнім обідом",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "7323",
+        "title": "Захват диска",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "7307",
+        "title": "Потужність двигуна",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "7242",
+        "title": "Максимальний діаметр колеса",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "5973",
+        "title": "Захват диска за внутрішнім обідом",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "8082",
+        "title": "Режим роботи",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "8310",
+        "title": "Напруга живлення",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "1724",
+        "title": "Швидкість обертання стола",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      }
+    ]
+  },
+  "8579": {
+    "title": "Пристосування рихтувальні",
+    "attributes": [
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      }
+    ]
+  },
+  "8581": {
+    "title": "Стенди для фарбування",
+    "attributes": [
+      {
+        "code": "13154",
+        "title": "Призначення",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "110",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "111",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "767",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "52",
+        "title": "Матеріал",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "78",
+        "title": "Колір виробника",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      }
+    ]
+  },
+  "8775": {
+    "title": "Набір захисту для катання",
+    "attributes": [
+      {
+        "code": "13341",
+        "title": "Категорія",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "measure",
+        "title": "Одиниця виміру та кількість",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "11787",
+        "title": "Вік користувача",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "description",
+        "title": "Опис",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "12097",
+        "title": "Базовий колір",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4210",
+        "title": "Матеріал верху",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "52",
+        "title": "Матеріал",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "country_of_origin",
+        "title": "Країна-виробник",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "4184",
+        "title": "Кріплення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2861",
+        "title": "Властивості",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "2856",
+        "title": "Стать",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "150",
+        "title": "Вага",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "ratio",
+        "title": "Мінімальна кратність товару",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "producer_code",
+        "title": "Модель виробника (референцiя)",
+        "type": "string",
+        "required": false
+      },
+      {
+        "code": "12230",
+        "title": "Регулювання розміру",
+        "type": "select",
+        "required": true
+      },
+      {
+        "code": "12231",
+        "title": "Матеріал зовнішньої раковини",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "12232",
+        "title": "Матеріал внутрішньої раковини",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "12233",
+        "title": "Вентиляція",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "12248",
+        "title": "Модель",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "12269",
+        "title": "Сертифікація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "14195",
+        "title": "Обмін та повернення",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "6021",
+        "title": "Комплектація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "5395",
+        "title": "Фіксація",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "4907",
+        "title": "Матеріал вставки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4796",
+        "title": "Вид застібки",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "78",
+        "title": "Колір виробника",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "113",
+        "title": "Гарантія",
+        "type": "float",
+        "required": false
+      },
+      {
+        "code": "404",
+        "title": "Країна реєстрації бренду",
+        "type": "select",
+        "required": false
+      },
+      {
+        "code": "2771",
+        "title": "Додаткові характеристики",
+        "type": "text",
+        "required": false
+      },
+      {
+        "code": "4271",
+        "title": "Матеріал підкладки",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "6486",
+        "title": "Розмір",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "4777",
+        "title": "Призначення",
+        "type": "multiselect",
+        "required": true
+      },
+      {
+        "code": "4512",
+        "title": "Технології",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4411",
+        "title": "Особливості",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4366",
+        "title": "Призначення",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "4328",
+        "title": "Матеріал виробу",
+        "type": "multiselect",
+        "required": false
+      },
+      {
+        "code": "barcodes",
+        "title": "Штрих код",
+        "type": "array",
+        "required": false
+      },
+      {
+        "code": "width",
+        "title": "Ширина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "weight",
+        "title": "Вага",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "length",
+        "title": "Глибина",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "height",
+        "title": "Висота",
+        "type": "float",
+        "required": true
+      },
+      {
+        "code": "brand",
+        "title": "Бренд",
+        "type": "select",
+        "required": false
+      }
+    ]
+  }
+}
