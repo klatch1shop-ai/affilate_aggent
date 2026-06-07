@@ -1,0 +1,30 @@
+URL: https://api-seller.rozetka.com.ua/apidoc/
+
+## API оновлення наявності в реальному часі
+
+### Метод: PUT /items/update-price-stock/{id}
+Дозволяє оновити наявність та ціну товару в реальному часі без очікування годинного фіду.
+
+Endpoint: https://api.seller.rozetka.com.ua/items/update-price-stock/{id}
+{id} — owox id товару в системі Розетки
+
+Headers:
+  Authorization: Bearer {ROZETKA_API_TOKEN}
+  Content-Type: application/json
+
+Body (JSON):
+  {"stock_quantity": 15}         # товар є в наявності
+  {"stock_quantity": 0}          # товар відсутній
+  {"stock_quantity": 10, "price": 999}  # оновити і наявність і ціну
+
+Права: токен має мати дозвіл goods_active
+
+Швидкість: до 800 мс (vs 1 година для XML фіду)
+
+Використання: коли агент бачить qty=0 в постачальника — одразу викликати цей метод
+
+### Частота оновлення XML фіду
+- Розетка читає фід 1 раз на годину автоматично
+- Є ручне оновлення в кабінеті (Товари → синхронізувати)
+- Налаштувати частіше ніж 1 година — неможливо
+- Рішення для реального часу — тільки API

@@ -32,3 +32,15 @@
 - Pricecreator: https://pricecreator.rozetka.com.ua/
 - Контакт: ivanovskaya@rozetka.ua (Софія Івановська)
 - Магазин seller id: gomer
+
+### API (детально)
+- stock_api.txt — оновлення наявності в реальному часі
+- api_full.txt — повна документація всіх endpoints
+
+### Ключові endpoints
+- Категорії: GET /market-categories/search
+- Дерево категорій: GET /market-categories/get-categories-by-parent?expand=parents,children
+- Пошук товару: GET /items/search?article={артикул}
+- Оновлення наявності: PUT /items/update-price-stock/{id}
+- Завантаження фіду: POST /item-price-updates/create
+- Статус модерації: GET /items/{id} (поле moderation_status)

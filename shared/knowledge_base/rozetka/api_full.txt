@@ -1,0 +1,105 @@
+# Rozetka Seller API — Повна документація
+URL: https://api-seller.rozetka.com.ua/apidoc/
+
+## АВТОРИЗАЦІЯ
+POST /sites — отримати Bearer токен (діє 24 години)
+Передати логін/пароль у форматі Base64
+Дозволи: goods_active, orders_edit
+
+## КАТЕГОРІЇ
+
+### Список категорій
+GET https://api.seller.rozetka.com.ua/market-categories/search
+Параметри: parent_id (фільтр), page (пагінація, 100 на сторінці)
+Відповідь: масив marketCategorys з id, name, parent_id
+
+### Дерево категорій
+GET https://api.seller.rozetka.com.ua/market-categories/get-categories-by-parent
+Параметри: id, expand=parents,children
+Заголовок: Content-Language: uk
+
+### Характеристики категорії
+GET https://api.seller.rozetka.com.ua/market-categories/category-options?category_id={id}
+Повертає: всі параметри (назва, тип, значення) для категорії
+
+Примітки:
+- Телевізори: rz_id = 80258
+- ID категорій статичні — зберігати в БД для маппінгу
+- rz_id в XML має вищий пріоритет над текстовою назвою
+
+## ТОВАРИ
+
+### Пошук товару за артикулом (отримати owox_id)
+GET https://api.seller.rozetka.com.ua/items/search?article={артикул}
+Параметри: article, find_by_text, item_active, sort, page
+Відповідь: масив items, поле id = owox_id
+
+### Деталі товару
+GET https://api.seller.rozetka.com.ua/items/{id}
+Поле: moderation_status (0-5)
+
+### Лічильники товарів
+GET https://api.seller.rozetka.com.ua/items/counts
+Поле: moderation — кількість товарів на модерації
+
+### Статуси модерації
+GET https://api.seller.rozetka.com.ua/items/statuses-moderation
+Значення moderation_status:
+  0 — Новий
+  1 — Очікує модерації
+  2 — На модерації
+  3 — Схвалено
+  4 — Відхилено
+  5 — Архівний
+
+## ОНОВЛЕННЯ НАЯВНОСТІ ТА ЦІН
+
+### Оновлення одного товару (реальний час)
+PUT https://api.seller.rozetka.com.ua/items/update-price-stock/{id}
+Headers: Authorization: Bearer {token}, Content-Type: application/json
+Body: {stock_quantity: 15} або {stock_quantity: 0} або {stock_quantity: 10, price: 999}
+Права: goods_active
+Швидкість: до 800 мс
+ВАЖЛИВО: 1 товар на запит, batch не підтримується
+
+### Масове оновлення через XML фід
+POST https://api.seller.rozetka.com.ua/item-price-updates/create
+Body: {url: посилання на XML фід}
+Асинхронно — система сама зчитує файл
+
+### Статус завантаження фіду
+GET https://api.seller.rozetka.com.ua/item-price-updates/search
+
+## ЕКСПОРТ ТОВАРІВ
+GET https://api.seller.rozetka.com.ua/items/create-export-file?marketId={id}
+GET https://api.seller.rozetka.com.ua/items/download-export-file?marketId={id}
+Формат: .xls
+
+## МАППІНГ КАТЕГОРІЙ
+POST https://api.seller.rozetka.com.ua/price-markets/create-bindings-categories
+
+## RATE LIMITS
+- Динамічні — нема фіксованих значень
+- HTTP 429 = перевищення ліміту
+- Стратегія: exponential back-off + jitter 0.1-1.0 сек
+- Token Bucket алгоритм для рівного розподілу
+
+## ОБОВ'ЯЗКОВІ ПОЛЯ ТОВАРУ
+- name / name_ua (SEO формула: Тип + Бренд + Модель + Колір + Хар-ки + Артикул)
+- vendor (бренд)
+- catalog_id / categoryId (rz_id)
+- article (артикул)
+- price (грн)
+- stock_quantity
+- picture (мін 1 фото, рекомендовано 3-6)
+- param (мін 3 характеристики)
+
+## XML ФІД — ЧАСТОТА ОНОВЛЕННЯ
+- Автоматично: 1 раз на годину
+- Ручне: кабінет Товари → синхронізувати
+- Частіше 1 год — неможливо
+- Реальний час — тільки PUT /items/update-price-stock/{id}
+
+## ДЛЯ ПОБУТОВОЇ ТЕХНІКИ
+- Технічно складний товар
+- Обов'язково: гарантія, штрихкод виробника, мін 3 характеристики
