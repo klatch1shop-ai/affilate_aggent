@@ -149,6 +149,7 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
     # ── pass 1: filter qualifying products ────────────────────────────────
     qualified = []
     seen_artikuls: set = set()
+    skipped_sale = 0
 
     for p in all_products:
         code        = clean_text(p.findtext("code") or "")
@@ -164,11 +165,23 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
             continue
         if artikul in seen_artikuls:
             continue
-        seen_artikuls.add(artikul)
 
+        # фільтр уцінок
+        raw_vendor = clean_text(p.findtext("vendor") or "")
+        raw_name   = clean_text(p.findtext("name") or "")
+        if (
+            "уцін" in raw_vendor.lower()
+            or "уцін" in raw_name.lower()
+            or raw_name.endswith("_У")
+            or raw_name.endswith("_у")
+        ):
+            skipped_sale += 1
+            continue
+
+        seen_artikuls.add(artikul)
         qualified.append((p, cat_info, rz_id, artikul))
 
-    logger.info(f"[KatranCat] Відповідають фільтру: {len(qualified)}")
+    logger.info(f"[KatranCat] Відповідають фільтру: {len(qualified)} (пропущено уцінок: {skipped_sale})")
 
     # ── pass 2: count names to detect duplicates ──────────────────────────
     name_counter: Counter = Counter()
@@ -278,6 +291,7 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         "cat_names":     categories_used,
         "brands":        sorted(brands),
         "skipped_price": skipped_price,
+        "skipped_sale":  skipped_sale,
     }
 
 
@@ -309,7 +323,9 @@ def main():
     print(f"  Категорій  : {stats['categories']}")
     print(f"  Збережено  : {stats['output']}")
     if stats["skipped_price"]:
-        print(f"  Пропущено (ціна=0): {stats['skipped_price']}")
+        print(f"  Пропущено (ціна=0)  : {stats['skipped_price']}")
+    if stats["skipped_sale"]:
+        print(f"  Пропущено (уцінки)  : {stats['skipped_sale']}")
 
     print(f"\n  Бренди ({len(stats['brands'])}):")
     for b in stats["brands"]:
