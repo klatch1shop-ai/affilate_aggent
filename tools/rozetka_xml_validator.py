@@ -590,12 +590,20 @@ def write_xlsx(report: dict, path: str):
 # ─── entry point ─────────────────────────────────────────────────────────────
 
 def main():
-    if len(sys.argv) < 2:
-        # default: look for data/katran_rozetka.xml relative to script
+    import argparse
+    parser = argparse.ArgumentParser(description="Rozetka XML Validator")
+    parser.add_argument("xml_file", nargs="?", default=None, help="XML file to validate")
+    parser.add_argument(
+        "--no-xlsx", action="store_true",
+        help="Skip Excel report (use on servers without AVX/openpyxl support)"
+    )
+    args = parser.parse_args()
+
+    if args.xml_file:
+        xml_path = args.xml_file
+    else:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         xml_path = os.path.join(script_dir, "..", "data", "katran_rozetka.xml")
-    else:
-        xml_path = sys.argv[1]
 
     if not os.path.isabs(xml_path):
         xml_path = os.path.join(os.getcwd(), xml_path)
@@ -609,15 +617,13 @@ def main():
     validator = RozetkaXMLValidator(xml_path)
     report    = validator.run()
 
-    # inject category names into report for XLSX
     report["_cat_names"] = validator.category_names
 
     json_path = "/tmp/validation_report.json"
-    xlsx_path = "/tmp/validation_report.xlsx"
-
     print("▶ Зберігаю звіти...")
     write_json(report, json_path)
-    write_xlsx(report, xlsx_path)
+    if not args.no_xlsx:
+        write_xlsx(report, "/tmp/validation_report.xlsx")
     print()
 
     errors = report["summary"]["total_errors"]
