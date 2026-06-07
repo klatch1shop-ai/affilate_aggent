@@ -149,7 +149,6 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
     # ── pass 1: filter qualifying products ────────────────────────────────
     qualified = []
     seen_artikuls: set = set()
-    skipped_sale = 0
 
     for p in all_products:
         code        = clean_text(p.findtext("code") or "")
@@ -166,22 +165,10 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         if artikul in seen_artikuls:
             continue
 
-        # фільтр уцінок
-        raw_vendor = clean_text(p.findtext("vendor") or "")
-        raw_name   = clean_text(p.findtext("name") or "")
-        if (
-            "уцін" in raw_vendor.lower()
-            or "уцін" in raw_name.lower()
-            or raw_name.endswith("_У")
-            or raw_name.endswith("_у")
-        ):
-            skipped_sale += 1
-            continue
-
         seen_artikuls.add(artikul)
         qualified.append((p, cat_info, rz_id, artikul))
 
-    logger.info(f"[KatranCat] Відповідають фільтру: {len(qualified)} (пропущено уцінок: {skipped_sale})")
+    logger.info(f"[KatranCat] Відповідають фільтру: {len(qualified)}")
 
     # ── pass 2: count names to detect duplicates ──────────────────────────
     name_counter: Counter = Counter()
@@ -193,6 +180,7 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
     offers_data: list = []
     brands: set = set()
     skipped_price = 0
+    skipped_sale  = 0
 
     for p, cat_info, rz_id, artikul in qualified:
         raw_name    = fix_name(p.findtext("name") or "", artikul)
@@ -204,6 +192,14 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         price_rrc   = parse_float(p.findtext("price_rrc") or "0")
         commission  = cat_info.get("commission", DEFAULT_COMMISSION)
         cat_name    = cat_info.get("name", DEFAULT_CAT_NAME)
+
+        # фільтр уцінок (після парсингу vendor)
+        if vendor and ("уцін" in vendor.lower() or vendor.startswith("!")):
+            skipped_sale += 1
+            continue
+        if "_У" in artikul and artikul.endswith("_У"):
+            skipped_sale += 1
+            continue
 
         price = calc_price(price_rrc, commission)
         if price <= 0:
