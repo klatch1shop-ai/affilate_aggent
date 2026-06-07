@@ -39,6 +39,14 @@ DEFAULT_CAT_NAME = "Інструменти"
 URL_RE           = re.compile(r"https?://\S+")
 VENDOR_BAD       = {"no name", "noname", "no-name", "unknown", ""}
 
+# категорії де аксесуари без бренду допустимі (Кріплення для ТВ тощо)
+ACCESSORIES_ALLOWED_CATS = {"80071"}
+
+ACCESSORY_KEYWORDS = [
+    "насадка", "фільтр для", "мішок для", "щітка для",
+    "засіб для", "refill", "картридж для",
+]
+
 
 # ─── helpers (mirrors katran_xml_generator) ───────────────────────────────────
 
@@ -179,8 +187,9 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
     categories_used: dict = {}
     offers_data: list = []
     brands: set = set()
-    skipped_price = 0
-    skipped_sale  = 0
+    skipped_price     = 0
+    skipped_sale      = 0
+    skipped_accessory = 0
 
     for p, cat_info, rz_id, artikul in qualified:
         raw_name    = fix_name(p.findtext("name") or "", artikul)
@@ -200,6 +209,13 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         if "_У" in artikul and artikul.endswith("_У"):
             skipped_sale += 1
             continue
+
+        # фільтр аксесуарів без бренду
+        if vendor == "Без бренду" and rz_id not in ACCESSORIES_ALLOWED_CATS:
+            name_lower = name.lower()
+            if any(kw in name_lower for kw in ACCESSORY_KEYWORDS):
+                skipped_accessory += 1
+                continue
 
         price = calc_price(price_rrc, commission)
         if price <= 0:
@@ -286,8 +302,9 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         "categories":    len(categories_used),
         "cat_names":     categories_used,
         "brands":        sorted(brands),
-        "skipped_price": skipped_price,
-        "skipped_sale":  skipped_sale,
+        "skipped_price":     skipped_price,
+        "skipped_sale":      skipped_sale,
+        "skipped_accessory": skipped_accessory,
     }
 
 
@@ -322,6 +339,8 @@ def main():
         print(f"  Пропущено (ціна=0)  : {stats['skipped_price']}")
     if stats["skipped_sale"]:
         print(f"  Пропущено (уцінки)  : {stats['skipped_sale']}")
+    if stats["skipped_accessory"]:
+        print(f"  Пропущено (аксесуари без бренду): {stats['skipped_accessory']}")
 
     print(f"\n  Бренди ({len(stats['brands'])}):")
     for b in stats["brands"]:
