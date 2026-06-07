@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../.env"))
 
 SHOP_NAME = "HYPER_STORE"
-SHOP_URL = "https://prom.ua/ua/c3882792-hyper-store.html"
+SHOP_URL = "https://seller.rozetka.com.ua/"
 DEFAULT_COMMISSION = 7.0
 DEFAULT_RZ_ID = "25636737"  # Ручний інструмент
 DEFAULT_CAT_NAME = "Інструменти"
@@ -95,7 +95,10 @@ def clean_text(text: str) -> str:
 def fix_name(name: str, artikul: str) -> str:
     if not name:
         return artikul
+    name = re.sub(r'^[!@#$%^&*()\[\]{}\-_=+|\\/<>\'"`~]+\s*', '', name)
     name = re.sub(r"\s+", " ", name).strip()
+    if not name:
+        return artikul
     return name[:255]
 
 
@@ -123,9 +126,11 @@ def generate_xml(output_file: str = None) -> tuple:
 
     categories_used = {}
     offers_data = []
+    seen_artikuls = set()
     skipped_stock = 0
     skipped_price = 0
     skipped_name = 0
+    skipped_dup = 0
 
     for p in all_products:
         code = clean_text(p.findtext("code") or "")
@@ -146,6 +151,11 @@ def generate_xml(output_file: str = None) -> tuple:
         if not is_in_stock(stock_str):
             skipped_stock += 1
             continue
+
+        if artikul in seen_artikuls:
+            skipped_dup += 1
+            continue
+        seen_artikuls.add(artikul)
 
         cat_info = cat_map.get(category_id, {})
         rz_id = cat_info.get("rz_id", DEFAULT_RZ_ID)
@@ -184,7 +194,7 @@ def generate_xml(output_file: str = None) -> tuple:
     logger.info(f"[Katran] Готово до XML: {len(offers_data)} товарів")
     logger.info(
         f"[Katran] Пропущено — без наявності: {skipped_stock}, "
-        f"без ціни: {skipped_price}, без назви: {skipped_name}"
+        f"без ціни: {skipped_price}, без назви: {skipped_name}, дублікатів: {skipped_dup}"
     )
 
     # Збираємо XML
@@ -229,7 +239,7 @@ def generate_xml(output_file: str = None) -> tuple:
         )
 
         offer.append(f'        <param name="Бренд">{xml_escape(o["vendor"])}</param>')
-        if o["warranty"]:
+        if o["warranty"] and o["warranty"] != "0":
             offer.append(f'        <param name="Гарантія">{xml_escape(o["warranty"])} міс</param>')
         offer.append(f'        <param name="Артикул">{xml_escape(o["artikul"])}</param>')
 
@@ -250,6 +260,7 @@ def generate_xml(output_file: str = None) -> tuple:
         "skipped_stock": skipped_stock,
         "skipped_price": skipped_price,
         "skipped_name": skipped_name,
+        "skipped_dup": skipped_dup,
         "categories": len(categories_used),
     }
     return output_file, len(offers_data), stats
@@ -273,6 +284,7 @@ if __name__ == "__main__":
         print(f"   Немає в наявності : {stats['skipped_stock']}")
         print(f"   Без ціни          : {stats['skipped_price']}")
         print(f"   Без назви         : {stats['skipped_name']}")
+        print(f"   Дублікати артикул : {stats['skipped_dup']}")
         print(f"   Категорій         : {stats['categories']}")
     except Exception as e:
         logger.error(f"[Katran] Критична помилка: {e}")
