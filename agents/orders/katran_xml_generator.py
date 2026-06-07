@@ -166,14 +166,14 @@ def generate_xml(output_file: str = None) -> tuple:
                 if url.startswith("http") and len(url) < 500:
                     pictures.append(url)
 
-        if category_id not in categories_used:
-            categories_used[category_id] = (cat_name, rz_id)
+        if rz_id not in categories_used:
+            categories_used[rz_id] = cat_name
 
         offers_data.append({
             "artikul": artikul,
             "name": name,
             "description": description,
-            "category_id": category_id,
+            "rz_id": rz_id,
             "vendor": vendor,
             "warranty": warranty,
             "stock_qty": max(stock_qty, 1),
@@ -201,8 +201,8 @@ def generate_xml(output_file: str = None) -> tuple:
         "    <categories>",
     ]
 
-    for cat_id, (cat_name, rz_id) in categories_used.items():
-        lines.append(f'      <category id="{cat_id}" rz_id="{rz_id}">{cat_name}</category>')
+    for rz_id, cat_name in categories_used.items():
+        lines.append(f'      <category id="{rz_id}">{cat_name}</category>')
 
     lines.extend(["    </categories>", "    <offers>"])
 
@@ -213,7 +213,7 @@ def generate_xml(output_file: str = None) -> tuple:
         offer = [f'      <offer id="{offer_id}" available="true">']
         offer.append(f'        <price>{o["price"]}</price>')
         offer.append("        <currencyId>UAH</currencyId>")
-        offer.append(f'        <categoryId>{o["category_id"]}</categoryId>')
+        offer.append(f'        <categoryId>{o["rz_id"]}</categoryId>')
 
         for pic_url in o["pictures"][:10]:
             offer.append(f"        <picture>{pic_url}</picture>")
