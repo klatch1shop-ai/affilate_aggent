@@ -505,7 +505,96 @@ SequenceMatcher ratio.
 
 ---
 
-### 4.12 `agents/orders/katran_xml_generator.py` — 279 рядків
+### 4.12 `tools/katran_category_xml.py` — генератор XML по категоріях (2026-06-07)
+
+Генерує Розетка YML-XML для конкретних rz_id категорій Катрана.
+
+**Ключові константи:**
+- `SKIP_CATEGORIES = {"80255"}` — пропускати повністю (Батарейки)
+- `ACCESSORIES_ALLOWED_CATS = {"80071"}` — де "Без бренду" дозволено
+- `ACCESSORY_KEYWORDS` — насадка/фільтр для/мішок для/щітка для/тощо
+
+**`generate_category_xml(rz_ids, output_file) → dict`**  
+3-прохідна генерація:
+1. Pass 1: фільтрація (rz_id, наявність, дедуп артикулів)
+2. Pass 2: лічильник однакових назв (для розрізнення → додає артикул)
+3. Pass 3: будова офферів + фільтри уцінок/б.в./аксесуарів без бренду
+
+Фільтри в Pass 3:
+- уцінки: `"уцін" in vendor.lower() or vendor.startswith("!") or "б/у" in vendor.lower()`
+- артикул _У: `artikul.endswith("_У")`
+- аксесуари без бренду: `vendor == "Без бренду" and rz_id not in ACCESSORIES_ALLOWED_CATS and any(kw in name for kw in ACCESSORY_KEYWORDS)`
+
+Статистика: `{total, categories, cat_names, brands, skipped_price, skipped_sale, skipped_accessory}`
+
+**Usage:**
+```bash
+python3 tools/katran_category_xml.py 80158,237815
+python3 tools/katran_category_xml.py 80011 --output /tmp/my.xml
+```
+
+---
+
+### 4.12b `tools/rozetka_xml_validator.py` — валідатор XML фідів (2026-06-07)
+
+Універсальний валідатор YML-XML фідів для Розетки.
+
+**Перевірки структурні (ERR):**
+- XML синтаксис, UTF-8 кодування
+- yml_catalog → shop → currencies → categories → offers
+- Унікальність `offer id`
+- `categoryId` кожного оффера є в `<categories>`
+- Обов'язкові поля: price>0, currencyId=UAH, picture (HTTPS, <1999 chars, без кирилиці), name 5-255 chars, vendor не пустий/no-name, article, stock_quantity>0
+
+**Попередження якості (WARN):**
+- Категорія DEFAULT (25636737) — товар без маппінгу
+- Назва >150 символів
+- Менше 3 параметрів
+- Гарантія = 0 місяців
+- HTTP фото (не HTTPS)
+- Назва = артикул (без нормальної назви)
+- vendor = "Без бренду"
+
+**Виводить:**
+- Консоль: прогрес по офферах + підсумок (Помилок/Попереджень)
+- `/tmp/validation_report.json` — машинозчитуваний звіт
+- `/tmp/validation_report.xlsx` — Excel звіт (пропускається з `--no-xlsx`)
+
+**Usage:**
+```bash
+python3 tools/rozetka_xml_validator.py data/katran_rozetka.xml
+python3 tools/rozetka_xml_validator.py --no-xlsx /tmp/katran_cat_80158.xml
+```
+
+---
+
+### 4.12c `tools/katran_pipeline.py` — автоматичний pipeline (2026-06-07)
+
+Повний pipeline генерації, валідації і публікації фіду Катрана.
+
+**Кроки:**
+1. Отримує список rz_id з БД або з аргументу `--categories`
+2. Завантажує фід Катрана (один раз для всіх категорій)
+3. Для кожної категорії: `generate_category_xml()` → окремий XML в `--output-dir`
+4. `run_validator()` на кожному файлі
+5. Зберігає `pipeline_report.json` (rz_id, name, offers_count, errors, warnings, status)
+6. Виводить зведену таблицю
+7. `merge_xmls()` → `data/katran_rozetka.xml`
+8. Фінальний валідатор на merged файлі
+9. `git_push()` якщо вказано `--push`
+
+**Імпортує логіку** з `tools/katran_category_xml.py` (не дублює код).
+
+**Usage:**
+```bash
+python3 tools/katran_pipeline.py --categories ALL --push
+python3 tools/katran_pipeline.py --categories 80158,80011,80193
+python3 tools/katran_pipeline.py --categories ALL --output-dir /tmp/my_pipeline/
+```
+
+---
+
+### 4.13 `agents/orders/katran_xml_generator.py` — 279 рядків
 
 Генератор Розетка-фіду з фіду Катрана.
 
@@ -971,10 +1060,14 @@ FastAPI дашборд.
 - Telegram бот: команди, голос (Whisper), PDF обробка, безпека
 - MCP сервери (Розетка, Єпіцентр) для Claude Code
 - Dashboard (FastAPI + WebSocket)
-- Маппінг 1449 категорій Катрана (27 батьківських → ~40% товарів)
+- Маппінг 1790 категорій Катрана (34 категорії в XML → ~45% товарів, 2486 офферів)
+- `tools/katran_category_xml.py` — генератор XML по окремих rz_id категоріях
+- `tools/rozetka_xml_validator.py` — валідатор XML фідів Розетки (ERR/WARN/JSON/XLSX звіт)
+- `tools/katran_pipeline.py` — автоматичний pipeline (генерація → валідація → merge → push)
+- `shared/knowledge_base/rozetka/api_advanced.txt` — розширена API документація (повернення, відгуки, реклама, причини скасування)
 
 ### 🔄 В процесі
-- Маппінг решти ~60% категорій Катрана (потрібна перевірка rz_id в PriceCreator)
+- Маппінг решти ~55% категорій Катрана (IT-категорії: смартфони, планшети, кабелі, USB тощо)
 - Налаштування GitHub посилання для Катрана в кабінеті Розетки (через менеджера Софію)
 
 ### ❌ Заплановано
@@ -993,7 +1086,8 @@ FastAPI дашборд.
 | AVX на сервері | sentence-transformers → exit 132 | embedding_service тільки на ноутбуці через Redis queue |
 | SSL Розетка | `verify=False` обов'язково | Старий сервер Celeron з протухлим сертом |
 | Статичний токен Розетки | `gapi_...` — треба активність раз на добу | Cron-запит або keep-alive |
-| ~60% товарів Катрана без категорій | 14 батьківських без rz_id | Перевірити в PriceCreator |
+| ~55% товарів Катрана без категорій | IT-категорії (смартфони, кабелі, USB) без rz_id | Перевірити в PriceCreator |
+| Cron rozetka_github_sync зламаний | Відносний шлях без cd → файл не знайдено | Замінити на абсолютний шлях або додати cd |
 | Prom баланс | ~325 грн залишилось | Поповнити |
 | patch-скрипти з docstrings | `r"""..."""` конфліктує з внутрішніми `"""` | Використовувати окремий файл |
 

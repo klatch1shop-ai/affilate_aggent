@@ -1,0 +1,78 @@
+# Rozetka Seller API — Розширена документація
+# Джерело: NotebookLM аналіз документації, 2026-06-07
+
+## Пошук товару по артикулу
+GET https://api.seller.rozetka.com.ua/items/search?article={sku}
+Повертає: id (owox id), stock_quantity, status, sell_status
+expand=status_available — список доступних статусів
+
+## Масове оновлення ціни/наявності
+PUT https://api.seller.rozetka.com.ua/items/update-price-stock/{id}
+Body: {"price": 150, "stock_quantity": 25}
+Немає batch endpoint — оновлювати по одному через цикл
+
+## Список всіх активних товарів
+GET https://api.seller.rozetka.com.ua/items/search?item_active=1&page=N
+expand=sell_status,status
+Пагінація через _meta.totalCount, _meta.pageCount
+
+## Лічильники товарів
+GET https://api.seller.rozetka.com.ua/items/counts
+Повертає: active, inactive, moderation, active_stock
+
+## Webhook — немає
+Тільки polling. Рекомендовано кожні 1-5 хвилин.
+Оптимізація: спочатку GET /orders/counts, якщо new змінився — тоді orders/search
+
+## Повернення
+POST https://api-seller.rozetka.com.ua/api/track/return — RZ-Delivery
+GET https://api.seller.rozetka.com.ua/calls/search?request_type=5 — запити на повернення
+PUT https://api.seller.rozetka.com.ua/orders/{id} status=19 — зафіксувати повернення
+POST https://api.seller.rozetka.com.ua/orders/restore — відновити замовлення
+GET https://api.seller.rozetka.com.ua/balances/search op_type=14 — фінанси по поверненнях
+
+## Статистика продажів
+GET /reports/search — список звітів
+GET /reports/download-report/{id} — завантажити XLSX/XML
+GET /items/{id} — поле sold = кількість проданих
+GET /markets/{id}/internal-rating — рейтинг за 30/180 днів
+GET /markets/{id}/market-counters — баланс і суми замовлень
+GET /orders/search?status=6&created_from=...&created_to=... — виконані замовлення
+GET /orders/export — масовий XLS
+
+## Відгуки про товари
+GET /item-comments/counts — нові відгуки
+GET /item-comments/search — список відгуків
+PUT /item-comments/mark-as-read/{id} — прочитати відгук
+POST /item-comments/create-comment — відповісти
+Body: {parent_id, text, item_id}
+
+## Відгуки про магазин
+GET /market-reviews/counts
+GET /market-reviews/search
+
+## Причини скасування замовлення (cancellation_reason_id)
+11 — Посилка не забрана
+12 — Відмова від товару
+13 — Скасовано адміністратором
+16 — Немає в наявності
+17 — Оплата не влаштовує
+18 — Не вдалося зв'язатися з покупцем
+20 — Товар не підійшов
+24 — Доставка не влаштовує
+25 — Тестове замовлення
+29 — Невірна ціна
+30 — Термін резерву закінчився
+42 — Немає в наявності (Out of stock)
+43 — Брак
+44 — Фейкове замовлення
+45 — Скасовано покупцем
+50 — Замовлення не оплачене
+
+## Реклама (Teaser advertising)
+POST /advertising-campaigns/create
+PUT /advertising-campaigns/{id}
+PUT /advertising-campaigns/{id}/block
+POST /advertising-campaign-items/create
+GET /advertising-campaigns/search-statistics
+Права токена: open_advertising або campaign_create
