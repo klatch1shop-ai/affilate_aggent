@@ -49,6 +49,7 @@ def git_push(stats: dict) -> bool:
         for cmd in [
             ["git", "add", "-f", XML_RELATIVE],
             ["git", "commit", "-m", commit_msg],
+            ["git", "pull", "--rebase"],
             ["git", "push"],
         ]:
             r = subprocess.run(cmd, cwd=REPO_PATH, capture_output=True, text=True)
