@@ -39,6 +39,9 @@ DEFAULT_CAT_NAME = "Інструменти"
 URL_RE           = re.compile(r"https?://\S+")
 VENDOR_BAD       = {"no name", "noname", "no-name", "unknown", ""}
 
+# категорії що пропускаються повністю (занадто мало характеристик або не підходять)
+SKIP_CATEGORIES = {"80255"}  # Батарейки — 56/57 без характеристик
+
 # категорії де аксесуари без бренду допустимі (Кріплення для ТВ тощо)
 ACCESSORIES_ALLOWED_CATS = {"80071"}
 
@@ -142,7 +145,10 @@ def fix_vendor(raw: str) -> str:
 # ─── core ─────────────────────────────────────────────────────────────────────
 
 def generate_category_xml(rz_ids: list, output_file: str) -> dict:
-    target_rz_ids = set(rz_ids)
+    target_rz_ids = set(rz_ids) - SKIP_CATEGORIES
+    skipped_cats = set(rz_ids) & SKIP_CATEGORIES
+    if skipped_cats:
+        logger.warning(f"[KatranCat] Пропускаю категорії зі SKIP_CATEGORIES: {skipped_cats}")
     logger.info(f"[KatranCat] Цільові rz_id: {target_rz_ids}")
 
     root     = get_katran_feed()
@@ -202,8 +208,8 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         commission  = cat_info.get("commission", DEFAULT_COMMISSION)
         cat_name    = cat_info.get("name", DEFAULT_CAT_NAME)
 
-        # фільтр уцінок (після парсингу vendor)
-        if vendor and ("уцін" in vendor.lower() or vendor.startswith("!")):
+        # фільтр уцінок і вживаних (після парсингу vendor)
+        if vendor and ("уцін" in vendor.lower() or vendor.startswith("!") or "б/у" in vendor.lower()):
             skipped_sale += 1
             continue
         if "_У" in artikul and artikul.endswith("_У"):
