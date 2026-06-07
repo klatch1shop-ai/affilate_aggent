@@ -138,7 +138,9 @@ def generate_xml(output_file: str = None) -> tuple:
         name = fix_name(p.findtext("name") or "", artikul)
         description = clean_text(p.findtext("description") or "")
         category_id = clean_text(p.findtext("categoryId") or "")
-        vendor = clean_text(p.findtext("vendor") or "Katran")
+        vendor = clean_text(p.findtext("vendor") or "")
+        if not vendor or vendor.lower() in ("no name", "noname", "no-name", "unknown"):
+            vendor = "Без бренду"
         warranty = clean_text(p.findtext("warranty") or "")
         stock_str = clean_text(p.findtext("stock") or "")
         stock_qty = max(int(parse_float(p.findtext("stock_quantity") or "0")), 0)
