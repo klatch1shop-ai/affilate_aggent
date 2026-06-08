@@ -265,6 +265,8 @@ async def handle_document(message: Message):
             )
             return
 
+        pdf_url = f"https://api.novaposhta.ua/v2.0/print/orders/?orders[]={ttn}&type=pdf"
+
         # --- Крок 2: НП API для уточнення даних ---
         await status_msg.edit_text(
             f'📄 ТТН <code>{ttn}</code> — перевіряю в НП API...',
@@ -362,7 +364,8 @@ async def handle_document(message: Message):
                 f'✅ <b>Готово!</b>\n'
                 f'Замовлення: <b>#{order_id}</b>\n'
                 f'ТТН <code>{ttn}</code> — встановлено та підтверджено (GET)\n'
-                f'Статус → «Передано в доставку»',
+                f'Статус → «Передано в доставку»\n'
+                f'📄 <a href="{pdf_url}">PDF накладна</a>',
                 parse_mode='HTML',
             )
         elif ok_ttn and ok_status and not ttn_verified:
@@ -372,7 +375,8 @@ async def handle_document(message: Message):
                 f'Замовлення: <b>#{order_id}</b>\n'
                 f'set_ttn: ✅  |  change_status: ✅\n'
                 f'Верифікація GET: ❌ поле ttn = <code>{actual_ttn or "порожньо"}</code>\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
+                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>\n'
+                f'📄 <a href="{pdf_url}">PDF накладна</a>',
                 parse_mode='HTML',
             )
         elif ok_ttn and not ok_status:
@@ -390,7 +394,8 @@ async def handle_document(message: Message):
                 f'{source_info}\n\n'
                 f'Замовлення: <b>#{order_id}</b>\n'
                 f'set_ttn: ❌\n\n'
-                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>',
+                f'Встанови вручну:\n<code>/ttn {order_id} {ttn}</code>\n'
+                f'📄 <a href="{pdf_url}">PDF накладна</a>',
                 parse_mode='HTML',
             )
 
