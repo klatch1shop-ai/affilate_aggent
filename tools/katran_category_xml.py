@@ -39,8 +39,13 @@ DEFAULT_CAT_NAME = "Інструменти"
 URL_RE           = re.compile(r"https?://\S+")
 VENDOR_BAD       = {"no name", "noname", "no-name", "unknown", ""}
 
-# категорії що пропускаються повністю (занадто мало характеристик або не підходять)
-SKIP_CATEGORIES = {"80255"}  # Батарейки — 56/57 без характеристик
+# категорії що пропускаються повністю (мало характеристик або потребують дозволу)
+SKIP_CATEGORIES = {
+    "80255",   # Батарейки — без характеристик
+    "80108",   # ДБЖ — потребує 60%+ виконаних замовлень і документів
+    "4674585", # Зарядні станції — потребує дозволу
+    "1554082", # Акумулятори для ДБЖ — потребує дозволу
+}
 
 # категорії де аксесуари без бренду допустимі (Кріплення для ТВ тощо)
 ACCESSORIES_ALLOWED_CATS = {"80071"}
@@ -49,6 +54,31 @@ ACCESSORY_KEYWORDS = [
     "насадка", "фільтр для", "мішок для", "щітка для",
     "засіб для", "refill", "картридж для",
 ]
+
+# ─── brand stop-list (VAL-67764, 2026-06-08) ─────────────────────────────────
+
+STOP_BRANDS_UPPER = {
+    'BOSCH', 'COOPER&HUNTER', 'TEFAL', 'SAMSUNG', 'ROWENTA',
+    'PHILIPS', 'MOULINEX', 'DELONGHI',
+    'COOPER', 'HUNTER',
+}
+
+# rz_id де заборонений бренд дозволений як виняток
+STOP_BRANDS_EXCEPTIONS = {
+    'BOSCH':   {'80133'},                                                         # Кондиціонери
+    'SAMSUNG': {'80037', '4628124', '80100', '80105', '80193', '80194', '80090'}, # IT категорії
+}
+
+
+def is_stop_brand(vendor: str, rz_id: str) -> bool:
+    vendor_upper = vendor.upper()
+    for brand, allowed_cats in STOP_BRANDS_EXCEPTIONS.items():
+        if brand in vendor_upper and rz_id in allowed_cats:
+            return False
+    for brand in STOP_BRANDS_UPPER:
+        if brand in vendor_upper:
+            return True
+    return False
 
 
 # ─── helpers (mirrors katran_xml_generator) ───────────────────────────────────
@@ -196,6 +226,8 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
     skipped_price     = 0
     skipped_sale      = 0
     skipped_accessory = 0
+    skipped_brand     = 0
+    skipped_nophoto   = 0
 
     for p, cat_info, rz_id, artikul in qualified:
         raw_name    = fix_name(p.findtext("name") or "", artikul)
@@ -214,6 +246,11 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
             continue
         if "_У" in artikul and artikul.endswith("_У"):
             skipped_sale += 1
+            continue
+
+        # фільтр стоп-брендів (Philips, Tefal, Rowenta тощо — VAL-67764)
+        if is_stop_brand(vendor, rz_id):
+            skipped_brand += 1
             continue
 
         # фільтр аксесуарів без бренду
@@ -235,9 +272,16 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         if images_el is not None:
             for img in images_el.findall("image"):
                 url = (img.text or img.get("url") or "").strip()
-                if url.startswith("http") and len(url) < 500 and url not in seen_pics:
+                last_seg = url.rstrip("/").split("/")[-1]
+                if (url.startswith("http") and len(url) < 500
+                        and last_seg and "." in last_seg
+                        and url not in seen_pics):
                     seen_pics.add(url)
                     pictures.append(url)
+
+        if not pictures:
+            skipped_nophoto += 1
+            continue
 
         if rz_id not in categories_used:
             categories_used[rz_id] = cat_name
@@ -311,6 +355,8 @@ def generate_category_xml(rz_ids: list, output_file: str) -> dict:
         "skipped_price":     skipped_price,
         "skipped_sale":      skipped_sale,
         "skipped_accessory": skipped_accessory,
+        "skipped_brand":     skipped_brand,
+        "skipped_nophoto":   skipped_nophoto,
     }
 
 
@@ -347,6 +393,10 @@ def main():
         print(f"  Пропущено (уцінки)  : {stats['skipped_sale']}")
     if stats["skipped_accessory"]:
         print(f"  Пропущено (аксесуари без бренду): {stats['skipped_accessory']}")
+    if stats["skipped_brand"]:
+        print(f"  Пропущено (стоп-бренди)         : {stats['skipped_brand']}")
+    if stats["skipped_nophoto"]:
+        print(f"  Пропущено (без фото)            : {stats['skipped_nophoto']}")
 
     print(f"\n  Бренди ({len(stats['brands'])}):")
     for b in stats["brands"]:
