@@ -189,7 +189,7 @@ def git_push() -> bool:
         for cmd in [
             ['git', 'add', 'data/carvol_rozetka.xml'],
             ['git', 'commit', '-m', msg],
-            ['git', 'push'],
+            ['git', 'pull', '--rebase'], ['git', 'push'],
         ]:
             r = subprocess.run(cmd, cwd=REPO_PATH, capture_output=True, text=True)
             if r.returncode != 0:
