@@ -10,20 +10,21 @@
 - available (true/false)
 - name (назва)
 - categoryId (внутрішній ID групи продавця)
-- portal_category_id (ID категорії Prom — НАЙВИЩИЙ ПРІОРИТЕТ)
+- portal_category_id (ID категорії Prom — НАЙВИЩИЙ ПРІОРИТЕТ, тільки кінцева категорія!)
 - price (якщо available=true)
 - selling_type (retail/wholesale/service)
+- name_ua і description_ua — обидва разом або жодного
 
 ## portal_category_id
-- Тільки числовий ID кінцевої категорії
 - Аналог rz_id Розетки
+- Тільки числовий ID кінцевої (термінальної) категорії
 - Батьківська категорія = критична помилка
 - Завантажити список: Кабінет → Імпорт → Список категорій (XLSX/XML)
 
 ## Фото
 - До 10 фото на товар
 - Формати: JPG, GIF, PNG
-- Макс розмір: 10 МБ (15 МБ по URL)
+- Макс: 10 МБ (15 МБ по URL)
 - Оптимально: 1280x1280 px
 - Кілька URL через кому з пробілом
 
@@ -44,51 +45,40 @@
 - Повне оновлення: раз на добу (вночі)
 - Якщо файл недоступний 6 днів — автооновлення вимикається
 
-## API оновлення наявності (без перезавантаження)
+## API оновлення наявності
 POST /products/edit_by_external_id
 Body: [{"external_id": "sku-123", "price": 550, "presence": "available"}]
 presence: available | not_available | order | service
 Ліміт: 100 товарів на запит
-Рекомендована частота: кожну годину
 
 ## Замовлення API
-GET /orders/list — список замовлень
-GET /orders/{id} — деталі замовлення
-Рекомендована частота polling: кожні 15-30 хв (без webhook!)
+GET /orders/list
+GET /orders/{id}
+Polling кожні 15-30 хв (webhook немає!)
 
 ## Статуси замовлень
-- new — нове
-- accepted — прийнято
-- paid — оплачено
-- delivered — виконано
-- canceled — скасовано
-GET /order_status_options/list — повний список для кабінету
+new | accepted | paid | delivered | canceled
+GET /order_status_options/list — повний список
 
 ## Зміна статусу
 POST /orders/set_status
-Body: {"status": "accepted", "ids": [123, 456]}
+Body: {"status": "accepted", "ids": [123]}
 
 ## ТТН
 POST /delivery/save_declaration_id
 Body: {"order_id": 123, "declaration_id": "20451458370815"}
-Після ТТН — змінити статус на delivered
 
 ## TecDoc (автозапчастини)
-Тип: type="vendor.model"
-Поля для TecDoc: vendor (бренд) + model (артикул)
-Час появи блоків сумісності: до 24 годин
-Китайські аналоги: vendor="Без бренда", код порожній, заповнити кросс-номери
+type="vendor.model" → vendor + model
+Час появи: до 24 годин
+Китайські аналоги: vendor="Без бренда", код порожній, кросс-номери
 
-## TecDoc — ручна сумісність (якщо не в базі)
-Характеристики:
+## Ручна сумісність (не в TecDoc)
+Характеристики через | з пробілами:
 - Сумісність з маркою: Volkswagen | Skoda
 - Сумісність з моделлю: Golf | Octavia
 - Рік випуску: 2018 | 2019 | 2020
-Розділювач: | з пробілами
 
-## Стоп категорії Prom
-- Зброя та вибухівка
-- Рецептурні ліки
-- Самогонні апарати
-- Рідини для вейпів
-Модерація: moderation@prom.ua
+## Стоп-категорії Prom
+Зброя, рецептурні ліки, самогонні апарати, вейпи
+moderation@prom.ua
