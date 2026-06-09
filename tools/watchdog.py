@@ -39,6 +39,7 @@ SERVICES        = ["rozetka-order-agent", "tg-dispatcher"]
 REPORT_INTERVAL = timedelta(hours=6)
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
 SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
+CRON_FLAG       = "/tmp/watchdog_cron_warned.flag"
 
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
@@ -136,8 +137,13 @@ def check_cron() -> dict:
                 log(f"[cron] WARN: {script} не має '{required}'")
 
     if issues:
+        if not os.path.exists(CRON_FLAG):
+            tg("⚠️ <b>Watchdog cron</b>: некоректні шляхи\n" + "\n".join(issues))
+            Path(CRON_FLAG).write_text(str(time.time()))
         return {"ok": False, "msg": "; ".join(issues)}
 
+    if os.path.exists(CRON_FLAG):
+        os.remove(CRON_FLAG)
     log("[cron] всі шляхи OK")
     return {"ok": True, "msg": "ok"}
 
@@ -210,26 +216,19 @@ def save_report_ts():
 
 
 def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
-    problems = []
+    ts = datetime.now().strftime("%d.%m %H:%M")
+    lines = [f"🔔 <b>Watchdog</b> [{ts}]"]
+
     for svc, active in svc_r.get("services", {}).items():
-        if not active:
-            problems.append(f"❌ {svc} не активний")
-    if not git_r["ok"]:
-        problems.append(f"❌ git: {git_r['msg']}")
-    if not cron_r["ok"]:
-        problems.append(f"⚠️ cron: {cron_r['msg']}")
-    if not sync_r["ok"]:
-        problems.append(f"❌ sync: {sync_r['msg'][:60]}")
+        lines.append(f"{'✅' if active else '❌'} {svc}")
+
+    git_ok = git_r["ok"]
+    git_line = "✅ git sync" if git_ok else f"❌ git sync ({git_r['msg'][:40]})"
+    lines.append(git_line)
 
     save_report_ts()
-    if not problems:
-        log("[report] Все OK — TG не надсилаємо")
-        return
-
-    ts  = datetime.now().strftime("%d.%m %H:%M")
-    msg = f"🚨 <b>Watchdog проблеми</b> [{ts}]\n\n" + "\n".join(problems)
-    tg(msg)
-    log(f"[report] Звіт про {len(problems)} проблем(и) відправлено в Telegram")
+    tg("\n".join(lines))
+    log("[report] 6h звіт відправлено в Telegram")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
