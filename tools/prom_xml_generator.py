@@ -155,6 +155,7 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
 
         lines.append(f'      <offer id="{x(offer_id)}" available="true" type="vendor.model">')
         lines.append(f'        <name>{x(name)}</name>')
+        lines.append(f'        <name_ua>{x(name)}</name_ua>')
         for photo in photos:
             lines.append(f'        <picture>{x(photo)}</picture>')
         lines.append(f'        <price>{price}</price>')
@@ -166,6 +167,7 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         if part_num:
             lines.append(f'        <model>{x(part_num)}</model>')
         lines.append(f'        <description>{x(desc)}</description>')
+        lines.append(f'        <description_ua>{x(desc)}</description_ua>')
         lines.append(f'        <selling_type>retail</selling_type>')
         lines.append(f'        <condition>used</condition>')
 
