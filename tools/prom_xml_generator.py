@@ -164,8 +164,9 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         lines.append(f'        <portal_category_id>{portal_cat_id}</portal_category_id>')
         if vendor:
             lines.append(f'        <vendor>{x(vendor)}</vendor>')
-        if part_num:
-            lines.append(f'        <model>{x(part_num)}</model>')
+        model_val = part_num if part_num else model
+        if model_val:
+            lines.append(f'        <model>{x(model_val)}</model>')
         lines.append(f'        <description>{x(desc)}</description>')
         lines.append(f'        <description_ua>{x(desc)}</description_ua>')
         lines.append(f'        <selling_type>retail</selling_type>')

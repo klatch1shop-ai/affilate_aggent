@@ -609,6 +609,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>A6</model>
         <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -5778,6 +5779,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -5843,6 +5845,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -13834,6 +13837,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -15611,6 +15615,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -15921,6 +15926,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -16147,6 +16153,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volkswagen</vendor>
+        <model>Touareg</model>
         <description>Марка: Volkswagen. Модель: Touareg. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volkswagen. Модель: Touareg. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -16357,6 +16364,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q5</model>
         <description>Марка: Audi. Модель: Q5. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q5. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -16780,6 +16788,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -16801,6 +16810,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2018. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -16982,6 +16992,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC60</model>
         <description>Марка: Volvo. Модель: XC60. Рік випуску: 2017. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2017. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17732,6 +17743,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC60</model>
         <description>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17755,6 +17767,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC60</model>
         <description>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17826,6 +17839,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17846,6 +17860,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17892,6 +17907,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -17982,6 +17998,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -18846,6 +18863,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volkswagen</vendor>
+        <model>Touareg</model>
         <description>Марка: Volkswagen. Модель: Touareg. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volkswagen. Модель: Touareg. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -19622,6 +19640,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>A8</model>
         <description>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 3.0L CREC. Кузов: 4HL (D4). Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 3.0L CREC. Кузов: 4HL (D4). Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -19784,6 +19803,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -19874,6 +19894,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -20084,6 +20105,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volvo</vendor>
+        <model>XC90</model>
         <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -20312,6 +20334,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q7</model>
         <description>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -20789,6 +20812,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q5</model>
         <description>Марка: Audi. Модель: Q5. Рік випуску: 2017. Двигун: 2.0L DAYB. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q5. Рік випуску: 2017. Двигун: 2.0L DAYB. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -20835,6 +20859,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Audi</vendor>
+        <model>Q5</model>
         <description>Марка: Audi. Модель: Q5. Рік випуску: 2017. Двигун: 2.0L DAYB. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Audi. Модель: Q5. Рік випуску: 2017. Двигун: 2.0L DAYB. Кузов: FY (80A). Виробник: Audi. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -22066,6 +22091,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volkswagen</vendor>
+        <model>Touareg</model>
         <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
@@ -22090,6 +22116,7 @@
         <categoryId>1</categoryId>
         <portal_category_id>120214</portal_category_id>
         <vendor>Volkswagen</vendor>
+        <model>Touareg</model>
         <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description>
         <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Б/В запчастина зі розбірки.</description_ua>
         <selling_type>retail</selling_type>
