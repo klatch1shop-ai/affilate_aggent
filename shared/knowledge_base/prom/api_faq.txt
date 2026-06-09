@@ -1,84 +1,43 @@
 # Prom.ua API та XML FAQ
-# Джерело: NotebookLM аналіз документації, 2026-06-09
+# Джерело: NotebookLM, 2026-06-09
 
 ## Формати прайсу
-Підтримуються: XLS/XLSX, CSV, XML/YML
+XLS/XLSX, CSV, XML/YML
 Найкращий для автооновлення: XML/YML
 
 ## Обов'язкові поля XML
-- id (унікальний)
-- available (true/false)
-- name (назва)
-- categoryId (внутрішній ID групи продавця)
-- portal_category_id (ID категорії Prom — НАЙВИЩИЙ ПРІОРИТЕТ, тільки кінцева категорія!)
-- price (якщо available=true)
-- selling_type (retail/wholesale/service)
-- name_ua і description_ua — обидва разом або жодного
+id, available, name, categoryId, portal_category_id, price, selling_type
+name_ua і description_ua — тільки разом або жодного
 
 ## portal_category_id
-- Аналог rz_id Розетки
-- Тільки числовий ID кінцевої (термінальної) категорії
-- Батьківська категорія = критична помилка
-- Завантажити список: Кабінет → Імпорт → Список категорій (XLSX/XML)
+Аналог rz_id. Тільки кінцева категорія! Батьківська = критична помилка.
+Список: Кабінет → Імпорт → Список категорій
 
 ## Фото
-- До 10 фото на товар
-- Формати: JPG, GIF, PNG
-- Макс: 10 МБ (15 МБ по URL)
-- Оптимально: 1280x1280 px
-- Кілька URL через кому з пробілом
+До 10 шт. JPG/GIF/PNG. URL через кому з пробілом. Оптимально 1280x1280.
 
-## vendor
-- Обов'язковий при type="vendor.model"
-- Обов'язковий для автозапчастин (TecDoc)
-- Якщо невідомий — "Без бренда"
-
-## Назва товару
-- Макс: 110 символів (UA: 130)
-- Не ALL CAPS
-- Без рекламних слів (акція, знижка)
-- Без телефонів і посилань
-- Мінімум одна літера алфавіту
+## Назва
+Макс 110 символів. Не ALL CAPS. Без акція/знижка/телефонів.
 
 ## Оновлення по посиланню
-- Ціни/наявність: кожні 4 години (07:00-22:00)
-- Повне оновлення: раз на добу (вночі)
-- Якщо файл недоступний 6 днів — автооновлення вимикається
+Ціни/наявність: кожні 4 год (07-22)
+Повне: раз на добу (вночі)
+Недоступний 6 днів = автооновлення вимикається
 
-## API оновлення наявності
-POST /products/edit_by_external_id
-Body: [{"external_id": "sku-123", "price": 550, "presence": "available"}]
-presence: available | not_available | order | service
-Ліміт: 100 товарів на запит
+## API
+POST /products/edit_by_external_id — оновлення до 100 товарів
+GET /orders/list — замовлення (polling 15-30 хв, webhook немає)
+POST /orders/set_status — зміна статусу
+POST /delivery/save_declaration_id — ТТН
 
-## Замовлення API
-GET /orders/list
-GET /orders/{id}
-Polling кожні 15-30 хв (webhook немає!)
-
-## Статуси замовлень
+## Статуси
 new | accepted | paid | delivered | canceled
-GET /order_status_options/list — повний список
 
-## Зміна статусу
-POST /orders/set_status
-Body: {"status": "accepted", "ids": [123]}
+## TecDoc
+type="vendor.model", vendor + model обов'язкові
+Китай: vendor="Без бренда", кросс-номери замість коду
 
-## ТТН
-POST /delivery/save_declaration_id
-Body: {"order_id": 123, "declaration_id": "20451458370815"}
-
-## TecDoc (автозапчастини)
-type="vendor.model" → vendor + model
-Час появи: до 24 годин
-Китайські аналоги: vendor="Без бренда", код порожній, кросс-номери
-
-## Ручна сумісність (не в TecDoc)
-Характеристики через | з пробілами:
-- Сумісність з маркою: Volkswagen | Skoda
-- Сумісність з моделлю: Golf | Octavia
-- Рік випуску: 2018 | 2019 | 2020
-
-## Стоп-категорії Prom
-Зброя, рецептурні ліки, самогонні апарати, вейпи
-moderation@prom.ua
+## Ручна сумісність
+Сумісність з маркою: Volkswagen | Skoda
+Сумісність з моделлю: Golf | Octavia
+Рік випуску: 2018 | 2019 | 2020
