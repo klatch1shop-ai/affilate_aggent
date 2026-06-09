@@ -217,18 +217,32 @@ def save_report_ts():
 
 def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
     ts = datetime.now().strftime("%d.%m %H:%M")
-    lines = [f"🔔 <b>Watchdog</b> [{ts}]"]
 
-    for svc, active in svc_r.get("services", {}).items():
-        lines.append(f"{'✅' if active else '❌'} {svc}")
+    svc_parts  = [f"{'✅' if active else '❌'} {svc}" for svc, active in svc_r.get("services", {}).items()]
+    git_ok     = git_r["ok"]
+    sync_ok    = sync_r["ok"]
+    svc_ok     = svc_r["ok"]
+    all_ok     = svc_ok and git_ok and sync_ok and cron_r["ok"]
 
-    git_ok = git_r["ok"]
-    git_line = "✅ git sync" if git_ok else f"❌ git sync ({git_r['msg'][:40]})"
-    lines.append(git_line)
+    if all_ok:
+        status_line = "  ".join(svc_parts) + ("  ✅ sync" if sync_ok else "  ❌ sync")
+        msg = f"🔔 <b>Watchdog OK</b> [{ts}]\n{status_line}"
+    else:
+        problems = []
+        for svc, active in svc_r.get("services", {}).items():
+            if not active:
+                problems.append(f"❌ {svc}")
+        if not git_ok:
+            problems.append(f"❌ git sync ({git_r['msg'][:40]})")
+        if not sync_ok:
+            problems.append(f"❌ rozetka sync ({sync_r['msg'][:40]})")
+        if not cron_r["ok"]:
+            problems.append(f"⚠️ cron ({cron_r['msg'][:40]})")
+        msg = f"🚨 <b>Watchdog</b> [{ts}]\n" + "\n".join(problems)
 
     save_report_ts()
-    tg("\n".join(lines))
-    log("[report] 6h звіт відправлено в Telegram")
+    tg(msg)
+    log(f"[report] 6h звіт ({'OK' if all_ok else 'PROBLEMS'}) відправлено в Telegram")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
