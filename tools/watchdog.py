@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+"""
+tools/watchdog.py — моніторинг здоров'я системи.
+
+Запускається кожні 10 хвилин через cron:
+  */10 * * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 tools/watchdog.py >> /tmp/watchdog.log 2>&1
+
+Перевіряє:
+  1. Git uncommitted changes — авто-коміт + push
+  2. Crontab — правильні шляхи (cd /home/tek/agent-system)
+  3. Сервіси systemd — перезапускає якщо впали
+  4. rozetka_sync_cron.log — FAILED alert
+  5. Telegram звіт кожні 6 годин
+"""
+
+import os
+import subprocess
+import sys
+import time
+from datetime import datetime, timedelta
+from pathlib import Path
+
+import requests
+from dotenv import load_dotenv
+
+# ── config ───────────────────────────────────────────────────────────────────
+
+REPO_DIR = "/home/tek/agent-system"
+load_dotenv(dotenv_path=os.path.join(REPO_DIR, ".env"))
+
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("TG_BOT_TOKEN")
+CHAT_ID   = (
+    os.getenv("TELEGRAM_ADMIN_ID")
+    or os.getenv("TELEGRAM_CHAT_ID")
+    or os.getenv("TG_CHAT_ID")
+)
+
+SERVICES        = ["rozetka-order-agent", "tg-dispatcher"]
+REPORT_INTERVAL = timedelta(hours=6)
+STATE_FILE      = "/tmp/watchdog_last_report.txt"
+SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
+
+CRON_CHECKS = [
+    ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
+    ("price_updater.py",       "cd /home/tek/agent-system"),
+    ("feed_sync.py",           "cd /home/tek/agent-system"),
+]
+
+# systemctl --user потребує XDG_RUNTIME_DIR в cron
+_uid = os.getuid()
+os.environ.setdefault("XDG_RUNTIME_DIR",        f"/run/user/{_uid}")
+os.environ.setdefault("DBUS_SESSION_BUS_ADDRESS", f"unix:path=/run/user/{_uid}/bus")
+
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+
+def log(msg: str):
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{ts}] {msg}", flush=True)
+
+
+def run(cmd: str, cwd: str = REPO_DIR) -> tuple:
+    """Returns (returncode, stdout, stderr)."""
+    try:
+        r = subprocess.run(
+            cmd, shell=True, cwd=cwd,
+            capture_output=True, text=True, timeout=60,
+        )
+        return r.returncode, r.stdout.strip(), r.stderr.strip()
+    except subprocess.TimeoutExpired:
+        return 1, "", "timeout"
+    except Exception as e:
+        return 1, "", str(e)
+
+
+def tg(msg: str):
+    if not BOT_TOKEN or not CHAT_ID:
+        log(f"[tg] не налаштовано BOT_TOKEN/CHAT_ID")
+        return
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+            json={"chat_id": CHAT_ID, "text": msg, "parse_mode": "HTML"},
+            timeout=10,
+        )
+    except Exception as e:
+        log(f"[tg] помилка: {e}")
+
+
+# ── check 1: git ──────────────────────────────────────────────────────────────
+
+def check_git() -> dict:
+    rc, stdout, _ = run("git status --porcelain")
+    if rc != 0:
+        return {"ok": False, "msg": "git status failed"}
+
+    if not stdout:
+        log("[git] репо чисте")
+        return {"ok": True, "msg": "clean"}
+
+    changed = len(stdout.splitlines())
+    log(f"[git] {changed} змінених файлів — авто-коміт...")
+
+    ts  = datetime.now().strftime("%Y-%m-%d %H:%M")
+    rc2, _, err2 = run(f'git add -A && git commit -m "auto: watchdog sync {ts}"')
+    if rc2 != 0:
+        log(f"[git] commit failed: {err2}")
+        return {"ok": False, "msg": f"commit failed: {err2[:80]}"}
+
+    rc3, _, err3 = run("git pull --rebase && git push")
+    if rc3 != 0:
+        log(f"[git] push failed: {err3}")
+        tg(f"⚠️ <b>Watchdog</b>: auto-commit OK але git push failed!\n<code>{err3[:200]}</code>")
+        return {"ok": False, "msg": f"push failed: {err3[:80]}"}
+
+    log(f"[git] авто-коміт + push: {changed} файлів")
+    tg(f"🔄 <b>Watchdog</b>: авто-sync {changed} файлів ({ts})")
+    return {"ok": True, "msg": f"auto-committed {changed} files"}
+
+
+# ── check 2: crontab ──────────────────────────────────────────────────────────
+
+def check_cron() -> dict:
+    rc, crontab, _ = run("crontab -l")
+    if rc != 0:
+        return {"ok": True, "msg": "no crontab"}
+
+    issues = []
+    for script, required in CRON_CHECKS:
+        lines = [
+            l for l in crontab.splitlines()
+            if script in l and not l.strip().startswith("#")
+        ]
+        for line in lines:
+            if required not in line:
+                issues.append(f"{script} — відсутній '{required}'")
+                log(f"[cron] WARN: {script} не має '{required}'")
+
+    if issues:
+        return {"ok": False, "msg": "; ".join(issues)}
+
+    log("[cron] всі шляхи OK")
+    return {"ok": True, "msg": "ok"}
+
+
+# ── check 3: services ─────────────────────────────────────────────────────────
+
+def check_services() -> dict:
+    statuses   = {}
+    restarted  = []
+    failed     = []
+
+    for svc in SERVICES:
+        rc, out, _ = run(f"systemctl --user is-active {svc}")
+        active = out.strip() == "active"
+        statuses[svc] = active
+
+        if not active:
+            log(f"[svc] {svc} не активний ('{out}') — перезапускаю...")
+            rc2, _, err2 = run(f"systemctl --user restart {svc}")
+            if rc2 == 0:
+                restarted.append(svc)
+                log(f"[svc] {svc} перезапущено")
+                tg(f"⚠️ <b>Watchdog</b>: <code>{svc}</code> впав — перезапущено ✅")
+            else:
+                failed.append(svc)
+                log(f"[svc] {svc} НЕ вдалось перезапустити: {err2}")
+                tg(f"🚨 <b>ALARM Watchdog</b>: <code>{svc}</code> не запускається!\n<code>{err2[:200]}</code>")
+
+    all_ok = not failed
+    return {"ok": all_ok, "services": statuses, "restarted": restarted, "failed": failed}
+
+
+# ── check 4: sync log ─────────────────────────────────────────────────────────
+
+def check_sync_log() -> dict:
+    if not os.path.exists(SYNC_LOG):
+        return {"ok": True, "msg": "no log yet"}
+
+    try:
+        lines = Path(SYNC_LOG).read_text(errors="replace").splitlines()
+        lines = [l.strip() for l in lines if l.strip()]
+        if not lines:
+            return {"ok": True, "msg": "empty"}
+
+        last = lines[-1]
+        if "FAILED" in last.upper() or ("ERROR" in last.upper() and "WARNING" not in last.upper()):
+            log(f"[sync] FAILED виявлено: {last}")
+            tg(f"🚨 <b>Watchdog</b>: rozetka_sync_cron FAILED!\n<code>{last[:200]}</code>")
+            return {"ok": False, "msg": last[:80]}
+
+        return {"ok": True, "msg": last[:80]}
+    except Exception as e:
+        return {"ok": True, "msg": f"read error: {e}"}
+
+
+# ── report every 6h ───────────────────────────────────────────────────────────
+
+def should_report() -> bool:
+    if not os.path.exists(STATE_FILE):
+        return True
+    try:
+        last = float(Path(STATE_FILE).read_text().strip())
+        return (time.time() - last) >= REPORT_INTERVAL.total_seconds()
+    except Exception:
+        return True
+
+
+def save_report_ts():
+    Path(STATE_FILE).write_text(str(time.time()))
+
+
+def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
+    svc_lines = "\n".join(
+        f"{'✅' if active else '❌'} {svc}"
+        for svc, active in svc_r.get("services", {}).items()
+    )
+    git_icon  = "✅" if git_r["ok"]  else "❌"
+    cron_icon = "✅" if cron_r["ok"] else "⚠️"
+    sync_icon = "✅" if sync_r["ok"] else "❌"
+    ts        = datetime.now().strftime("%d.%m %H:%M")
+
+    msg = (
+        f"📊 <b>Watchdog звіт</b> [{ts}]\n\n"
+        f"{svc_lines}\n"
+        f"{git_icon} git: {git_r['msg']}\n"
+        f"{cron_icon} cron: {cron_r['msg']}\n"
+        f"{sync_icon} sync: {sync_r['msg'][:60]}"
+    )
+    tg(msg)
+    save_report_ts()
+    log("[report] Звіт відправлено в Telegram")
+
+
+# ── main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    log("=== Watchdog START ===")
+
+    git_r  = check_git()
+    cron_r = check_cron()
+    svc_r  = check_services()
+    sync_r = check_sync_log()
+
+    log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
+    log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
+    log(f"[svc]  ok={svc_r['ok']}  {svc_r.get('services')}")
+    log(f"[sync] ok={sync_r['ok']} {sync_r['msg']}")
+
+    if should_report():
+        send_report(git_r, svc_r, cron_r, sync_r)
+
+    log("=== Watchdog END ===")
+
+
+if __name__ == "__main__":
+    main()
