@@ -218,7 +218,6 @@ def main():
             for p in changes['price_updated']:
                 msg += f'\n  {p["sku"]}: {p["old_price"]:.0f}→{p["new_price"]:.0f} грн (Єп: {p["epi_price"]:.0f})'
 
-        tg(msg)
         logger.success(f'Завершено за {duration}с')
         print(f'OK: in_stock={in_stock}, out_of_stock={out_stock}, price_changes={changes["price_changed"]}')
 

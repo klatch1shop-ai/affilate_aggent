@@ -114,7 +114,6 @@ def check_git() -> dict:
         return {"ok": False, "msg": f"push failed: {err3[:80]}"}
 
     log(f"[git] авто-коміт + push: {changed} файлів")
-    tg(f"🔄 <b>Watchdog</b>: авто-sync {changed} файлів ({ts})")
     return {"ok": True, "msg": f"auto-committed {changed} files"}
 
 
@@ -211,25 +210,26 @@ def save_report_ts():
 
 
 def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
-    svc_lines = "\n".join(
-        f"{'✅' if active else '❌'} {svc}"
-        for svc, active in svc_r.get("services", {}).items()
-    )
-    git_icon  = "✅" if git_r["ok"]  else "❌"
-    cron_icon = "✅" if cron_r["ok"] else "⚠️"
-    sync_icon = "✅" if sync_r["ok"] else "❌"
-    ts        = datetime.now().strftime("%d.%m %H:%M")
+    problems = []
+    for svc, active in svc_r.get("services", {}).items():
+        if not active:
+            problems.append(f"❌ {svc} не активний")
+    if not git_r["ok"]:
+        problems.append(f"❌ git: {git_r['msg']}")
+    if not cron_r["ok"]:
+        problems.append(f"⚠️ cron: {cron_r['msg']}")
+    if not sync_r["ok"]:
+        problems.append(f"❌ sync: {sync_r['msg'][:60]}")
 
-    msg = (
-        f"📊 <b>Watchdog звіт</b> [{ts}]\n\n"
-        f"{svc_lines}\n"
-        f"{git_icon} git: {git_r['msg']}\n"
-        f"{cron_icon} cron: {cron_r['msg']}\n"
-        f"{sync_icon} sync: {sync_r['msg'][:60]}"
-    )
-    tg(msg)
     save_report_ts()
-    log("[report] Звіт відправлено в Telegram")
+    if not problems:
+        log("[report] Все OK — TG не надсилаємо")
+        return
+
+    ts  = datetime.now().strftime("%d.%m %H:%M")
+    msg = f"🚨 <b>Watchdog проблеми</b> [{ts}]\n\n" + "\n".join(problems)
+    tg(msg)
+    log(f"[report] Звіт про {len(problems)} проблем(и) відправлено в Telegram")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────

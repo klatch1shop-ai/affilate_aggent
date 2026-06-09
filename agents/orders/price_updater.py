@@ -319,7 +319,6 @@ def run(force: bool = False, dry_run: bool = False, limit: int = None):
 
     if not changed:
         logger.success('Ціни актуальні — змін немає')
-        tg('📊 <b>Price Updater</b>: ціни актуальні, змін немає')
         return
 
     # Оновлюємо ціни на Prom батчами
@@ -379,7 +378,6 @@ def run(force: bool = False, dry_run: bool = False, limit: int = None):
             msg += f'\n  {c["sku"]}: {c["old_our"]:.0f}→{c["new_our"]:.0f} грн ({c["diff_pct"]:+.1f}%) CPA={c["cpa"]*100:.1f}%'
 
     logger.success(msg.replace('<b>', '').replace('</b>', ''))
-    tg(msg)
 
 
 if __name__ == '__main__':

@@ -240,12 +240,8 @@ def main():
         print(f'Час:              {duration}с')
         print(f'URL: https://raw.githubusercontent.com/klatch1shop-ai/affilate_aggent/main/data/carvol_rozetka.xml')
 
-        tg(
-            f'🔄 <b>Rozetka GitHub Sync</b> ({duration}с)\n'
-            f'В наявності: {stats["in_stock"]} | Відсутніх: {stats["out_stock"]}\n'
-            f'Змінилось цін: {stats["price_changed"]}\n'
-            f'Git: {"✅" if pushed else "❌"}'
-        )
+        if not pushed:
+            tg(f'❌ <b>Rozetka GitHub Sync</b>: git push FAILED')
 
     except Exception as e:
         logger.error(f'Помилка: {e}')
