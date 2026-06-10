@@ -102,11 +102,13 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         '    <offers>',
     ]
 
+    is_door = "двер" in name_ua.lower()
+
     stats = {
         "total_in":    0,
         "skip_photo":  0,
         "skip_avail":  0,
-        "price_zero":  0,
+        "skip_filter": 0,
         "generated":   0,
     }
 
@@ -146,9 +148,11 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
             price = int(float(row[COL_PRICE] or 0)) if COL_PRICE < len(row) else 0
         except (ValueError, TypeError):
             price = 0
-        if price == 0:
-            price = 1
-            stats["price_zero"] += 1
+
+        oem = cell(row, COL_PART_NUM)
+        if not oem or price <= 1:
+            stats["skip_filter"] += 1
+            continue
 
         name = build_name(name_ua, brand, model, year, left_right)
         desc = build_description(row)
@@ -159,7 +163,7 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         for photo in photos:
             lines.append(f'        <picture>{x(photo)}</picture>')
         lines.append(f'        <price>{price}</price>')
-        lines.append(f'        <currencyId>UAH</currencyId>')
+        lines.append(f'        <currencyId>USD</currencyId>')
         lines.append(f'        <categoryId>{cat_id_local}</categoryId>')
         lines.append(f'        <portal_category_id>{portal_cat_id}</portal_category_id>')
         if vendor:
@@ -190,6 +194,22 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         if cross:
             lines.append(f'        <param name="Кросс-номери">{x(cross)}</param>')
         lines.append(f'        <param name="Стан">Вживані</param>')
+
+        if is_door:
+            front_back = "Передня" if "Передн" in front_rear else "Задня"
+            if "Лев" in left_right:
+                side = "ліва"
+            elif "Прав" in left_right:
+                side = "права"
+            else:
+                side = ""
+            location = f"{front_back} {side}".strip() if side else front_back
+            lines.append(f'        <param name="Місце встановлення">{x(location)}</param>')
+            lines.append(f'        <param name="Фарбування">Потрібно</param>')
+            color = cell(row, COL_COLOR)
+            if color:
+                lines.append(f'        <param name="Колір">{x(color)}</param>')
+
         lines.append(f'      </offer>')
 
         stats["generated"] += 1
@@ -248,14 +268,13 @@ def main():
 
     out_path.write_text(xml_content, encoding="utf-8")
 
-    skipped = stats["skip_photo"] + stats["skip_avail"]
     print()
     print("─" * 50)
-    print(f"Знайдено в категорії     : {stats['total_in']}")
-    print(f"Пропущено (без фото)     : {stats['skip_photo']}")
-    print(f"Пропущено (наявність=0)  : {stats['skip_avail']}")
-    print(f"Ціна=0 → 1 (placeholder) : {stats['price_zero']}")
-    print(f"Згенеровано товарів      : {stats['generated']}")
+    print(f"Знайдено в категорії          : {stats['total_in']}")
+    print(f"Пропущено (без фото)          : {stats['skip_photo']}")
+    print(f"Пропущено (наявність=0)       : {stats['skip_avail']}")
+    print(f"Пропущено (OEM пустий/ціна≤1) : {stats['skip_filter']}")
+    print(f"Згенеровано товарів           : {stats['generated']}")
     print(f"Збережено → {out_path}")
 
 
