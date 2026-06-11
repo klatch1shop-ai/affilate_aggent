@@ -21,3 +21,4 @@ logs/*.csv
 !.env.example
 shared/feeds/orders/*.xlsx
 shared/feeds/orders/ttn_pdfs/
+claw-code/
