@@ -191,6 +191,24 @@ def generate_update_xml(feed: dict) -> tuple:
     return in_stock, out_of_stock
 
 
+
+def git_push() -> bool:
+    import subprocess
+    try:
+        subprocess.run(['git', 'add', 'shared/feeds/epicentr_update.xml'], check=True, capture_output=True, cwd='/home/tek/agent-system')
+        result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True, cwd='/home/tek/agent-system')
+        if result.returncode == 0:
+            logger.info('Git: файл не змінився')
+            return True
+        subprocess.run(['git', 'commit', '-m', 'sync: epicentr availability auto'], check=True, capture_output=True, cwd='/home/tek/agent-system')
+        subprocess.run(['git', 'pull', '--rebase'], check=True, capture_output=True, cwd='/home/tek/agent-system')
+        subprocess.run(['git', 'push'], check=True, capture_output=True, cwd='/home/tek/agent-system')
+        logger.success('Git push: OK')
+        return True
+    except Exception as e:
+        logger.error(f'Git push: FAILED {e}')
+        return False
+
 def main():
     logger.add('/tmp/feed_sync.log', rotation='10 MB', level='INFO')
     start = datetime.now()
@@ -205,6 +223,7 @@ def main():
 
         # 3. Генеруємо XML для автооновлення
         in_stock, out_stock = generate_update_xml(feed)
+        git_ok = git_push()
 
         duration = (datetime.now() - start).seconds
         msg = (
@@ -219,7 +238,8 @@ def main():
                 msg += f'\n  {p["sku"]}: {p["old_price"]:.0f}→{p["new_price"]:.0f} грн (Єп: {p["epi_price"]:.0f})'
 
         logger.success(f'Завершено за {duration}с')
-        print(f'OK: in_stock={in_stock}, out_of_stock={out_stock}, price_changes={changes["price_changed"]}')
+        git_status = "✅ OK" if git_ok else "❌ FAILED"
+        print(f"OK: in_stock={in_stock}, out_of_stock={out_stock}, price_changes={changes["price_changed"]}, git={git_status}")
 
     except Exception as e:
         logger.error(f'Feed Sync помилка: {e}')
