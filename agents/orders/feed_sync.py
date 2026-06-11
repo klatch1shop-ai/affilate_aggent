@@ -194,15 +194,15 @@ def generate_update_xml(feed: dict) -> tuple:
 
 def git_push() -> bool:
     import subprocess
+    cwd = '/home/tek/agent-system'
     try:
-        subprocess.run(['git', 'add', 'shared/feeds/epicentr_update.xml'], check=True, capture_output=True, cwd='/home/tek/agent-system')
-        result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True, cwd='/home/tek/agent-system')
+        subprocess.run(['git', 'add', 'shared/feeds/epicentr_update.xml'], check=True, capture_output=True, cwd=cwd)
+        result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True, cwd=cwd)
         if result.returncode == 0:
             logger.info('Git: файл не змінився')
             return True
-        subprocess.run(['git', 'commit', '-m', 'sync: epicentr availability auto'], check=True, capture_output=True, cwd='/home/tek/agent-system')
-        subprocess.run(['git', 'pull', '--rebase'], check=True, capture_output=True, cwd='/home/tek/agent-system')
-        subprocess.run(['git', 'push'], check=True, capture_output=True, cwd='/home/tek/agent-system')
+        subprocess.run(['git', 'commit', '-m', 'sync: epicentr availability auto'], check=True, capture_output=True, cwd=cwd)
+        subprocess.run(['git', 'push', '--force-with-lease'], check=True, capture_output=True, cwd=cwd)
         logger.success('Git push: OK')
         return True
     except Exception as e:
