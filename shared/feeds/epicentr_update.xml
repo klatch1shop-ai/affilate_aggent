@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2026-06-11 16:00">
+<yml_catalog date="2026-06-11 20:00">
   <offers>
     <offer id="2934015518" available="true">
       <price>5740.00</price>
@@ -813,9 +813,9 @@
       <price>170.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934014430" available="false">
+    <offer id="2934014430" available="true">
       <price>136380.00</price>
-      <availability>out_of_stock</availability>
+      <availability>in_stock</availability>
     </offer>
     <offer id="2934015526" available="true">
       <price>370.00</price>
@@ -5385,9 +5385,9 @@
       <price>260.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934014520" available="false">
+    <offer id="2934014520" available="true">
       <price>139290.00</price>
-      <availability>out_of_stock</availability>
+      <availability>in_stock</availability>
     </offer>
     <offer id="2934019540" available="true">
       <price>330.00</price>
@@ -9121,9 +9121,9 @@
       <price>2570.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934018898" available="false">
+    <offer id="2934018898" available="true">
       <price>136380.00</price>
-      <availability>out_of_stock</availability>
+      <availability>in_stock</availability>
     </offer>
     <offer id="2934017804" available="true">
       <price>640.00</price>
@@ -12953,9 +12953,9 @@
       <price>1140.00</price>
       <availability>out_of_stock</availability>
     </offer>
-    <offer id="2934021131" available="true">
+    <offer id="2934021131" available="false">
       <price>250.00</price>
-      <availability>in_stock</availability>
+      <availability>out_of_stock</availability>
     </offer>
     <offer id="2934020277" available="true">
       <price>59490.00</price>
