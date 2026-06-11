@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Радіатор охолодження двигуна</category>
+    </categories>
+    <offers>
+      <offer id="60492" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi Q5 2014</name>
+        <name_ua>Радіатор охолодження двигуна Audi Q5 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/55/0002_55_910.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/55/0002_55_911.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/55/0002_55_912.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/55/0002_55_913.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/55/0002_55_914.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K0-121-251-AA</model>
+        <vendorCode>8K0-121-251-AA</vendorCode>
+        <description>Марка: Audi. Модель: Q5. Рік випуску: 2014. Двигун: 3.0L TDI CPNB. Кузов: 8R. Виробник: Audi. Номер виробника: 8K0-121-251-AA. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q5. Рік випуску: 2014. Двигун: 3.0L TDI CPNB. Кузов: 8R. Виробник: Audi. Номер виробника: 8K0-121-251-AA. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CPNB</param>
+        <param name="Кузов">8R</param>
+        <param name="Кросс-номери">8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL</param>
+        <param name="Код запчастини">8K0-121-251-AA</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q5</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="57492" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A8 2017</name>
+        <name_ua>Радіатор охолодження двигуна Audi A8 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_259.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_260.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_261.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_262.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_263.jpg</picture>
+        <price>90</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-121-251-C</model>
+        <vendorCode>4H0-121-251-C</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Виробник: Audi. Номер виробника: 4H0-121-251-C. Кросс-номери: 4H0-121-251-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Виробник: Audi. Номер виробника: 4H0-121-251-C. Кросс-номери: 4H0-121-251-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4HL (D4)</param>
+        <param name="Кросс-номери">4H0-121-251-C</param>
+        <param name="Код запчастини">4H0-121-251-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="50491" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi Q7</name>
+        <name_ua>Радіатор охолодження двигуна Audi Q7</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/19/0002_19_068.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/19/0002_19_069.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/19/0002_19_070.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/19/0002_19_071.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/19/0002_19_072.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8W0-121-251-N</model>
+        <vendorCode>8W0-121-251-N</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Кросс-номери">8W0-121-251-N, 8W0-121-251-AB</param>
+        <param name="Код запчастини">8W0-121-251-N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="50268" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Volvo XC90</name>
+        <name_ua>Радіатор охолодження двигуна Volvo XC90</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/18/0002_18_183.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/18/0002_18_184.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/18/0002_18_185.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/18/0002_18_186.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/18/0002_18_187.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>32224828</model>
+        <vendorCode>32224828</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Виробник: Volvo. Номер виробника: 32224828. Кросс-номери: 31338288, 32224828. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Виробник: Volvo. Номер виробника: 32224828. Кросс-номери: 31338288, 32224828. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кросс-номери">31338288, 32224828</param>
+        <param name="Код запчастини">32224828</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="45365" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi Q7 2017</name>
+        <name_ua>Радіатор охолодження двигуна Audi Q7 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/99/0001_99_088.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/99/0001_99_089.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/99/0001_99_090.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8W0-121-251-N</model>
+        <vendorCode>8W0-121-251-N</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4M</param>
+        <param name="Кросс-номери">8W0-121-251-N, 8W0-121-251-AB</param>
+        <param name="Код запчастини">8W0-121-251-N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44412" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Ford Escape 2013</name>
+        <name_ua>Радіатор охолодження двигуна Ford Escape 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/94/0001_94_504.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/94/0001_94_505.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/94/0001_94_506.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/94/0001_94_507.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/94/0001_94_508.jpg</picture>
+        <price>85</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>CV61-8005-DE</model>
+        <vendorCode>CV61-8005-DE</vendorCode>
+        <description>Марка: Ford. Модель: Escape. Рік випуску: 2013. Двигун: 1.6L ENJT0. Виробник: Ford. Номер виробника: CV61-8005-DE. Кросс-номери: CV61-8005-DE, CV6Z-8005-B, RAD-83. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Escape. Рік випуску: 2013. Двигун: 1.6L ENJT0. Виробник: Ford. Номер виробника: CV61-8005-DE. Кросс-номери: CV61-8005-DE, CV6Z-8005-B, RAD-83. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">1.6L ENJT0</param>
+        <param name="Кросс-номери">CV61-8005-DE, CV6Z-8005-B, RAD-83</param>
+        <param name="Код запчастини">CV61-8005-DE</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Escape</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="43874" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi Q7 2017</name>
+        <name_ua>Радіатор охолодження двигуна Audi Q7 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_342.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_343.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_344.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_345_v1.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8W0-121-251-N</model>
+        <vendorCode>8W0-121-251-N</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 8W0-121-251-N. Кросс-номери: 8W0-121-251-N, 8W0-121-251-AB. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4M</param>
+        <param name="Кросс-номери">8W0-121-251-N, 8W0-121-251-AB</param>
+        <param name="Код запчастини">8W0-121-251-N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37893" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A4</name>
+        <name_ua>Радіатор охолодження двигуна Audi A4</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_872.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_873.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_874.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_875.jpg</picture>
+        <price>100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K0-121-251-AA</model>
+        <vendorCode>8K0-121-251-AA</vendorCode>
+        <description>Марка: Audi. Модель: A4. Двигун: 3.0L. Кузов: B8. Виробник: Audi. Номер виробника: 8K0-121-251-AA. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A4. Двигун: 3.0L. Кузов: B8. Виробник: Audi. Номер виробника: 8K0-121-251-AA. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L</param>
+        <param name="Кузов">B8</param>
+        <param name="Кросс-номери">8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL</param>
+        <param name="Код запчастини">8K0-121-251-AA</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A4</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="34463" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A8 2011</name>
+        <name_ua>Радіатор охолодження двигуна Audi A8 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_106.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_107.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_108.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_109.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_110.jpg</picture>
+        <price>100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0121251E</model>
+        <vendorCode>4H0121251E</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Виробник: Audi. Номер виробника: 4H0121251E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Виробник: Audi. Номер виробника: 4H0121251E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.2L CDRA</param>
+        <param name="Кузов">4H8 (D4)</param>
+        <param name="Код запчастини">4H0121251E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="34460" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi S8 2015</name>
+        <name_ua>Радіатор охолодження двигуна Audi S8 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_093.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_094.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_095.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/57/0001_57_096.jpg</picture>
+        <price>350</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0145804B</model>
+        <vendorCode>4H0145804B</vendorCode>
+        <description>Марка: Audi. Модель: S8. Рік випуску: 2015. Двигун: 4.0L CTFA. Кузов: 4HC (D4). Виробник: Audi. Номер виробника: 4H0145804B. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: S8. Рік випуску: 2015. Двигун: 4.0L CTFA. Кузов: 4HC (D4). Виробник: Audi. Номер виробника: 4H0145804B. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.0L CTFA</param>
+        <param name="Кузов">4HC (D4)</param>
+        <param name="Код запчастини">4H0145804B</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">S8</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="33692" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Volkswagen CC 2014</name>
+        <name_ua>Радіатор охолодження двигуна Volkswagen CC 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/53/0001_53_816.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/53/0001_53_817.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/53/0001_53_818.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/53/0001_53_819.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/53/0001_53_820_v1.jpg</picture>
+        <price>50</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>5K0-121-253-B</model>
+        <vendorCode>5K0-121-253-B</vendorCode>
+        <description>Марка: Volkswagen. Модель: CC. Рік випуску: 2014. Двигун: 2.0L CBFA. Кузов: 35. Виробник: Volkswagen. Номер виробника: 5K0-121-253-B. Кросс-номери: 5K0-121-253-B, 1K0-121-251-L, 1K0-121-253-L, 5K0-121-251-J, 5K0-121-251-AA. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: CC. Рік випуску: 2014. Двигун: 2.0L CBFA. Кузов: 35. Виробник: Volkswagen. Номер виробника: 5K0-121-253-B. Кросс-номери: 5K0-121-253-B, 1K0-121-251-L, 1K0-121-253-L, 5K0-121-251-J, 5K0-121-251-AA. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CBFA</param>
+        <param name="Кузов">35</param>
+        <param name="Кросс-номери">5K0-121-253-B, 1K0-121-251-L, 1K0-121-253-L, 5K0-121-251-J, 5K0-121-251-AA</param>
+        <param name="Код запчастини">5K0-121-253-B</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">CC</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="29289" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6 2017</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/32/0001_32_420.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/32/0001_32_421.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/32/0001_32_422_v1.jpg</picture>
+        <price>100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K0-121-251-L</model>
+        <vendorCode>8K0-121-251-L</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 8K0-121-251-L. Кросс-номери: 8K0-121-251-L. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 8K0-121-251-L. Кросс-номери: 8K0-121-251-L. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Кросс-номери">8K0-121-251-L</param>
+        <param name="Код запчастини">8K0-121-251-L</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27965" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Skoda Superb</name>
+        <name_ua>Радіатор охолодження двигуна Skoda Superb</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_608.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_609.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_610_v3.jpg</picture>
+        <price>45</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Skoda</vendor>
+        <model>5Q0121251EM</model>
+        <vendorCode>5Q0121251EM</vendorCode>
+        <description>Марка: Skoda. Модель: Superb. Виробник: Skoda. Номер виробника: 5Q0121251EM. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Skoda. Модель: Superb. Виробник: Skoda. Номер виробника: 5Q0121251EM. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Код запчастини">5Q0121251EM</param>
+        <param name="Сумісність з маркою">Skoda</param>
+        <param name="Сумісність з моделлю">Superb</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27963" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_602.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_603.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_604.jpg</picture>
+        <price>30</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4F0121251N</model>
+        <vendorCode>4F0121251N</vendorCode>
+        <description>Марка: Audi. Модель: A6. Кузов: C6. Виробник: Audi. Номер виробника: 4F0121251N. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Кузов: C6. Виробник: Audi. Номер виробника: 4F0121251N. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">C6</param>
+        <param name="Код запчастини">4F0121251N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27962" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Ford Fusion</name>
+        <name_ua>Радіатор охолодження двигуна Ford Fusion</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_599.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_600.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_601.jpg</picture>
+        <price>60</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DG938005BC</model>
+        <vendorCode>DG938005BC</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Двигун: 2.5. Виробник: Ford. Номер виробника: DG938005BC. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Двигун: 2.5. Виробник: Ford. Номер виробника: DG938005BC. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5</param>
+        <param name="Код запчастини">DG938005BC</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27959" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_590.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_591.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_592.jpg</picture>
+        <price>30</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4F0121251N</model>
+        <vendorCode>4F0121251N</vendorCode>
+        <description>Марка: Audi. Модель: A6. Кузов: C6. Виробник: Audi. Номер виробника: 4F0121251N. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Кузов: C6. Виробник: Audi. Номер виробника: 4F0121251N. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">C6</param>
+        <param name="Код запчастини">4F0121251N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27850" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi Q7 2011</name>
+        <name_ua>Радіатор охолодження двигуна Audi Q7 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_106.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_107.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_108.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_109.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_110_v4.jpg</picture>
+        <price>25</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>7L6-121-253-B</model>
+        <vendorCode>7L6-121-253-B</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 7L6-121-253-B. Кросс-номери: 7L6-121-253-B, 7L0-121-253-A. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 7L6-121-253-B. Кросс-номери: 7L6-121-253-B, 7L0-121-253-A. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CJWB</param>
+        <param name="Кузов">4L</param>
+        <param name="Кросс-номери">7L6-121-253-B, 7L0-121-253-A</param>
+        <param name="Код запчастини">7L6-121-253-B</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20149" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6 2012 Лев.</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6 2012 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_059_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_060_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_061.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_062.jpg</picture>
+        <price>45</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-121-212</model>
+        <vendorCode>4G0-121-212</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-121-212. Кросс-номери: 4G0-121-212. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-121-212. Кросс-номери: 4G0-121-212. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CGXB</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-121-212</param>
+        <param name="Код запчастини">4G0-121-212</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17013" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A4</name>
+        <name_ua>Радіатор охолодження двигуна Audi A4</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_384.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_385.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_386.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_387.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_388.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_389.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/74/0000_74_390_v1.jpg</picture>
+        <price>130</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K0-121-251-AL</model>
+        <vendorCode>8K0-121-251-AL</vendorCode>
+        <description>Марка: Audi. Модель: A4. Двигун: 3.0L. Кузов: B8. Виробник: Audi. Номер виробника: 8K0-121-251-AL. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A4. Двигун: 3.0L. Кузов: B8. Виробник: Audi. Номер виробника: 8K0-121-251-AL. Кросс-номери: 8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L</param>
+        <param name="Кузов">B8</param>
+        <param name="Кросс-номери">8K0-121-251-AA, 8K0-121-251-Q, 8K0-121-251-AL</param>
+        <param name="Код запчастини">8K0-121-251-AL</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A4</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16770" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6 2014 Лев.</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6 2014 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_132.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_133.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_134.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_135.jpg</picture>
+        <price>40</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-121-212</model>
+        <vendorCode>4G0-121-212</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2014. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-121-212. Кросс-номери: 4G0-121-212. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2014. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-121-212. Кросс-номери: 4G0-121-212. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CTUA</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-121-212</param>
+        <param name="Код запчастини">4G0-121-212</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="11723" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Volkswagen CC 2013</name>
+        <name_ua>Радіатор охолодження двигуна Volkswagen CC 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_902.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_903.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_904.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_905.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_906.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_907_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_908.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_909.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_910.jpg</picture>
+        <price>401</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>1K0121207BC</model>
+        <vendorCode>1K0121207BC</vendorCode>
+        <description>Марка: Volkswagen. Модель: CC. Рік випуску: 2013. Двигун: 2.0L CBFA. Кузов: 35. Виробник: Volkswagen. Номер виробника: 1K0121207BC. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: CC. Рік випуску: 2013. Двигун: 2.0L CBFA. Кузов: 35. Виробник: Volkswagen. Номер виробника: 1K0121207BC. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CBFA</param>
+        <param name="Кузов">35</param>
+        <param name="Код запчастини">1K0121207BC</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">CC</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="11710" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Volvo XC60 2015</name>
+        <name_ua>Радіатор охолодження двигуна Volvo XC60 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_832.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_833.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_834.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_835.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_836.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_837.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_838.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_839.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_840.jpg</picture>
+        <price>800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>6G918C607MG</model>
+        <vendorCode>6G918C607MG</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Номер виробника: 6G918C607MG. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Номер виробника: 6G918C607MG. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T11</param>
+        <param name="Кузов">I</param>
+        <param name="Код запчастини">6G918C607MG</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8008" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Ford Fusion 2014</name>
+        <name_ua>Радіатор охолодження двигуна Ford Fusion 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/34/0000_34_099.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/34/0000_34_100.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/34/0000_34_102.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/34/0000_34_103.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/34/0000_34_101_v1.jpg</picture>
+        <price>45</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DG9H-19710-AC</model>
+        <vendorCode>DG9H-19710-AC</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2014. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: DG9H-19710-AC. Кросс-номери: DG9H19710AC. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2014. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: DG9H-19710-AC. Кросс-номери: DG9H19710AC. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">DG9H19710AC</param>
+        <param name="Код запчастини">DG9H-19710-AC</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="5768" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Audi A6 2013</name>
+        <name_ua>Радіатор охолодження двигуна Audi A6 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_952.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_953.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_954.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_956.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_957.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_955.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/24/0000_24_958_v3.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K0-121-251-H</model>
+        <vendorCode>8K0-121-251-H</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2013. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Виробник: Audi. Номер виробника: 8K0-121-251-H. Кросс-номери: 8K0-121-251-H. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2013. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Виробник: Audi. Номер виробника: 8K0-121-251-H. Кросс-номери: 8K0-121-251-H. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CTUA</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Кросс-номери">8K0-121-251-H</param>
+        <param name="Код запчастини">8K0-121-251-H</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="1552" available="true" type="vendor.model">
+        <name>Радіатор охолодження двигуна Volkswagen Beetle 2014</name>
+        <name_ua>Радіатор охолодження двигуна Volkswagen Beetle 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/07/0000_07_984.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/07/0000_07_985.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/07/0000_07_986.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/07/0000_07_988_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/07/0000_07_987_v1.jpg</picture>
+        <price>60</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>120218</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>5C0-121-251-E</model>
+        <vendorCode>5C0-121-251-E</vendorCode>
+        <description>Марка: Volkswagen. Модель: Beetle. Рік випуску: 2014. Двигун: 2.5L CBUA. Кузов: 5C1. Виробник: Volkswagen. Номер виробника: 5C0-121-251-E. Кросс-номери: 5C0-121-251-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Beetle. Рік випуску: 2014. Двигун: 2.5L CBUA. Кузов: 5C1. Виробник: Volkswagen. Номер виробника: 5C0-121-251-E. Кросс-номери: 5C0-121-251-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L CBUA</param>
+        <param name="Кузов">5C1</param>
+        <param name="Кросс-номери">5C0-121-251-E</param>
+        <param name="Код запчастини">5C0-121-251-E</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Beetle</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>

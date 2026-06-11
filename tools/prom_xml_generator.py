@@ -90,7 +90,7 @@ def x(val: str) -> str:
 
 
 def generate_xml(rows: list, category_name: str, cat_id_local: int,
-                 portal_cat_id: int, name_ua: str) -> tuple[str, dict]:
+                 portal_cat_id: int, name_ua: str, no_filter: bool = False) -> tuple[str, dict]:
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -150,7 +150,7 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
             price = 0
 
         oem = cell(row, COL_PART_NUM)
-        if not oem or price <= 1:
+        if not no_filter and (not oem or price <= 1):
             stats["skip_filter"] += 1
             continue
 
@@ -172,18 +172,14 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         model_val = part_num if part_num else model
         if model_val:
             lines.append(f'        <model>{x(model_val)}</model>')
+        if part_num:
+            lines.append(f'        <vendorCode>{x(part_num)}</vendorCode>')
         lines.append(f'        <description>{x(desc)}</description>')
         lines.append(f'        <description_ua>{x(desc)}</description_ua>')
         lines.append(f'        <selling_type>retail</selling_type>')
         lines.append(f'        <condition>used</condition>')
 
         # params
-        if brand:
-            lines.append(f'        <param name="Марка авто">{x(brand)}</param>')
-        if model:
-            lines.append(f'        <param name="Модель авто">{x(model)}</param>')
-        if year:
-            lines.append(f'        <param name="Рік випуску">{x(year)}</param>')
         if engine:
             lines.append(f'        <param name="Двигун">{x(engine)}</param>')
         if body:
@@ -196,7 +192,13 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
             lines.append(f'        <param name="Кросс-номери">{x(cross)}</param>')
         if part_num:
             lines.append(f'        <param name="Код запчастини">{x(part_num)}</param>')
-        lines.append(f'        <param name="Стан">Вживані</param>')
+        if brand:
+            lines.append(f'        <param name="Сумісність з маркою">{x(brand)}</param>')
+        if model:
+            lines.append(f'        <param name="Сумісність з моделлю">{x(model)}</param>')
+        if year:
+            lines.append(f'        <param name="Рік випуску автомобіля">{x(year)}</param>')
+        lines.append(f'        <param name="Стан">Б/в</param>')
 
         if is_door:
             front_back = "Передня" if "Передн" in front_rear else "Задня"
@@ -230,6 +232,7 @@ def main():
     parser.add_argument("--name-ua",       required=True, dest="name_ua",
                         help="Назва категорії укр. (для заголовку товару)")
     parser.add_argument("--out",           required=True, help="Вихідний XML файл")
+    parser.add_argument("--no-filter",     action="store_true", dest="no_filter", help="Без фільтру OEM/ціни")
     args = parser.parse_args()
 
     if not os.path.exists(args.file):
@@ -267,6 +270,7 @@ def main():
         cat_id_local=1,
         portal_cat_id=args.portal_cat_id,
         name_ua=args.name_ua,
+        no_filter=args.no_filter,
     )
 
     out_path.write_text(xml_content, encoding="utf-8")
