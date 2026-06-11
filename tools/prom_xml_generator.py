@@ -193,6 +193,8 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
             lines.append(f'        <param name="Лівий/Правий">{x(left_right)}</param>')
         if cross:
             lines.append(f'        <param name="Кросс-номери">{x(cross)}</param>')
+        if part_num:
+            lines.append(f'        <param name="Код запчастини">{x(part_num)}</param>')
         lines.append(f'        <param name="Стан">Вживані</param>')
 
         if is_door:

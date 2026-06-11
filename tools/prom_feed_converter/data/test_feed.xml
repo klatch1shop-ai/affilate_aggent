@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2026-06-01">
+  <shop>
+    <name>Test Supplier</name>
+    <categories>
+      <category id="10">Фільтри оливи</category>
+      <category id="11">Фільтри повітря</category>
+      <category id="12">Гальмівні колодки</category>
+    </categories>
+    <offers>
+      <offer id="1001" available="true">
+        <name>Фільтр оливи TOPTUL Toyota Camry 2.5</name>
+        <price>185</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>10</categoryId>
+        <picture>https://example.com/img/1001_1.jpg</picture>
+        <picture>https://example.com/img/1001_2.jpg</picture>
+        <vendor>TOPTUL</vendor>
+        <vendorCode>GH-2034</vendorCode>
+        <article>GH-2034</article>
+        <description>Оливний фільтр для Toyota Camry 2.5 2011-2023. Ефективна фільтрація.</description>
+        <param name="Марка авто">Toyota</param>
+        <param name="Модель авто">Camry</param>
+        <param name="Роки випуску">2011-2023</param>
+        <param name="Об'єм двигуна">2.5</param>
+        <param name="Тип фільтра">Оливний</param>
+      </offer>
+      <offer id="1002" available="true">
+        <name>Фільтр повітря TOPTUL Hyundai Tucson 2.0</name>
+        <price>220</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>11</categoryId>
+        <picture>https://example.com/img/1002.jpg</picture>
+        <vendor>TOPTUL</vendor>
+        <vendorCode>AF-4455</vendorCode>
+        <article>AF-4455</article>
+        <description>Повітряний фільтр Hyundai Tucson 2.0 2015-2022.</description>
+        <param name="Марка авто">Hyundai</param>
+        <param name="Модель авто">Tucson</param>
+        <param name="Роки випуску">2015-2022</param>
+        <param name="Об'єм двигуна">2.0</param>
+        <param name="Тип фільтра">Повітряний</param>
+      </offer>
+      <offer id="1003" available="false">
+        <name>Колодки гальмівні Kia Sportage передні</name>
+        <price>680</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>12</categoryId>
+        <vendor>BREMBO</vendor>
+        <vendorCode>P30091</vendorCode>
+        <article>P30091</article>
+        <param name="Марка авто">Kia</param>
+        <param name="Модель авто">Sportage</param>
+        <param name="Роки випуску">2016-2022</param>
+        <param name="Вісь">Передня</param>
+        <param name="Тип фільтра">Гальмівні</param>
+      </offer>
+      <offer id="1004" available="true">
+        <name>Фільтр оливи Toyota RAV4 2.0</name>
+        <price>165</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>10</categoryId>
+        <picture>https://example.com/img/1004.jpg</picture>
+        <vendor>MANN</vendor>
+        <vendorCode>W7008</vendorCode>
+        <article>W7008</article>
+        <description>Оливний фільтр MANN для Toyota RAV4.</description>
+        <param name="Марка авто">Toyota</param>
+        <param name="Модель авто">RAV4</param>
+        <param name="Роки випуску">2013-2023</param>
+        <param name="Об'єм двигуна">2.0</param>
+        <param name="Тип фільтра">Оливний</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>

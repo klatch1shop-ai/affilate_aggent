@@ -30,6 +30,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32300770, 36012913</param>
+        <param name="Код запчастини">32300770</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="66195" available="true" type="vendor.model">
@@ -57,6 +58,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32300771, 36012914</param>
+        <param name="Код запчастини">32300771</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="66154" available="true" type="vendor.model">
@@ -83,6 +85,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32300768, 36012916, 36003711</param>
+        <param name="Код запчастини">32300768</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65116" available="true" type="vendor.model">
@@ -109,6 +112,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31381442, 36010012</param>
+        <param name="Код запчастини">31381442</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64916" available="true" type="vendor.model">
@@ -135,6 +139,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31400430</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64915" available="true" type="vendor.model">
@@ -161,6 +166,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31400431</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64849" available="true" type="vendor.model">
@@ -187,6 +193,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31471267</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64848" available="true" type="vendor.model">
@@ -213,6 +220,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31471268</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64825" available="true" type="vendor.model">
@@ -239,6 +247,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32217363, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">32217363</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64822" available="true" type="vendor.model">
@@ -265,6 +274,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32217364, 31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">32217364</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64778" available="true" type="vendor.model">
@@ -291,6 +301,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31400431</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64777" available="true" type="vendor.model">
@@ -317,6 +328,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31400430</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63298" available="true" type="vendor.model">
@@ -342,6 +354,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">23249389, 23341891, 84737985</param>
+        <param name="Код запчастини">84737985</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63295" available="true" type="vendor.model">
@@ -367,6 +380,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">23249390, 23341892, 84737986</param>
+        <param name="Код запчастини">84737986</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57054" available="true" type="vendor.model">
@@ -395,6 +409,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124-A, 4H0-615-124-B</param>
+        <param name="Код запчастини">4H0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57053" available="true" type="vendor.model">
@@ -422,6 +437,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123-A, 4H0-615-123-B</param>
+        <param name="Код запчастини">4H0-615-123-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57002" available="true" type="vendor.model">
@@ -449,6 +465,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31381442, 36010012</param>
+        <param name="Код запчастини">31381442</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57001" available="true" type="vendor.model">
@@ -476,6 +493,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31381549, 36010013</param>
+        <param name="Код запчастини">31381549</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57000" available="true" type="vendor.model">
@@ -503,6 +521,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31381549, 36010013</param>
+        <param name="Код запчастини">31381549</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56922" available="true" type="vendor.model">
@@ -529,6 +548,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31381442, 36010012</param>
+        <param name="Код запчастини">31381442</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56681" available="true" type="vendor.model">
@@ -557,6 +577,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56680" available="true" type="vendor.model">
@@ -584,6 +605,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56675" available="true" type="vendor.model">
@@ -611,6 +633,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-105-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56674" available="true" type="vendor.model">
@@ -638,6 +661,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-124-J, 7L6-615-124-N, 7L6-615-150</param>
+        <param name="Код запчастини">7L6-615-106-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56638" available="true" type="vendor.model">
@@ -667,6 +691,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56637" available="true" type="vendor.model">
@@ -695,6 +720,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56566" available="true" type="vendor.model">
@@ -722,6 +748,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31423312, 36012489</param>
+        <param name="Код запчастини">31423312</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56565" available="true" type="vendor.model">
@@ -749,6 +776,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31423311, 36012490</param>
+        <param name="Код запчастини">31423311</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55825" available="true" type="vendor.model">
@@ -776,6 +804,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31381549, 36010013</param>
+        <param name="Код запчастини">31381549</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55824" available="true" type="vendor.model">
@@ -803,6 +832,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31381442, 36010012</param>
+        <param name="Код запчастини">31381442</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55756" available="true" type="vendor.model">
@@ -830,6 +860,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31471267</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55750" available="true" type="vendor.model">
@@ -857,6 +888,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31471268</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55677" available="true" type="vendor.model">
@@ -885,6 +917,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31400431</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55668" available="true" type="vendor.model">
@@ -912,6 +945,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31471267</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55667" available="true" type="vendor.model">
@@ -940,6 +974,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31471268</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55570" available="true" type="vendor.model">
@@ -967,6 +1002,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">80A-615-404-A, 80A-615-404-D-SL7, 8W0-615-404-A, 8W0-615-404-K-SL7, 8W0-615-404-N-SL7</param>
+        <param name="Код запчастини">8W0-615-404-K-SL7</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55569" available="true" type="vendor.model">
@@ -994,6 +1030,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">80A-615-403-A, 80A-615-403-D-SL7, 8W0-615-403-A, 8W0-615-403-K-SL7, 8W0-615-403-N-SL7</param>
+        <param name="Код запчастини">8W0-615-403-K-SL7</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55516" available="true" type="vendor.model">
@@ -1021,6 +1058,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4K0-615-105-T, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4N0-615-107-N, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4K0-615-105-T</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55514" available="true" type="vendor.model">
@@ -1048,6 +1086,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4K0-615-106-T, 4K0-615-108-C, 4M0-615-108-AD, 4M0-615-108-C, 4M0-615-108-H, 4N0-615-108-AC, 4N0-615-108-N, 4M0-615-108-BS</param>
+        <param name="Код запчастини">4K0-615-106-T</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55088" available="true" type="vendor.model">
@@ -1076,6 +1115,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8R0-615-106-BF, 8R0-615-106-BK, 8R0-615-106-CA, 8R0-615-108-E, 8R0-615-108-G</param>
+        <param name="Код запчастини">8R0-615-106-BF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55087" available="true" type="vendor.model">
@@ -1104,6 +1144,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8R0-615-105-BF, 8R0-615-105-BK, 8R0-615-105-CA, 8R0-615-107-E, 8R0-615-107-G</param>
+        <param name="Код запчастини">8R0-615-105-BF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52103" available="true" type="vendor.model">
@@ -1131,6 +1172,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52102" available="true" type="vendor.model">
@@ -1159,6 +1201,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52082" available="true" type="vendor.model">
@@ -1187,6 +1230,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52080" available="true" type="vendor.model">
@@ -1216,6 +1260,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51972" available="true" type="vendor.model">
@@ -1244,6 +1289,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8R0-615-105-BF, 8R0-615-105-BK, 8R0-615-105-CA, 8R0-615-107-E, 8R0-615-107-G</param>
+        <param name="Код запчастини">8R0-615-105-CA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48372" available="true" type="vendor.model">
@@ -1271,6 +1317,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-106-BE, 4M0-615-106-BG, 4M0-615-106-DB, 4M0-615-106-EB, 4M0-615-106-FS, 4K0-615-108-C, 4M0-615-108-AD, 4M0-615-108-C, 4M0-615-108-H, 4N0-615-108-AC, 4M0-615-108-BS</param>
+        <param name="Код запчастини">4M0-615-106-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47561" available="true" type="vendor.model">
@@ -1298,6 +1345,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45777" available="true" type="vendor.model">
@@ -1323,6 +1371,7 @@
         <param name="Кузов">FY (80A)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">80A615405</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45776" available="true" type="vendor.model">
@@ -1348,6 +1397,7 @@
         <param name="Кузов">FY (80A)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">80A615406</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45008" available="true" type="vendor.model">
@@ -1376,6 +1426,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31381551, 36011370</param>
+        <param name="Код запчастини">31381551</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45002" available="true" type="vendor.model">
@@ -1403,6 +1454,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44972" available="true" type="vendor.model">
@@ -1430,6 +1482,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-105-BG, 4M0-615-105-DB, 4M0-615-105-EB, 4M0-615-105-FS, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4M0-615-105-FS</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44965" available="true" type="vendor.model">
@@ -1457,6 +1510,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-105-BG, 4M0-615-105-DB, 4M0-615-105-EB, 4M0-615-105-FS, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4M0-615-105-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44167" available="true" type="vendor.model">
@@ -1483,6 +1537,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31400430, 31471267, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">31471267</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44164" available="true" type="vendor.model">
@@ -1509,6 +1564,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">31471268</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44091" available="true" type="vendor.model">
@@ -1534,6 +1590,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32217364, 31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">32217364</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44088" available="true" type="vendor.model">
@@ -1561,6 +1618,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32217363, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">32217363</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44067" available="true" type="vendor.model">
@@ -1584,6 +1642,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">4M0615406AS</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43843" available="true" type="vendor.model">
@@ -1608,6 +1667,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">80A-615-106-AB, 80A-615-106-CF, 80A-615-108</param>
+        <param name="Код запчастини">80A-615-106-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43841" available="true" type="vendor.model">
@@ -1633,6 +1693,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">80A-615-105-AB, 80A-615-105-CF, 80A-615-107</param>
+        <param name="Код запчастини">80A-615-105-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43840" available="true" type="vendor.model">
@@ -1657,6 +1718,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">4M0-615-105-JH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41824" available="true" type="vendor.model">
@@ -1683,6 +1745,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-106-BE, 4M0-615-106-BG, 4M0-615-106-DB, 4M0-615-106-EB, 4M0-615-106-FS, 4K0-615-108-C, 4M0-615-108-AD, 4M0-615-108-C, 4M0-615-108-H, 4N0-615-108-AC, 4M0-615-108-BS</param>
+        <param name="Код запчастини">4M0-615-106-EB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41204" available="true" type="vendor.model">
@@ -1710,6 +1773,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-105-BG, 4M0-615-105-DB, 4M0-615-105-EB, 4M0-615-105-FS, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4M0-615-105-EB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41144" available="true" type="vendor.model">
@@ -1737,6 +1801,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-105-BG, 4M0-615-105-DB, 4M0-615-105-EB, 4M0-615-105-FS, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4M0-615-107-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40352" available="true" type="vendor.model">
@@ -1762,6 +1827,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">80A-615-106-AB, 80A-615-106-CF, 80A-615-108</param>
+        <param name="Код запчастини">80A-615-106-CF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40351" available="true" type="vendor.model">
@@ -1787,6 +1853,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">80A-615-105-AB, 80A-615-105-CF, 80A-615-107</param>
+        <param name="Код запчастини">80A-615-105-CF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="39613" available="true" type="vendor.model">
@@ -1814,6 +1881,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-105-BG, 4M0-615-105-DB, 4M0-615-105-EB, 4M0-615-105-FS, 4K0-615-107-C, 4M0-615-107-AD, 4M0-615-107-C, 4M0-615-107-H, 4N0-615-107-AC, 4M0-615-107-BS</param>
+        <param name="Код запчастини">4M0-615-105-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="39596" available="true" type="vendor.model">
@@ -1842,6 +1910,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-106-BE, 4M0-615-106-BG, 4M0-615-106-DB, 4M0-615-106-EB, 4M0-615-106-FS, 4K0-615-108-C, 4M0-615-108-AD, 4M0-615-108-C, 4M0-615-108-H, 4N0-615-108-AC, 4M0-615-108-BS</param>
+        <param name="Код запчастини">4M0-615-106-DB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="38706" available="true" type="vendor.model">
@@ -1869,6 +1938,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8W0-615-107-C</param>
+        <param name="Код запчастини">8W0-615-107-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37934" available="true" type="vendor.model">
@@ -1895,6 +1965,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31381549, 36010013</param>
+        <param name="Код запчастини">31381549</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37273" available="true" type="vendor.model">
@@ -1922,6 +1993,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32217364, 31400431, 31471268, 36010010, 36012636, 36003033</param>
+        <param name="Код запчастини">32217364</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37272" available="true" type="vendor.model">
@@ -1949,6 +2021,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32217363, 36010009, 36012635, 36003032</param>
+        <param name="Код запчастини">32217363</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34212" available="true" type="vendor.model">
@@ -1976,6 +2049,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34211" available="true" type="vendor.model">
@@ -2004,6 +2078,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34136" available="true" type="vendor.model">
@@ -2032,6 +2107,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34134" available="true" type="vendor.model">
@@ -2060,6 +2136,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34132" available="true" type="vendor.model">
@@ -2088,6 +2165,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34131" available="true" type="vendor.model">
@@ -2116,6 +2194,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34129" available="true" type="vendor.model">
@@ -2144,6 +2223,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34126" available="true" type="vendor.model">
@@ -2172,6 +2252,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34125" available="true" type="vendor.model">
@@ -2200,6 +2281,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34124" available="true" type="vendor.model">
@@ -2228,6 +2310,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33279" available="true" type="vendor.model">
@@ -2254,6 +2337,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31727" available="true" type="vendor.model">
@@ -2285,6 +2369,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123-D</param>
+        <param name="Код запчастини">4H0-615-123-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31726" available="true" type="vendor.model">
@@ -2317,6 +2402,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124-D</param>
+        <param name="Код запчастини">4H0-615-124-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31690" available="true" type="vendor.model">
@@ -2345,6 +2431,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31689" available="true" type="vendor.model">
@@ -2375,6 +2462,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31680" available="true" type="vendor.model">
@@ -2403,6 +2491,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31679" available="true" type="vendor.model">
@@ -2430,6 +2519,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31677" available="true" type="vendor.model">
@@ -2456,6 +2546,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31674" available="true" type="vendor.model">
@@ -2486,6 +2577,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31562" available="true" type="vendor.model">
@@ -2513,6 +2605,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31423311, 36012490</param>
+        <param name="Код запчастини">31423311</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31561" available="true" type="vendor.model">
@@ -2541,6 +2634,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31423312, 36012489</param>
+        <param name="Код запчастини">31423312</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31525" available="true" type="vendor.model">
@@ -2569,6 +2663,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-106-BE, 4M0-615-106-BG, 4M0-615-106-DB, 4M0-615-106-EB, 4M0-615-106-FS, 4K0-615-108-C, 4M0-615-108-AD, 4M0-615-108-C, 4M0-615-108-H, 4N0-615-108-AC, 4M0-615-108-BS</param>
+        <param name="Код запчастини">4M0-615-106-BG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29740" available="true" type="vendor.model">
@@ -2598,6 +2693,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29739" available="true" type="vendor.model">
@@ -2627,6 +2723,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28263" available="true" type="vendor.model">
@@ -2657,6 +2754,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28262" available="true" type="vendor.model">
@@ -2687,6 +2785,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28209" available="true" type="vendor.model">
@@ -2714,6 +2813,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">3C0-615-124</param>
+        <param name="Код запчастини">3C0-615-124</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27875" available="true" type="vendor.model">
@@ -2741,6 +2841,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27874" available="true" type="vendor.model">
@@ -2767,6 +2868,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27870" available="true" type="vendor.model">
@@ -2794,6 +2896,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27869" available="true" type="vendor.model">
@@ -2820,6 +2923,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27253" available="true" type="vendor.model">
@@ -2848,6 +2952,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7P6-615-424-C, 7P6-615-424-D, 7P6-615-424-E, 7P6-615-424-F</param>
+        <param name="Код запчастини">7P6-615-424-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27252" available="true" type="vendor.model">
@@ -2876,6 +2981,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7P6-615-423-C, 7P6-615-423-D, 7P6-615-423-E, 7P6-615-423-F</param>
+        <param name="Код запчастини">7P6-615-423-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="26290" available="true" type="vendor.model">
@@ -2904,6 +3010,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123, 4G0-615-123-C, 4G0-615-123-H, 4G0-615-123-K</param>
+        <param name="Код запчастини">4G0-615-123-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="26289" available="true" type="vendor.model">
@@ -2931,6 +3038,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124, 4G0-615-124-C, 4G0-615-124-H, 4G0-615-124-K</param>
+        <param name="Код запчастини">4G0-615-124-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25876" available="true" type="vendor.model">
@@ -2958,6 +3066,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-403-A, 4M0-615-403-F-SL7</param>
+        <param name="Код запчастини">4M0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25875" available="true" type="vendor.model">
@@ -2986,6 +3095,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-404-A, 4M0-615-404-F-SL7</param>
+        <param name="Код запчастини">4M0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25160" available="true" type="vendor.model">
@@ -3013,6 +3123,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-615-403-A, 4M0-615-403-F-SL7</param>
+        <param name="Код запчастини">4M0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25158" available="true" type="vendor.model">
@@ -3040,6 +3151,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4M0-615-404-A, 4M0-615-404-F-SL7</param>
+        <param name="Код запчастини">4M0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24954" available="true" type="vendor.model">
@@ -3067,6 +3179,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">36002410</param>
+        <param name="Код запчастини">36002410</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24953" available="true" type="vendor.model">
@@ -3094,6 +3207,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">36002411</param>
+        <param name="Код запчастини">36002411</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24946" available="true" type="vendor.model">
@@ -3120,6 +3234,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P6615105AF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24945" available="true" type="vendor.model">
@@ -3146,6 +3261,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P6615106AF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24768" available="true" type="vendor.model">
@@ -3172,6 +3288,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24767" available="true" type="vendor.model">
@@ -3197,6 +3314,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P6615106AF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24690" available="true" type="vendor.model">
@@ -3224,6 +3342,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">36002410</param>
+        <param name="Код запчастини">36002410</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24683" available="true" type="vendor.model">
@@ -3251,6 +3370,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8K0-615-124-B, 8K0-615-124-H</param>
+        <param name="Код запчастини">8K0-615-124-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24681" available="true" type="vendor.model">
@@ -3278,6 +3398,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24615" available="true" type="vendor.model">
@@ -3304,6 +3425,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P0615424</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24614" available="true" type="vendor.model">
@@ -3330,6 +3452,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P0615423</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23001" available="true" type="vendor.model">
@@ -3361,6 +3484,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-F</param>
+        <param name="Код запчастини">4G0-615-404-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22995" available="true" type="vendor.model">
@@ -3394,6 +3518,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-124-G</param>
+        <param name="Код запчастини">4G0-615-124-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22994" available="true" type="vendor.model">
@@ -3426,6 +3551,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123-G</param>
+        <param name="Код запчастини">4G0-615-123-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22993" available="true" type="vendor.model">
@@ -3457,6 +3583,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-F</param>
+        <param name="Код запчастини">4G0-615-403-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22580" available="true" type="vendor.model">
@@ -3483,6 +3610,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22566" available="true" type="vendor.model">
@@ -3509,6 +3637,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-124-J, 7L6-615-124-N, 7L6-615-150</param>
+        <param name="Код запчастини">7L6-615-150</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22565" available="true" type="vendor.model">
@@ -3535,6 +3664,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22171" available="true" type="vendor.model">
@@ -3561,6 +3691,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22170" available="true" type="vendor.model">
@@ -3587,6 +3718,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22150" available="true" type="vendor.model">
@@ -3615,6 +3747,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22149" available="true" type="vendor.model">
@@ -3643,6 +3776,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22067" available="true" type="vendor.model">
@@ -3669,6 +3803,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P0615423</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22066" available="true" type="vendor.model">
@@ -3695,6 +3830,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P0615424</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21456" available="true" type="vendor.model">
@@ -3723,6 +3859,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-123-D, 4G0-615-123-J, 4G0-615-123-L</param>
+        <param name="Код запчастини">4G0-615-123-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20573" available="true" type="vendor.model">
@@ -3749,6 +3886,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">dg9c 2d250 h</param>
+        <param name="Код запчастини">dg9c 2d250 h</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20572" available="true" type="vendor.model">
@@ -3775,6 +3913,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">dg9c 2d251 h</param>
+        <param name="Код запчастини">dg9c 2d251 h</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20549" available="true" type="vendor.model">
@@ -3803,6 +3942,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8K0-615-403-E</param>
+        <param name="Код запчастини">8K0-615-403-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20548" available="true" type="vendor.model">
@@ -3831,6 +3971,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8K0-615-404-E</param>
+        <param name="Код запчастини">8K0-615-404-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20529" available="true" type="vendor.model">
@@ -3858,6 +3999,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8U0-615-403-B</param>
+        <param name="Код запчастини">8U0-615-403-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20528" available="true" type="vendor.model">
@@ -3885,6 +4027,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8U0-615-404-B</param>
+        <param name="Код запчастини">8U0-615-404-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19517" available="true" type="vendor.model">
@@ -3910,6 +4053,7 @@
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">DG9C2D251A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19516" available="true" type="vendor.model">
@@ -3935,6 +4079,7 @@
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">DG9C2D250A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19510" available="true" type="vendor.model">
@@ -3961,6 +4106,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">BRCF-304, EG1Z-2552-B, EG1Z-2552-C</param>
+        <param name="Код запчастини">EG1Z-2552-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19457" available="true" type="vendor.model">
@@ -3987,6 +4133,7 @@
         <param name="Двигун">2.5L ENS70</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">DG9C2D250A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19456" available="true" type="vendor.model">
@@ -4012,6 +4159,7 @@
         <param name="Двигун">2.5L ENS70</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">DG9C2D251A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19374" available="true" type="vendor.model">
@@ -4041,6 +4189,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19373" available="true" type="vendor.model">
@@ -4069,6 +4218,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19367" available="true" type="vendor.model">
@@ -4097,6 +4247,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19366" available="true" type="vendor.model">
@@ -4125,6 +4276,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19364" available="true" type="vendor.model">
@@ -4153,6 +4305,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17500" available="true" type="vendor.model">
@@ -4180,6 +4333,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">BRCF-304, EG1Z-2552-B, EG1Z-2552-C</param>
+        <param name="Код запчастини">EG1Z-2552-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17493" available="true" type="vendor.model">
@@ -4206,6 +4360,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">440011AA0A</param>
+        <param name="Код запчастини">44001-1AA0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17485" available="true" type="vendor.model">
@@ -4232,6 +4387,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">440111aa0a</param>
+        <param name="Код запчастини">440111aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17471" available="true" type="vendor.model">
@@ -4260,6 +4416,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17435" available="true" type="vendor.model">
@@ -4286,6 +4443,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">kg9c-2d251-c</param>
+        <param name="Код запчастини">kg9c-2d251-c</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17434" available="true" type="vendor.model">
@@ -4312,6 +4470,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">kg9c-2d250-c</param>
+        <param name="Код запчастини">kg9c-2d250-c</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17432" available="true" type="vendor.model">
@@ -4339,6 +4498,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17431" available="true" type="vendor.model">
@@ -4366,6 +4526,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17410" available="true" type="vendor.model">
@@ -4392,6 +4553,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">dg9c-2d251-g</param>
+        <param name="Код запчастини">dg9c-2d251-g</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17407" available="true" type="vendor.model">
@@ -4418,6 +4580,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">kg9c-2d251-c</param>
+        <param name="Код запчастини">kg9c-2d251-c</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17119" available="true" type="vendor.model">
@@ -4444,6 +4607,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0615404A</param>
+        <param name="Код запчастини">4G0615404A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16907" available="true" type="vendor.model">
@@ -4471,6 +4635,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">m2gc-2d250-a</param>
+        <param name="Код запчастини">m2gc-2d250-a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16817" available="true" type="vendor.model">
@@ -4499,6 +4664,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">m2gc-2b294-aa</param>
+        <param name="Код запчастини">m2gc-2b294-aa</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16808" available="true" type="vendor.model">
@@ -4527,6 +4693,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2GC2011KG</param>
+        <param name="Код запчастини">F2GC-2011-KG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16806" available="true" type="vendor.model">
@@ -4554,6 +4721,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2GC2B557A</param>
+        <param name="Код запчастини">F2GC-2B557-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16805" available="true" type="vendor.model">
@@ -4582,6 +4750,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2GC2010KG</param>
+        <param name="Код запчастини">F2GC-2010-KG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16803" available="true" type="vendor.model">
@@ -4607,6 +4776,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG1Z-2B121-B, DG1Z-2B121-E</param>
+        <param name="Код запчастини">DG1Z-2B120-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16782" available="true" type="vendor.model">
@@ -4633,6 +4803,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG1Z-2B121-B, DG1Z-2B121-E</param>
+        <param name="Код запчастини">DG1Z-2B121-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16655" available="true" type="vendor.model">
@@ -4659,6 +4830,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15660" available="true" type="vendor.model">
@@ -4686,6 +4858,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31423312, 36012489</param>
+        <param name="Код запчастини">31423312</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15643" available="true" type="vendor.model">
@@ -4712,6 +4885,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15642" available="true" type="vendor.model">
@@ -4738,6 +4912,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-124-J, 7L6-615-124-N, 7L6-615-150</param>
+        <param name="Код запчастини">7L6-615-150</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15634" available="true" type="vendor.model">
@@ -4765,6 +4940,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-124-J, 7L6-615-124-N, 7L6-615-150</param>
+        <param name="Код запчастини">7L6-615-150</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15633" available="true" type="vendor.model">
@@ -4791,6 +4967,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15630" available="true" type="vendor.model">
@@ -4816,6 +4993,7 @@
         <param name="Двигун">3.0L VR30DDTT</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">410014ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15629" available="true" type="vendor.model">
@@ -4841,6 +5019,7 @@
         <param name="Двигун">3.0L VR30DDTT</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">410114ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14803" available="true" type="vendor.model">
@@ -4866,6 +5045,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG1Z-2B121-B, DG1Z-2B121-E</param>
+        <param name="Код запчастини">DG1Z-2B120-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14799" available="true" type="vendor.model">
@@ -4892,6 +5072,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG1Z-2B121-B, DG1Z-2B121-E</param>
+        <param name="Код запчастини">DG1Z-2B121-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13987" available="true" type="vendor.model">
@@ -4916,6 +5097,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13986" available="true" type="vendor.model">
@@ -4940,6 +5122,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13528" available="true" type="vendor.model">
@@ -4967,6 +5150,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">KG9C-2D250-C</param>
+        <param name="Код запчастини">KG9C2D250C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13527" available="true" type="vendor.model">
@@ -4993,6 +5177,7 @@
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">KG9C-2D251-C</param>
+        <param name="Код запчастини">KG9C2D251C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13502" available="true" type="vendor.model">
@@ -5019,6 +5204,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">440111aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13501" available="true" type="vendor.model">
@@ -5045,6 +5231,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">440011aa0a</param>
+        <param name="Код запчастини">440011aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13453" available="true" type="vendor.model">
@@ -5071,6 +5258,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C-2D251-G</param>
+        <param name="Код запчастини">DG9C2D251G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13394" available="true" type="vendor.model">
@@ -5097,6 +5285,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">LX612D250BNC</param>
+        <param name="Код запчастини">LX61-2D250-BNC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13393" available="true" type="vendor.model">
@@ -5123,6 +5312,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">LX612D251BNC</param>
+        <param name="Код запчастини">LX61-2D251-BNC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13374" available="true" type="vendor.model">
@@ -5151,6 +5341,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">KG9C-2D250-C</param>
+        <param name="Код запчастини">KG9C2D250C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13353" available="true" type="vendor.model">
@@ -5177,6 +5368,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13336" available="true" type="vendor.model">
@@ -5205,6 +5397,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13217" available="true" type="vendor.model">
@@ -5232,6 +5425,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0615404</param>
+        <param name="Код запчастини">5N0615404</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13216" available="true" type="vendor.model">
@@ -5259,6 +5453,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12736" available="true" type="vendor.model">
@@ -5286,6 +5481,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2GC-2B294-AA</param>
+        <param name="Код запчастини">F2GC2B294AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12548" available="true" type="vendor.model">
@@ -5312,6 +5508,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">2B294B2B302B</param>
+        <param name="Код запчастини">2B294-B2B302-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12543" available="true" type="vendor.model">
@@ -5338,6 +5535,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">2B294B2B302B</param>
+        <param name="Код запчастини">2B294-B2B302-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11957" available="true" type="vendor.model">
@@ -5364,6 +5562,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P0615423</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11956" available="true" type="vendor.model">
@@ -5390,6 +5589,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P0615424</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11423" available="true" type="vendor.model">
@@ -5415,6 +5615,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">410014ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11416" available="true" type="vendor.model">
@@ -5440,6 +5641,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">410114ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10998" available="true" type="vendor.model">
@@ -5466,6 +5668,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">BRCF-304, EG1Z-2552-B, EG1Z-2552-C</param>
+        <param name="Код запчастини">EG1Z-2552-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10997" available="true" type="vendor.model">
@@ -5492,6 +5695,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">BRCF-305, EG1Z-2553-B, EG1Z-2553-C</param>
+        <param name="Код запчастини">EG1Z-2553-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10981" available="true" type="vendor.model">
@@ -5518,6 +5722,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">BRCF-305, EG1Z-2553-B, EG1Z-2553-C</param>
+        <param name="Код запчастини">EG1Z-2553-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10980" available="true" type="vendor.model">
@@ -5544,6 +5749,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">BRCF-304, EG1Z-2552-B, EG1Z-2552-C</param>
+        <param name="Код запчастини">EG1Z-2552-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10974" available="true" type="vendor.model">
@@ -5571,6 +5777,7 @@
         <param name="Кузов">MK7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">5QM615406</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10962" available="true" type="vendor.model">
@@ -5596,6 +5803,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">440111aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10960" available="true" type="vendor.model">
@@ -5621,6 +5829,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">440011aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10927" available="true" type="vendor.model">
@@ -5646,6 +5855,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">440111aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10925" available="true" type="vendor.model">
@@ -5671,6 +5881,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">440011aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10832" available="true" type="vendor.model">
@@ -5699,6 +5910,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C-2D251-G</param>
+        <param name="Код запчастини">DG9C2D251G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10800" available="true" type="vendor.model">
@@ -5726,6 +5938,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10799" available="true" type="vendor.model">
@@ -5753,6 +5966,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10756" available="true" type="vendor.model">
@@ -5780,6 +5994,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">4G0615415D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10755" available="true" type="vendor.model">
@@ -5808,6 +6023,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">4G0615415D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10659" available="true" type="vendor.model">
@@ -5835,6 +6051,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P6615403M</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10658" available="true" type="vendor.model">
@@ -5862,6 +6079,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P0615424</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10528" available="true" type="vendor.model">
@@ -5890,6 +6108,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">7P6615106AF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10527" available="true" type="vendor.model">
@@ -5916,6 +6135,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">7P6615105AF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9755" available="true" type="vendor.model">
@@ -5943,6 +6163,7 @@
         <param name="Кузов">8K (B8)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">8K0105AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9479" available="true" type="vendor.model">
@@ -5971,6 +6192,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-123-J, 7L6-615-123-N, 7L6-615-123-Q, 7L6-615-149</param>
+        <param name="Код запчастини">7L6-615-149</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9478" available="true" type="vendor.model">
@@ -5999,6 +6221,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-106-BG, 7L6-615-124-J, 7L6-615-124-N, 7L6-615-150</param>
+        <param name="Код запчастини">7L6-615-150</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9453" available="true" type="vendor.model">
@@ -6025,6 +6248,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">410114ga0a</param>
+        <param name="Код запчастини">410114ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9354" available="true" type="vendor.model">
@@ -6051,6 +6275,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">410014ga0a</param>
+        <param name="Код запчастини">410014ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9332" available="true" type="vendor.model">
@@ -6079,6 +6304,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31423312, 36012489</param>
+        <param name="Код запчастини">31423312</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9075" available="true" type="vendor.model">
@@ -6107,6 +6333,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8870" available="true" type="vendor.model">
@@ -6134,6 +6361,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2GC-2010-NF</param>
+        <param name="Код запчастини">F2GC2010NF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8780" available="true" type="vendor.model">
@@ -6161,6 +6389,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2GC-2010-NF</param>
+        <param name="Код запчастини">F2GC2010NF</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8722" available="true" type="vendor.model">
@@ -6186,6 +6415,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8467" available="true" type="vendor.model">
@@ -6213,6 +6443,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">36002411</param>
+        <param name="Код запчастини">36002411</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8384" available="true" type="vendor.model">
@@ -6239,6 +6470,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">209236064A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8383" available="true" type="vendor.model">
@@ -6265,6 +6497,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">209236054A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8315" available="true" type="vendor.model">
@@ -6291,6 +6524,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">GV612D251A</param>
+        <param name="Код запчастини">GV61-2D251-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8297" available="true" type="vendor.model">
@@ -6316,6 +6550,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8296" available="true" type="vendor.model">
@@ -6342,6 +6577,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8200" available="true" type="vendor.model">
@@ -6369,6 +6605,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG9C2B134A</param>
+        <param name="Код запчастини">DG9C-2B134-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8199" available="true" type="vendor.model">
@@ -6396,6 +6633,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C2B302AB</param>
+        <param name="Код запчастини">DG9C-2B302-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7981" available="true" type="vendor.model">
@@ -6424,6 +6662,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0615404</param>
+        <param name="Код запчастини">5N0615404</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7980" available="true" type="vendor.model">
@@ -6451,6 +6690,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0615404</param>
+        <param name="Код запчастини">5N0615404</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7766" available="true" type="vendor.model">
@@ -6479,6 +6719,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0615124</param>
+        <param name="Код запчастини">5N0615124</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7765" available="true" type="vendor.model">
@@ -6506,6 +6747,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0615123</param>
+        <param name="Код запчастини">5N0615123</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7710" available="true" type="vendor.model">
@@ -6531,6 +6773,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C2B302AB</param>
+        <param name="Код запчастини">DG9C-2B302-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7608" available="true" type="vendor.model">
@@ -6558,6 +6801,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">644GN064</param>
+        <param name="Код запчастини">644GN064</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7553" available="true" type="vendor.model">
@@ -6585,6 +6829,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B</param>
+        <param name="Код запчастини">4G0-615-124-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7160" available="true" type="vendor.model">
@@ -6614,6 +6859,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7073" available="true" type="vendor.model">
@@ -6641,6 +6887,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7041" available="true" type="vendor.model">
@@ -6668,6 +6915,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7040" available="true" type="vendor.model">
@@ -6695,6 +6943,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-615-404-AR, 7L6-615-424-D, 7L6-615-424-G, 7L6-615-424-H, 7L6-615-424-L</param>
+        <param name="Код запчастини">7L6-615-424-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6768" available="true" type="vendor.model">
@@ -6723,6 +6972,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-615-123, 4G0-615-123-B, 4G0-615-123-E</param>
+        <param name="Код запчастини">4G0-615-123-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6766" available="true" type="vendor.model">
@@ -6751,6 +7001,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4H0-615-124, 4G0-615-124-B, 4G0-615-124-E</param>
+        <param name="Код запчастини">4G0-615-124-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6764" available="true" type="vendor.model">
@@ -6779,6 +7030,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">644GN064</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6374" available="true" type="vendor.model">
@@ -6806,6 +7058,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31423312, 36012489</param>
+        <param name="Код запчастини">31423312</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6373" available="true" type="vendor.model">
@@ -6832,6 +7085,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">32355158A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5826" available="true" type="vendor.model">
@@ -6858,6 +7112,7 @@
         <param name="Кузов">5N</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">5N0615123</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5824" available="true" type="vendor.model">
@@ -6885,6 +7140,7 @@
         <param name="Кузов">5N</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">5N0615124</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5823" available="true" type="vendor.model">
@@ -6911,6 +7167,7 @@
         <param name="Кузов">5N</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">5N0615123</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5822" available="true" type="vendor.model">
@@ -6938,6 +7195,7 @@
         <param name="Кузов">5N</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">5N0615124</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5631" available="true" type="vendor.model">
@@ -6964,6 +7222,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8M512M088B1</param>
+        <param name="Код запчастини">8M51-2M088-B1</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5630" available="true" type="vendor.model">
@@ -6989,6 +7248,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8M512M089B1</param>
+        <param name="Код запчастини">8M51-2M089-B1</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5537" available="true" type="vendor.model">
@@ -7015,6 +7275,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">BV612B302A1</param>
+        <param name="Код запчастини">BV61-2B302-A1</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5536" available="true" type="vendor.model">
@@ -7040,6 +7301,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">BV612B294A1</param>
+        <param name="Код запчастини">BV61-2B294-A1</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5205" available="true" type="vendor.model">
@@ -7067,6 +7329,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5204" available="true" type="vendor.model">
@@ -7094,6 +7357,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4G0-615-403-A</param>
+        <param name="Код запчастини">4G0-615-403-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4249" available="true" type="vendor.model">
@@ -7119,6 +7383,7 @@
         <param name="Двигун">3.7L VQ37VHR</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">410114ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4149" available="true" type="vendor.model">
@@ -7145,6 +7410,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">7L6-615-403-AR, 7L6-615-423-D, 7L6-615-423-G, 7L6-615-423-H, 7L6-615-423-L</param>
+        <param name="Код запчастини">7L6-615-423-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3480" available="true" type="vendor.model">
@@ -7172,6 +7438,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">561-615-123</param>
+        <param name="Код запчастини">561-615-123</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3479" available="true" type="vendor.model">
@@ -7199,6 +7466,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">561-615-124</param>
+        <param name="Код запчастини">561-615-124</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3394" available="true" type="vendor.model">
@@ -7225,6 +7493,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C-2B713-A</param>
+        <param name="Код запчастини">DG9C2B713A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3393" available="true" type="vendor.model">
@@ -7250,6 +7519,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG9C-2B712-A</param>
+        <param name="Код запчастини">DG9C2B712A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3392" available="true" type="vendor.model">
@@ -7276,6 +7546,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C-2B302-A</param>
+        <param name="Код запчастини">DG9C2B302A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3391" available="true" type="vendor.model">
@@ -7302,6 +7573,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG9C-2B294-A</param>
+        <param name="Код запчастини">DG9C2B294A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2952" available="true" type="vendor.model">
@@ -7328,6 +7600,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">KG9C-2D251-C</param>
+        <param name="Код запчастини">KG9C2D251C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2951" available="true" type="vendor.model">
@@ -7354,6 +7627,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">KG9C-2D250-C</param>
+        <param name="Код запчастини">KG9C2D250C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2462" available="true" type="vendor.model">
@@ -7378,6 +7652,7 @@
         <param name="Двигун">2.0L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">440011aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2459" available="true" type="vendor.model">
@@ -7401,6 +7676,7 @@
         <param name="Двигун">2.0L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">440111aa0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2451" available="true" type="vendor.model">
@@ -7427,6 +7703,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">410014ga0a</param>
+        <param name="Код запчастини">410014ga0a</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1852" available="true" type="vendor.model">
@@ -7455,6 +7732,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG9C-2B302-AB</param>
+        <param name="Код запчастини">DG9C2B302AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1849" available="true" type="vendor.model">
@@ -7483,6 +7761,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG9C-2B294-AB</param>
+        <param name="Код запчастини">DG9C2B294AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1698" available="true" type="vendor.model">
@@ -7510,6 +7789,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1212" available="true" type="vendor.model">
@@ -7538,6 +7818,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="969" available="true" type="vendor.model">
@@ -7564,6 +7845,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4G0-615-404-A</param>
+        <param name="Код запчастини">4G0-615-404-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="462" available="true" type="vendor.model">
@@ -7592,6 +7874,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-615-403-X, 5N0-615-403</param>
+        <param name="Код запчастини">5N0-615-403</param>
         <param name="Стан">Вживані</param>
       </offer>
     </offers>

@@ -29,6 +29,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32324590, 32324591, 36010551, 36011663, 36003709</param>
+        <param name="Код запчастини">32324590</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="66191" available="true" type="vendor.model">
@@ -55,6 +56,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32324589, 36010550, 36011662, 36011711, 36003708</param>
+        <param name="Код запчастини">32324589</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="66153" available="true" type="vendor.model">
@@ -80,6 +82,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">32324587, 32324588, 36010610, 36003707</param>
+        <param name="Код запчастини">32324588</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65418" available="true" type="vendor.model">
@@ -107,6 +110,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65415" available="true" type="vendor.model">
@@ -133,6 +137,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">32336222, 32336255, 31325852, 31437934, 36010126, 36010571, 36011773, 36003638</param>
+        <param name="Код запчастини">31325852</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65117" available="true" type="vendor.model">
@@ -158,6 +163,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65031" available="true" type="vendor.model">
@@ -182,6 +188,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65018" available="true" type="vendor.model">
@@ -208,6 +215,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64987" available="true" type="vendor.model">
@@ -233,6 +241,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64985" available="true" type="vendor.model">
@@ -259,6 +268,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64984" available="true" type="vendor.model">
@@ -284,6 +294,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64983" available="true" type="vendor.model">
@@ -310,6 +321,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64981" available="true" type="vendor.model">
@@ -335,6 +347,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64980" available="true" type="vendor.model">
@@ -360,6 +373,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64962" available="true" type="vendor.model">
@@ -386,6 +400,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64960" available="true" type="vendor.model">
@@ -412,6 +427,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64956" available="true" type="vendor.model">
@@ -436,6 +452,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64954" available="true" type="vendor.model">
@@ -460,6 +477,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64918" available="true" type="vendor.model">
@@ -484,6 +502,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">36010091</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64917" available="true" type="vendor.model">
@@ -508,6 +527,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">36010091</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64837" available="true" type="vendor.model">
@@ -532,6 +552,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64836" available="true" type="vendor.model">
@@ -557,6 +578,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64835" available="true" type="vendor.model">
@@ -582,6 +604,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64744" available="true" type="vendor.model">
@@ -606,6 +629,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">36010091</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64743" available="true" type="vendor.model">
@@ -630,6 +654,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">36010091</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64597" available="true" type="vendor.model">
@@ -657,6 +682,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">30783071, 31272545, 31367560, 36001183, 36002546, 36012419, 50463398, 50558699, 36051324</param>
+        <param name="Код запчастини">31367560</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63027" available="true" type="vendor.model">
@@ -683,6 +709,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2G3-3B437-AC, F2GZ-3B437-A, F2GZ-3B437-G, TX-694, TX-757, TX-876, F2GZ-3B437-M</param>
+        <param name="Код запчастини">F2G3-3B437-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62096" available="true" type="vendor.model">
@@ -707,6 +734,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62048" available="true" type="vendor.model">
@@ -733,6 +761,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62042" available="true" type="vendor.model">
@@ -756,6 +785,7 @@
         <param name="Модель авто">A8</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62039" available="true" type="vendor.model">
@@ -781,6 +811,7 @@
         <param name="Кузов">4H8 (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62038" available="true" type="vendor.model">
@@ -804,6 +835,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-271-D</param>
+        <param name="Код запчастини">4G0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62035" available="true" type="vendor.model">
@@ -826,6 +858,7 @@
         <param name="Модель авто">A7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62034" available="true" type="vendor.model">
@@ -851,6 +884,7 @@
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62032" available="true" type="vendor.model">
@@ -876,6 +910,7 @@
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62031" available="true" type="vendor.model">
@@ -899,6 +934,7 @@
         <param name="Кузов">B9</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">8W0-407-271, 8W0-407-271-D, 8W0-407-271-L</param>
+        <param name="Код запчастини">8W0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62030" available="true" type="vendor.model">
@@ -922,6 +958,7 @@
         <param name="Модель авто">A8</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62029" available="true" type="vendor.model">
@@ -945,6 +982,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62028" available="true" type="vendor.model">
@@ -969,6 +1007,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62027" available="true" type="vendor.model">
@@ -992,6 +1031,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62026" available="true" type="vendor.model">
@@ -1017,6 +1057,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62025" available="true" type="vendor.model">
@@ -1041,6 +1082,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62024" available="true" type="vendor.model">
@@ -1066,6 +1108,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62023" available="true" type="vendor.model">
@@ -1089,6 +1132,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62022" available="true" type="vendor.model">
@@ -1113,6 +1157,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62021" available="true" type="vendor.model">
@@ -1138,6 +1183,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62020" available="true" type="vendor.model">
@@ -1162,6 +1208,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62019" available="true" type="vendor.model">
@@ -1185,6 +1232,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62018" available="true" type="vendor.model">
@@ -1210,6 +1258,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62017" available="true" type="vendor.model">
@@ -1235,6 +1284,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62016" available="true" type="vendor.model">
@@ -1260,6 +1310,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62013" available="true" type="vendor.model">
@@ -1285,6 +1336,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62010" available="true" type="vendor.model">
@@ -1310,6 +1362,7 @@
         <param name="Кузов">4H8 (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62007" available="true" type="vendor.model">
@@ -1333,6 +1386,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62006" available="true" type="vendor.model">
@@ -1356,6 +1410,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="62002" available="true" type="vendor.model">
@@ -1379,6 +1434,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="61999" available="true" type="vendor.model">
@@ -1402,6 +1458,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="61997" available="true" type="vendor.model">
@@ -1425,6 +1482,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="61994" available="true" type="vendor.model">
@@ -1447,6 +1505,7 @@
         <param name="Модель авто">A7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56667" available="true" type="vendor.model">
@@ -1473,6 +1532,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56645" available="true" type="vendor.model">
@@ -1499,6 +1559,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56644" available="true" type="vendor.model">
@@ -1525,6 +1586,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56563" available="true" type="vendor.model">
@@ -1552,6 +1614,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30783068, 31325573, 31367536, 36001813, 36002544, 36012415, 50463394, 50643687</param>
+        <param name="Код запчастини">31367536</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56385" available="true" type="vendor.model">
@@ -1578,6 +1641,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56384" available="true" type="vendor.model">
@@ -1604,6 +1668,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56383" available="true" type="vendor.model">
@@ -1630,6 +1695,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56359" available="true" type="vendor.model">
@@ -1655,6 +1721,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55820" available="true" type="vendor.model">
@@ -1682,6 +1749,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55730" available="true" type="vendor.model">
@@ -1707,6 +1775,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55729" available="true" type="vendor.model">
@@ -1732,6 +1801,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55653" available="true" type="vendor.model">
@@ -1757,6 +1827,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55652" available="true" type="vendor.model">
@@ -1782,6 +1853,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55598" available="true" type="vendor.model">
@@ -1808,6 +1880,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55596" available="true" type="vendor.model">
@@ -1834,6 +1907,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55560" available="true" type="vendor.model">
@@ -1862,6 +1936,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4K0-501-204</param>
+        <param name="Код запчастини">4K0-501-204</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55257" available="true" type="vendor.model">
@@ -1888,6 +1963,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55256" available="true" type="vendor.model">
@@ -1914,6 +1990,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55106" available="true" type="vendor.model">
@@ -1940,6 +2017,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53660" available="true" type="vendor.model">
@@ -1965,6 +2043,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-DT, 1K0-407-271-FP, 1K0-407-761-BV, 1K0-407-761-BX, 3Q0-407-271-AL, 3Q0-407-761-CV, 3Q0-407-761-FV, 3Q0-407-271-N</param>
+        <param name="Код запчастини">3Q0-407-271-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53658" available="true" type="vendor.model">
@@ -1990,6 +2069,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">3Q0-407-272-AE, 3Q0-407-762-CV, 3Q0-407-762-DV, 8J0-407-762-B, 8J0-407-762-BV, 8J0-407-762-H, 3Q0-407-272-C</param>
+        <param name="Код запчастини">3Q0-407-272-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53656" available="true" type="vendor.model">
@@ -2015,6 +2095,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0-407-766-B, 1K0-407-272-TN, 5N0-407-762-F</param>
+        <param name="Код запчастини">5N0-407-762-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53653" available="true" type="vendor.model">
@@ -2042,6 +2123,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-407-761-N</param>
+        <param name="Код запчастини">5N0-407-761-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53510" available="true" type="vendor.model">
@@ -2069,6 +2151,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-407-761-N</param>
+        <param name="Код запчастини">5N0-407-761-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52076" available="true" type="vendor.model">
@@ -2096,6 +2179,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52075" available="true" type="vendor.model">
@@ -2123,6 +2207,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52070" available="true" type="vendor.model">
@@ -2149,6 +2234,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52067" available="true" type="vendor.model">
@@ -2175,6 +2261,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52050" available="true" type="vendor.model">
@@ -2202,6 +2289,7 @@
         <param name="Кузов">4HC (D4)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52048" available="true" type="vendor.model">
@@ -2229,6 +2317,7 @@
         <param name="Кузов">4HC (D4)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52034" available="true" type="vendor.model">
@@ -2256,6 +2345,7 @@
         <param name="Кузов">4HC (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52032" available="true" type="vendor.model">
@@ -2283,6 +2373,7 @@
         <param name="Кузов">4HC (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51966" available="true" type="vendor.model">
@@ -2309,6 +2400,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51250" available="true" type="vendor.model">
@@ -2336,6 +2428,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51249" available="true" type="vendor.model">
@@ -2363,6 +2456,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51246" available="true" type="vendor.model">
@@ -2390,6 +2484,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51243" available="true" type="vendor.model">
@@ -2417,6 +2512,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51242" available="true" type="vendor.model">
@@ -2444,6 +2540,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51241" available="true" type="vendor.model">
@@ -2471,6 +2568,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51240" available="true" type="vendor.model">
@@ -2496,6 +2594,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51239" available="true" type="vendor.model">
@@ -2523,6 +2622,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51234" available="true" type="vendor.model">
@@ -2549,6 +2649,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0-407-764-B, 5N0-407-764-BX, 5N0-407-764-J, 5N0-407-764-JX, 5N0-407-766-D, 5N0-407-766-DX, 5WA-407-272-R</param>
+        <param name="Код запчастини">5N0-407-764-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51233" available="true" type="vendor.model">
@@ -2575,6 +2676,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-407-761-N</param>
+        <param name="Код запчастини">5N0-407-761-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51232" available="true" type="vendor.model">
@@ -2600,6 +2702,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51231" available="true" type="vendor.model">
@@ -2626,6 +2729,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51230" available="true" type="vendor.model">
@@ -2651,6 +2755,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51228" available="true" type="vendor.model">
@@ -2676,6 +2781,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51226" available="true" type="vendor.model">
@@ -2703,6 +2809,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51225" available="true" type="vendor.model">
@@ -2730,6 +2837,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49017" available="true" type="vendor.model">
@@ -2756,6 +2864,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49011" available="true" type="vendor.model">
@@ -2785,6 +2894,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-3B437-AE, K2GZ-3B437-A, K2GZ-3B437-K, TX-1141, TX-935, K2GZ-3B437-N</param>
+        <param name="Код запчастини">K2GP-3B437-AE</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49010" available="true" type="vendor.model">
@@ -2813,6 +2923,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437720, 36003139</param>
+        <param name="Код запчастини">31437720</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49008" available="true" type="vendor.model">
@@ -2842,6 +2953,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437620, 31437935, 36010141, 36010220, 36011790, 36011806</param>
+        <param name="Код запчастини">31437935</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48106" available="true" type="vendor.model">
@@ -2869,6 +2981,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47949" available="true" type="vendor.model">
@@ -2897,6 +3010,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31437621</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47834" available="true" type="vendor.model">
@@ -2923,6 +3037,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47833" available="true" type="vendor.model">
@@ -2949,6 +3064,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47832" available="true" type="vendor.model">
@@ -2975,6 +3091,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-4K139-AC, K2GZ-4K139-A</param>
+        <param name="Код запчастини">K2GP-4K139-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47831" available="true" type="vendor.model">
@@ -3001,6 +3118,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-4K139-AD, K2GZ-4K139-D, K2GZ-4K139-G</param>
+        <param name="Код запчастини">K2GP-4K139-AD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47827" available="true" type="vendor.model">
@@ -3026,6 +3144,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47826" available="true" type="vendor.model">
@@ -3051,6 +3170,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46012" available="true" type="vendor.model">
@@ -3076,6 +3196,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46010" available="true" type="vendor.model">
@@ -3101,6 +3222,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45931" available="true" type="vendor.model">
@@ -3127,6 +3249,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45916" available="true" type="vendor.model">
@@ -3152,6 +3275,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45915" available="true" type="vendor.model">
@@ -3177,6 +3301,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45775" available="true" type="vendor.model">
@@ -3203,6 +3328,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45774" available="true" type="vendor.model">
@@ -3229,6 +3355,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45773" available="true" type="vendor.model">
@@ -3254,6 +3381,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">80A-501-204-C, 80A-501-204-G</param>
+        <param name="Код запчастини">80A-501-204-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45772" available="true" type="vendor.model">
@@ -3279,6 +3407,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">80A-501-203-G, 80A-501-203-H</param>
+        <param name="Код запчастини">80A-501-203-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45452" available="true" type="vendor.model">
@@ -3304,6 +3433,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45351" available="true" type="vendor.model">
@@ -3330,6 +3460,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45349" available="true" type="vendor.model">
@@ -3356,6 +3487,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45231" available="true" type="vendor.model">
@@ -3382,6 +3514,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45229" available="true" type="vendor.model">
@@ -3408,6 +3541,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44969" available="true" type="vendor.model">
@@ -3435,6 +3569,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31437621</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44966" available="true" type="vendor.model">
@@ -3460,6 +3595,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44952" available="true" type="vendor.model">
@@ -3486,6 +3622,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44951" available="true" type="vendor.model">
@@ -3511,6 +3648,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44947" available="true" type="vendor.model">
@@ -3536,6 +3674,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44936" available="true" type="vendor.model">
@@ -3561,6 +3700,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44935" available="true" type="vendor.model">
@@ -3586,6 +3726,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44927" available="true" type="vendor.model">
@@ -3611,6 +3752,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44269" available="true" type="vendor.model">
@@ -3636,6 +3778,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-501-203-AX, 1K0-501-203-D, 1K0-501-203-DX, 1K0-501-203-FX, 1K0-501-203-F</param>
+        <param name="Код запчастини">1K0-501-203-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44188" available="true" type="vendor.model">
@@ -3661,6 +3804,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8501201B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44187" available="true" type="vendor.model">
@@ -3686,6 +3830,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8501201B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44124" available="true" type="vendor.model">
@@ -3711,6 +3856,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44122" available="true" type="vendor.model">
@@ -3736,6 +3882,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44076" available="true" type="vendor.model">
@@ -3760,6 +3907,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44075" available="true" type="vendor.model">
@@ -3784,6 +3932,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43994" available="true" type="vendor.model">
@@ -3808,6 +3957,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43978" available="true" type="vendor.model">
@@ -3832,6 +3982,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43940" available="true" type="vendor.model">
@@ -3858,6 +4009,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43929" available="true" type="vendor.model">
@@ -3883,6 +4035,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">8R0501203</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43759" available="true" type="vendor.model">
@@ -3907,6 +4060,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43758" available="true" type="vendor.model">
@@ -3931,6 +4085,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43716" available="true" type="vendor.model">
@@ -3954,6 +4109,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43715" available="true" type="vendor.model">
@@ -3978,6 +4134,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43107" available="true" type="vendor.model">
@@ -4003,6 +4160,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43105" available="true" type="vendor.model">
@@ -4029,6 +4187,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41926" available="true" type="vendor.model">
@@ -4055,6 +4214,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40864" available="true" type="vendor.model">
@@ -4078,6 +4238,7 @@
         <param name="Модель авто">A7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40795" available="true" type="vendor.model">
@@ -4105,6 +4266,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">80A-501-203-G, 80A-501-203-H</param>
+        <param name="Код запчастини">80A-501-203-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40781" available="true" type="vendor.model">
@@ -4131,6 +4293,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40780" available="true" type="vendor.model">
@@ -4157,6 +4320,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40731" available="true" type="vendor.model">
@@ -4183,6 +4347,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">80A-501-204-C, 80A-501-204-G</param>
+        <param name="Код запчастини">80A-501-204-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40729" available="true" type="vendor.model">
@@ -4206,6 +4371,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40727" available="true" type="vendor.model">
@@ -4229,6 +4395,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40726" available="true" type="vendor.model">
@@ -4252,6 +4419,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40404" available="true" type="vendor.model">
@@ -4277,6 +4445,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="38959" available="true" type="vendor.model">
@@ -4303,6 +4472,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31437621</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36648" available="true" type="vendor.model">
@@ -4328,6 +4498,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4F0-407-451-DX, 4F0-407-271-K</param>
+        <param name="Код запчастини">4F0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36647" available="true" type="vendor.model">
@@ -4353,6 +4524,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4F0-407-452-V, 4F0-407-452-X, 4F0-407-272-J</param>
+        <param name="Код запчастини">4F0-407-272-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36646" available="true" type="vendor.model">
@@ -4378,6 +4550,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4F0-407-452-V, 4F0-407-452-X, 4F0-407-272-J</param>
+        <param name="Код запчастини">4F0-407-271-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36645" available="true" type="vendor.model">
@@ -4402,6 +4575,7 @@
         <param name="Кузов">C6</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4F0-501-203-BX, 4F0-501-203-B</param>
+        <param name="Код запчастини">4F0-501-203-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36644" available="true" type="vendor.model">
@@ -4426,6 +4600,7 @@
         <param name="Кузов">C6</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4F0-501-203-BX, 4F0-501-203-B</param>
+        <param name="Код запчастини">4F0-501-203-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36643" available="true" type="vendor.model">
@@ -4450,6 +4625,7 @@
         <param name="Кузов">C6</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4F0-501-203-BX, 4F0-501-203-B</param>
+        <param name="Код запчастини">4F0-501-203-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="36642" available="true" type="vendor.model">
@@ -4474,6 +4650,7 @@
         <param name="Кузов">C6</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4F0-501-203-BX, 4F0-501-203-B</param>
+        <param name="Код запчастини">4F0-501-203-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35216" available="true" type="vendor.model">
@@ -4498,6 +4675,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 3AB-407-271, 3C0-407-271-AH, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35215" available="true" type="vendor.model">
@@ -4522,6 +4700,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 3AB-407-271, 3C0-407-271-AH, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35212" available="true" type="vendor.model">
@@ -4545,6 +4724,7 @@
         <param name="Модель авто">CC</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">3C0407271AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35211" available="true" type="vendor.model">
@@ -4568,6 +4748,7 @@
         <param name="Модель авто">CC</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">3C0407271AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35210" available="true" type="vendor.model">
@@ -4590,6 +4771,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">3C0407271AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34517" available="true" type="vendor.model">
@@ -4616,6 +4798,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34516" available="true" type="vendor.model">
@@ -4642,6 +4825,7 @@
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34510" available="true" type="vendor.model">
@@ -4668,6 +4852,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34509" available="true" type="vendor.model">
@@ -4694,6 +4879,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34506" available="true" type="vendor.model">
@@ -4720,6 +4906,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34149" available="true" type="vendor.model">
@@ -4743,6 +4930,7 @@
         <param name="Двигун">2.0L</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
+        <param name="Код запчастини">4H0407271K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34146" available="true" type="vendor.model">
@@ -4767,6 +4955,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34145" available="true" type="vendor.model">
@@ -4791,6 +4980,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34144" available="true" type="vendor.model">
@@ -4815,6 +5005,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34142" available="true" type="vendor.model">
@@ -4839,6 +5030,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34140" available="true" type="vendor.model">
@@ -4863,6 +5055,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-K</param>
+        <param name="Код запчастини">4H0-407-271-K</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33775" available="true" type="vendor.model">
@@ -4889,6 +5082,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33732" available="true" type="vendor.model">
@@ -4915,6 +5109,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-X, 7L8-501-201</param>
+        <param name="Код запчастини">7L8-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33723" available="true" type="vendor.model">
@@ -4942,6 +5137,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-X, 7L8-501-201</param>
+        <param name="Код запчастини">7L8-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33677" available="true" type="vendor.model">
@@ -4968,6 +5164,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33676" available="true" type="vendor.model">
@@ -4994,6 +5191,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33646" available="true" type="vendor.model">
@@ -5019,6 +5217,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33435" available="true" type="vendor.model">
@@ -5045,6 +5244,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33434" available="true" type="vendor.model">
@@ -5071,6 +5271,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33432" available="true" type="vendor.model">
@@ -5095,6 +5296,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33431" available="true" type="vendor.model">
@@ -5119,6 +5321,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33425" available="true" type="vendor.model">
@@ -5145,6 +5348,7 @@
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">K2GP-4K138-AC, K2GZ-4K138-A, K2GZ-4K138-E</param>
+        <param name="Код запчастини">K2GP-4K138-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33224" available="true" type="vendor.model">
@@ -5171,6 +5375,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33223" available="true" type="vendor.model">
@@ -5197,6 +5402,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33139" available="true" type="vendor.model">
@@ -5221,6 +5427,7 @@
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32160" available="true" type="vendor.model">
@@ -5250,6 +5457,7 @@
         <param name="Кузов">4HL (D4)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32158" available="true" type="vendor.model">
@@ -5278,6 +5486,7 @@
         <param name="Кузов">4HL (D4)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32117" available="true" type="vendor.model">
@@ -5303,6 +5512,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325816, 31437939, 36010091, 36011787</param>
+        <param name="Код запчастини">31325816</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32001" available="true" type="vendor.model">
@@ -5329,6 +5539,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32000" available="true" type="vendor.model">
@@ -5355,6 +5566,7 @@
         <param name="Кузов">8R</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31869" available="true" type="vendor.model">
@@ -5382,6 +5594,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437522, 36010059, 36010216</param>
+        <param name="Код запчастини">36010216</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31668" available="true" type="vendor.model">
@@ -5412,6 +5625,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31666" available="true" type="vendor.model">
@@ -5439,6 +5653,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31665" available="true" type="vendor.model">
@@ -5469,6 +5684,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31664" available="true" type="vendor.model">
@@ -5498,6 +5714,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31663" available="true" type="vendor.model">
@@ -5527,6 +5744,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31662" available="true" type="vendor.model">
@@ -5557,6 +5775,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31661" available="true" type="vendor.model">
@@ -5585,6 +5804,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31660" available="true" type="vendor.model">
@@ -5614,6 +5834,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31530" available="true" type="vendor.model">
@@ -5640,6 +5861,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31437621, 31325854, 32240323, 32336203, 32336205, 32339224, 36010127, 36010221, 36011782, 36012827, 36003640</param>
+        <param name="Код запчастини">31325854</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31505" available="true" type="vendor.model">
@@ -5667,6 +5889,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31504" available="true" type="vendor.model">
@@ -5693,6 +5916,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4M0-407-271, 4M0-407-271-D, 4M0-407-271-AD</param>
+        <param name="Код запчастини">4M0-407-271-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29792" available="true" type="vendor.model">
@@ -5721,6 +5945,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29791" available="true" type="vendor.model">
@@ -5748,6 +5973,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29748" available="true" type="vendor.model">
@@ -5775,6 +6001,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28589" available="true" type="vendor.model">
@@ -5802,6 +6029,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">30783071, 31272545, 31367560, 36001183, 36002546, 36012419, 50463398, 50558699, 36051324</param>
+        <param name="Код запчастини">31367560</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27571" available="true" type="vendor.model">
@@ -5826,6 +6054,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-3B437-AB, K2GP-3B437-AC, K2GP-3B437-AD, K2GZ-3B437-A, K2GZ-3B437-K, TX-1141, K2GZ-3B437-N</param>
+        <param name="Код запчастини">K2GP-3B437-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="26350" available="true" type="vendor.model">
@@ -5852,6 +6081,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="26349" available="true" type="vendor.model">
@@ -5878,6 +6108,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="26340" available="true" type="vendor.model">
@@ -5904,6 +6135,7 @@
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25423" available="true" type="vendor.model">
@@ -5930,6 +6162,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25406" available="true" type="vendor.model">
@@ -5956,6 +6189,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25261" available="true" type="vendor.model">
@@ -5982,6 +6216,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25260" available="true" type="vendor.model">
@@ -6008,6 +6243,7 @@
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25144" available="true" type="vendor.model">
@@ -6034,6 +6270,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25143" available="true" type="vendor.model">
@@ -6060,6 +6297,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24952" available="true" type="vendor.model">
@@ -6085,6 +6323,7 @@
         <param name="Двигун">4.0L CTGE</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24944" available="true" type="vendor.model">
@@ -6111,6 +6350,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24943" available="true" type="vendor.model">
@@ -6137,6 +6377,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24684" available="true" type="vendor.model">
@@ -6163,6 +6404,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7L0-407-271-A, 7L0-407-271-C, 7L0-407-271-E, 7L8-407-271, 7L0-407-271-F</param>
+        <param name="Код запчастини">7L0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24679" available="true" type="vendor.model">
@@ -6188,6 +6430,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24678" available="true" type="vendor.model">
@@ -6215,6 +6458,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30783068, 31325573, 31367536, 36001813, 36002544, 36012415, 50463394, 50643687</param>
+        <param name="Код запчастини">31367536</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24569" available="true" type="vendor.model">
@@ -6241,6 +6485,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24568" available="true" type="vendor.model">
@@ -6267,6 +6512,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24567" available="true" type="vendor.model">
@@ -6293,6 +6539,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24566" available="true" type="vendor.model">
@@ -6319,6 +6566,7 @@
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24563" available="true" type="vendor.model">
@@ -6345,6 +6593,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24562" available="true" type="vendor.model">
@@ -6371,6 +6620,7 @@
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24531" available="true" type="vendor.model">
@@ -6396,6 +6646,7 @@
         <param name="Двигун">2.7L ENWQ0</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">F2G3-4K138-AB, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2G3-4K138-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24530" available="true" type="vendor.model">
@@ -6421,6 +6672,7 @@
         <param name="Двигун">2.7L ENWQ0</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">F2G3-4K138-AB, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2G3-4K138-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24428" available="true" type="vendor.model">
@@ -6447,6 +6699,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24271" available="true" type="vendor.model">
@@ -6473,6 +6726,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24020" available="true" type="vendor.model">
@@ -6499,6 +6753,7 @@
         <param name="Кузов">4M</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">4M0-501-203-D, 4M0-501-201-D</param>
+        <param name="Код запчастини">4M0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23991" available="true" type="vendor.model">
@@ -6526,6 +6781,7 @@
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">30783071, 31272545, 31367560, 36001183, 36002546, 36012419, 50463398, 50558699, 36051324</param>
+        <param name="Код запчастини">31367560</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23659" available="true" type="vendor.model">
@@ -6550,6 +6806,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23658" available="true" type="vendor.model">
@@ -6574,6 +6831,7 @@
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23567" available="true" type="vendor.model">
@@ -6602,6 +6860,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2G3-3B437-CD, F2GZ-3B437-B, F2GZ-3B437-D, F2GZ-3B437-E, F2GZ-3B437-H, TX-695, TX-706, TX-750, TX-778, F2GZ-3B437-L</param>
+        <param name="Код запчастини">F2GZ-3B437-L</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="23000" available="true" type="vendor.model">
@@ -6629,6 +6888,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8R0-501-204-DX, 8R0-501-204-D</param>
+        <param name="Код запчастини">8R0-501-204-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22955" available="true" type="vendor.model">
@@ -6654,6 +6914,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">3.6L CGRA</param>
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
+        <param name="Код запчастини">7P0407271C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22726" available="true" type="vendor.model">
@@ -6680,6 +6941,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22725" available="true" type="vendor.model">
@@ -6706,6 +6968,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22578" available="true" type="vendor.model">
@@ -6730,6 +6993,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Рік випуску">2007</param>
         <param name="Двигун">3.0L TDI BUG</param>
         <param name="Кузов">4L</param>
+        <param name="Код запчастини">7L8501201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22577" available="true" type="vendor.model">
@@ -6756,6 +7020,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-X, 7L8-501-201</param>
+        <param name="Код запчастини">7L8-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22560" available="true" type="vendor.model">
@@ -6782,6 +7047,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7L0-407-271-A, 7L0-407-271-C, 7L0-407-271-E, 7L8-407-271, 7L0-407-271-F</param>
+        <param name="Код запчастини">7L0-407-271-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22559" available="true" type="vendor.model">
@@ -6808,6 +7074,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7L0-407-271-A, 7L0-407-271-C, 7L0-407-271-E, 7L8-407-271, 7L0-407-271-F</param>
+        <param name="Код запчастини">7L0-407-271-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22174" available="true" type="vendor.model">
@@ -6834,6 +7101,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22173" available="true" type="vendor.model">
@@ -6860,6 +7128,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22107" available="true" type="vendor.model">
@@ -6886,6 +7155,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2G3-4K138-AB, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22090" available="true" type="vendor.model">
@@ -6912,6 +7182,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G8</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22065" available="true" type="vendor.model">
@@ -6938,6 +7209,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22064" available="true" type="vendor.model">
@@ -6964,6 +7236,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21392" available="true" type="vendor.model">
@@ -6990,6 +7263,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4HC (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21108" available="true" type="vendor.model">
@@ -7016,6 +7290,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21107" available="true" type="vendor.model">
@@ -7042,6 +7317,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21106" available="true" type="vendor.model">
@@ -7068,6 +7344,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21105" available="true" type="vendor.model">
@@ -7094,6 +7371,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21104" available="true" type="vendor.model">
@@ -7120,6 +7398,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21103" available="true" type="vendor.model">
@@ -7146,6 +7425,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20564" available="true" type="vendor.model">
@@ -7173,6 +7453,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8K0-501-201</param>
+        <param name="Код запчастини">8K0-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20563" available="true" type="vendor.model">
@@ -7200,6 +7481,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8K0-501-202</param>
+        <param name="Код запчастини">8K0-501-202</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20530" available="true" type="vendor.model">
@@ -7227,6 +7509,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-501-203-AX, 1K0-501-203-D, 1K0-501-203-DX, 1K0-501-203-FX, 1K0-501-203-F</param>
+        <param name="Код запчастини">1K0-501-203-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20522" available="true" type="vendor.model">
@@ -7253,6 +7536,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">8K (B8)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8K0-501-203-MX, 8K0-501-203-M</param>
+        <param name="Код запчастини">8K0-501-203-M</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="20521" available="true" type="vendor.model">
@@ -7278,6 +7562,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">8K (B8)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8K0-501-203-MX, 8K0-501-203-M</param>
+        <param name="Код запчастини">8K0-501-203-M</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19838" available="true" type="vendor.model">
@@ -7303,6 +7588,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">3.0L TDI</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19837" available="true" type="vendor.model">
@@ -7328,6 +7614,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">3.0L TDI</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19807" available="true" type="vendor.model">
@@ -7352,6 +7639,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">3.0L TDI</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19499" available="true" type="vendor.model">
@@ -7379,6 +7667,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8R0-501-203-DX, 8R0-501-203-D</param>
+        <param name="Код запчастини">8R0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19446" available="true" type="vendor.model">
@@ -7406,6 +7695,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8R0-501-204-DX, 8R0-501-204-D</param>
+        <param name="Код запчастини">8R0-501-204-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19440" available="true" type="vendor.model">
@@ -7433,6 +7723,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-501-204-D, 1K0-501-204-F</param>
+        <param name="Код запчастини">1K0-501-204-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19439" available="true" type="vendor.model">
@@ -7459,6 +7750,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-501-203-AX, 1K0-501-203-D, 1K0-501-203-DX, 1K0-501-203-FX, 1K0-501-203-F</param>
+        <param name="Код запчастини">1K0-501-203-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19434" available="true" type="vendor.model">
@@ -7485,6 +7777,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19433" available="true" type="vendor.model">
@@ -7511,6 +7804,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19389" available="true" type="vendor.model">
@@ -7537,6 +7831,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19385" available="true" type="vendor.model">
@@ -7562,6 +7857,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19383" available="true" type="vendor.model">
@@ -7587,6 +7883,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19273" available="true" type="vendor.model">
@@ -7613,6 +7910,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19272" available="true" type="vendor.model">
@@ -7639,6 +7937,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="19122" available="true" type="vendor.model">
@@ -7665,6 +7964,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4H2 (D4)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18260" available="true" type="vendor.model">
@@ -7690,6 +7990,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18258" available="true" type="vendor.model">
@@ -7715,6 +8016,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18051" available="true" type="vendor.model">
@@ -7743,6 +8045,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">HG93-3B436-B, DG9Z-3B436-B, DG9Z-3B436-H, FG9Z-3B436-B, HG9Z-3B436-M, TX-618, TX-699, TX-723, TX-768, TX-807, HG9Z-3B436-D</param>
+        <param name="Код запчастини">HG9Z-3B436-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17886" available="true" type="vendor.model">
@@ -7769,6 +8072,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17880" available="true" type="vendor.model">
@@ -7796,6 +8100,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17810" available="true" type="vendor.model">
@@ -7821,6 +8126,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17689" available="true" type="vendor.model">
@@ -7847,6 +8153,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">CA83-3B436-BB, 8A8Z-3B436-D, CA8Z-3B436-B, TX-638</param>
+        <param name="Код запчастини">CA8Z-3B436-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17560" available="true" type="vendor.model">
@@ -7873,6 +8180,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8A83-4K139-AA, 8A8Z-4K139-A</param>
+        <param name="Код запчастини">8A8Z-4K139-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17559" available="true" type="vendor.model">
@@ -7899,6 +8207,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8A83-4K138-AA, 8A8Z-4K138-A</param>
+        <param name="Код запчастини">8A8Z-4K138-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17529" available="true" type="vendor.model">
@@ -7925,6 +8234,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17528" available="true" type="vendor.model">
@@ -7951,6 +8261,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17484" available="true" type="vendor.model">
@@ -7976,6 +8287,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17469" available="true" type="vendor.model">
@@ -8002,6 +8314,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17420" available="true" type="vendor.model">
@@ -8028,6 +8341,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17419" available="true" type="vendor.model">
@@ -8054,6 +8368,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17409" available="true" type="vendor.model">
@@ -8079,6 +8394,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">F2G3-4K138-AC, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17133" available="true" type="vendor.model">
@@ -8103,6 +8419,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="17118" available="true" type="vendor.model">
@@ -8127,6 +8444,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">C7</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16934" available="true" type="vendor.model">
@@ -8154,6 +8472,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-4K139-AD, K2GZ-4K139-D, K2GZ-4K139-G</param>
+        <param name="Код запчастини">K2GP-4K139-AD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16410" available="true" type="vendor.model">
@@ -8182,6 +8501,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16041" available="true" type="vendor.model">
@@ -8209,6 +8529,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">CA83-3B437-AA, 8A8Z-3B437-C, 8A8Z-3B437-CB, CA8Z-3B437-A, CA8Z-3B437-B, CA8Z-3B437-C, TX-591, TX-760, TX-855, CA8Z-3B437-D</param>
+        <param name="Код запчастини">CA8Z-3B437-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16040" available="true" type="vendor.model">
@@ -8235,6 +8556,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16037" available="true" type="vendor.model">
@@ -8262,6 +8584,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16035" available="true" type="vendor.model">
@@ -8288,6 +8611,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31325110, 36010058</param>
+        <param name="Код запчастини">31325110</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16034" available="true" type="vendor.model">
@@ -8315,6 +8639,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG13-3B437-BA, AA5Z-3B437-A, DG1Z-3B437-A, DG1Z-3B437-E, TX-595, TX-749, TX-834</param>
+        <param name="Код запчастини">DG1Z-3B437-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16029" available="true" type="vendor.model">
@@ -8342,6 +8667,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">K2GP-3B436-AB, K2GZ-3B436-A, K2GZ-3B436-Z, TX-1320, TX-931, K2GZ-3B436-AJ</param>
+        <param name="Код запчастини">K2GP-3B436-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="16027" available="true" type="vendor.model">
@@ -8367,6 +8693,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-3B437-AB, K2GP-3B437-AC, K2GP-3B437-AD, K2GZ-3B437-A, K2GZ-3B437-K, TX-1141, K2GZ-3B437-N</param>
+        <param name="Код запчастини">K2GP-3B437-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15859" available="true" type="vendor.model">
@@ -8393,6 +8720,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-3B437-AB, K2GP-3B437-AC, K2GP-3B437-AD, K2GZ-3B437-A, K2GZ-3B437-K, TX-1141, K2GZ-3B437-N</param>
+        <param name="Код запчастини">K2GP-3B437-AD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14563" available="true" type="vendor.model">
@@ -8420,6 +8748,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14561" available="true" type="vendor.model">
@@ -8447,6 +8776,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14529" available="true" type="vendor.model">
@@ -8474,6 +8804,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14528" available="true" type="vendor.model">
@@ -8501,6 +8832,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14519" available="true" type="vendor.model">
@@ -8529,6 +8861,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14511" available="true" type="vendor.model">
@@ -8554,6 +8887,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14508" available="true" type="vendor.model">
@@ -8580,6 +8914,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="14498" available="true" type="vendor.model">
@@ -8606,6 +8941,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">3.2L B6324S5</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31367559</param>
+        <param name="Код запчастини">31367559</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13825" available="true" type="vendor.model">
@@ -8632,6 +8968,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13824" available="true" type="vendor.model">
@@ -8658,6 +8995,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13500" available="true" type="vendor.model">
@@ -8683,6 +9021,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13499" available="true" type="vendor.model">
@@ -8708,6 +9047,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13482" available="true" type="vendor.model">
@@ -8734,6 +9074,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13481" available="true" type="vendor.model">
@@ -8760,6 +9101,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13469" available="true" type="vendor.model">
@@ -8785,6 +9127,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">F2G3-4K138-AC, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13452" available="true" type="vendor.model">
@@ -8811,6 +9154,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2G3-4K138-AB, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13451" available="true" type="vendor.model">
@@ -8837,6 +9181,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2G3-4K138-AB, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13396" available="true" type="vendor.model">
@@ -8864,6 +9209,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">LX67-4K138-AAB, LX6Z-4K138-A</param>
+        <param name="Код запчастини">LX6Z-4K138-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13395" available="true" type="vendor.model">
@@ -8891,6 +9237,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">LX67-4K139-AAB, LX6Z-4K139-A</param>
+        <param name="Код запчастини">LX6Z-4K139-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13325" available="true" type="vendor.model">
@@ -8917,6 +9264,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13269" available="true" type="vendor.model">
@@ -8943,6 +9291,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">8K (B8)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8K0-501-203-MX, 8K0-501-203-M</param>
+        <param name="Код запчастини">8K0-501-203-M</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13215" available="true" type="vendor.model">
@@ -8969,6 +9318,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-501-204-D, 1K0-501-204-F</param>
+        <param name="Код запчастини">1K0-501-204-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13159" available="true" type="vendor.model">
@@ -8995,6 +9345,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31259504, 30681132, 36000156, 36000931</param>
+        <param name="Код запчастини">31259504</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13158" available="true" type="vendor.model">
@@ -9020,6 +9371,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31259504, 30681132, 36000156, 36000931</param>
+        <param name="Код запчастини">31259504</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12944" available="true" type="vendor.model">
@@ -9045,6 +9397,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">K2GP-3B436-DB, K2GZ-3B436-B, K2GZ-3B436-Y, TX-13121, TX-932, K2GZ-3B436-AK</param>
+        <param name="Код запчастини">K2GP-3B436-DB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12943" available="true" type="vendor.model">
@@ -9071,6 +9424,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">K2GP-3B436-AB, K2GZ-3B436-A, K2GZ-3B436-Z, TX-1320, TX-931, K2GZ-3B436-AJ</param>
+        <param name="Код запчастини">K2GP-3B436-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12346" available="true" type="vendor.model">
@@ -9098,6 +9452,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31325110, 36010058</param>
+        <param name="Код запчастини">31325110</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12337" available="true" type="vendor.model">
@@ -9124,6 +9479,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">K2GP-3B436-AB, K2GZ-3B436-A, K2GZ-3B436-Z, TX-1320, TX-931, K2GZ-3B436-AJ</param>
+        <param name="Код запчастини">K2GP-3B436-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12336" available="true" type="vendor.model">
@@ -9150,6 +9506,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">K2GP-3B437-AB, K2GP-3B437-AC, K2GP-3B437-AD, K2GZ-3B437-A, K2GZ-3B437-K, TX-1141, K2GZ-3B437-N</param>
+        <param name="Код запчастини">K2GP-3B437-AD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12172" available="true" type="vendor.model">
@@ -9177,6 +9534,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">F2G3-3B436-JC, TX-878, F2GZ-3B436-AE</param>
+        <param name="Код запчастини">F2GZ-3B436-AE</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11977" available="true" type="vendor.model">
@@ -9200,6 +9558,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG9Z-3B436-BT, TX-926</param>
+        <param name="Код запчастини">DG9Z-3B436-BT</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11944" available="true" type="vendor.model">
@@ -9226,6 +9585,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31259504, 30681132, 36000156, 36000931</param>
+        <param name="Код запчастини">31259504</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11764" available="true" type="vendor.model">
@@ -9252,6 +9612,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11763" available="true" type="vendor.model">
@@ -9278,6 +9639,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11033" available="true" type="vendor.model">
@@ -9304,6 +9666,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="11032" available="true" type="vendor.model">
@@ -9330,6 +9693,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10977" available="true" type="vendor.model">
@@ -9357,6 +9721,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG13-4K138-AA, DG1Z-4K138-B</param>
+        <param name="Код запчастини">DG1Z-4K138-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10976" available="true" type="vendor.model">
@@ -9384,6 +9749,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">DG13-4K139-AA, DG1Z-4K139-B</param>
+        <param name="Код запчастини">DG1Z-4K139-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10955" available="true" type="vendor.model">
@@ -9409,6 +9775,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10954" available="true" type="vendor.model">
@@ -9434,6 +9801,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10923" available="true" type="vendor.model">
@@ -9460,6 +9828,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10915" available="true" type="vendor.model">
@@ -9486,6 +9855,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10914" available="true" type="vendor.model">
@@ -9511,6 +9881,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10879" available="true" type="vendor.model">
@@ -9538,6 +9909,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10878" available="true" type="vendor.model">
@@ -9565,6 +9937,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10828" available="true" type="vendor.model">
@@ -9591,6 +9964,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">VEBJ82MBE179VO</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10797" available="true" type="vendor.model">
@@ -9617,6 +9991,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10796" available="true" type="vendor.model">
@@ -9643,6 +10018,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10749" available="true" type="vendor.model">
@@ -9670,6 +10046,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10748" available="true" type="vendor.model">
@@ -9697,6 +10074,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10647" available="true" type="vendor.model">
@@ -9723,6 +10101,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10646" available="true" type="vendor.model">
@@ -9749,6 +10128,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-501-201-G, 7P0-501-201-GX, 7P0-501-201-Q, 7P0-501-201-QX, 7P0-501-201-SX, 7P0-501-201-S</param>
+        <param name="Код запчастини">7P0-501-201-G</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10537" available="true" type="vendor.model">
@@ -9775,6 +10155,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10082" available="true" type="vendor.model">
@@ -9802,6 +10183,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31325110, 36010058</param>
+        <param name="Код запчастини">31325110</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9888" available="true" type="vendor.model">
@@ -9829,6 +10211,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GC (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9461" available="true" type="vendor.model">
@@ -9856,6 +10239,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9016" available="true" type="vendor.model">
@@ -9883,6 +10267,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8906" available="true" type="vendor.model">
@@ -9908,6 +10293,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">2.0L ENR90</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">F2G3-4K138-AC, F2GZ-4K138-A, F2GZ-4K138-C</param>
+        <param name="Код запчастини">F2GZ-4K138-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8712" available="true" type="vendor.model">
@@ -9934,6 +10320,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8711" available="true" type="vendor.model">
@@ -9961,6 +10348,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8640" available="true" type="vendor.model">
@@ -9986,6 +10374,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7L0-407-271-A, 7L0-407-271-C, 7L0-407-271-E, 7L8-407-271, 7L0-407-271-F</param>
+        <param name="Код запчастини">7L0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8639" available="true" type="vendor.model">
@@ -10012,6 +10401,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7L0-407-271-A, 7L0-407-271-C, 7L0-407-271-E, 7L8-407-271, 7L0-407-271-F</param>
+        <param name="Код запчастини">7L0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8481" available="true" type="vendor.model">
@@ -10039,6 +10429,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30783068, 31325573, 31367536, 36001813, 36002544, 36012415, 50463394, 50643687</param>
+        <param name="Код запчастини">31325573</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8437" available="true" type="vendor.model">
@@ -10065,6 +10456,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">30783071, 31272545, 31367560, 36001183, 36002546, 36012419, 50463398, 50558699, 36051324</param>
+        <param name="Код запчастини">36012419</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8436" available="true" type="vendor.model">
@@ -10091,6 +10483,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30783068, 31325573, 31367536, 36001813, 36002544, 36012415, 50463394, 50643687</param>
+        <param name="Код запчастини">31325573</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8378" available="true" type="vendor.model">
@@ -10118,6 +10511,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8377" available="true" type="vendor.model">
@@ -10143,6 +10537,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">7P</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8304" available="true" type="vendor.model">
@@ -10168,6 +10563,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">CV61-3B436-TC, CV6Z-3B436-AM, CV6Z-3B436-AQ, CV6Z-3B436-AT, CV6Z-3B436-D, TX-610, TX-826, TX-865, CV6Z-3B436-AY</param>
+        <param name="Код запчастини">CV61-3B436-TC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8300" available="true" type="vendor.model">
@@ -10194,6 +10590,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7943" available="true" type="vendor.model">
@@ -10221,6 +10618,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-501-203-AX, 1K0-501-203-D, 1K0-501-203-DX, 1K0-501-203-FX, 1K0-501-203-F</param>
+        <param name="Код запчастини">1K0-501-203-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7775" available="true" type="vendor.model">
@@ -10247,6 +10645,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-407-763-J, 5N0-407-763-F</param>
+        <param name="Код запчастини">5N0-407-763-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7601" available="true" type="vendor.model">
@@ -10272,6 +10671,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7600" available="true" type="vendor.model">
@@ -10297,6 +10697,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7141" available="true" type="vendor.model">
@@ -10324,6 +10725,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7058" available="true" type="vendor.model">
@@ -10350,6 +10752,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7057" available="true" type="vendor.model">
@@ -10376,6 +10779,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7028" available="true" type="vendor.model">
@@ -10402,6 +10806,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-X, 7L8-501-201</param>
+        <param name="Код запчастини">7L8-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7027" available="true" type="vendor.model">
@@ -10428,6 +10833,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-X, 7L8-501-201</param>
+        <param name="Код запчастини">7L8-501-201</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6763" available="true" type="vendor.model">
@@ -10454,6 +10860,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6762" available="true" type="vendor.model">
@@ -10480,6 +10887,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6760" available="true" type="vendor.model">
@@ -10506,6 +10914,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6385" available="true" type="vendor.model">
@@ -10531,6 +10940,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">I</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">31325135, 36001876</param>
+        <param name="Код запчастини">31325135</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6091" available="true" type="vendor.model">
@@ -10556,6 +10966,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6084" available="true" type="vendor.model">
@@ -10581,6 +10992,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4G2 (C7)</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5877" available="true" type="vendor.model">
@@ -10607,6 +11019,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DG13-3B436-BA, DG1Z-3B436-A, DG1Z-3B436-D, TX-594, TX-747, TX-833</param>
+        <param name="Код запчастини">DG1Z-3B436-E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5718" available="true" type="vendor.model">
@@ -10633,6 +11046,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">1.6L ENJT0</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">CV61-4K138-AA, CV6Z-4K138-A, CV6Z-4K138-B, CV6Z-4K138-C, CV6Z-4K138-D</param>
+        <param name="Код запчастини">CV6Z-4K138-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5717" available="true" type="vendor.model">
@@ -10659,6 +11073,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">1.6L ENJT0</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">CV61-4K138-AA, CV6Z-4K138-A, CV6Z-4K138-B, CV6Z-4K138-C, CV6Z-4K138-D</param>
+        <param name="Код запчастини">CV6Z-4K138-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5591" available="true" type="vendor.model">
@@ -10684,6 +11099,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">1.8L CPRA</param>
         <param name="Кузов">NMS / B8</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">561407271AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5590" available="true" type="vendor.model">
@@ -10709,6 +11125,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Двигун">1.8L CPRA</param>
         <param name="Кузов">NMS / B8</param>
         <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">561407272AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5584" available="true" type="vendor.model">
@@ -10736,6 +11153,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5N0-407-761-N</param>
+        <param name="Код запчастини">5N0-407-761-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5189" available="true" type="vendor.model">
@@ -10762,6 +11180,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5188" available="true" type="vendor.model">
@@ -10787,6 +11206,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="5187" available="true" type="vendor.model">
@@ -10812,6 +11232,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4H0-407-271-H</param>
+        <param name="Код запчастини">4H0-407-271-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4868" available="true" type="vendor.model">
@@ -10838,6 +11259,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">40</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4200" available="true" type="vendor.model">
@@ -10862,6 +11284,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4169" available="true" type="vendor.model">
@@ -10886,6 +11309,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4168" available="true" type="vendor.model">
@@ -10910,6 +11334,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7L8-501-201-BX, 7L8-501-201-B</param>
+        <param name="Код запчастини">7L8-501-201-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4145" available="true" type="vendor.model">
@@ -10934,6 +11359,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4L</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">7P0-407-271-A, 7P0-407-271-B, 7P0-407-271-C</param>
+        <param name="Код запчастини">7P0-407-271-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3469" available="true" type="vendor.model">
@@ -10960,6 +11386,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">NMS / B7</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">561407271AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="3468" available="true" type="vendor.model">
@@ -10987,6 +11414,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">561-407-272-AA</param>
+        <param name="Код запчастини">561-407-272-AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2695" available="true" type="vendor.model">
@@ -11012,6 +11440,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">3Q0-407-271-AD, 3Q0-407-271-AM, 3Q0-407-761-LX, 3Q0-407-761-MX, 3Q0-407-761-SX, 3Q0-407-271-AC</param>
+        <param name="Код запчастини">3Q0-407-271-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2016" available="true" type="vendor.model">
@@ -11038,6 +11467,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Перед.</param>
         <param name="Кросс-номери">4G0-407-451-BX, 4H0-407-451-AX, 4H0-407-451-BX, 4G0-407-271-F</param>
+        <param name="Код запчастини">4G0-407-271-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2013" available="true" type="vendor.model">
@@ -11064,6 +11494,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GF</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1684" available="true" type="vendor.model">
@@ -11091,6 +11522,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="963" available="true" type="vendor.model">
@@ -11118,6 +11550,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="962" available="true" type="vendor.model">
@@ -11144,6 +11577,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Кузов">4GA</param>
         <param name="Передній/Задній">Задн.</param>
         <param name="Кросс-номери">8R0-501-203-C</param>
+        <param name="Код запчастини">8R0-501-203-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="485" available="true" type="vendor.model">
@@ -11171,6 +11605,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">1K0-407-271-BJ, 1K0-407-271-EE, 1K0-407-271-KH, 1K0-407-271-LJ, 1K0-407-271-NP, 1K0-407-271-PB, 1K0-407-271-PC, 1K0-407-451-DX, 1K0-407-451-TX, 3AB-407-271, 3C0-407-271-AH, 3C0-407-451-FX, 3C8-407-271, 3C0-407-271-AJ</param>
+        <param name="Код запчастини">3C0-407-271-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="184" available="true" type="vendor.model">
@@ -11196,6 +11631,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">39600-4GB0A</param>
+        <param name="Код запчастини">39600-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="183" available="true" type="vendor.model">
@@ -11221,6 +11657,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Задн.</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">39601-4GB0A</param>
+        <param name="Код запчастини">39601-4GB0A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30" available="true" type="vendor.model">
@@ -11252,6 +11689,7 @@ Lincoln MKX (Black Label, Premiere, Reserve, Select) 2016-2018. Б/В запча
         <param name="Передній/Задній">Перед.</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">30783071, 31272545, 31367560, 36001183, 36002546, 36012419, 50463398, 50558699, 36051324</param>
+        <param name="Код запчастини">31272545</param>
         <param name="Стан">Вживані</param>
       </offer>
     </offers>

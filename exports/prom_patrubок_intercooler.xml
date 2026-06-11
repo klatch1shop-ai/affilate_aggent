@@ -27,6 +27,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65482" available="true" type="vendor.model">
@@ -50,6 +51,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65408" available="true" type="vendor.model">
@@ -73,6 +75,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65247" available="true" type="vendor.model">
@@ -97,6 +100,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-738-AQ, 4G0-145-738-AT, 4G0-145-738-AR</param>
+        <param name="Код запчастини">4G0-145-738-AT</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65245" available="true" type="vendor.model">
@@ -121,6 +125,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65091" available="true" type="vendor.model">
@@ -144,6 +149,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65088" available="true" type="vendor.model">
@@ -167,6 +173,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31422062</param>
+        <param name="Код запчастини">31422062</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65087" available="true" type="vendor.model">
@@ -191,6 +198,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65086" available="true" type="vendor.model">
@@ -214,6 +222,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65076" available="true" type="vendor.model">
@@ -238,6 +247,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-709-AG</param>
+        <param name="Код запчастини">4G0-145-709-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65040" available="true" type="vendor.model">
@@ -262,6 +272,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65006" available="true" type="vendor.model">
@@ -286,6 +297,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65004" available="true" type="vendor.model">
@@ -309,6 +321,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31422062</param>
+        <param name="Код запчастини">31422062</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="65003" available="true" type="vendor.model">
@@ -333,6 +346,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="64762" available="true" type="vendor.model">
@@ -357,6 +371,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63687" available="true" type="vendor.model">
@@ -383,6 +398,7 @@
         <param name="Кузов">8WH (B9)</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8W0-145-738-D, 8W0-145-738-B</param>
+        <param name="Код запчастини">8W0-145-738-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63685" available="true" type="vendor.model">
@@ -410,6 +426,7 @@
         <param name="Кузов">8WH (B9)</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">8W0-145-673-A, 8W0-145-673-AR</param>
+        <param name="Код запчастини">8W0-145-673-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="63005" available="true" type="vendor.model">
@@ -433,6 +450,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-9R504-BD, F2GZ-9B659-B, F2GZ-9B659-F, F2GZ-9B659-G</param>
+        <param name="Код запчастини">F2G3-9R504-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="61372" available="true" type="vendor.model">
@@ -458,6 +476,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31319909, 31338560</param>
+        <param name="Код запчастини">31319909</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60950" available="true" type="vendor.model">
@@ -480,6 +499,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-708-A</param>
+        <param name="Код запчастини">7P0-145-708-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60949" available="true" type="vendor.model">
@@ -502,6 +522,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-972-B, 7P0-145-972-D</param>
+        <param name="Код запчастини">7P0-145-972-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60948" available="true" type="vendor.model">
@@ -524,6 +545,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-943</param>
+        <param name="Код запчастини">7P0-145-943</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60601" available="true" type="vendor.model">
@@ -545,6 +567,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60479" available="true" type="vendor.model">
@@ -569,6 +592,7 @@
         <param name="Кузов">4L</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7P0-145-738-B</param>
+        <param name="Код запчастини">7P0-145-738-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60477" available="true" type="vendor.model">
@@ -591,6 +615,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-972-B, 7P0-145-972-D</param>
+        <param name="Код запчастини">7P0-145-972-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60475" available="true" type="vendor.model">
@@ -613,6 +638,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60473" available="true" type="vendor.model">
@@ -635,6 +661,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60472" available="true" type="vendor.model">
@@ -657,6 +684,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60415" available="true" type="vendor.model">
@@ -679,6 +707,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-795-AB</param>
+        <param name="Код запчастини">7L6-145-795-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60350" available="true" type="vendor.model">
@@ -703,6 +732,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31370193</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60346" available="true" type="vendor.model">
@@ -727,6 +757,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60258" available="true" type="vendor.model">
@@ -751,6 +782,7 @@
         <param name="Двигун">2.0L B4204T23</param>
         <param name="Кузов">II</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60075" available="true" type="vendor.model">
@@ -773,6 +805,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4M</param>
         <param name="Кросс-номери">4M0-145-708-H</param>
+        <param name="Код запчастини">4M0-145-708-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60074" available="true" type="vendor.model">
@@ -795,6 +828,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4M</param>
         <param name="Кросс-номери">4M0-145-708-H</param>
+        <param name="Код запчастини">4M0-145-708-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60070" available="true" type="vendor.model">
@@ -818,6 +852,7 @@
         <param name="Кузов">4M</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4M0-145-737-C</param>
+        <param name="Код запчастини">4M0-145-737-C</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60040" available="true" type="vendor.model">
@@ -839,6 +874,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60038" available="true" type="vendor.model">
@@ -863,6 +899,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60034" available="true" type="vendor.model">
@@ -884,6 +921,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60025" available="true" type="vendor.model">
@@ -908,6 +946,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60024" available="true" type="vendor.model">
@@ -929,6 +968,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="60023" available="true" type="vendor.model">
@@ -953,6 +993,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59773" available="true" type="vendor.model">
@@ -978,6 +1019,7 @@
         <param name="Кузов">5N</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59759" available="true" type="vendor.model">
@@ -1003,6 +1045,7 @@
         <param name="Кузов">8U</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59750" available="true" type="vendor.model">
@@ -1026,6 +1069,7 @@
         <param name="Рік випуску">2020</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">K2G3-6F073-CC, K2GZ-6F073-B</param>
+        <param name="Код запчастини">K2G3-6F073-CC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59748" available="true" type="vendor.model">
@@ -1049,6 +1093,7 @@
         <param name="Рік випуску">2021</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">K2G3-6F073-CC, K2GZ-6F073-B</param>
+        <param name="Код запчастини">K2G3-6F073CC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59717" available="true" type="vendor.model">
@@ -1072,6 +1117,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-9R504-BD, F2GZ-9B659-B, F2GZ-9B659-F, F2GZ-9B659-G</param>
+        <param name="Код запчастини">F2G3-9R504-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59593" available="true" type="vendor.model">
@@ -1098,6 +1144,7 @@
         <param name="Кузов">4H2 (D4)</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">4H0-145-737-M, 4H0-145-737-AA</param>
+        <param name="Код запчастини">4H0-145-737-AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59532" available="true" type="vendor.model">
@@ -1122,6 +1169,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="59006" available="true" type="vendor.model">
@@ -1144,6 +1192,7 @@
         <param name="Модель авто">A6</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-738-AQ, 4G0-145-738-AT, 4G0-145-738-AR</param>
+        <param name="Код запчастини">4G0-145-738-AT</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="58974" available="true" type="vendor.model">
@@ -1167,6 +1216,7 @@
         <param name="Рік випуску">2021</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">K2G3-9K308-BB, K2GZ-9K308-A</param>
+        <param name="Код запчастини">K2G3-9K308-BB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="58748" available="true" type="vendor.model">
@@ -1191,6 +1241,7 @@
         <param name="Двигун">2.5L B5254T12</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31319173</param>
+        <param name="Код запчастини">31319173</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="58407" available="true" type="vendor.model">
@@ -1216,6 +1267,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-738-AQ, 4G0-145-738-AT, 4G0-145-738-AR</param>
+        <param name="Код запчастини">4G0-145-738-AR</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57306" available="true" type="vendor.model">
@@ -1239,6 +1291,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57043" available="true" type="vendor.model">
@@ -1263,6 +1316,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57026" available="true" type="vendor.model">
@@ -1286,6 +1340,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57025" available="true" type="vendor.model">
@@ -1311,6 +1366,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="57024" available="true" type="vendor.model">
@@ -1334,6 +1390,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31422062</param>
+        <param name="Код запчастини">31422062</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56988" available="true" type="vendor.model">
@@ -1357,6 +1414,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56985" available="true" type="vendor.model">
@@ -1383,6 +1441,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56984" available="true" type="vendor.model">
@@ -1406,6 +1465,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56983" available="true" type="vendor.model">
@@ -1430,6 +1490,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56810" available="true" type="vendor.model">
@@ -1454,6 +1515,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56532" available="true" type="vendor.model">
@@ -1478,6 +1540,7 @@
         <param name="Двигун">2.5L B5254T12</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30636785</param>
+        <param name="Код запчастини">30636785</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56513" available="true" type="vendor.model">
@@ -1501,6 +1564,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31330747, 31370095, 31657761, 32222269</param>
+        <param name="Код запчастини">31330747</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56488" available="true" type="vendor.model">
@@ -1525,6 +1589,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-737-B</param>
+        <param name="Код запчастини">4L0-145-737-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56485" available="true" type="vendor.model">
@@ -1549,6 +1614,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-A</param>
+        <param name="Код запчастини">4L0-145-972-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56484" available="true" type="vendor.model">
@@ -1573,6 +1639,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-738-B, 7P0-145-738-D</param>
+        <param name="Код запчастини">4L0-145-738-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56308" available="true" type="vendor.model">
@@ -1597,6 +1664,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-709-AG</param>
+        <param name="Код запчастини">4G0-145-709-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56158" available="true" type="vendor.model">
@@ -1622,6 +1690,7 @@
         <param name="Кузов">8U</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">5N0-145-832-N</param>
+        <param name="Код запчастини">5N0-145-832-N</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="56097" available="true" type="vendor.model">
@@ -1646,6 +1715,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">31370094</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55949" available="true" type="vendor.model">
@@ -1670,6 +1740,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">31370094</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55947" available="true" type="vendor.model">
@@ -1693,6 +1764,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31657757, 31370095, 31657761, 32222269</param>
+        <param name="Код запчастини">31370095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55882" available="true" type="vendor.model">
@@ -1718,6 +1790,7 @@
         <param name="Кузов">II</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">32222071</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55880" available="true" type="vendor.model">
@@ -1742,6 +1815,7 @@
         <param name="Двигун">2.0L B4204T23</param>
         <param name="Кузов">II</param>
         <param name="Кросс-номери">31657757, 31370095, 31657761, 32222269</param>
+        <param name="Код запчастини">31657757</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55459" available="true" type="vendor.model">
@@ -1767,6 +1841,7 @@
         <param name="Кузов">4A2 (C8)</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">4K0-145-738-AB</param>
+        <param name="Код запчастини">4K0-145-738-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55183" available="true" type="vendor.model">
@@ -1793,6 +1868,7 @@
         <param name="Кузов">8R</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">8R0-145-790-J</param>
+        <param name="Код запчастини">8R0-145-790-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="55181" available="true" type="vendor.model">
@@ -1818,6 +1894,7 @@
         <param name="Двигун">3.0L TDI CPNB</param>
         <param name="Кузов">8R</param>
         <param name="Кросс-номери">059-145-731-CS</param>
+        <param name="Код запчастини">059-145-731-CS</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="54064" available="true" type="vendor.model">
@@ -1840,6 +1917,7 @@
         <param name="Модель авто">A6</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-738-AQ, 4G0-145-738-AT, 4G0-145-738-AR</param>
+        <param name="Код запчастини">4G0-145-738-AT</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="53369" available="true" type="vendor.model">
@@ -1864,6 +1942,7 @@
         <param name="Двигун">2.7L ENWQ0</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">F2GZ-6F072-A</param>
+        <param name="Код запчастини">F2GZ-6F072-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="52912" available="true" type="vendor.model">
@@ -1887,6 +1966,7 @@
         <param name="Рік випуску">2018</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-6C646-CG</param>
+        <param name="Код запчастини">F2G3-6C646-CG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51733" available="true" type="vendor.model">
@@ -1909,6 +1989,7 @@
         <param name="Модель авто">XC60</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51730" available="true" type="vendor.model">
@@ -1933,6 +2014,7 @@
         <param name="Двигун">2.0L</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51606" available="true" type="vendor.model">
@@ -1958,6 +2040,7 @@
         <param name="Кузов">7P</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7P0-145-738-B</param>
+        <param name="Код запчастини">7P0-145-738-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="51605" available="true" type="vendor.model">
@@ -1982,6 +2065,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-972-B, 7P0-145-972-D, 7P0-145-972-B, 7P0-145-972-D</param>
+        <param name="Код запчастини">7P0-145-972-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49625" available="true" type="vendor.model">
@@ -2004,6 +2088,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-709</param>
+        <param name="Код запчастини">7P0-145-709</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49624" available="true" type="vendor.model">
@@ -2026,6 +2111,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-708-A</param>
+        <param name="Код запчастини">7P0-145-708-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49623" available="true" type="vendor.model">
@@ -2048,6 +2134,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-943</param>
+        <param name="Код запчастини">7P0-145-943</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49622" available="true" type="vendor.model">
@@ -2071,6 +2158,7 @@
         <param name="Модель авто">Touareg</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-792</param>
+        <param name="Код запчастини">7P0-145-792</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="49146" available="true" type="vendor.model">
@@ -2095,6 +2183,7 @@
         <param name="Двигун">2.0L TDI DFBA</param>
         <param name="Кузов">4A2 (C8)</param>
         <param name="Кросс-номери">05L-145-762-A, 05L-145-762-J</param>
+        <param name="Код запчастини">05L-145-762-J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48757" available="true" type="vendor.model">
@@ -2120,6 +2209,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48741" available="true" type="vendor.model">
@@ -2143,6 +2233,7 @@
         <param name="Рік випуску">2018</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31657738</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48695" available="true" type="vendor.model">
@@ -2169,6 +2260,7 @@
         <param name="Двигун">2.7L ENWQ0</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">HG9Z-6C646-A</param>
+        <param name="Код запчастини">HG9Z-6C646-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48633" available="true" type="vendor.model">
@@ -2190,6 +2282,7 @@
         <param name="Марка авто">Audi</param>
         <param name="Модель авто">Q5</param>
         <param name="Кузов">FY (80A)</param>
+        <param name="Код запчастини">80A145673M</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48632" available="true" type="vendor.model">
@@ -2214,6 +2307,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">2.7L ENWQ0</param>
         <param name="Кросс-номери">K2G3-6F073-AA, K2GZ-6F073-A, K2GZ-6F073-C</param>
+        <param name="Код запчастини">K2G3-6F073-AA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48540" available="true" type="vendor.model">
@@ -2238,6 +2332,7 @@
         <param name="Рік випуску">2023</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">K2G3-6F073-CC, K2GZ-6F073-B</param>
+        <param name="Код запчастини">K2G3-6F073-CC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48301" available="true" type="vendor.model">
@@ -2262,6 +2357,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="48300" available="true" type="vendor.model">
@@ -2288,6 +2384,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47933" available="true" type="vendor.model">
@@ -2313,6 +2410,7 @@
         <param name="Кузов">II</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47927" available="true" type="vendor.model">
@@ -2338,6 +2436,7 @@
         <param name="Двигун">2.0L B4204T23</param>
         <param name="Кузов">II</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31657738</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="47379" available="true" type="vendor.model">
@@ -2359,6 +2458,7 @@
         <param name="Марка авто">Audi</param>
         <param name="Модель авто">Q5</param>
         <param name="Кузов">FY (80A)</param>
+        <param name="Код запчастини">80A145673D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46934" available="true" type="vendor.model">
@@ -2384,6 +2484,7 @@
         <param name="Двигун">2.0L B4204T23</param>
         <param name="Кузов">II</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31657738</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46719" available="true" type="vendor.model">
@@ -2409,6 +2510,7 @@
         <param name="Кузов">II</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46683" available="true" type="vendor.model">
@@ -2433,6 +2535,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="46052" available="true" type="vendor.model">
@@ -2457,6 +2560,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-708-A</param>
+        <param name="Код запчастини">7P0-145-708-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45551" available="true" type="vendor.model">
@@ -2482,6 +2586,7 @@
         <param name="Кузов">II</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45524" available="true" type="vendor.model">
@@ -2506,6 +2611,7 @@
         <param name="Кузов">4L</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-145-708-H</param>
+        <param name="Код запчастини">7L6-145-708-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="45392" available="true" type="vendor.model">
@@ -2529,6 +2635,7 @@
         <param name="Модель авто">XC90</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">32222071</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="44345" available="true" type="vendor.model">
@@ -2553,6 +2660,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-A</param>
+        <param name="Код запчастини">4L0-145-972-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="43589" available="true" type="vendor.model">
@@ -2577,6 +2685,7 @@
         <param name="Двигун">3.0L TDI CATA</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="42637" available="true" type="vendor.model">
@@ -2598,6 +2707,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">Touareg</param>
         <param name="Кросс-номери">7L6-145-943-B</param>
+        <param name="Код запчастини">7L6-145-943-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="42474" available="true" type="vendor.model">
@@ -2620,6 +2730,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41900" available="true" type="vendor.model">
@@ -2644,6 +2755,7 @@
         <param name="Двигун">2.0L CPMA</param>
         <param name="Кузов">8K (B8)</param>
         <param name="Кросс-номери">8K0-145-709-K, 8K0-145-709-M, 8K0-145-709-H</param>
+        <param name="Код запчастини">8K0-145-709-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="41620" available="true" type="vendor.model">
@@ -2667,6 +2779,7 @@
         <param name="Модель авто">Q5</param>
         <param name="Кузов">FY (80A)</param>
         <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">80A145673E</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40909" available="true" type="vendor.model">
@@ -2692,6 +2805,7 @@
         <param name="Кузов">8U</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40591" available="true" type="vendor.model">
@@ -2716,6 +2830,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-709-AG</param>
+        <param name="Код запчастини">4G0-145-709-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40168" available="true" type="vendor.model">
@@ -2739,6 +2854,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40163" available="true" type="vendor.model">
@@ -2763,6 +2879,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="40119" available="true" type="vendor.model">
@@ -2787,6 +2904,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">31370094</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="39444" available="true" type="vendor.model">
@@ -2811,6 +2929,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37974" available="true" type="vendor.model">
@@ -2836,6 +2955,7 @@
         <param name="Кузов">II</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">31370094, 31657759, 32222071</param>
+        <param name="Код запчастини">32222071</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37843" available="true" type="vendor.model">
@@ -2856,6 +2976,7 @@
         <param name="Марка авто">Ford</param>
         <param name="Модель авто">Edge</param>
         <param name="Кросс-номери">K2G3-6C646-CD, K2GZ-6C646-A</param>
+        <param name="Код запчастини">K2G3-6C646-CD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37545" available="true" type="vendor.model">
@@ -2879,6 +3000,7 @@
         <param name="Модель авто">XC60</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37544" available="true" type="vendor.model">
@@ -2901,6 +3023,7 @@
         <param name="Модель авто">XC60</param>
         <param name="Рік випуску">2016</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37541" available="true" type="vendor.model">
@@ -2925,6 +3048,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338543</param>
+        <param name="Код запчастини">31338543</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37540" available="true" type="vendor.model">
@@ -2949,6 +3073,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338543</param>
+        <param name="Код запчастини">31338543</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37539" available="true" type="vendor.model">
@@ -2971,6 +3096,7 @@
         <param name="Марка авто">Volvo</param>
         <param name="Модель авто">XC60</param>
         <param name="Кросс-номери">31338543</param>
+        <param name="Код запчастини">31338543</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="37538" available="true" type="vendor.model">
@@ -2995,6 +3121,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338543</param>
+        <param name="Код запчастини">31338543</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35857" available="true" type="vendor.model">
@@ -3016,6 +3143,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-943-B</param>
+        <param name="Код запчастини">7L6-145-943-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="35464" available="true" type="vendor.model">
@@ -3041,6 +3169,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30636611</param>
+        <param name="Код запчастини">30636611</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34895" available="true" type="vendor.model">
@@ -3065,6 +3194,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-709-AG</param>
+        <param name="Код запчастини">4G0-145-709-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="34887" available="true" type="vendor.model">
@@ -3089,6 +3219,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="33687" available="true" type="vendor.model">
@@ -3113,6 +3244,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="32180" available="true" type="vendor.model">
@@ -3137,6 +3269,7 @@
         <param name="Двигун">2.0L CYNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-737-AP</param>
+        <param name="Код запчастини">4G0-145-737-AP</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31621" available="true" type="vendor.model">
@@ -3162,6 +3295,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31318" available="true" type="vendor.model">
@@ -3186,6 +3320,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31657757, 31370095, 31657761, 32222269</param>
+        <param name="Код запчастини">31370095</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31317" available="true" type="vendor.model">
@@ -3212,6 +3347,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31316" available="true" type="vendor.model">
@@ -3235,6 +3371,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Кросс-номери">31422062</param>
+        <param name="Код запчастини">31422062</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31315" available="true" type="vendor.model">
@@ -3261,6 +3398,7 @@
         <param name="Двигун">2.0L B4204T27</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31282" available="true" type="vendor.model">
@@ -3287,6 +3425,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31139" available="true" type="vendor.model">
@@ -3311,6 +3450,7 @@
         <param name="Двигун">2.0L B4204T9</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">32222272</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="31137" available="true" type="vendor.model">
@@ -3336,6 +3476,7 @@
         <param name="Двигун">2.0L B4204T9</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338543</param>
+        <param name="Код запчастини">31338543</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30713" available="true" type="vendor.model">
@@ -3360,6 +3501,7 @@
         <param name="Модель авто">CC</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-828-F, 1K0-145-828-AC</param>
+        <param name="Код запчастини">1K0-145-828-F</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30481" available="true" type="vendor.model">
@@ -3384,6 +3526,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">K2G3-6C646-CD, K2GZ-6C646-A</param>
+        <param name="Код запчастини">K2G3-6C646-CD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30479" available="true" type="vendor.model">
@@ -3408,6 +3551,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">K2G3-6F073-CC, K2GZ-6F073-B</param>
+        <param name="Код запчастини">K2G3-6F073-CC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30463" available="true" type="vendor.model">
@@ -3431,6 +3575,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">3.0L TDI CPNB</param>
         <param name="Кузов">4GC (C7)</param>
+        <param name="Код запчастини">4G0-145-737-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30461" available="true" type="vendor.model">
@@ -3454,6 +3599,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">3.0L TDI CPNB</param>
         <param name="Кузов">4GC (C7)</param>
+        <param name="Код запчастини">4G0-145-709-AC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30242" available="true" type="vendor.model">
@@ -3478,6 +3624,7 @@
         <param name="Модель авто">Passat</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30225" available="true" type="vendor.model">
@@ -3501,6 +3648,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30214" available="true" type="vendor.model">
@@ -3527,6 +3675,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30212" available="true" type="vendor.model">
@@ -3550,6 +3699,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30211" available="true" type="vendor.model">
@@ -3573,6 +3723,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30207" available="true" type="vendor.model">
@@ -3599,6 +3750,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30204" available="true" type="vendor.model">
@@ -3622,6 +3774,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30203" available="true" type="vendor.model">
@@ -3645,6 +3798,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30202" available="true" type="vendor.model">
@@ -3667,6 +3821,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30188" available="true" type="vendor.model">
@@ -3694,6 +3849,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30187" available="true" type="vendor.model">
@@ -3717,6 +3873,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30184" available="true" type="vendor.model">
@@ -3740,6 +3897,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30182" available="true" type="vendor.model">
@@ -3763,6 +3921,7 @@
         <param name="Марка авто">Volkswagen</param>
         <param name="Модель авто">CC</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30181" available="true" type="vendor.model">
@@ -3789,6 +3948,7 @@
         <param name="Двигун">2.0L CBFA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30176" available="true" type="vendor.model">
@@ -3812,6 +3972,7 @@
         <param name="Модель авто">XC60</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31370193</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30146" available="true" type="vendor.model">
@@ -3834,6 +3995,7 @@
         <param name="Марка авто">Volvo</param>
         <param name="Модель авто">XC60</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30141" available="true" type="vendor.model">
@@ -3856,6 +4018,7 @@
         <param name="Марка авто">Volvo</param>
         <param name="Модель авто">XC60</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30133" available="true" type="vendor.model">
@@ -3879,6 +4042,7 @@
         <param name="Модель авто">XC60</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31370193</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30122" available="true" type="vendor.model">
@@ -3904,6 +4068,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31422095, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31370193</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30101" available="true" type="vendor.model">
@@ -3929,6 +4094,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31319909, 31338560</param>
+        <param name="Код запчастини">31319909</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30100" available="true" type="vendor.model">
@@ -3956,6 +4122,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="30098" available="true" type="vendor.model">
@@ -3981,6 +4148,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31338545, 31657738, 32222272</param>
+        <param name="Код запчастини">31338545</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29839" available="true" type="vendor.model">
@@ -4006,6 +4174,7 @@
         <param name="Двигун">3.0L TDI CPNB</param>
         <param name="Кузов">4GC (C7)</param>
         <param name="Кросс-номери">4G0-145-673-R</param>
+        <param name="Код запчастини">4G0-145-673-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29514" available="true" type="vendor.model">
@@ -4028,6 +4197,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-795-AB</param>
+        <param name="Код запчастини">7L6-145-795-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29513" available="true" type="vendor.model">
@@ -4050,6 +4220,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-795-AB</param>
+        <param name="Код запчастини">7L6-145-795-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29512" available="true" type="vendor.model">
@@ -4072,6 +4243,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-795-AB</param>
+        <param name="Код запчастини">7L6-145-795-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29511" available="true" type="vendor.model">
@@ -4094,6 +4266,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-795-AB</param>
+        <param name="Код запчастини">7L6-145-795-AB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="29266" available="true" type="vendor.model">
@@ -4120,6 +4293,7 @@
         <param name="Рік випуску">2012</param>
         <param name="Двигун">3.0L TDI CATA</param>
         <param name="Кузов">4L</param>
+        <param name="Код запчастини">7L6145945J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28675" available="true" type="vendor.model">
@@ -4144,6 +4318,7 @@
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30636613, 31319473</param>
+        <param name="Код запчастини">31319473</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28674" available="true" type="vendor.model">
@@ -4168,6 +4343,7 @@
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30740940</param>
+        <param name="Код запчастини">30740940</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28673" available="true" type="vendor.model">
@@ -4193,6 +4369,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">30636611</param>
+        <param name="Код запчастини">30636611</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="28323" available="true" type="vendor.model">
@@ -4217,6 +4394,7 @@
         <param name="Рік випуску">2018</param>
         <param name="Двигун">2.0L DGUA</param>
         <param name="Кузов">BW</param>
+        <param name="Код запчастини">5QF-145-792</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27512" available="true" type="vendor.model">
@@ -4240,6 +4418,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">K2G3-6C646-CD, K2GZ-6C646-A</param>
+        <param name="Код запчастини">K2G3-6C646-CD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="27036" available="true" type="vendor.model">
@@ -4264,6 +4443,7 @@
         <param name="Рік випуску">2011</param>
         <param name="Двигун">3.0L TDI CATA</param>
         <param name="Кузов">4L</param>
+        <param name="Код запчастини">7P0145941A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25321" available="true" type="vendor.model">
@@ -4290,6 +4470,7 @@
         <param name="Кузов">BW</param>
         <param name="Лівий/Правий">Лев.</param>
         <param name="Кросс-номери">5QN-145-832, 5QF-145-832</param>
+        <param name="Код запчастини">5QF-145-832</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="25205" available="true" type="vendor.model">
@@ -4313,6 +4494,7 @@
         <param name="Рік випуску">2016</param>
         <param name="Двигун">3.0L PH TDI CVZA e-tron</param>
         <param name="Кузов">4M</param>
+        <param name="Код запчастини">059145673BR</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="24174" available="true" type="vendor.model">
@@ -4342,6 +4524,7 @@
         <param name="Кузов">4L</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">7L6-145-941-C, 7L6-145-941-F, 7L6-145-941-G, 7L6-145-941-J, 7P0-145-941-A</param>
+        <param name="Код запчастини">7L6145945J</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="22722" available="true" type="vendor.model">
@@ -4365,6 +4548,7 @@
         <param name="Рік випуску">2015</param>
         <param name="Двигун">3.0L CTWB</param>
         <param name="Кузов">4L</param>
+        <param name="Код запчастини">06E129829R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="21255" available="true" type="vendor.model">
@@ -4390,6 +4574,7 @@
         <param name="Двигун">2.0L B4204T9</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31370983, 31422097</param>
+        <param name="Код запчастини">31422097</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18628" available="true" type="vendor.model">
@@ -4414,6 +4599,7 @@
         <param name="Двигун">2.0L ENR90</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">DS7Z-6K683-B, DS7Z-6K683-H, FS7Z-6K683-A</param>
+        <param name="Код запчастини">FS7Z-6K683-A</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18624" available="true" type="vendor.model">
@@ -4440,6 +4626,7 @@
         <param name="Рік випуску">2017</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-9R504-BD, F2GZ-9B659-B, F2GZ-9B659-F, F2GZ-9B659-G</param>
+        <param name="Код запчастини">F2G3-9R504-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="18623" available="true" type="vendor.model">
@@ -4466,6 +4653,7 @@
         <param name="Рік випуску">2017</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">HG93-9R504-FA, HG9Z-9B659-A, HG9Z-9B659-C</param>
+        <param name="Код запчастини">HG93-9R504-FA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="15005" available="true" type="vendor.model">
@@ -4492,6 +4680,7 @@
         <param name="Кузов">I</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">31422061, 31370773, 31439498, 32325480</param>
+        <param name="Код запчастини">31422061</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13204" available="true" type="vendor.model">
@@ -4519,6 +4708,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-770-N, 1K0-145-770-AH</param>
+        <param name="Код запчастини">1K0-145-770-AH</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="13029" available="true" type="vendor.model">
@@ -4543,6 +4733,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">K2G3-6F073-CC, K2GZ-6F073-B</param>
+        <param name="Код запчастини">K2G3-6F073-CC</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12687" available="true" type="vendor.model">
@@ -4568,6 +4759,7 @@
         <param name="Двигун">2.0L B4204T11</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">31370288</param>
+        <param name="Код запчастини">31370288</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="12633" available="true" type="vendor.model">
@@ -4592,6 +4784,7 @@
         <param name="Рік випуску">2020</param>
         <param name="Двигун">2.0L</param>
         <param name="Кросс-номери">LX61-9P437-DA, LX6Z-9P437-E</param>
+        <param name="Код запчастини">LX61-9P437-DA</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="10684" available="true" type="vendor.model">
@@ -4616,6 +4809,7 @@
         <param name="Двигун">3.0L TDI CNRB</param>
         <param name="Кузов">7P</param>
         <param name="Кросс-номери">7P0-145-737-A, 7P0-145-737-D</param>
+        <param name="Код запчастини">7P0-145-737-D</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9582" available="true" type="vendor.model">
@@ -4640,6 +4834,7 @@
         <param name="Рік випуску">2017</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-9R504-BD, F2GZ-9B659-B, F2GZ-9B659-F, F2GZ-9B659-G</param>
+        <param name="Код запчастини">F2G3-9R504-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9373" available="true" type="vendor.model">
@@ -4664,6 +4859,7 @@
         <param name="Двигун">2.0L CPMB</param>
         <param name="Кузов">8K (B8)</param>
         <param name="Кросс-номери">8K0-145-709-K, 8K0-145-709-M, 8K0-145-709-H</param>
+        <param name="Код запчастини">8K0-145-709-H</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9371" available="true" type="vendor.model">
@@ -4688,6 +4884,7 @@
         <param name="Двигун">2.0L CPMB</param>
         <param name="Кузов">8K (B8)</param>
         <param name="Кросс-номери">8K0-145-737-J, 8K0-145-737-S</param>
+        <param name="Код запчастини">8K0-145-737-S</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9155" available="true" type="vendor.model">
@@ -4712,6 +4909,7 @@
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30740940</param>
+        <param name="Код запчастини">30740940</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9154" available="true" type="vendor.model">
@@ -4736,6 +4934,7 @@
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30636613, 31319473</param>
+        <param name="Код запчастини">31319473</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9090" available="true" type="vendor.model">
@@ -4761,6 +4960,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">1K0-145-834-AJ</param>
+        <param name="Код запчастини">1K0-145-834-AJ</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="9085" available="true" type="vendor.model">
@@ -4785,6 +4985,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8965" available="true" type="vendor.model">
@@ -4808,6 +5009,7 @@
         <param name="Рік випуску">2018</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-6F073-CJ, F2G3-6F073-CK, F2GZ-6F073-B, F2GZ-6F073-C, F2GZ-6F073-F</param>
+        <param name="Код запчастини">F2G3-6F073-CK</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8702" available="true" type="vendor.model">
@@ -4834,6 +5036,7 @@
         <param name="Кузов">NMS / B8</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8494" available="true" type="vendor.model">
@@ -4857,6 +5060,7 @@
         <param name="Рік випуску">2012</param>
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
+        <param name="Код запчастини">30741450</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="8129" available="true" type="vendor.model">
@@ -4881,6 +5085,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">5N</param>
         <param name="Кросс-номери">1K0-145-838-AG</param>
+        <param name="Код запчастини">1K0-145-838-AG</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7850" available="true" type="vendor.model">
@@ -4905,6 +5110,7 @@
         <param name="Рік випуску">2014</param>
         <param name="Двигун">2.0L TDI CFGC</param>
         <param name="Кузов">5N</param>
+        <param name="Код запчастини">1K0145770AE</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7283" available="true" type="vendor.model">
@@ -4929,6 +5135,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="7206" available="true" type="vendor.model">
@@ -4955,6 +5162,7 @@
         <param name="Кузов">35</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6904" available="true" type="vendor.model">
@@ -4980,6 +5188,7 @@
         <param name="Кузов">5N</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="6557" available="true" type="vendor.model">
@@ -5003,6 +5212,7 @@
         <param name="Рік випуску">2014</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">F2G3-9R504-BD, F2GZ-9B659-B, F2GZ-9B659-F, F2GZ-9B659-G</param>
+        <param name="Код запчастини">F2G3-9R504-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4947" available="true" type="vendor.model">
@@ -5025,6 +5235,7 @@
         <param name="Модель авто">Q7</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">4L0-145-972-B</param>
+        <param name="Код запчастини">4L0-145-972-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4907" available="true" type="vendor.model">
@@ -5049,6 +5260,7 @@
         <param name="Двигун">3.0L CTWB</param>
         <param name="Кузов">4L</param>
         <param name="Кросс-номери">7L6-145-943-B</param>
+        <param name="Код запчастини">7L6-145-943-B</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="4722" available="true" type="vendor.model">
@@ -5072,6 +5284,7 @@
         <param name="Рік випуску">2019</param>
         <param name="Двигун">1.4L DGXA</param>
         <param name="Кузов">MK7</param>
+        <param name="Код запчастини">1K0145832AT</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2216" available="true" type="vendor.model">
@@ -5095,6 +5308,7 @@
         <param name="Рік випуску">2014</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">DS736C646BD</param>
+        <param name="Код запчастини">DS73-6C646-BD</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2214" available="true" type="vendor.model">
@@ -5118,6 +5332,7 @@
         <param name="Рік випуску">2014</param>
         <param name="Двигун">2.0L ENR90</param>
         <param name="Кросс-номери">DS739R504FB</param>
+        <param name="Код запчастини">DS73-9R504-FB</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="2085" available="true" type="vendor.model">
@@ -5144,6 +5359,7 @@
         <param name="Двигун">3.0L TDI</param>
         <param name="Кузов">4GF</param>
         <param name="Кросс-номери">4G0-145-673-R</param>
+        <param name="Код запчастини">4G0-145-673-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1709" available="true" type="vendor.model">
@@ -5168,6 +5384,7 @@
         <param name="Двигун">3.0L B6304T4</param>
         <param name="Кузов">I</param>
         <param name="Кросс-номери">30636613, 31319473</param>
+        <param name="Код запчастини">31319473</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1267" available="true" type="vendor.model">
@@ -5192,6 +5409,7 @@
         <param name="Двигун">2.0L CCTA</param>
         <param name="Кузов">35</param>
         <param name="Кросс-номери">3C0-145-832-R</param>
+        <param name="Код запчастини">3C0-145-832-R</param>
         <param name="Стан">Вживані</param>
       </offer>
       <offer id="1200" available="true" type="vendor.model">
@@ -5220,6 +5438,7 @@
         <param name="Кузов">35</param>
         <param name="Лівий/Правий">Прав.</param>
         <param name="Кросс-номери">1K0-145-840-M, 1K0-145-840-R, 1K0-145-840-AF</param>
+        <param name="Код запчастини">1K0-145-840-R</param>
         <param name="Стан">Вживані</param>
       </offer>
     </offers>
