@@ -160,6 +160,7 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
         lines.append(f'      <offer id="{x(offer_id)}" available="true" type="vendor.model">')
         lines.append(f'        <name>{x(name)}</name>')
         lines.append(f'        <name_ua>{x(name)}</name_ua>')
+        photos = photos[:10]
         for photo in photos:
             lines.append(f'        <picture>{x(photo)}</picture>')
         lines.append(f'        <price>{price}</price>')

@@ -1,0 +1,1262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Двигун автомобільний</category>
+    </categories>
+    <offers>
+      <offer id="63491" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A4 Allroad 2016</name>
+        <name_ua>Двигун автомобільний Audi A4 Allroad 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/67/0002_67_148.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/67/0002_67_149.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_089.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_090.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_091.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_092.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_093.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_094.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/69/0002_69_095.jpg</picture>
+        <price>7500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>059-100-037-C</model>
+        <vendorCode>059-100-037-C</vendorCode>
+        <description>Марка: Audi. Модель: A4 Allroad. Рік випуску: 2016. Двигун: 3.0L TDI CSWB. Кузов: 8WH (B9). Виробник: Audi. Номер виробника: 059-100-037-C. Кросс-номери: 059-100-037-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A4 Allroad. Рік випуску: 2016. Двигун: 3.0L TDI CSWB. Кузов: 8WH (B9). Виробник: Audi. Номер виробника: 059-100-037-C. Кросс-номери: 059-100-037-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CSWB</param>
+        <param name="Кузов">8WH (B9)</param>
+        <param name="Кросс-номери">059-100-037-C</param>
+        <param name="Код запчастини">059-100-037-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A4 Allroad</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="57593" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2013</name>
+        <name_ua>Двигун автомобільний Audi Q7 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_634.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_635.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_636.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_637.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_638.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_639.jpg</picture>
+        <price>3500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>059-100-035-F</model>
+        <vendorCode>059-100-035-F</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2013. Двигун: 3.0L TDI CNRB. Кузов: 4L. Виробник: Audi. Номер виробника: 059-100-035-F. Кросс-номери: 059-100-035-F, 059-100-036-R, 059-100-099-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2013. Двигун: 3.0L TDI CNRB. Кузов: 4L. Виробник: Audi. Номер виробника: 059-100-035-F. Кросс-номери: 059-100-035-F, 059-100-036-R, 059-100-099-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CNRB</param>
+        <param name="Кузов">4L</param>
+        <param name="Кросс-номери">059-100-035-F, 059-100-036-R, 059-100-099-K</param>
+        <param name="Код запчастини">059-100-035-F</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="57531" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_403.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_404.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_405.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_406.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/45/0002_45_407.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 115532 милі (Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 115532 милі (Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="57247" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_327.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_328.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_329.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_330.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_331.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/44/0002_44_332.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 95692 милі (Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 95692 милі (Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56875" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_832.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_833.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_834.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_835.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_836.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_837.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_838.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_839.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 0 миль (Not Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 0 миль (Not Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56213" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A6 2016</name>
+        <name_ua>Двигун автомобільний Audi A6 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_170.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_171.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_172.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_173.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_174.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_175.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_176.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_177.jpg</picture>
+        <price>4000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-037-C</model>
+        <vendorCode>06E-100-037-C</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Кросс-номери">06E-100-037-C</param>
+        <param name="Код запчастини">06E-100-037-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="55881" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A7 2016</name>
+        <name_ua>Двигун автомобільний Audi A7 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_947.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_948.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_949.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_950.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_951.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/38/0002_38_952.jpg</picture>
+        <price>4000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-037-C</model>
+        <vendorCode>06E-100-037-C</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GF</param>
+        <param name="Кросс-номери">06E-100-037-C</param>
+        <param name="Код запчастини">06E-100-037-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="49676" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2017</name>
+        <name_ua>Двигун автомобільний Audi Q7 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_952.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_953.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_954.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_955.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_956.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/15/0002_15_957.jpg</picture>
+        <price>4500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-036-K</model>
+        <vendorCode>06E-100-036-K</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 06E-100-036-K. Кросс-номери: 06E-100-036-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Виробник: Audi. Номер виробника: 06E-100-036-K. Кросс-номери: 06E-100-036-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4M</param>
+        <param name="Кросс-номери">06E-100-036-K</param>
+        <param name="Код запчастини">06E-100-036-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="47215" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_251.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_252.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_253.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_254.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_255.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_256.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_257.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_258.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_259.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 133740 миль (Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 133740 миль (Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="40224" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_903.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_905.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_906.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_907.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_908.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_909.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_910.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/78/0001_78_911.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 71717 миль (Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 71717 миль (Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="38768" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC90 2016</name>
+        <name_ua>Двигун автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_305.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_306.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_307.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_308.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_309.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_310.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_311.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/73/0001_73_312.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36012527</model>
+        <vendorCode>36012527</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 113513 миль (Actual). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 36012527. Кросс-номери: 36012527, 36050829. Коментар: 113513 миль (Actual). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">36012527, 36050829</param>
+        <param name="Код запчастини">36012527</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37828" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A6 2012</name>
+        <name_ua>Двигун автомобільний Audi A6 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_634.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_635.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_636.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_637.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_638_v1.jpg</picture>
+        <price>3800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-035-N</model>
+        <vendorCode>06E-100-035-N</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Виробник: Audi. Номер виробника: 06E-100-035-N. Кросс-номери: 06E-100-035-N. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Виробник: Audi. Номер виробника: 06E-100-035-N. Кросс-номери: 06E-100-035-N. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CGXB</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Кросс-номери">06E-100-035-N</param>
+        <param name="Код запчастини">06E-100-035-N</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37826" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Touareg</name>
+        <name_ua>Двигун автомобільний Volkswagen Touareg</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_624.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_625.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_626.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_627.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_628.jpg</picture>
+        <price>2000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>03H-100-037-G</model>
+        <vendorCode>03H-100-037-G</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Кросс-номери">03H-100-037-G, 03H-100-037-GX</param>
+        <param name="Код запчастини">03H-100-037-G</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37824" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Touareg 2013</name>
+        <name_ua>Двигун автомобільний Volkswagen Touareg 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_614.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_615.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_616.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_617.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_618.jpg</picture>
+        <price>2000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>03H-100-037-G</model>
+        <vendorCode>03H-100-037-G</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2013. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2013. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Кросс-номери">03H-100-037-G, 03H-100-037-GX</param>
+        <param name="Код запчастини">03H-100-037-G</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37817" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Touareg 2016</name>
+        <name_ua>Двигун автомобільний Volkswagen Touareg 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_579.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_580.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_581.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_582.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_583.jpg</picture>
+        <price>2000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>03H-100-037-G</model>
+        <vendorCode>03H-100-037-G</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2016. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2016. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Кросс-номери">03H-100-037-G, 03H-100-037-GX</param>
+        <param name="Код запчастини">03H-100-037-G</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="36558" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A6 2016</name>
+        <name_ua>Двигун автомобільний Audi A6 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_790.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_791.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_792_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_793_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_794_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_795.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_796.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_797_v1.jpg</picture>
+        <price>4000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-037-C</model>
+        <vendorCode>06E-100-037-C</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06E-100-037-C. Кросс-номери: 06E-100-037-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Кросс-номери">06E-100-037-C</param>
+        <param name="Код запчастини">06E-100-037-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="36540" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Passat 2017</name>
+        <name_ua>Двигун автомобільний Volkswagen Passat 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_701.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_702.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_703_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_704.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_705.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/64/0001_64_706.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>06K-100-032-M</model>
+        <vendorCode>06K-100-032-M</vendorCode>
+        <description>Марка: Volkswagen. Модель: Passat. Рік випуску: 2017. Двигун: 1.8L CPRA. Кузов: NMS / B8. Виробник: Volkswagen. Номер виробника: 06K-100-032-M. Кросс-номери: 06K-100-032-C, 06K-100-032-M, 06K-100-033-M, 06K-100-034-S. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Passat. Рік випуску: 2017. Двигун: 1.8L CPRA. Кузов: NMS / B8. Виробник: Volkswagen. Номер виробника: 06K-100-032-M. Кросс-номери: 06K-100-032-C, 06K-100-032-M, 06K-100-033-M, 06K-100-034-S. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">1.8L CPRA</param>
+        <param name="Кузов">NMS / B8</param>
+        <param name="Кросс-номери">06K-100-032-C, 06K-100-032-M, 06K-100-033-M, 06K-100-034-S</param>
+        <param name="Код запчастини">06K-100-032-M</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Passat</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="35928" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Fusion 2013</name>
+        <name_ua>Двигун автомобільний Ford Fusion 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_549.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_550.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_551.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_552.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_553.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_554.jpg</picture>
+        <price>350</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>CV6Z-6006-D</model>
+        <vendorCode>CV6Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: CV6Z-6006-A, CV6Z-6006-D, CV6Z-6006-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: CV6Z-6006-A, CV6Z-6006-D, CV6Z-6006-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENS70</param>
+        <param name="Кросс-номери">CV6Z-6006-A, CV6Z-6006-D, CV6Z-6006-E</param>
+        <param name="Код запчастини">CV6Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="31209" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A6 2016</name>
+        <name_ua>Двигун автомобільний Audi A6 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_830.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_831.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_832.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_833.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_834.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_835_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/60/0001_60_836.jpg</picture>
+        <price>2500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06L-100-033-P</model>
+        <vendorCode>06L-100-033-P</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06L-100-033-P. Кросс-номери: 06L-100-033-P. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Виробник: Audi. Номер виробника: 06L-100-033-P. Кросс-номери: 06L-100-033-P. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CYNB</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Кросс-номери">06L-100-033-P</param>
+        <param name="Код запчастини">06L-100-033-P</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="30444" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Edge 2019</name>
+        <name_ua>Двигун автомобільний Ford Edge 2019</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_259.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_260.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_261.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_262.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_263.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_264.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/38/0001_38_265_v1.jpg</picture>
+        <price>1200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>K2GE-6007-AA</model>
+        <vendorCode>K2GE-6007-AA</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GE-6007-AA. Кросс-номери: K2GE-6007-AA, K2GZ-6006-A. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GE-6007-AA. Кросс-номери: K2GE-6007-AA, K2GZ-6006-A. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">K2GE-6007-AA, K2GZ-6006-A</param>
+        <param name="Код запчастини">K2GE-6007-AA</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2019</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="30341" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC60 2015</name>
+        <name_ua>Двигун автомобільний Volvo XC60 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_731.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_732.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_733.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_735_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_736.jpg</picture>
+        <price>4000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36050646</model>
+        <vendorCode>36050646</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 3.0L B6304T4. Кузов: I. Виробник: Volvo. Номер виробника: 36050646. Кросс-номери: 36010034, 36050646, 6906403. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 3.0L B6304T4. Кузов: I. Виробник: Volvo. Номер виробника: 36050646. Кросс-номери: 36010034, 36050646, 6906403. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L B6304T4</param>
+        <param name="Кузов">I</param>
+        <param name="Кросс-номери">36010034, 36050646, 6906403</param>
+        <param name="Код запчастини">36050646</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="30277" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Touareg 2014</name>
+        <name_ua>Двигун автомобільний Volkswagen Touareg 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_319.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_320.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_321.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_322.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_323.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_324.jpg</picture>
+        <price>2000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>03H-100-037-G</model>
+        <vendorCode>03H-100-037-G</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2014. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2014. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Кросс-номери">03H-100-037-G, 03H-100-037-GX</param>
+        <param name="Код запчастини">03H-100-037-G</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="30220" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2010</name>
+        <name_ua>Двигун автомобільний Audi Q7 2010</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_026.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_027.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_028.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_029.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_030.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/37/0001_37_031.jpg</picture>
+        <price>3000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>03H-100-037-C</model>
+        <vendorCode>03H-100-037-C</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2010. Двигун: 3.6L BHK. Кузов: 4L. Виробник: Audi. Номер виробника: 03H-100-037-C. Кросс-номери: 03H-100-037-C, 03H-100-037-CX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2010. Двигун: 3.6L BHK. Кузов: 4L. Виробник: Audi. Номер виробника: 03H-100-037-C. Кросс-номери: 03H-100-037-C, 03H-100-037-CX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L BHK</param>
+        <param name="Кузов">4L</param>
+        <param name="Кросс-номери">03H-100-037-C, 03H-100-037-CX</param>
+        <param name="Код запчастини">03H-100-037-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2010</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="28808" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi A7 2012</name>
+        <name_ua>Двигун автомобільний Audi A7 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_440.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_442.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_443.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_445.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_447.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_448.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_449.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_450.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_451.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/30/0001_30_452.jpg</picture>
+        <price>4500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-033-J</model>
+        <vendorCode>06E-100-033-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4GA. Виробник: Audi. Номер виробника: 06E-100-033-J. Кросс-номери: 06E-100-033-J, 06E-100-034-S. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4GA. Виробник: Audi. Номер виробника: 06E-100-033-J. Кросс-номери: 06E-100-033-J, 06E-100-034-S. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CGXB</param>
+        <param name="Кузов">4GA</param>
+        <param name="Кросс-номери">06E-100-033-J, 06E-100-034-S</param>
+        <param name="Код запчастини">06E-100-033-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="26914" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2011</name>
+        <name_ua>Двигун автомобільний Audi Q7 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_004.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_005.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_006.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_007.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_008.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_009.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_010.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_011_v1.jpg</picture>
+        <price>5000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-033-Q</model>
+        <vendorCode>06E-100-033-Q</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 06E-100-033-Q. Кросс-номери: 06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 06E-100-033-Q. Кросс-номери: 06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CJWB</param>
+        <param name="Кузов">4L</param>
+        <param name="Кросс-номери">06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q</param>
+        <param name="Код запчастини">06E-100-033-Q</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="25224" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2016</name>
+        <name_ua>Двигун автомобільний Audi Q7 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_160.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_161_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_162.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_163.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_164.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_165_v1.jpg</picture>
+        <price>6000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>059-100-036-J</model>
+        <vendorCode>059-100-036-J</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2016. Двигун: 3.0L PH TDI CVZA e-tron. Кузов: 4M. Виробник: Audi. Номер виробника: 059-100-036-J. Кросс-номери: 059-100-036-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2016. Двигун: 3.0L PH TDI CVZA e-tron. Кузов: 4M. Виробник: Audi. Номер виробника: 059-100-036-J. Кросс-номери: 059-100-036-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L PH TDI CVZA e-tron</param>
+        <param name="Кузов">4M</param>
+        <param name="Кросс-номери">059-100-036-J</param>
+        <param name="Код запчастини">059-100-036-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="23668" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Touareg 2011</name>
+        <name_ua>Двигун автомобільний Volkswagen Touareg 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_352.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_353.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_354.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_355.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_356.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_357.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_358.jpg</picture>
+        <price>2000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>03H-100-037-G</model>
+        <vendorCode>03H-100-037-G</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Виробник: Volkswagen. Номер виробника: 03H-100-037-G. Кросс-номери: 03H-100-037-G, 03H-100-037-GX. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Кросс-номери">03H-100-037-G, 03H-100-037-GX</param>
+        <param name="Код запчастини">03H-100-037-G</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="19326" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Flex 2013</name>
+        <name_ua>Двигун автомобільний Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_596.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_597.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_598.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_599.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_600.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_601.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_602.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_603.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DL2Z-6006-D</model>
+        <vendorCode>DL2Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM</param>
+        <param name="Код запчастини">DL2Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="19289" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Fusion 2013</name>
+        <name_ua>Двигун автомобільний Ford Fusion 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_405.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_406.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_407.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_408.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/86/0000_86_409.jpg</picture>
+        <price>350</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>CV6Z-6006-D</model>
+        <vendorCode>CV6Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENS70</param>
+        <param name="Кросс-номери">DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D</param>
+        <param name="Код запчастини">CV6Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="18611" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Flex 2013</name>
+        <name_ua>Двигун автомобільний Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_642.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_643.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_644.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_645.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_646.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_647.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_648.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DL2Z-6006-D</model>
+        <vendorCode>DL2Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM</param>
+        <param name="Код запчастини">DL2Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="18594" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Fusion 2016</name>
+        <name_ua>Двигун автомобільний Ford Fusion 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_526.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_527.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_528.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_529.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_530.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_531.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/82/0000_82_532.jpg</picture>
+        <price>350</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>CV6Z-6006-D</model>
+        <vendorCode>CV6Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2016. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2016. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: CV6Z-6006-D. Кросс-номери: DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENS70</param>
+        <param name="Кросс-номери">DS332AA, CV6Z-6006-A, DS7Z-6007-C, CV6Z-6006-D</param>
+        <param name="Код запчастини">CV6Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17352" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Flex 2013</name>
+        <name_ua>Двигун автомобільний Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_924.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_925.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_926.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_927.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_928.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_929.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_930.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_931.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_932.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_933.jpg</picture>
+        <price>1200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>ds 490 aa</model>
+        <vendorCode>ds 490 aa</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: ds 490 aa. Кросс-номери: 9H6Z-6006-ARM. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: ds 490 aa. Кросс-номери: 9H6Z-6006-ARM. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENTA0 Turbo</param>
+        <param name="Кросс-номери">9H6Z-6006-ARM</param>
+        <param name="Код запчастини">ds 490 aa</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17327" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Edge 2020</name>
+        <name_ua>Двигун автомобільний Ford Edge 2020</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_819.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_820.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_821.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_822.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_823.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_824.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_825.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_826.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_827.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_828.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>k2ge 6007 ca</model>
+        <vendorCode>k2ge 6007 ca</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: k2ge 6007 ca. Кросс-номери: k2ge 6007 ca. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: k2ge 6007 ca. Кросс-номери: k2ge 6007 ca. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L</param>
+        <param name="Кросс-номери">k2ge 6007 ca</param>
+        <param name="Код запчастини">k2ge 6007 ca</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17246" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Edge 2019</name>
+        <name_ua>Двигун автомобільний Ford Edge 2019</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_485.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_486.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_487.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_488.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_489.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_490.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_491.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_492.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/75/0000_75_493.jpg</picture>
+        <price>1300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>K2GE-6007-AA</model>
+        <vendorCode>K2GE-6007-AA</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GE-6007-AA. Кросс-номери: K2GE-6007-A, K2GZ-6006-A. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GE-6007-AA. Кросс-номери: K2GE-6007-A, K2GZ-6006-A. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">K2GE-6007-A, K2GZ-6006-A</param>
+        <param name="Код запчастини">K2GE-6007-AA</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2019</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16005" available="true" type="vendor.model">
+        <name>Двигун автомобільний Audi Q7 2012</name>
+        <name_ua>Двигун автомобільний Audi Q7 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_411.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_412.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_413.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_414.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_415.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_416.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_417.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_418.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_419.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/69/0000_69_420.jpg</picture>
+        <price>3500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>06E-100-033-Q</model>
+        <vendorCode>06E-100-033-Q</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2012. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 06E-100-033-Q. Кросс-номери: 06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2012. Двигун: 3.0L CJWB. Кузов: 4L. Виробник: Audi. Номер виробника: 06E-100-033-Q. Кросс-номери: 06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CJWB</param>
+        <param name="Кузов">4L</param>
+        <param name="Кросс-номери">06E-100-032-F, 06E-100-032-FX, 06E-100-033-QX, 06E-100-033-Q</param>
+        <param name="Код запчастини">06E-100-033-Q</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="15687" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Flex 2013</name>
+        <name_ua>Двигун автомобільний Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_114.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_115.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_116.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_117.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_118.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_119.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/68/0000_68_120.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DL2Z-6006-D</model>
+        <vendorCode>DL2Z-6006-D</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DL2Z-6006-D. Кросс-номери: AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">AT4Z-6006-B, DL2Z-6006-A, DL2Z-6006-B, DL2Z-6006-C, DL2Z-6006-D, HG1Z-6006-ARM</param>
+        <param name="Код запчастини">DL2Z-6006-D</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8707" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volvo XC60 2012</name>
+        <name_ua>Двигун автомобільний Volvo XC60 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_168.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_169.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_170.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_171.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_172.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_173.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_174.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_175.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_176.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_177.jpg</picture>
+        <price>2300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>36010035</model>
+        <vendorCode>36010035</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.2L B6324S5. Кузов: I. Виробник: Volvo. Номер виробника: 36010035. Кросс-номери: 36010035, 36051160. Коментар: 3.2 л, 238 л.с., бензин, АКПП, полный привод (4WD). Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.2L B6324S5. Кузов: I. Виробник: Volvo. Номер виробника: 36010035. Кросс-номери: 36010035, 36051160. Коментар: 3.2 л, 238 л.с., бензин, АКПП, полный привод (4WD). Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.2L B6324S5</param>
+        <param name="Кузов">I</param>
+        <param name="Кросс-номери">36010035, 36051160</param>
+        <param name="Код запчастини">36010035</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8575" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Escape 2017</name>
+        <name_ua>Двигун автомобільний Ford Escape 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_320.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_321.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_322.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_323.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_324.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_325.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_326.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_327.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_328.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>GV6Z-6006-AA</model>
+        <vendorCode>GV6Z-6006-AA</vendorCode>
+        <description>Марка: Ford. Модель: Escape. Рік випуску: 2017. Двигун: 2.5L ENT60. Виробник: Ford. Номер виробника: GV6Z-6006-AA. Кросс-номери: GV6Z-6006-AA. Коментар: 2.5 л, 168 л.с., бензин, АКПП, передний привод. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Escape. Рік випуску: 2017. Двигун: 2.5L ENT60. Виробник: Ford. Номер виробника: GV6Z-6006-AA. Кросс-номери: GV6Z-6006-AA. Коментар: 2.5 л, 168 л.с., бензин, АКПП, передний привод. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENT60</param>
+        <param name="Кросс-номери">GV6Z-6006-AA</param>
+        <param name="Код запчастини">GV6Z-6006-AA</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Escape</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8546" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Fusion 2018</name>
+        <name_ua>Двигун автомобільний Ford Fusion 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_221.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_222.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_223.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_224.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_225.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_226.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_227.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_228.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_229_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/36/0000_36_230.jpg</picture>
+        <price>490</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DS7Z-6006-C</model>
+        <vendorCode>DS7Z-6006-C</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: DS7Z-6006-C. Кросс-номери: HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: DS7Z-6006-C. Кросс-номери: HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENUA0</param>
+        <param name="Кросс-номери">HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U</param>
+        <param name="Код запчастини">DS7Z-6006-C</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8366" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Fusion 2019</name>
+        <name_ua>Двигун автомобільний Ford Fusion 2019</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_450_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_451.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_452.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_453_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_455.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_456.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_457.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_458.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_459.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/35/0000_35_460_v1.jpg</picture>
+        <price>490</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DS7Z-6006-C</model>
+        <vendorCode>DS7Z-6006-C</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2019. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: DS7Z-6006-C. Кросс-номери: HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2019. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: DS7Z-6006-C. Кросс-номери: HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENUA0</param>
+        <param name="Кросс-номери">HG1Z-6007-A, DS7Z-6006-C, DS7Z-6006-U</param>
+        <param name="Код запчастини">DS7Z-6006-C</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2019</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7509" available="true" type="vendor.model">
+        <name>Двигун автомобільний Ford Edge 2020</name>
+        <name_ua>Двигун автомобільний Ford Edge 2020</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_981.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_982.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_983.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_984.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_985_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_986.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_987.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_988_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/31/0000_31_989.jpg</picture>
+        <price>2200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>LBA</model>
+        <vendorCode>LBA</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: LBA. Коментар: Пробег 7 000 миль LBA 05240. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: LBA. Коментар: Пробег 7 000 миль LBA 05240. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L</param>
+        <param name="Код запчастини">LBA</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7503" available="true" type="vendor.model">
+        <name>Двигун автомобільний Volkswagen Beetle 2014</name>
+        <name_ua>Двигун автомобільний Volkswagen Beetle 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_972.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_973.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_974.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_975.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_976.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/62/0001_62_977.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341527</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>07K-100-031-M</model>
+        <vendorCode>07K-100-031-M</vendorCode>
+        <description>Марка: Volkswagen. Модель: Beetle. Рік випуску: 2014. Двигун: 2.5L CBUA. Кузов: 5C1. Виробник: Volkswagen. Номер виробника: 07K-100-031-M. Кросс-номери: 07K-100-031-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Beetle. Рік випуску: 2014. Двигун: 2.5L CBUA. Кузов: 5C1. Виробник: Volkswagen. Номер виробника: 07K-100-031-M. Кросс-номери: 07K-100-031-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L CBUA</param>
+        <param name="Кузов">5C1</param>
+        <param name="Кросс-номери">07K-100-031-M</param>
+        <param name="Код запчастини">07K-100-031-M</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Beetle</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>
