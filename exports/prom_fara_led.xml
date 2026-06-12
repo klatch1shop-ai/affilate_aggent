@@ -1,0 +1,1374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Фара Full LED</category>
+    </categories>
+    <offers>
+      <offer id="65617" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 2022 Лев.</name>
+        <name_ua>Фара Full LED Audi Q7 2022 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_246.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_247.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_248.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_249.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_250.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_251.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_252.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_253.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_254.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_255.jpg</picture>
+        <price>850</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-941-773-E</model>
+        <vendorCode>4M0-941-773-E</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2022. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4M0-941-773-E. Кросс-номери: 4M0-941-033-B, 4M0-941-033-E, 4M0-941-773-B, 4M0-941-773-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2022. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4M0-941-773-E. Кросс-номери: 4M0-941-033-B, 4M0-941-033-E, 4M0-941-773-B, 4M0-941-773-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4M0-941-033-B, 4M0-941-033-E, 4M0-941-773-B, 4M0-941-773-E</param>
+        <param name="Код запчастини">4M0-941-773-E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2022</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="65616" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi Q7 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_236.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_237.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_238.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_239.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_240.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_241.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_242.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_243_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_244.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/75/0002_75_245.jpg</picture>
+        <price>850</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-941-034-B</model>
+        <vendorCode>4M0-941-034-B</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2016. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4M0-941-034-B. Кросс-номери: 4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2016. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4M0-941-034-B. Кросс-номери: 4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E</param>
+        <param name="Код запчастини">4M0-941-034-B</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64796" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC90 2016 Прав.</name>
+        <name_ua>Фара Full LED Volvo XC90 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_230.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_231.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_232.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_233.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_234.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_235.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_236.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_237.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_238.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_239.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31446687</model>
+        <vendorCode>31446687</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31446687. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31446687. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">31468582, 31446687, 31468721, 31395941</param>
+        <param name="Код запчастини">31446687</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64792" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC90 2016 Лев.</name>
+        <name_ua>Фара Full LED Volvo XC90 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_207.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_208.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_209.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_210.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_211.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_212.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_213.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_214.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_215.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_216_v1.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31395940</model>
+        <vendorCode>31395940</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Лев.. Виробник: Volvo. Номер виробника: 31395940. Кросс-номери: 31353151, 31468663, 31395940. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Лев.. Виробник: Volvo. Номер виробника: 31395940. Кросс-номери: 31353151, 31468663, 31395940. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">31353151, 31468663, 31395940</param>
+        <param name="Код запчастини">31395940</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64791" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC90 2016 Прав.</name>
+        <name_ua>Фара Full LED Volvo XC90 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_201.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_202.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_203.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_204.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_205.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_206.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31446687</model>
+        <vendorCode>31446687</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31446687. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31446687. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">31468582, 31446687, 31468721, 31395941</param>
+        <param name="Код запчастини">31446687</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64790" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC90 2016 Прав.</name>
+        <name_ua>Фара Full LED Volvo XC90 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_187.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_188.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_189.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_190.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_191.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_192.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_193.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_194.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_195.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_196.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31395941</model>
+        <vendorCode>31395941</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31395941. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 31395941. Кросс-номери: 31468582, 31446687, 31468721, 31395941. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">31468582, 31446687, 31468721, 31395941</param>
+        <param name="Код запчастини">31395941</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64576" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_311.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_312.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_313.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_314.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_315.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_316.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_317.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_318.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_319.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_320.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="60092" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_481.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_482.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_483.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_484.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_485.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/54/0002_54_486.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="57805" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A6 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi A6 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_449.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_450.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_451.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_452.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_453.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_454.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_455.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_456.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/46/0002_46_457.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-034-K</model>
+        <vendorCode>4G0-941-034-K</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G0-941-034-K. Кросс-номери: 4G0-941-034-K, 4G0-941-774-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G0-941-034-K. Кросс-номери: 4G0-941-034-K, 4G0-941-774-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G0-941-034-K, 4G0-941-774-K</param>
+        <param name="Код запчастини">4G0-941-034-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56873" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_819.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_818.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_820.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_821.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_822.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_823.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_824.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-M</model>
+        <vendorCode>4G8-941-034-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-M, 4G8-941-774-M</param>
+        <param name="Код запчастини">4G8-941-034-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56830" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A6 2017 Прав.</name>
+        <name_ua>Фара Full LED Audi A6 2017 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_665.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_666.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_667.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_668.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_669.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_671.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-034-K</model>
+        <vendorCode>4G0-941-034-K</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G0-941-034-K. Кросс-номери: 4G0-941-034-K, 4G0-941-774-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G0-941-034-K. Кросс-номери: 4G0-941-034-K, 4G0-941-774-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CYNB</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G0-941-034-K, 4G0-941-774-K</param>
+        <param name="Код запчастини">4G0-941-034-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56688" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC90 2016 Лев.</name>
+        <name_ua>Фара Full LED Volvo XC90 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_110.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_111.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_112.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_113.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_114.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_116.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_119.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_122.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_123.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31468663</model>
+        <vendorCode>31468663</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Лев.. Виробник: Volvo. Номер виробника: 31468663. Кросс-номери: 31353151, 31468663, 31395940. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Лівий/Правий: Лев.. Виробник: Volvo. Номер виробника: 31468663. Кросс-номери: 31353151, 31468663, 31395940. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">31353151, 31468663, 31395940</param>
+        <param name="Код запчастини">31468663</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56686" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A6 2017 Лев.</name>
+        <name_ua>Фара Full LED Audi A6 2017 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_097.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_098.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_099.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_100.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_101.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_102.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_103.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_104.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-033-K</model>
+        <vendorCode>4G0-941-033-K</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 2.0L CYNB. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CYNB</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-941-033-K, 4G0-941-773-K</param>
+        <param name="Код запчастини">4G0-941-033-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56685" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A6 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A6 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_089.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_090.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_091.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_092.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_093.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_094.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_095.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/42/0002_42_096.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-033-K</model>
+        <vendorCode>4G0-941-033-K</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-941-033-K, 4G0-941-773-K</param>
+        <param name="Код запчастини">4G0-941-033-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56246" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_298.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_299.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_300.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_301.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_302.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_303.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_304.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_305.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_306.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L CREC. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56085" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_693.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_694.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_695.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_696.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_697.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/39/0002_39_698.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="52178" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_455.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_456.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_457.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_458.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_459.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_460.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_461.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_462.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-J</model>
+        <vendorCode>4G8-941-033-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CRTD</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-J, 4G8-941-773-J</param>
+        <param name="Код запчастини">4G8-941-033-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="52177" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_449.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_450.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_451.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_452_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_453.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/25/0002_25_454.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-J</model>
+        <vendorCode>4G8-941-034-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CRTD</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-J, 4G8-941-774-J</param>
+        <param name="Код запчастини">4G8-941-034-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="51948" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_491.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_492.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_493.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_494.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_495.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-J</model>
+        <vendorCode>4G8-941-034-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CRTD</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-J, 4G8-941-774-J</param>
+        <param name="Код запчастини">4G8-941-034-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="51946" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_480.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_481.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_482.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_483.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_484.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/24/0002_24_485.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-J</model>
+        <vendorCode>4G8-941-033-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Двигун: 3.0L TDI CRTD. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CRTD</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-J, 4G8-941-773-J</param>
+        <param name="Код запчастини">4G8-941-033-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44811" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q5 Лев.</name>
+        <name_ua>Фара Full LED Audi Q5 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_656.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_657.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_658.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_659.jpg</picture>
+        <price>1050</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>80A941035A</model>
+        <vendorCode>80A941035A</vendorCode>
+        <description>Марка: Audi. Модель: Q5. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 80A941035A. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q5. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 80A941035A. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Код запчастини">80A941035A</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q5</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44810" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q5 Прав.</name>
+        <name_ua>Фара Full LED Audi Q5 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_652.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_654.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_653.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_655.jpg</picture>
+        <price>1100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>80A941036A</model>
+        <vendorCode>80A941036A</vendorCode>
+        <description>Марка: Audi. Модель: Q5. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 80A941036A. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q5. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 80A941036A. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Код запчастини">80A941036A</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q5</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44691" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_598.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_599.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_600.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_601.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_602.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_092.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_093.jpg</picture>
+        <price>750</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>China</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Лівий/Правий: Лев.. Виробник: China. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Лівий/Правий: Лев.. Виробник: China. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44689" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_591.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_592.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_593.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_078.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_079.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_080.jpg</picture>
+        <price>750</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>China</vendor>
+        <model>4G8-941-034-M</model>
+        <vendorCode>4G8-941-034-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Лівий/Правий: Прав.. Виробник: China. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Лівий/Правий: Прав.. Виробник: China. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-M, 4G8-941-774-M</param>
+        <param name="Код запчастини">4G8-941-034-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44635" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 2018 Прав.</name>
+        <name_ua>Фара Full LED Audi Q7 2018 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_774.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_775.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_776.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_777.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_778.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_779.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_780.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_781.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_782.jpg</picture>
+        <price>800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-941-034-E</model>
+        <vendorCode>4M0-941-034-E</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2018. Двигун: 3.0L CREC. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4M0-941-034-E. Кросс-номери: 4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2018. Двигун: 3.0L CREC. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4M0-941-034-E. Кросс-номери: 4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4M0-941-034-B, 4M0-941-034-E, 4M0-941-774-B, 4M0-941-774-E</param>
+        <param name="Код запчастини">4M0-941-034-E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44634" available="true" type="vendor.model">
+        <name>Фара Full LED Volvo XC60 2018 Прав.</name>
+        <name_ua>Фара Full LED Volvo XC60 2018 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_761.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_762.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_763.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_764.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_765.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_766.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_767_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_768.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>32208976</model>
+        <vendorCode>32208976</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 32208976. Кросс-номери: 32208976, 31656553. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2018. Двигун: 2.0L B4204T23. Кузов: II. Лівий/Правий: Прав.. Виробник: Volvo. Номер виробника: 32208976. Кросс-номери: 32208976, 31656553. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T23</param>
+        <param name="Кузов">II</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">32208976, 31656553</param>
+        <param name="Код запчастини">32208976</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="42081" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 Лев.</name>
+        <name_ua>Фара Full LED Audi Q7 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_170.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_171.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_172.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_173.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_174_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_175.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_176.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_177_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_178_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/86/0001_86_179.jpg</picture>
+        <price>800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-941-033-A</model>
+        <vendorCode>4M0-941-033-A</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4M0-941-033-A. Кросс-номери: 4M0-941-033-A, 4M0-941-033-D, 4M0-941-773-A, 4M0-941-773-D. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4M0-941-033-A. Кросс-номери: 4M0-941-033-A, 4M0-941-033-D, 4M0-941-773-A, 4M0-941-773-D. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4M0-941-033-A, 4M0-941-033-D, 4M0-941-773-A, 4M0-941-773-D</param>
+        <param name="Код запчастини">4M0-941-033-A</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="38431" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A8 2015 Лев.</name>
+        <name_ua>Фара Full LED Audi A8 2015 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_875.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_876.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_877.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_878.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_879.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_880.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_881.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_882.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_883.jpg</picture>
+        <price>1200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-941-033</model>
+        <vendorCode>4H0-941-033</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-033. Кросс-номери: 4H0-941-033, 4H0-941-773. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-033. Кросс-номери: 4H0-941-033, 4H0-941-773. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4HL (D4)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4H0-941-033, 4H0-941-773</param>
+        <param name="Код запчастини">4H0-941-033</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="38425" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_822.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_823.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_824.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_825.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_826.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_827_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_828.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_829.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-M</model>
+        <vendorCode>4G8-941-033-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Двигун: 3.0 TDI. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Двигун: 3.0 TDI. Кузов: 4GF. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-M. Кросс-номери: 4G8-941-033-M, 4G8-941-773-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0 TDI</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-M, 4G8-941-773-M</param>
+        <param name="Код запчастини">4G8-941-033-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="38424" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_813.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_814.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_815.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_816_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_817.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_818.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_819.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_820.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/71/0001_71_821.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-M</model>
+        <vendorCode>4G8-941-034-M</vendorCode>
+        <description>Марка: Audi. Модель: A7. Двигун: 3.0 TDI. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Двигун: 3.0 TDI. Кузов: 4GF. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-M. Кросс-номери: 4G8-941-034-M, 4G8-941-774-M. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0 TDI</param>
+        <param name="Кузов">4GF</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-M, 4G8-941-774-M</param>
+        <param name="Код запчастини">4G8-941-034-M</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37829" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A8 2017 Прав.</name>
+        <name_ua>Фара Full LED Audi A8 2017 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_639.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_640.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_641.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_642.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_643.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_644.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_648.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_645.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_646_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/69/0001_69_647.jpg</picture>
+        <price>1200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-941-034</model>
+        <vendorCode>4H0-941-034</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4H0-941-034. Кросс-номери: 4H0-941-034, 4H0-941-774. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4H0-941-034. Кросс-номери: 4H0-941-034, 4H0-941-774. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4HL (D4)</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4H0-941-034, 4H0-941-774</param>
+        <param name="Код запчастини">4H0-941-034</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37073" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Лев.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_729.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_730.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_731.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_732_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_733.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_734_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_735_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_736.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_737.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-033-J</model>
+        <vendorCode>4G8-941-033-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G8-941-033-J. Кросс-номери: 4G8-941-033-J, 4G8-941-773-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G8-941-033-J, 4G8-941-773-J</param>
+        <param name="Код запчастини">4G8-941-033-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="37072" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A7 2016 Прав.</name>
+        <name_ua>Фара Full LED Audi A7 2016 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_720.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_721_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_722.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_723.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_724.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_725.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_726.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_727.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/66/0001_66_728.jpg</picture>
+        <price>1800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-J</model>
+        <vendorCode>4G8-941-034-J</vendorCode>
+        <description>Марка: Audi. Модель: A7. Рік випуску: 2016. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A7. Рік випуску: 2016. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-J. Кросс-номери: 4G8-941-034-J, 4G8-941-774-J. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-J, 4G8-941-774-J</param>
+        <param name="Код запчастини">4G8-941-034-J</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A7</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="32573" available="true" type="vendor.model">
+        <name>Фара Full LED Audi S6 2013 Лев.</name>
+        <name_ua>Фара Full LED Audi S6 2013 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/48/0001_48_951.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/48/0001_48_952.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/48/0001_48_953.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/48/0001_48_954.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/48/0001_48_955.jpg</picture>
+        <price>750</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-773-C</model>
+        <vendorCode>4G0-941-773-C</vendorCode>
+        <description>Марка: Audi. Модель: S6. Рік випуску: 2013. Двигун: 4.0L CEUC. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-773-C. Кросс-номери: 4G0-941-033-C, 4G0-941-773-C. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: S6. Рік випуску: 2013. Двигун: 4.0L CEUC. Кузов: 4G2 (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-773-C. Кросс-номери: 4G0-941-033-C, 4G0-941-773-C. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.0L CEUC</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-941-033-C, 4G0-941-773-C</param>
+        <param name="Код запчастини">4G0-941-773-C</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">S6</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="31064" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A8 2017 Лев.</name>
+        <name_ua>Фара Full LED Audi A8 2017 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_237.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_238.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_239.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_240.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_241.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_242.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_243.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/41/0001_41_244.jpg</picture>
+        <price>1200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-941-033</model>
+        <vendorCode>4H0-941-033</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-033. Кросс-номери: 4H0-941-033, 4H0-941-773. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4HL (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-033. Кросс-номери: 4H0-941-033, 4H0-941-773. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4HL (D4)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4H0-941-033, 4H0-941-773</param>
+        <param name="Код запчастини">4H0-941-033</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="26246" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 2020 Прав.</name>
+        <name_ua>Фара Full LED Audi Q7 2020 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_563.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_565.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_564.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_571.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_572.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_566.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_567.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_568.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_569.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_570_v2.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4KE-941-040</model>
+        <vendorCode>4KE-941-040</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2020. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4KE-941-040. Кросс-номери: 4KE-941-040. Коментар: e-trom. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2020. Кузов: 4M. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4KE-941-040. Кросс-номери: 4KE-941-040. Коментар: e-trom. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4KE-941-040</param>
+        <param name="Код запчастини">4KE-941-040</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="26245" available="true" type="vendor.model">
+        <name>Фара Full LED Audi Q7 2020 Лев.</name>
+        <name_ua>Фара Full LED Audi Q7 2020 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_552.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_553.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_554.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_555.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_556.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_557.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_558.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_559.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_560_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/18/0001_18_561_v2.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4KE-941-039</model>
+        <vendorCode>4KE-941-039</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2020. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4KE-941-039. Кросс-номери: 4KE-941-039. Коментар: e-tron. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2020. Кузов: 4M. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4KE-941-039. Кросс-номери: 4KE-941-039. Коментар: e-tron. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4KE-941-039</param>
+        <param name="Код запчастини">4KE-941-039</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="25000" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A6 2017 Лев.</name>
+        <name_ua>Фара Full LED Audi A6 2017 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_187.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_188.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_189.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_190.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_191.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_192.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_193_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/13/0001_13_194_v1.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-941-033-K</model>
+        <vendorCode>4G0-941-033-K</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4GC (C7). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4G0-941-033-K. Кросс-номери: 4G0-941-033-K, 4G0-941-773-K. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4GC (C7)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4G0-941-033-K, 4G0-941-773-K</param>
+        <param name="Код запчастини">4G0-941-033-K</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20927" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A8 2011 Прав.</name>
+        <name_ua>Фара Full LED Audi A8 2011 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_718.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_719.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_720.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_721.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_722.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_723.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_724_v3.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_725_v1.jpg</picture>
+        <price>1100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-941-030-L</model>
+        <vendorCode>4H0-941-030-L</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4H0-941-030-L. Кросс-номери: 4H0-941-030-L. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4H0-941-030-L. Кросс-номери: 4H0-941-030-L. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.2L CDRA</param>
+        <param name="Кузов">4H8 (D4)</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4H0-941-030-L</param>
+        <param name="Код запчастини">4H0-941-030-L</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20926" available="true" type="vendor.model">
+        <name>Фара Full LED Audi A8 2011 Лев.</name>
+        <name_ua>Фара Full LED Audi A8 2011 Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_710.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_711.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_712.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_713.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_714.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_715.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_716.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_717_v1.jpg</picture>
+        <price>1100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-941-003-L</model>
+        <vendorCode>4H0-941-003-L</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-003-L. Кросс-номери: 4H0-941-003-L. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2011. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4H0-941-003-L. Кросс-номери: 4H0-941-003-L. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.2L CDRA</param>
+        <param name="Кузов">4H8 (D4)</param>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4H0-941-003-L</param>
+        <param name="Код запчастини">4H0-941-003-L</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20885" available="true" type="vendor.model">
+        <name>Фара Full LED Audi S7 2013 Прав.</name>
+        <name_ua>Фара Full LED Audi S7 2013 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_518.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_519.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_520.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_522.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_523.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_524.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/94/0000_94_525.jpg</picture>
+        <price>1400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G8-941-034-E</model>
+        <vendorCode>4G8-941-034-E</vendorCode>
+        <description>Марка: Audi. Модель: S7. Рік випуску: 2013. Двигун: 4.0L CEUC. Кузов: 4GA. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-E. Кросс-номери: 4G8-941-034-E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: S7. Рік випуску: 2013. Двигун: 4.0L CEUC. Кузов: 4GA. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4G8-941-034-E. Кросс-номери: 4G8-941-034-E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.0L CEUC</param>
+        <param name="Кузов">4GA</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4G8-941-034-E</param>
+        <param name="Код запчастини">4G8-941-034-E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">S7</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20338" available="true" type="vendor.model">
+        <name>Фара Full LED Ford Fusion 2018 Прав.</name>
+        <name_ua>Фара Full LED Ford Fusion 2018 Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_896.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_897.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_898.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_899.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_900.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/91/0000_91_901_v1.jpg</picture>
+        <price>830</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>HS73-13E014-AF</model>
+        <vendorCode>HS73-13E014-AF</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Лівий/Правий: Прав.. Виробник: Ford. Номер виробника: HS73-13E014-AF. Кросс-номери: HS73-13E014-AF, HS7Z-13008-F, HS7Z-13008-AB. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Лівий/Правий: Прав.. Виробник: Ford. Номер виробника: HS73-13E014-AF. Кросс-номери: HS73-13E014-AF, HS7Z-13008-F, HS7Z-13008-AB. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENUA0</param>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">HS73-13E014-AF, HS7Z-13008-F, HS7Z-13008-AB</param>
+        <param name="Код запчастини">HS73-13E014-AF</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="14992" available="true" type="vendor.model">
+        <name>Фара Full LED Audi e-tron Прав.</name>
+        <name_ua>Фара Full LED Audi e-tron Прав.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_911.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_912.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_913.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_914.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_915.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_916.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_917.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_918.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_919_v2.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4KE-941-040</model>
+        <vendorCode>4KE-941-040</vendorCode>
+        <description>Марка: Audi. Модель: e-tron. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4KE-941-040. Кросс-номери: 4KE-941-040. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: e-tron. Лівий/Правий: Прав.. Виробник: Audi. Номер виробника: 4KE-941-040. Кросс-номери: 4KE-941-040. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Прав.</param>
+        <param name="Кросс-номери">4KE-941-040</param>
+        <param name="Код запчастини">4KE-941-040</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">e-tron</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="14991" available="true" type="vendor.model">
+        <name>Фара Full LED Audi e-tron Лев.</name>
+        <name_ua>Фара Full LED Audi e-tron Лев.</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_902.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_903.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_904.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_905.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_906.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_907.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_908.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_909.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/64/0000_64_910.jpg</picture>
+        <price>1000</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>12020601</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4KE-941-039</model>
+        <vendorCode>4KE-941-039</vendorCode>
+        <description>Марка: Audi. Модель: e-tron. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4KE-941-039. Кросс-номери: 4KE-941-039. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: e-tron. Лівий/Правий: Лев.. Виробник: Audi. Номер виробника: 4KE-941-039. Кросс-номери: 4KE-941-039. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Лівий/Правий">Лев.</param>
+        <param name="Кросс-номери">4KE-941-039</param>
+        <param name="Код запчастини">4KE-941-039</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">e-tron</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>

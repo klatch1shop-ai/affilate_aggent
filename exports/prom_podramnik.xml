@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Підрамник</category>
+    </categories>
+    <offers>
+      <offer id="64833" available="true" type="vendor.model">
+        <name>Підрамник Volvo XC90 2016</name>
+        <name_ua>Підрамник Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_398.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_399.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_400.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_401.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/72/0002_72_402.jpg</picture>
+        <price>420</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341625</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31451728</model>
+        <vendorCode>31451728</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 31451728. Кросс-номери: 31360596, 31451728, 31476651, 31658033, 31681543, 32221609, 32221676, 32370491, 32370490. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Виробник: Volvo. Номер виробника: 31451728. Кросс-номери: 31360596, 31451728, 31476651, 31658033, 31681543, 32221609, 32221676, 32370491, 32370490. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Кросс-номери">31360596, 31451728, 31476651, 31658033, 31681543, 32221609, 32221676, 32370491, 32370490</param>
+        <param name="Код запчастини">31451728</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="4244" available="true" type="vendor.model">
+        <name>Підрамник Volkswagen Passat 2014</name>
+        <name_ua>Підрамник Volkswagen Passat 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/19/0000_19_419.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/19/0000_19_420.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/19/0000_19_421_v2.jpg</picture>
+        <price>141</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>341625</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>561505373</model>
+        <vendorCode>561505373</vendorCode>
+        <description>Марка: Volkswagen. Модель: Passat. Рік випуску: 2014. Двигун: 1.8L CPKA. Кузов: NMS / B7. Виробник: Volkswagen. Номер виробника: 561505373. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Passat. Рік випуску: 2014. Двигун: 1.8L CPKA. Кузов: NMS / B7. Виробник: Volkswagen. Номер виробника: 561505373. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">1.8L CPKA</param>
+        <param name="Кузов">NMS / B7</param>
+        <param name="Код запчастини">561505373</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Passat</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>

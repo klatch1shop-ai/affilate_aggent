@@ -1,0 +1,1205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Бампер автомобільний</category>
+    </categories>
+    <offers>
+      <offer id="65945" available="true" type="vendor.model">
+        <name>Бампер автомобільний Polestar 2 2023</name>
+        <name_ua>Бампер автомобільний Polestar 2 2023</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_474.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_475.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_476.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_477.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_478.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_479.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_480.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_481.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/76/0002_76_482.jpg</picture>
+        <price>800</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Polestar</vendor>
+        <model>40002104</model>
+        <vendorCode>40002104</vendorCode>
+        <description>Марка: Polestar. Модель: 2. Рік випуску: 2023. Двигун: E400V6 78 кВт. Передній/Задній: Задн.. Колір: 707. Виробник: Polestar. Номер виробника: 40002104. Кросс-номери: 40002104, 36003517, 40002106, 36003518. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Polestar. Модель: 2. Рік випуску: 2023. Двигун: E400V6 78 кВт. Передній/Задній: Задн.. Колір: 707. Виробник: Polestar. Номер виробника: 40002104. Кросс-номери: 40002104, 36003517, 40002106, 36003518. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">E400V6 78 кВт</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">40002104, 36003517, 40002106, 36003518</param>
+        <param name="Код запчастини">40002104</param>
+        <param name="Сумісність з маркою">Polestar</param>
+        <param name="Сумісність з моделлю">2</param>
+        <param name="Рік випуску автомобіля">2023</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="64693" available="true" type="vendor.model">
+        <name>Бампер автомобільний Volvo XC90 2016</name>
+        <name_ua>Бампер автомобільний Volvo XC90 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_809.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_810.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_811.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_812.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_813.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_814.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_815.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/71/0002_71_816.jpg</picture>
+        <price>900</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>39799254</model>
+        <vendorCode>39799254</vendorCode>
+        <description>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Передній/Задній: Задн.. Колір: 717. Виробник: Volvo. Номер виробника: 39799254. Кросс-номери: 39847629, 39799254. Коментар: 39799264 - в колір. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC90. Рік випуску: 2016. Двигун: 2.0L B4204T27. Передній/Задній: Задн.. Колір: 717. Виробник: Volvo. Номер виробника: 39799254. Кросс-номери: 39847629, 39799254. Коментар: 39799264 - в колір. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T27</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">39847629, 39799254</param>
+        <param name="Код запчастини">39799254</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC90</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="56403" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015</name>
+        <name_ua>Бампер автомобільний Audi A8 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_917.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_918.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_919.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_920.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_921.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_922.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_923.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/40/0002_40_924.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E</model>
+        <vendorCode>4H0-807-067-E</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 4.0L CTGA. Кузов: 4HL (D4). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E. Кросс-номери: 4H0-807-067-E, 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015. Двигун: 4.0L CTGA. Кузов: 4HL (D4). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E. Кросс-номери: 4H0-807-067-E, 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.0L CTGA</param>
+        <param name="Кузов">4HL (D4)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E, 4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="52420" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2012</name>
+        <name_ua>Бампер автомобільний Audi Q7 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_331.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_332.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_333.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_334.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_335.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_336.jpg</picture>
+        <price>250</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4L0-807-303-D</model>
+        <vendorCode>4L0-807-303-D</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2012. Кузов: 4L. Передній/Задній: Задн.. Колір: Z8W. Виробник: Audi. Номер виробника: 4L0-807-303-D. Кросс-номери: 4L0-807-303-A-GRU, 4L0-807-303-D-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2012. Кузов: 4L. Передній/Задній: Задн.. Колір: Z8W. Виробник: Audi. Номер виробника: 4L0-807-303-D. Кросс-номери: 4L0-807-303-A-GRU, 4L0-807-303-D-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4L0-807-303-A-GRU, 4L0-807-303-D-GRU</param>
+        <param name="Код запчастини">4L0-807-303-D</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="52379" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2012</name>
+        <name_ua>Бампер автомобільний Audi Q7 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_175.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_176.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_177.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_178.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_179.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_180.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_181.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/26/0002_26_182_v1.jpg</picture>
+        <price>250</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4L0-807-303-D</model>
+        <vendorCode>4L0-807-303-D</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2012. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0-807-303-D. Кросс-номери: 4L0-807-303-A-GRU, 4L0-807-303-D-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2012. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0-807-303-D. Кросс-номери: 4L0-807-303-A-GRU, 4L0-807-303-D-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4L0-807-303-A-GRU, 4L0-807-303-D-GRU</param>
+        <param name="Код запчастини">4L0-807-303-D</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="47307" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2017</name>
+        <name_ua>Бампер автомобільний Audi Q7 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_657.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_658.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_659.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_660.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_661.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_662.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_663.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_664.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/06/0002_06_665.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-807-511</model>
+        <vendorCode>4M0-807-511</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Передній/Задній: Задн.. Колір: 041. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2017. Двигун: 3.0L CREC. Кузов: 4M. Передній/Задній: Задн.. Колір: 041. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CREC</param>
+        <param name="Кузов">4M</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4M0-807-511, 4M0-807-511-GRU</param>
+        <param name="Код запчастини">4M0-807-511</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="46392" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q5</name>
+        <name_ua>Бампер автомобільний Audi Q5</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_024.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_025.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_026.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_027.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_028.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_029.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_030.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_031.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/03/0002_03_032.jpg</picture>
+        <price>1600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>80A807437P</model>
+        <vendorCode>80A807437P</vendorCode>
+        <description>Марка: Audi. Модель: Q5. Кузов: FY (80A). Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 80A807437P. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q5. Кузов: FY (80A). Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 80A807437P. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">FY (80A)</param>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Код запчастини">80A807437P</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q5</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="45322" available="true" type="vendor.model">
+        <name>Бампер автомобільний Volkswagen CC</name>
+        <name_ua>Бампер автомобільний Volkswagen CC</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/98/0001_98_919.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/98/0001_98_920.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/98/0001_98_921.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/98/0001_98_922.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/98/0001_98_923.jpg</picture>
+        <price>80</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>China</vendor>
+        <model>3C8-807-221-F-GRU</model>
+        <vendorCode>3C8-807-221-F-GRU</vendorCode>
+        <description>Марка: Volkswagen. Модель: CC. Передній/Задній: Перед.. Виробник: China. Номер виробника: 3C8-807-221-F-GRU. Кросс-номери: 3C8-807-221-D-GRU, 3C8-807-221-F-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: CC. Передній/Задній: Перед.. Виробник: China. Номер виробника: 3C8-807-221-F-GRU. Кросс-номери: 3C8-807-221-D-GRU, 3C8-807-221-F-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Кросс-номери">3C8-807-221-D-GRU, 3C8-807-221-F-GRU</param>
+        <param name="Код запчастини">3C8-807-221-F-GRU</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">CC</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44786" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2011</name>
+        <name_ua>Бампер автомобільний Audi Q7 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_549.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_550.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_551.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_552.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_553.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_554.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_555.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_556.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4L0807385</model>
+        <vendorCode>4L0807385</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L TDI CATA. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807385. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L TDI CATA. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807385. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CATA</param>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">4L0807385</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44769" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2011</name>
+        <name_ua>Бампер автомобільний Audi Q7 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_472.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_473.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_474.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_475.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_476.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_477.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_478.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_479.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_480.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4L0807511G</model>
+        <vendorCode>4L0807511G</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWC. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807511G. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2011. Двигун: 3.0L CJWC. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807511G. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CJWC</param>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">4L0807511G</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44746" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7 2014</name>
+        <name_ua>Бампер автомобільний Audi Q7 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_369.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_370.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_371.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_372.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_373.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_374.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_375.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/96/0001_96_376.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4L0807385</model>
+        <vendorCode>4L0807385</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Рік випуску: 2014. Двигун: 3.0L TDI CNRB. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807385. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Рік випуску: 2014. Двигун: 3.0L TDI CNRB. Кузов: 4L. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4L0807385. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CNRB</param>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">4L0807385</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44629" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7</name>
+        <name_ua>Бампер автомобільний Audi Q7</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_718.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_719.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_720.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_721.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_722.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_723.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_724.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/95/0001_95_725.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>China</vendor>
+        <model>4L0-807-105-G-GRU</model>
+        <vendorCode>4L0-807-105-G-GRU</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4L. Передній/Задній: Перед.. Виробник: China. Номер виробника: 4L0-807-105-G-GRU. Кросс-номери: 4L0-807-105-G-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4L. Передній/Задній: Перед.. Виробник: China. Номер виробника: 4L0-807-105-G-GRU. Кросс-номери: 4L0-807-105-G-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4L</param>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Кросс-номери">4L0-807-105-G-GRU</param>
+        <param name="Код запчастини">4L0-807-105-G-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44011" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q5</name>
+        <name_ua>Бампер автомобільний Audi Q5</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_849.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_850.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_851.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_852.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_853.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_854.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_855.jpg</picture>
+        <price>1500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>80A807437E</model>
+        <vendorCode>80A807437E</vendorCode>
+        <description>Марка: Audi. Модель: Q5. Кузов: FY (80A). Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 80A807437E. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q5. Кузов: FY (80A). Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 80A807437E. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">FY (80A)</param>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Код запчастини">80A807437E</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q5</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44006" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7</name>
+        <name_ua>Бампер автомобільний Audi Q7</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_824.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_825.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_826.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_827.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_828.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_829.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-807-511</model>
+        <vendorCode>4M0-807-511</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4M0-807-511, 4M0-807-511-GRU</param>
+        <param name="Код запчастини">4M0-807-511</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="44005" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7</name>
+        <name_ua>Бампер автомобільний Audi Q7</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_763.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_764.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_765.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_766.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_767.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_768.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_769.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0002/04/0002_04_770.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/92/0001_92_823.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-807-511</model>
+        <vendorCode>4M0-807-511</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4M0-807-511, 4M0-807-511-GRU</param>
+        <param name="Код запчастини">4M0-807-511</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="27930" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2012</name>
+        <name_ua>Бампер автомобільний Audi A8 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_478.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_479.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_481.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_480_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_482.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_483.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_484.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_485.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/26/0001_26_486.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067</model>
+        <vendorCode>4H0-807-067</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2012. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067. Кросс-номери: 4H0-807-067. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2012. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067. Кросс-номери: 4H0-807-067. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067</param>
+        <param name="Код запчастини">4H0-807-067</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="26997" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi Q7</name>
+        <name_ua>Бампер автомобільний Audi Q7</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_512.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_513.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_514.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_515.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_516.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_517.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_518.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_519.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_520.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/22/0001_22_521.jpg</picture>
+        <price>600</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4M0-807-511</model>
+        <vendorCode>4M0-807-511</vendorCode>
+        <description>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: Q7. Кузов: 4M. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4M0-807-511. Кросс-номери: 4M0-807-511, 4M0-807-511-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">4M</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4M0-807-511, 4M0-807-511-GRU</param>
+        <param name="Код запчастини">4M0-807-511</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">Q7</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="23810" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A4 Allroad 2013</name>
+        <name_ua>Бампер автомобільний Audi A4 Allroad 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_023.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_024.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_025.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_026.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_027.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_028.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_029.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_030.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_031.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/08/0001_08_032.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>8K9-807-511-F</model>
+        <vendorCode>8K9-807-511-F</vendorCode>
+        <description>Марка: Audi. Модель: A4 Allroad. Рік випуску: 2013. Двигун: 2.0L CPMA. Кузов: 8K (B8). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 8K9-807-511-F. Кросс-номери: 8K9-807-511-F, 8K9-807-511-F-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A4 Allroad. Рік випуску: 2013. Двигун: 2.0L CPMA. Кузов: 8K (B8). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 8K9-807-511-F. Кросс-номери: 8K9-807-511-F, 8K9-807-511-F-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CPMA</param>
+        <param name="Кузов">8K (B8)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">8K9-807-511-F, 8K9-807-511-F-GRU</param>
+        <param name="Код запчастини">8K9-807-511-F</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A4 Allroad</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="23751" available="true" type="vendor.model">
+        <name>Бампер автомобільний Volkswagen Touareg 2011</name>
+        <name_ua>Бампер автомобільний Volkswagen Touareg 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_774.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_775.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_776.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_778.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_779.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_780.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/07/0001_07_781.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/56/0001_56_435.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/56/0001_56_436.jpg</picture>
+        <price>300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>7P6-807-421-B</model>
+        <vendorCode>7P6-807-421-B</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 7P6-807-421-B. Кросс-номери: 7P6-807-421, 7P6-807-421-B. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2011. Двигун: 3.6L CGRA. Кузов: 7P. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 7P6-807-421-B. Кросс-номери: 7P6-807-421, 7P6-807-421-B. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.6L CGRA</param>
+        <param name="Кузов">7P</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">7P6-807-421, 7P6-807-421-B</param>
+        <param name="Код запчастини">7P6-807-421-B</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="23733" available="true" type="vendor.model">
+        <name>Бампер автомобільний Volkswagen Touareg 2014</name>
+        <name_ua>Бампер автомобільний Volkswagen Touareg 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_067.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_068.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_069.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_070.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_071.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/97/0001_97_072.jpg</picture>
+        <price>300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>7P6-807-421-B</model>
+        <vendorCode>7P6-807-421-B</vendorCode>
+        <description>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2014. Двигун: 3.0L TDI CNRB. Кузов: 7P. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 7P6-807-421-B. Кросс-номери: 7P6-807-421, 7P6-807-421-B. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: Touareg. Рік випуску: 2014. Двигун: 3.0L TDI CNRB. Кузов: 7P. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 7P6-807-421-B. Кросс-номери: 7P6-807-421, 7P6-807-421-B. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L TDI CNRB</param>
+        <param name="Кузов">7P</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">7P6-807-421, 7P6-807-421-B</param>
+        <param name="Код запчастини">7P6-807-421-B</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">Touareg</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="22443" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6 2012</name>
+        <name_ua>Бампер автомобільний Audi A6 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_339.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_340.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_341.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_342.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_343.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_344.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_345.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_346.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_347.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0001/02/0001_02_348_v2.jpg</picture>
+        <price>300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G5807511</model>
+        <vendorCode>4G5807511</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Передній/Задній: Задн.. Колір: Y1P. Виробник: Audi. Номер виробника: 4G5807511. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2012. Двигун: 3.0L CGXB. Кузов: 4G2 (C7). Передній/Задній: Задн.. Колір: Y1P. Виробник: Audi. Номер виробника: 4G5807511. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CGXB</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Код запчастини">4G5807511</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="21735" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6</name>
+        <name_ua>Бампер автомобільний Audi A6</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_684.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_685.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_686.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_687.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_688.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_689.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_690.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_691.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_692.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_693.jpg</picture>
+        <price>1700</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G0-807-437-AF</model>
+        <vendorCode>4G0-807-437-AF</vendorCode>
+        <description>Марка: Audi. Модель: A6. Кузов: C7. Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 4G0-807-437-AF. Кросс-номери: 4G0-807-437-AF. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Кузов: C7. Передній/Задній: Перед.. Виробник: Audi. Номер виробника: 4G0-807-437-AF. Кросс-номери: 4G0-807-437-AF. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">C7</param>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Кросс-номери">4G0-807-437-AF</param>
+        <param name="Код запчастини">4G0-807-437-AF</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="21663" available="true" type="vendor.model">
+        <name>Бампер автомобільний Ford Escape 2014</name>
+        <name_ua>Бампер автомобільний Ford Escape 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_353.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_354.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_355.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_356.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_357.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_358.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_359.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_360.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_361.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_362.jpg</picture>
+        <price>500</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>CJ5Z-17D957-BCPTM</model>
+        <vendorCode>CJ5Z-17D957-BCPTM</vendorCode>
+        <description>Марка: Ford. Модель: Escape. Рік випуску: 2014. Двигун: 1.6L ENJT0. Передній/Задній: Перед.. Колір: BR. Виробник: Ford. Номер виробника: CJ5Z-17D957-BCPTM. Кросс-номери: CJ5Z-17D957-BCPTM. Коментар: Ford Escape 2013-2016. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Escape. Рік випуску: 2014. Двигун: 1.6L ENJT0. Передній/Задній: Перед.. Колір: BR. Виробник: Ford. Номер виробника: CJ5Z-17D957-BCPTM. Кросс-номери: CJ5Z-17D957-BCPTM. Коментар: Ford Escape 2013-2016. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">1.6L ENJT0</param>
+        <param name="Передній/Задній">Перед.</param>
+        <param name="Кросс-номери">CJ5Z-17D957-BCPTM</param>
+        <param name="Код запчастини">CJ5Z-17D957-BCPTM</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Escape</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="21661" available="true" type="vendor.model">
+        <name>Бампер автомобільний Volkswagen CC 2013</name>
+        <name_ua>Бампер автомобільний Volkswagen CC 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_336.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_337.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_338.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_339.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_340.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_341.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_342.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/98/0000_98_343.jpg</picture>
+        <price>250</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Volkswagen</vendor>
+        <model>3C8-807-421-K</model>
+        <vendorCode>3C8-807-421-K</vendorCode>
+        <description>Марка: Volkswagen. Модель: CC. Рік випуску: 2013. Двигун: 2.0L CBFA. Кузов: 35. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 3C8-807-421-K. Кросс-номери: 3C8-807-421-K. Коментар: Volkswagen CC 2013-2017. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volkswagen. Модель: CC. Рік випуску: 2013. Двигун: 2.0L CBFA. Кузов: 35. Передній/Задній: Задн.. Виробник: Volkswagen. Номер виробника: 3C8-807-421-K. Кросс-номери: 3C8-807-421-K. Коментар: Volkswagen CC 2013-2017. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L CBFA</param>
+        <param name="Кузов">35</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">3C8-807-421-K</param>
+        <param name="Код запчастини">3C8-807-421-K</param>
+        <param name="Сумісність з маркою">Volkswagen</param>
+        <param name="Сумісність з моделлю">CC</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20706" available="true" type="vendor.model">
+        <name>Бампер автомобільний Infiniti Q50 2014</name>
+        <name_ua>Бампер автомобільний Infiniti Q50 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/93/0000_93_626.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/93/0000_93_627.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/93/0000_93_628.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/93/0000_93_629.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/93/0000_93_630.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Infiniti</vendor>
+        <model>85022-4GA0H</model>
+        <vendorCode>85022-4GA0H</vendorCode>
+        <description>Марка: Infiniti. Модель: Q50. Рік випуску: 2014. Двигун: 3.5L VQ35HR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GA0H. Кросс-номери: 85022-4GA0H. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Infiniti. Модель: Q50. Рік випуску: 2014. Двигун: 3.5L VQ35HR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GA0H. Кросс-номери: 85022-4GA0H. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L VQ35HR</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">85022-4GA0H</param>
+        <param name="Код запчастини">85022-4GA0H</param>
+        <param name="Сумісність з маркою">Infiniti</param>
+        <param name="Сумісність з моделлю">Q50</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="20122" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6 2015</name>
+        <name_ua>Бампер автомобільний Audi A6 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_917.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_918.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_919.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_920.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_921.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/90/0000_90_922.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G5-807-067-A-GRU</model>
+        <vendorCode>4G5-807-067-A-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2015. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4G5-807-067-A-GRU. Кросс-номери: 4G5-807-067-A-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2015. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4G5-807-067-A-GRU. Кросс-номери: 4G5-807-067-A-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CTUA</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4G5-807-067-A-GRU</param>
+        <param name="Код запчастини">4G5-807-067-A-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17417" available="true" type="vendor.model">
+        <name>Бампер автомобільний Infiniti Q50 2017</name>
+        <name_ua>Бампер автомобільний Infiniti Q50 2017</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_228.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_229.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_230.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_231.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_232.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_233.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_234.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_235.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/76/0000_76_236.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Infiniti</vendor>
+        <model>85022-4GA0H</model>
+        <vendorCode>85022-4GA0H</vendorCode>
+        <description>Марка: Infiniti. Модель: Q50. Рік випуску: 2017. Двигун: 3.0L VR30DDTT. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GA0H. Кросс-номери: 85022-4GA0H. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Infiniti. Модель: Q50. Рік випуску: 2017. Двигун: 3.0L VR30DDTT. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GA0H. Кросс-номери: 85022-4GA0H. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L VR30DDTT</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">85022-4GA0H</param>
+        <param name="Код запчастини">85022-4GA0H</param>
+        <param name="Сумісність з маркою">Infiniti</param>
+        <param name="Сумісність з моделлю">Q50</param>
+        <param name="Рік випуску автомобіля">2017</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16669" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6 2014</name>
+        <name_ua>Бампер автомобільний Audi A6 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_562.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_563.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_564.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_565.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_566.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_567.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_568.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_569.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_570.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/72/0000_72_571.jpg</picture>
+        <price>250</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4G5-807-067-GRU</model>
+        <vendorCode>4G5-807-067-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2014. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Передній/Задній: Задн.. Колір: Y9B. Виробник: Audi. Номер виробника: 4G5-807-067-GRU. Кросс-номери: 4G5-807-067-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2014. Двигун: 3.0L CTUA. Кузов: 4G2 (C7). Передній/Задній: Задн.. Колір: Y9B. Виробник: Audi. Номер виробника: 4G5-807-067-GRU. Кросс-номери: 4G5-807-067-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L CTUA</param>
+        <param name="Кузов">4G2 (C7)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4G5-807-067-GRU</param>
+        <param name="Код запчастини">4G5-807-067-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="10356" available="true" type="vendor.model">
+        <name>Бампер автомобільний Infiniti Q50 2015</name>
+        <name_ua>Бампер автомобільний Infiniti Q50 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_638.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_639.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_640.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_641.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_642.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_643.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_644.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_645.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_646.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_647.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Infiniti</vendor>
+        <model>85022-4GB0H</model>
+        <vendorCode>85022-4GB0H</vendorCode>
+        <description>Марка: Infiniti. Модель: Q50. Рік випуску: 2015. Двигун: 3.7L VQ37VHR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GB0H. Кросс-номери: 85022-4GB0H. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Infiniti. Модель: Q50. Рік випуску: 2015. Двигун: 3.7L VQ37VHR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GB0H. Кросс-номери: 85022-4GB0H. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.7L VQ37VHR</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">85022-4GB0H</param>
+        <param name="Код запчастини">85022-4GB0H</param>
+        <param name="Сумісність з маркою">Infiniti</param>
+        <param name="Сумісність з моделлю">Q50</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="10340" available="true" type="vendor.model">
+        <name>Бампер автомобільний Infiniti Q50 2015</name>
+        <name_ua>Бампер автомобільний Infiniti Q50 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_505.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_506.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_507.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_508.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_509.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_510.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_511.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_512.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_513.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/44/0000_44_514.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Infiniti</vendor>
+        <model>85022-4GB0H</model>
+        <vendorCode>85022-4GB0H</vendorCode>
+        <description>Марка: Infiniti. Модель: Q50. Рік випуску: 2015. Двигун: 3.7L VQ37VHR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GB0H. Кросс-номери: 85022-4GB0H. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Infiniti. Модель: Q50. Рік випуску: 2015. Двигун: 3.7L VQ37VHR. Передній/Задній: Задн.. Виробник: Infiniti. Номер виробника: 85022-4GB0H. Кросс-номери: 85022-4GB0H. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.7L VQ37VHR</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">85022-4GB0H</param>
+        <param name="Код запчастини">85022-4GB0H</param>
+        <param name="Сумісність з маркою">Infiniti</param>
+        <param name="Сумісність з моделлю">Q50</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7080" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6 2009</name>
+        <name_ua>Бампер автомобільний Audi A6 2009</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_205.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_206.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_207.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_208.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_209.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_210.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_211.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_212.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_213.jpg</picture>
+        <price>300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4F5-807-303-D-GRU</model>
+        <vendorCode>4F5-807-303-D-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2009. Кузов: C6. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4F5-807-303-D-GRU. Кросс-номери: 4F5-807-303-D-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2009. Кузов: C6. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4F5-807-303-D-GRU. Кросс-номери: 4F5-807-303-D-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">C6</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4F5-807-303-D-GRU</param>
+        <param name="Код запчастини">4F5-807-303-D-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2009</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7078" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A6 2009</name>
+        <name_ua>Бампер автомобільний Audi A6 2009</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_193_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_194.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_195.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_196.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_197.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_198_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_199.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_200.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/30/0000_30_201.jpg</picture>
+        <price>300</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4F5-807-303-D-GRU</model>
+        <vendorCode>4F5-807-303-D-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A6. Рік випуску: 2009. Кузов: C6. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4F5-807-303-D-GRU. Кросс-номери: 4F5-807-303-D-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A6. Рік випуску: 2009. Кузов: C6. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4F5-807-303-D-GRU. Кросс-номери: 4F5-807-303-D-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">C6</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4F5-807-303-D-GRU</param>
+        <param name="Код запчастини">4F5-807-303-D-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A6</param>
+        <param name="Рік випуску автомобіля">2009</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="305" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name>
+        <name_ua>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_132.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_133.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_134.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_135.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_136.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_137.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_138.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_139.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_140.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E-GRU</model>
+        <vendorCode>4H0-807-067-E-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">D4</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015, 2016, 2017, 2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="304" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name>
+        <name_ua>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_122.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_123.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_124.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_125.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_126.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_127.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_128.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_129.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_130.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_131.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E-GRU</model>
+        <vendorCode>4H0-807-067-E-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">D4</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015, 2016, 2017, 2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="303" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name>
+        <name_ua>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_109.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_110.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_111.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_112.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_113.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_114.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_115.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_116.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_117.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_118.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E-GRU</model>
+        <vendorCode>4H0-807-067-E-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">D4</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015, 2016, 2017, 2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="302" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name>
+        <name_ua>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_099.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_100.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_101.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_102.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_103.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_104.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_105.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_106.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_107.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_108.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E-GRU</model>
+        <vendorCode>4H0-807-067-E-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">D4</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015, 2016, 2017, 2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="301" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name>
+        <name_ua>Бампер автомобільний Audi A8 2015, 2016, 2017, 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_089.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_090.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_091.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_092.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_093.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_094.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_095.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_096.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_097.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/02/0000_02_098.jpg</picture>
+        <price>400</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-E-GRU</model>
+        <vendorCode>4H0-807-067-E-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2015, 2016, 2017, 2018. Кузов: D4. Передній/Задній: Задн.. Виробник: Audi. Номер виробника: 4H0-807-067-E-GRU. Кросс-номери: 4H0-807-067-E-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Кузов">D4</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-E-GRU</param>
+        <param name="Код запчастини">4H0-807-067-E-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2015, 2016, 2017, 2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="82" available="true" type="vendor.model">
+        <name>Бампер автомобільний Audi A8 2012</name>
+        <name_ua>Бампер автомобільний Audi A8 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_699.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_700.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_701_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_702_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_703_v3.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_704_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_705_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/00/0000_00_706_v2.jpg</picture>
+        <price>301</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>121214</portal_category_id>
+        <vendor>Audi</vendor>
+        <model>4H0-807-067-GRU</model>
+        <vendorCode>4H0-807-067-GRU</vendorCode>
+        <description>Марка: Audi. Модель: A8. Рік випуску: 2012. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Передній/Задній: Задн.. Колір: X7U. Виробник: Audi. Номер виробника: 4H0-807-067-GRU. Кросс-номери: 4H0-807-067-GRU. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Audi. Модель: A8. Рік випуску: 2012. Двигун: 4.2L CDRA. Кузов: 4H8 (D4). Передній/Задній: Задн.. Колір: X7U. Виробник: Audi. Номер виробника: 4H0-807-067-GRU. Кросс-номери: 4H0-807-067-GRU. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">4.2L CDRA</param>
+        <param name="Кузов">4H8 (D4)</param>
+        <param name="Передній/Задній">Задн.</param>
+        <param name="Кросс-номери">4H0-807-067-GRU</param>
+        <param name="Код запчастини">4H0-807-067-GRU</param>
+        <param name="Сумісність з маркою">Audi</param>
+        <param name="Сумісність з моделлю">A8</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>

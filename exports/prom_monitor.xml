@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="1">Монітор дисплей навігація</category>
+    </categories>
+    <offers>
+      <offer id="21937" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Fusion 2018</name>
+        <name_ua>Монітор дисплей навігація Ford Fusion 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/99/0000_99_746.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/99/0000_99_747.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/99/0000_99_748.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/99/0000_99_749.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/99/0000_99_750.jpg</picture>
+        <price>100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>GS7T18B955SB</model>
+        <vendorCode>GS7T18B955SB</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: GS7T18B955SB. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2018. Двигун: 2.0L ENUA0. Виробник: Ford. Номер виробника: GS7T18B955SB. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENUA0</param>
+        <param name="Код запчастини">GS7T18B955SB</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="19564" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Fusion 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Fusion 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/87/0000_87_823_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/87/0000_87_824_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/87/0000_87_825_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/87/0000_87_826_v1.jpg</picture>
+        <price>24</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DS7T18B955CE</model>
+        <vendorCode>DS7T18B955CE</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: DS7T18B955CE. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: DS7T18B955CE. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENS70</param>
+        <param name="Код запчастини">DS7T18B955CE</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="18128" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/79/0000_79_982.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/79/0000_79_983.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/79/0000_79_984.jpg</picture>
+        <price>100</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>da8t-18b955-cd</model>
+        <vendorCode>da8t-18b955-cd</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-18b955-cd. Кросс-номери: da8t-18b955-cd. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-18b955-cd. Кросс-номери: da8t-18b955-cd. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">da8t-18b955-cd</param>
+        <param name="Код запчастини">da8t-18b955-cd</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="17936" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/78/0000_78_980.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/78/0000_78_981.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/78/0000_78_982.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/78/0000_78_983.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>da8t-14f239-bn</model>
+        <vendorCode>da8t-14f239-bn</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-14f239-bn. Кросс-номери: da8t-14f239-bn. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-14f239-bn. Кросс-номери: da8t-14f239-bn. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">da8t-14f239-bn</param>
+        <param name="Код запчастини">da8t-14f239-bn</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16868" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Edge 2019</name>
+        <name_ua>Монітор дисплей навігація Ford Edge 2019</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_659.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_660.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_661.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_662_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_663_v1.jpg</picture>
+        <price>350</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>K2GT-14G370-CCH</model>
+        <vendorCode>K2GT-14G370-CCH</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GT-14G370-CCH. Кросс-номери: K2GT14G370CCH. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2019. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: K2GT-14G370-CCH. Кросс-номери: K2GT14G370CCH. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">K2GT14G370CCH</param>
+        <param name="Код запчастини">K2GT-14G370-CCH</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2019</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16829" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2014</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_431.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_432.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_433_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_434_v1.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>da8t-14f239-bs</model>
+        <vendorCode>da8t-14f239-bs</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2014. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-14f239-bs. Кросс-номери: da8t-14f239-bs. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2014. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: da8t-14f239-bs. Кросс-номери: da8t-14f239-bs. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">da8t-14f239-bs</param>
+        <param name="Код запчастини">da8t-14f239-bs</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="16823" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_394.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_395.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_396.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_397_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/73/0000_73_398_v1.jpg</picture>
+        <price>150</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>da8t-14f239-bk</model>
+        <vendorCode>da8t-14f239-bk</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: da8t-14f239-bk. Кросс-номери: da8t-14f239-bk. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: da8t-14f239-bk. Кросс-номери: da8t-14f239-bk. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENTA0 Turbo</param>
+        <param name="Кросс-номери">da8t-14f239-bk</param>
+        <param name="Код запчастини">da8t-14f239-bk</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="15179" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/65/0000_65_991.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/65/0000_65_992.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/65/0000_65_993.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/65/0000_65_994.jpg</picture>
+        <price>191</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DA8T14F239BK</model>
+        <vendorCode>DA8T14F239BK</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DA8T14F239BK. Кросс-номери: DA8T-14F239-BK. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2013. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: DA8T14F239BK. Кросс-номери: DA8T-14F239-BK. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">DA8T-14F239-BK</param>
+        <param name="Код запчастини">DA8T14F239BK</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="11833" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Escape 2020</name>
+        <name_ua>Монітор дисплей навігація Ford Escape 2020</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/51/0000_51_344.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/51/0000_51_345.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/51/0000_51_346.jpg</picture>
+        <price>200</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>LJ6T-18B955-FC</model>
+        <vendorCode>LJ6T-18B955-FC</vendorCode>
+        <description>Марка: Ford. Модель: Escape. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: LJ6T-18B955-FC. Кросс-номери: LJ6T18B955FC. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Escape. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: LJ6T-18B955-FC. Кросс-номери: LJ6T18B955FC. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L</param>
+        <param name="Кросс-номери">LJ6T18B955FC</param>
+        <param name="Код запчастини">LJ6T-18B955-FC</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Escape</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="11671" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Edge 2016</name>
+        <name_ua>Монітор дисплей навігація Ford Edge 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_597.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_598.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/50/0000_50_599.jpg</picture>
+        <price>291</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>G2GT14G370BL</model>
+        <vendorCode>G2GT14G370BL</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2016. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: G2GT14G370BL. Кросс-номери: G2GT-14G370-BL. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2016. Двигун: 3.5L ENKX0. Виробник: Ford. Номер виробника: G2GT14G370BL. Кросс-номери: G2GT-14G370-BL. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENKX0</param>
+        <param name="Кросс-номери">G2GT-14G370-BL</param>
+        <param name="Код запчастини">G2GT14G370BL</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="11378" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Edge 2016</name>
+        <name_ua>Монітор дисплей навігація Ford Edge 2016</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/49/0000_49_079.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/49/0000_49_080.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/49/0000_49_081.jpg</picture>
+        <price>131</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>J2GT14G370ACE</model>
+        <vendorCode>J2GT14G370ACE</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2016. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: J2GT14G370ACE. Кросс-номери: J2GT-14G370-ACE. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2016. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: J2GT14G370ACE. Кросс-номери: J2GT-14G370-ACE. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">J2GT-14G370-ACE</param>
+        <param name="Код запчастини">J2GT14G370ACE</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2016</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="10058" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Volvo XC60 2011</name>
+        <name_ua>Монітор дисплей навігація Volvo XC60 2011</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/43/0000_43_089.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/43/0000_43_090.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/43/0000_43_091.jpg</picture>
+        <price>120</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31337643</model>
+        <vendorCode>31337643</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2011. Двигун: 3.2L B6324S4. Кузов: I. Виробник: Volvo. Номер виробника: 31337643. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2011. Двигун: 3.2L B6324S4. Кузов: I. Виробник: Volvo. Номер виробника: 31337643. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.2L B6324S4</param>
+        <param name="Кузов">I</param>
+        <param name="Код запчастини">31337643</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2011</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="9832" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Volvo XC60 2015</name>
+        <name_ua>Монітор дисплей навігація Volvo XC60 2015</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/42/0000_42_178.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/42/0000_42_179.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/42/0000_42_180.jpg</picture>
+        <price>120</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31483612AA</model>
+        <vendorCode>31483612AA</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Номер виробника: 31483612AA. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2015. Двигун: 2.0L B4204T11. Кузов: I. Виробник: Volvo. Номер виробника: 31483612AA. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L B4204T11</param>
+        <param name="Кузов">I</param>
+        <param name="Код запчастини">31483612AA</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2015</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="8844" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Edge 2018</name>
+        <name_ua>Монітор дисплей навігація Ford Edge 2018</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_858_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_859.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_860.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/37/0000_37_861.jpg</picture>
+        <price>291</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>J2GT14G370ACF</model>
+        <vendorCode>J2GT14G370ACF</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2018. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: J2GT14G370ACF. Кросс-номери: J2GT-14G370-ACF. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2018. Двигун: 2.0L ENR90. Виробник: Ford. Номер виробника: J2GT14G370ACF. Кросс-номери: J2GT-14G370-ACF. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L ENR90</param>
+        <param name="Кросс-номери">J2GT-14G370-ACF</param>
+        <param name="Код запчастини">J2GT14G370ACF</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2018</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7818" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Flex 2014</name>
+        <name_ua>Монітор дисплей навігація Ford Flex 2014</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_257_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_258_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_253_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_256.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_254.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/33/0000_33_255.jpg</picture>
+        <price>131</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DA8T18B955FD</model>
+        <vendorCode>DA8T18B955FD</vendorCode>
+        <description>Марка: Ford. Модель: Flex. Рік випуску: 2014. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: DA8T18B955FD. Кросс-номери: DA8T-18B955-FD. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Flex. Рік випуску: 2014. Двигун: 3.5L ENTA0 Turbo. Виробник: Ford. Номер виробника: DA8T18B955FD. Кросс-номери: DA8T-18B955-FD. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.5L ENTA0 Turbo</param>
+        <param name="Кросс-номери">DA8T-18B955-FD</param>
+        <param name="Код запчастини">DA8T18B955FD</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Flex</param>
+        <param name="Рік випуску автомобіля">2014</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="7563" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Volvo XC60 2012</name>
+        <name_ua>Монітор дисплей навігація Volvo XC60 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/32/0000_32_182_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/32/0000_32_183.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/32/0000_32_184_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/32/0000_32_185_v1.jpg</picture>
+        <price>55</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31357018</model>
+        <vendorCode>31357018</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.0L B6304T4. Кузов: I. Виробник: Volvo. Номер виробника: 31357018. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.0L B6304T4. Кузов: I. Виробник: Volvo. Номер виробника: 31357018. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.0L B6304T4</param>
+        <param name="Кузов">I</param>
+        <param name="Код запчастини">31357018</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="6002" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Volvo XC60 2012</name>
+        <name_ua>Монітор дисплей навігація Volvo XC60 2012</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/25/0000_25_786.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/25/0000_25_787.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/25/0000_25_788.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/25/0000_25_789.jpg</picture>
+        <price>55</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Volvo</vendor>
+        <model>31357018</model>
+        <vendorCode>31357018</vendorCode>
+        <description>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.2L B6324S5. Кузов: I. Виробник: Volvo. Номер виробника: 31357018. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Volvo. Модель: XC60. Рік випуску: 2012. Двигун: 3.2L B6324S5. Кузов: I. Виробник: Volvo. Номер виробника: 31357018. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">3.2L B6324S5</param>
+        <param name="Кузов">I</param>
+        <param name="Код запчастини">31357018</param>
+        <param name="Сумісність з маркою">Volvo</param>
+        <param name="Сумісність з моделлю">XC60</param>
+        <param name="Рік випуску автомобіля">2012</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="3323" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Fusion 2013</name>
+        <name_ua>Монітор дисплей навігація Ford Fusion 2013</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/15/0000_15_524_v1.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/15/0000_15_526.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/15/0000_15_527.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/15/0000_15_525_v1.jpg</picture>
+        <price>23</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>DS7T-18B955-CE</model>
+        <vendorCode>DS7T-18B955-CE</vendorCode>
+        <description>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: DS7T-18B955-CE. Кросс-номери: DS7T18B955CE. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Fusion. Рік випуску: 2013. Двигун: 2.5L ENS70. Виробник: Ford. Номер виробника: DS7T-18B955-CE. Кросс-номери: DS7T18B955CE. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.5L ENS70</param>
+        <param name="Кросс-номери">DS7T18B955CE</param>
+        <param name="Код запчастини">DS7T-18B955-CE</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Fusion</param>
+        <param name="Рік випуску автомобіля">2013</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+      <offer id="2939" available="true" type="vendor.model">
+        <name>Монітор дисплей навігація Ford Edge 2020</name>
+        <name_ua>Монітор дисплей навігація Ford Edge 2020</name_ua>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/13/0000_13_852.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/13/0000_13_853_v2.jpg</picture>
+        <picture>http://export-content.baz-on.net/pub/c1181/productphoto/0000/13/0000_13_854.jpg</picture>
+        <price>250</price>
+        <currencyId>USD</currencyId>
+        <categoryId>1</categoryId>
+        <portal_category_id>340415</portal_category_id>
+        <vendor>Ford</vendor>
+        <model>JS7T-14G370-GJG</model>
+        <vendorCode>JS7T-14G370-GJG</vendorCode>
+        <description>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: JS7T-14G370-GJG. Кросс-номери: JS7T14G370GJG, JS7T-14G370. Б/В запчастина зі розбірки.</description>
+        <description_ua>Марка: Ford. Модель: Edge. Рік випуску: 2020. Двигун: 2.0L. Виробник: Ford. Номер виробника: JS7T-14G370-GJG. Кросс-номери: JS7T14G370GJG, JS7T-14G370. Б/В запчастина зі розбірки.</description_ua>
+        <selling_type>retail</selling_type>
+        <condition>used</condition>
+        <param name="Двигун">2.0L</param>
+        <param name="Кросс-номери">JS7T14G370GJG, JS7T-14G370</param>
+        <param name="Код запчастини">JS7T-14G370-GJG</param>
+        <param name="Сумісність з маркою">Ford</param>
+        <param name="Сумісність з моделлю">Edge</param>
+        <param name="Рік випуску автомобіля">2020</param>
+        <param name="Стан">Б/в</param>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>
