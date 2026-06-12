@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2026-06-12 12:00">
+<yml_catalog date="2026-06-12 16:00">
   <offers>
     <offer id="2934015518" available="true">
       <price>5740.00</price>
@@ -11329,9 +11329,9 @@
       <price>1480.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934020548" available="true">
+    <offer id="2934020548" available="false">
       <price>50.00</price>
-      <availability>in_stock</availability>
+      <availability>out_of_stock</availability>
     </offer>
     <offer id="2934020305" available="true">
       <price>5330.00</price>
@@ -12369,9 +12369,9 @@
       <price>2140.00</price>
       <availability>out_of_stock</availability>
     </offer>
-    <offer id="2934021022" available="true">
+    <offer id="2934021022" available="false">
       <price>2520.00</price>
-      <availability>in_stock</availability>
+      <availability>out_of_stock</availability>
     </offer>
     <offer id="2934020243" available="true">
       <price>2700.00</price>
@@ -12953,9 +12953,9 @@
       <price>1140.00</price>
       <availability>out_of_stock</availability>
     </offer>
-    <offer id="2934021131" available="false">
+    <offer id="2934021131" available="true">
       <price>250.00</price>
-      <availability>out_of_stock</availability>
+      <availability>in_stock</availability>
     </offer>
     <offer id="2934020277" available="true">
       <price>59490.00</price>
@@ -15149,9 +15149,9 @@
       <price>10700.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934021441" available="true">
+    <offer id="2934021441" available="false">
       <price>4230.00</price>
-      <availability>in_stock</availability>
+      <availability>out_of_stock</availability>
     </offer>
     <offer id="2934021036" available="true">
       <price>2070.00</price>
@@ -15777,9 +15777,9 @@
       <price>140.00</price>
       <availability>in_stock</availability>
     </offer>
-    <offer id="2934021646" available="true">
+    <offer id="2934021646" available="false">
       <price>9070.00</price>
-      <availability>in_stock</availability>
+      <availability>out_of_stock</availability>
     </offer>
     <offer id="2934021907" available="false">
       <price>4520.00</price>
