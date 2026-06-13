@@ -229,14 +229,35 @@ def _best_match(query: str, candidates: list[tuple[str, str]]) -> tuple[float, s
     return best_score, best_code, best_name
 
 
+_manual_map: dict[str, tuple[str, str]] = {}
+
+
+def _load_manual_map() -> dict[str, tuple[str, str]]:
+    """Завантажує ручний маппінг з таблиці carvol_epicentr_cat_map."""
+    global _manual_map
+    if _manual_map:
+        return _manual_map
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT carvol_cat, epicentr_code, epicentr_name FROM carvol_epicentr_cat_map")
+        for r in cur.fetchall():
+            _manual_map[r['carvol_cat'].strip()] = (r['epicentr_code'], r['epicentr_name'])
+        cur.close(); conn.close()
+        logger.info(f"Ручний маппінг: {len(_manual_map)} записів")
+    except Exception as e:
+        logger.warning(f"carvol_epicentr_cat_map недоступна: {e}")
+    return _manual_map
+
+
 def map_category(carvol_cat: str) -> tuple[str, str]:
     """
     Повертає (epicentr_code, epicentr_name) для категорії Carvol.
-    Стратегія:
-    1. Точний збіг по name_ua
-    2. Матч по листовій категорії (після останнього '>')
-    3. Матч по повному шляху
-    Поріг score=0.72 з урахуванням штрафу за різницю довжин.
+    Стратегія (пріоритет зверху вниз):
+    1. Ручний маппінг (carvol_epicentr_cat_map) — точний збіг або по кореневій категорії
+    2. Точний fuzzy-збіг по epicentr_categories
+    3. Матч по листовій категорії (після останнього ' > ')
+    4. Матч по повному шляху
     """
     key = (carvol_cat or '').strip()
     if not key:
@@ -245,27 +266,50 @@ def map_category(carvol_cat: str) -> tuple[str, str]:
     if key in _cat_cache:
         return _cat_cache[key]
 
+    manual = _load_manual_map()
+
+    # 1a. Точний ручний маппінг
+    if key in manual:
+        result = manual[key]
+        _cat_cache[key] = result
+        logger.debug(f"  CAT '{key}' → '{result[1]}' (manual exact)")
+        return result
+
+    # 1b. Ручний маппінг по кореню шляху (частина до першого ' > ')
+    root_cat = key.split(' > ')[0].strip()
+    if root_cat != key and root_cat in manual:
+        result = manual[root_cat]
+        _cat_cache[key] = result
+        logger.debug(f"  CAT '{key}' (root='{root_cat}') → '{result[1]}' (manual root)")
+        return result
+
     candidates = _load_epicentr_cats()
 
-    # 1. Точний збіг
+    # 2. Точний fuzzy-збіг
     key_norm = _norm(key)
     for code, name in candidates:
         if _norm(name) == key_norm:
             _cat_cache[key] = (code, name)
-            logger.debug(f"  CAT '{key}' → '{name}' (exact)")
+            logger.debug(f"  CAT '{key}' → '{name}' (fuzzy exact)")
             return (code, name)
 
-    # 2. Матч по листовій категорії (частина після останнього ' > ')
+    # 3. Матч по листовій категорії (частина після останнього ' > ')
     leaf = key.split(' > ')[-1].strip()
     if leaf and leaf != key:
+        # Спочатку ручний маппінг для листа
+        if leaf in manual:
+            result = manual[leaf]
+            _cat_cache[key] = result
+            logger.debug(f"  CAT '{key}' (leaf='{leaf}') → '{result[1]}' (manual leaf)")
+            return result
         score, code, name = _best_match(leaf, candidates)
         if score >= 0.72:
-            result: tuple[str, str] = (code, name)
+            result = (code, name)
             _cat_cache[key] = result
             logger.debug(f"  CAT '{key}' (leaf='{leaf}') → '{name}' (score={score:.2f})")
             return result
 
-    # 3. Матч по повному шляху
+    # 4. Матч по повному шляху
     score, code, name = _best_match(key, candidates)
     if score >= 0.72 and code:
         result = (code, name)
