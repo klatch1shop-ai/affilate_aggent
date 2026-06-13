@@ -28,6 +28,7 @@ from shared.utils.db import get_connection
 
 INPUT_FILE  = os.path.join(BASE_DIR, 'data', 'carvol_opt_20260613.xml')
 OUTPUT_FILE = os.path.join(BASE_DIR, 'exports', 'carvol_epicentr.xml')
+FEED_FILE   = os.path.join(BASE_DIR, 'data', 'carvol_feed.xml')
 
 # SpreadsheetML namespace
 SS_NS = 'urn:schemas-microsoft-com:office:spreadsheet'
@@ -47,7 +48,8 @@ DEFAULT_HEIGHT  = 100
 DEFAULT_LENGTH  = 200
 
 # Категорія-дефолт якщо fuzzy-match не знайшов відповідника (≥0.6)
-DEFAULT_EPICENTR_CAT = ('4638107', 'Автомобільна електроніка')
+DEFAULT_EPICENTR_CAT = ('4907', 'Магнітоли')
+DEFAULT_VENDOR = 'Carvol'
 
 
 # ── SpreadsheetML парсер ────────────────────────────────────────────────────
@@ -357,6 +359,36 @@ def get_pictures(article: str) -> list[str]:
     return _pics_cache.get((article or '').upper(), [])
 
 
+# ── Дані з Rozetka XML feed (описи, фото, vendor) ──────────────────────────
+
+_feed_cache: dict[str, dict] = {}
+
+
+def _load_feed_data(feed_file: str) -> None:
+    """Завантажує описи, фото і vendor з Prom/Rozetka XML фіду Carvol."""
+    if _feed_cache:
+        return
+    if not os.path.exists(feed_file):
+        logger.warning(f"Feed файл не знайдено: {feed_file}")
+        return
+    try:
+        tree = ET.parse(feed_file)
+        root = tree.getroot()
+        offers = root.findall('.//offer')
+        for o in offers:
+            art = (o.findtext('article', '') or '').strip()
+            if not art:
+                continue
+            key = art.upper()
+            desc = (o.findtext('description_ua', '') or o.findtext('description', '') or '').strip()
+            pics = [p.text for p in o.findall('picture') if p.text and p.text.strip()]
+            vendor = (o.findtext('vendor', '') or '').strip()
+            _feed_cache[key] = {'desc': desc, 'pics': pics, 'vendor': vendor}
+        logger.info(f"Feed завантажено: {len(_feed_cache)} товарів з {feed_file}")
+    except Exception as exc:
+        logger.warning(f"Не вдалось завантажити feed: {exc}")
+
+
 # ── Хелпери ─────────────────────────────────────────────────────────────────
 
 def vendor_hash(vendor: str) -> str:
@@ -385,6 +417,7 @@ def parse_price(raw: str) -> float:
 def generate_xml(
     input_file: str = INPUT_FILE,
     output_file: str = OUTPUT_FILE,
+    feed_file: str = FEED_FILE,
 ) -> int:
     # 1. Парсинг SpreadsheetML
     records = parse_spreadsheet_ml(input_file)
@@ -415,8 +448,9 @@ def generate_xml(
         logger.error("Немає товарів з залишком '+'")
         return 0
 
-    # 3. Фото з БД
+    # 3. Фото з БД + дані з Rozetka feed (описи, фото, vendor)
     _load_pics()
+    _load_feed_data(feed_file)
 
     # 4. Генерація XML
     lines = [
@@ -429,6 +463,11 @@ def generate_xml(
     cnt_no_price = 0
     cnt_no_article = 0
     cnt_with_pics = 0
+    cnt_pics_from_feed = 0
+    cnt_desc_from_feed = 0
+    cnt_desc_auto = 0
+    cnt_vendor_from_feed = 0
+    cnt_vendor_default = 0
     cat_stats: dict[str, int] = {}
 
     for rec in filtered:
@@ -448,19 +487,48 @@ def generate_xml(
         cat_raw = rec.get(headers[col['category']], '').strip() if 'category' in col else ''
         desc    = rec.get(headers[col['desc']], '').strip()     if 'desc'     in col else ''
 
+        # Feed-дані для fallback
+        feed_item = _feed_cache.get(article.upper(), {})
+
         # Назва: беремо з файлу або складаємо як [Бренд] [Модель] [Артикул]
         if not name:
             parts = [p for p in [vendor, model or article] if p]
             name = ' '.join(parts) or article
 
+        # Vendor: прайс → feed → дефолт
+        if not vendor:
+            feed_vendor = feed_item.get('vendor', '')
+            if feed_vendor:
+                vendor = feed_vendor
+                cnt_vendor_from_feed += 1
+            else:
+                vendor = DEFAULT_VENDOR
+                cnt_vendor_default += 1
+
+        # Опис: прайс → feed → авто-генерація
+        if not desc:
+            feed_desc = feed_item.get('desc', '')
+            if feed_desc:
+                desc = feed_desc
+                cnt_desc_from_feed += 1
+            else:
+                desc = f'<p>{escape_xml(name)} — якісний автоаксесуар для вашого автомобіля.</p>'
+                cnt_desc_auto += 1
+
         cat_code, cat_name = map_category(cat_raw)
         cat_stats[cat_name] = cat_stats.get(cat_name, 0) + 1
 
+        # Фото: БД → feed
         pictures = get_pictures(article)
         if pictures:
             cnt_with_pics += 1
+        else:
+            feed_pics = feed_item.get('pics', [])
+            if feed_pics:
+                pictures = feed_pics
+                cnt_pics_from_feed += 1
 
-        v_hash = vendor_hash(vendor) if vendor else 'carvol'
+        v_hash = vendor_hash(vendor)
         avail  = 'true'
 
         offer: list[str] = [
@@ -510,12 +578,19 @@ def generate_xml(
     print(f'\n{sep}')
     print(f'  Генерація: {output_file}')
     print(sep)
+    cnt_no_pics = cnt_total - cnt_with_pics - cnt_pics_from_feed
     print(f'  Записів у файлі:         {len(records)}')
     print(f'  З наявністю "+":         {len(filtered)}')
     print(f'  Згенеровано офферів:     {cnt_total}')
     print(f'  Пропущено (ціна=0):      {cnt_no_price}')
     print(f'  Пропущено (немає арт.):  {cnt_no_article}')
     print(f'  З фото (з БД):           {cnt_with_pics}')
+    print(f'  З фото (з feed):         {cnt_pics_from_feed}')
+    print(f'  Без фото:                {cnt_no_pics}')
+    print(f'  Опис з feed:             {cnt_desc_from_feed}')
+    print(f'  Опис авто-генерація:     {cnt_desc_auto}')
+    print(f'  Vendor з feed:           {cnt_vendor_from_feed}')
+    print(f'  Vendor дефолт (Carvol):  {cnt_vendor_default}')
     print(f'  Розмір файлу:            {size_kb} KB')
     print(f'\n  Детектовані колонки:')
     for field, idx in col.items():
@@ -536,7 +611,8 @@ if __name__ == '__main__':
     )
     parser.add_argument('--input',  default=INPUT_FILE,  help='Шлях до SpreadsheetML файлу')
     parser.add_argument('--output', default=OUTPUT_FILE, help='Шлях для збереження XML')
+    parser.add_argument('--feed',   default=FEED_FILE,   help='Шлях до Rozetka XML feed (описи/фото/vendor)')
     args = parser.parse_args()
 
-    total = generate_xml(args.input, args.output)
+    total = generate_xml(args.input, args.output, args.feed)
     sys.exit(0 if total > 0 else 1)
