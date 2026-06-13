@@ -50,7 +50,6 @@ DEFAULT_LENGTH  = 200
 # Категорія-дефолт якщо fuzzy-match не знайшов відповідника (≥0.6)
 DEFAULT_EPICENTR_CAT = ('4907', 'Магнітоли')
 DEFAULT_VENDOR = 'Carvol'
-OTHER_BRAND_CODE = '827b4a70220f11ea918e001e67ecc97b'
 
 
 # ── SpreadsheetML парсер ────────────────────────────────────────────────────
@@ -571,12 +570,12 @@ def generate_xml(
             v_text = brand_info['value_ua']
             cnt_vendor_valid += 1
         else:
-            v_code = OTHER_BRAND_CODE
-            v_text = 'Інше'
+            v_code = ''
+            v_text = vendor
             cnt_vendor_other += 1
             vendor_unknown_stats[vendor] = vendor_unknown_stats.get(vendor, 0) + 1
             if vendor not in _unknown_vendors_warned:
-                logger.warning(f"Невідомий бренд → Єпіцентр 'Інше': '{vendor}'")
+                logger.warning(f"Невідомий бренд для Єпіцентру (буде 'Інше'): '{vendor}'")
                 _unknown_vendors_warned.add(vendor)
 
         avail = 'true'
