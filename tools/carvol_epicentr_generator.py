@@ -11,7 +11,7 @@ tools/carvol_epicentr_generator.py
     python3 tools/carvol_epicentr_generator.py --input data/carvol_opt_20260613.xml --output exports/carvol_epicentr.xml
 """
 
-import os, sys, re, hashlib, json, argparse
+import os, sys, re, hashlib, json, argparse, math
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from difflib import SequenceMatcher
@@ -51,6 +51,25 @@ DEFAULT_LENGTH  = 200
 DEFAULT_EPICENTR_CAT = ('4907', 'Магнітоли')
 DEFAULT_VENDOR = 'Carvol'
 OTHER_BRAND_CODE = '827b4a70220f11ea918e001e67ecc97b'
+
+# Комісія Єпіцентру по кодах категорій (% від ціни продажу)
+# Джерело: таблиця epicentr_cpa_rates; відсутні категорії → дефолт 15%
+EPICENTR_COMMISSION: dict[str, float] = {
+    '8743': 15.0,  # Перехідні рамки для автомагнітол
+    '4907': 15.0,  # Магнітоли
+    '3729': 15.0,  # Камери заднього огляду
+    '2821': 15.0,  # Кабелі та перехідники
+    '2848': 15.0,  # Аксесуари для автосигналізацій
+    '2883': 15.0,  # LED-світло для автомобіля
+    '2866': 15.0,  # Автомагнітоли
+}
+DEFAULT_COMMISSION = 15.0
+
+
+def calc_sell_price(rrc: float, cat_code: str) -> float:
+    """Ціна продажу = РРЦ gross-up на комісію Єпіцентру, округлення вгору до 10."""
+    comm = EPICENTR_COMMISSION.get(cat_code, DEFAULT_COMMISSION)
+    return math.ceil(rrc / (1 - comm / 100) / 10) * 10
 
 
 # ── SpreadsheetML парсер ────────────────────────────────────────────────────
@@ -505,6 +524,7 @@ def generate_xml(
     cnt_vendor_other = 0    # не знайдено → Єпіцентр прийме як "Інше"
     vendor_unknown_stats: dict[str, int] = {}
     cat_stats: dict[str, int] = {}
+    price_samples: list[tuple] = []  # (article, cat_code, rrc, sell_price)
 
     for rec in filtered:
         article = rec.get(headers[col['article']], '').strip()
@@ -554,6 +574,10 @@ def generate_xml(
         cat_code, cat_name = map_category(cat_raw)
         cat_stats[cat_name] = cat_stats.get(cat_name, 0) + 1
 
+        sell_price = calc_sell_price(price, cat_code)
+        if len(price_samples) < 5:
+            price_samples.append((article, cat_code, price, sell_price))
+
         # Фото: БД → feed
         pictures = get_pictures(article)
         if pictures:
@@ -583,7 +607,7 @@ def generate_xml(
 
         offer: list[str] = [
             f'  <offer id="{escape_xml(article)}" available="{avail}">',
-            f'    <price>{price:.2f}</price>',
+            f'    <price>{sell_price:.2f}</price>',
             f'    <category code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</category>',
             f'    <attribute_set code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</attribute_set>',
             f'    <name lang="ua">{escape_xml(name)}</name>',
@@ -659,6 +683,12 @@ def generate_xml(
         print(f'\n  Невідомі бренди (топ-20):')
         for brand, cnt in sorted(vendor_unknown_stats.items(), key=lambda x: -x[1])[:20]:
             print(f'    {cnt:5}  {brand}')
+    if price_samples:
+        print(f'\n  Приклади ціноутворення (РРЦ → ціна з комісією 15%):')
+        print(f'  {"Артикул":<20} {"Кат":>6}  {"РРЦ (uah)":>12}  {"→":>2}  {"Ціна продажу":>12}  {"Надбавка":>8}')
+        for art, cat, rrc, sp in price_samples:
+            markup = sp - rrc
+            print(f'  {art:<20} {cat:>6}  {rrc:>12.2f}  {"→":>2}  {sp:>12.2f}  {markup:>+8.2f}')
     print(sep)
 
     return cnt_total
