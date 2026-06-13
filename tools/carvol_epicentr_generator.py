@@ -389,11 +389,42 @@ def _load_feed_data(feed_file: str) -> None:
         logger.warning(f"Не вдалось завантажити feed: {exc}")
 
 
+# ── Бренди Єпіцентру (epicentr_brand_map) ──────────────────────────────────
+
+_brand_map: dict[str, dict] = {}  # key=brand_name.lower()
+_unknown_vendors_warned: set[str] = set()
+
+
+def _load_brand_map() -> dict[str, dict]:
+    global _brand_map
+    if _brand_map:
+        return _brand_map
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT brand_name, valuecode, value_ua FROM epicentr_brand_map")
+        for r in cur.fetchall():
+            key = (r['brand_name'] or '').lower().strip()
+            if key:
+                _brand_map[key] = {'valuecode': r['valuecode'], 'value_ua': r['value_ua']}
+        cur.close(); conn.close()
+        logger.info(f"Бренди Єпіцентру завантажено: {len(_brand_map)} записів")
+    except Exception as e:
+        logger.warning(f"epicentr_brand_map недоступна: {e}")
+    return _brand_map
+
+
+def get_valid_vendor(vendor_name: str, conn=None) -> dict | None:
+    """
+    Шукає бренд в epicentr_brand_map (case-insensitive).
+    Повертає {'valuecode': ..., 'value_ua': ...} або None якщо не знайдено.
+    """
+    bmap = _load_brand_map()
+    key = (vendor_name or '').lower().strip()
+    return bmap.get(key)
+
+
 # ── Хелпери ─────────────────────────────────────────────────────────────────
-
-def vendor_hash(vendor: str) -> str:
-    return hashlib.md5((vendor or '').lower().encode()).hexdigest()
-
 
 def escape_xml(text) -> str:
     s = str(text) if text is not None else ''
@@ -448,9 +479,10 @@ def generate_xml(
         logger.error("Немає товарів з залишком '+'")
         return 0
 
-    # 3. Фото з БД + дані з Rozetka feed (описи, фото, vendor)
+    # 3. Фото з БД + дані з Rozetka feed (описи, фото, vendor) + бренди Єпіцентру
     _load_pics()
     _load_feed_data(feed_file)
+    _load_brand_map()
 
     # 4. Генерація XML
     lines = [
@@ -468,6 +500,9 @@ def generate_xml(
     cnt_desc_auto = 0
     cnt_vendor_from_feed = 0
     cnt_vendor_default = 0
+    cnt_vendor_valid = 0    # знайдено в epicentr_brand_map
+    cnt_vendor_other = 0    # не знайдено → Єпіцентр прийме як "Інше"
+    vendor_unknown_stats: dict[str, int] = {}
     cat_stats: dict[str, int] = {}
 
     for rec in filtered:
@@ -528,8 +563,22 @@ def generate_xml(
                 pictures = feed_pics
                 cnt_pics_from_feed += 1
 
-        v_hash = vendor_hash(vendor)
-        avail  = 'true'
+        # Пошук бренду в epicentr_brand_map
+        brand_info = get_valid_vendor(vendor)
+        if brand_info:
+            v_code = brand_info['valuecode']
+            v_text = brand_info['value_ua']
+            cnt_vendor_valid += 1
+        else:
+            v_code = ''
+            v_text = vendor
+            cnt_vendor_other += 1
+            vendor_unknown_stats[vendor] = vendor_unknown_stats.get(vendor, 0) + 1
+            if vendor not in _unknown_vendors_warned:
+                logger.warning(f"Невідомий бренд для Єпіцентру (буде 'Інше'): '{vendor}'")
+                _unknown_vendors_warned.add(vendor)
+
+        avail = 'true'
 
         offer: list[str] = [
             f'  <offer id="{escape_xml(article)}" available="{avail}">',
@@ -546,12 +595,17 @@ def generate_xml(
         if desc:
             offer.append(f'    <description lang="ua"><![CDATA[{desc}]]></description>')
 
+        if v_code:
+            brand_param = f'    <param name="Бренд" paramcode="brand" valuecode="{escape_xml(v_code)}">{escape_xml(v_text)}</param>'
+        else:
+            brand_param = f'    <param name="Бренд" paramcode="brand">{escape_xml(v_text)}</param>'
+
         offer += [
-            f'    <vendor code="{v_hash}">{escape_xml(vendor)}</vendor>',
+            f'    <vendor code="{escape_xml(v_code)}">{escape_xml(v_text)}</vendor>',
             f'    <country_of_origin code="{COUNTRY_CODE}">{COUNTRY_NAME}</country_of_origin>',
             '    <param name="Міра виміру" paramcode="measure" valuecode="measure_pcs">шт.</param>',
             '    <param name="Мінімальна кратність товару" paramcode="ratio">1</param>',
-            f'    <param name="Бренд" paramcode="brand">{escape_xml(vendor)}</param>',
+            brand_param,
             f'    <weight>{DEFAULT_WEIGHT}</weight>',
             f'    <width>{DEFAULT_WIDTH}</width>',
             f'    <height>{DEFAULT_HEIGHT}</height>',
@@ -591,6 +645,8 @@ def generate_xml(
     print(f'  Опис авто-генерація:     {cnt_desc_auto}')
     print(f'  Vendor з feed:           {cnt_vendor_from_feed}')
     print(f'  Vendor дефолт (Carvol):  {cnt_vendor_default}')
+    print(f'  Vendor code (Єпіцентр):  {cnt_vendor_valid}')
+    print(f'  Vendor=Інше (невідомий): {cnt_vendor_other}')
     print(f'  Розмір файлу:            {size_kb} KB')
     print(f'\n  Детектовані колонки:')
     for field, idx in col.items():
@@ -598,6 +654,10 @@ def generate_xml(
     print(f'\n  Топ категорій Єпіцентру:')
     for cat, cnt in sorted(cat_stats.items(), key=lambda x: -x[1])[:15]:
         print(f'    {cnt:5}  {cat}')
+    if vendor_unknown_stats:
+        print(f'\n  Невідомі бренди (топ-20):')
+        for brand, cnt in sorted(vendor_unknown_stats.items(), key=lambda x: -x[1])[:20]:
+            print(f'    {cnt:5}  {brand}')
     print(sep)
 
     return cnt_total
