@@ -6,7 +6,7 @@ tools/watchdog.py — моніторинг здоров'я системи.
   */10 * * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 tools/watchdog.py >> /tmp/watchdog.log 2>&1
 
 Перевіряє:
-  1. Git uncommitted changes — авто-коміт + push
+  1. Git uncommitted changes — авто-коміт локально (push — тільки розробник вручну)
   2. Crontab — правильні шляхи (cd /home/tek/agent-system)
   3. Сервіси systemd — перезапускає якщо впали
   4. rozetka_sync_cron.log — FAILED alert
@@ -108,14 +108,9 @@ def check_git() -> dict:
         log(f"[git] commit failed: {err2}")
         return {"ok": False, "msg": f"commit failed: {err2[:80]}"}
 
-    rc3, _, err3 = run("git pull --rebase && git push")
-    if rc3 != 0:
-        log(f"[git] push failed: {err3}")
-        tg(f"⚠️ <b>Watchdog</b>: auto-commit OK але git push failed!\n<code>{err3[:200]}</code>")
-        return {"ok": False, "msg": f"push failed: {err3[:80]}"}
-
-    log(f"[git] авто-коміт + push: {changed} файлів")
-    return {"ok": True, "msg": f"auto-committed {changed} files"}
+    # Push виконує тільки розробник вручну — watchdog лише комітить локально
+    log(f"[git] авто-коміт (без push): {changed} файлів")
+    return {"ok": True, "msg": f"auto-committed {changed} files (no push)"}
 
 
 # ── check 2: crontab ──────────────────────────────────────────────────────────
