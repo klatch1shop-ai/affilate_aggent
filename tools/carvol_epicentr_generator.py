@@ -194,12 +194,13 @@ def _detect_cam_resolution(name: str) -> str:
     return '640x480'
 
 
-def get_category_params(cat_code: str, name: str) -> list[str]:
+def get_category_params(cat_code: str, name: str, car_brand_map: dict | None = None) -> list[str]:
     """
     Повертає список рядків <param> для обов'язкових атрибутів категорії.
-    Викликається при складанні XML offer.
+    car_brand_map: {name_lower: (valuecode, name_ua)} з epicentr_car_brands.
     """
     params = []
+    cbm = car_brand_map or {}
 
     if cat_code == '8743':
         # Перехідні рамки для автомагнітол
@@ -208,10 +209,11 @@ def get_category_params(cat_code: str, name: str) -> list[str]:
         color = _detect_frame_color(name)
         color_code = COLOR_GREY if color == 'grey' else (COLOR_SILVER if color == 'silver' else COLOR_BLACK)
         color_ua = {'grey': 'сірий', 'silver': 'срібло', 'black': 'чорний'}[color]
+        car_brands = detect_car_brands_from_name(name, cbm)
         params += [
             _p('Розмір', '5575', din_code, din),
             _p('Вид', '51', FRAME_VIEW_FRAME, 'рамка'),
-            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            *[_p('Марка автомобіля', '4866', vc, nu) for vc, nu in car_brands],
             _p('Матеріал', '52', FRAME_MATERIAL_PLASTIC, 'пластик'),
             _p('Базовий колір', '12097', color_code, color_ua),
         ]
@@ -220,8 +222,9 @@ def get_category_params(cat_code: str, name: str) -> list[str]:
         # Автомагнітоли (Android head units — QIV Q1/Q4/Q5, Mekede, Teyes)
         din = _detect_din(name)
         din_code = HU_DIN_2 if din == '2 DIN' else (HU_DIN_1 if din == '1 DIN' else HU_DIN_STK)
+        car_brands = detect_car_brands_from_name(name, cbm)
         params += [
-            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            *[_p('Марка автомобіля', '4866', vc, nu) for vc, nu in car_brands],
             _p('Тип магнітоли', '6546', HU_TYPE_MULTIMEDIA, 'мультимедіа'),
             _p('Монтажний розмір', '6547', din_code, din),
             _p("Роз'єми", '6534', CONN_USB, 'USB'),
@@ -247,8 +250,9 @@ def get_category_params(cat_code: str, name: str) -> list[str]:
             '640x480':   CAM_RES_640x480,
         }
         res_code = res_map.get(res, CAM_RES_640x480)
+        car_brands = detect_car_brands_from_name(name, cbm)
         params += [
-            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            *[_p('Марка автомобіля', '4866', vc, nu) for vc, nu in car_brands],
             _p('Роздільна здатність екрана', '1514', res_code, res),
             _p('Вид', '11926', view_code, view_ua),
             _p('Тип', '6513', CAM_TYPE_UNIVERSAL, 'універсальна'),
@@ -649,6 +653,45 @@ def get_valid_vendor(vendor_name: str, conn=None) -> dict | None:
     return bmap.get(key)
 
 
+# ── Бренди авто Єпіцентру (epicentr_car_brands, attr 4866) ─────────────────
+
+_car_brand_map: dict[str, tuple[str, str]] = {}  # name_lower → (valuecode, name_ua)
+
+
+def _load_car_brand_map() -> dict[str, tuple[str, str]]:
+    global _car_brand_map
+    if _car_brand_map:
+        return _car_brand_map
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT valuecode, name_ua, name_lower FROM epicentr_car_brands")
+        for r in cur.fetchall():
+            key = r['name_lower'] or (r['name_ua'] or '').lower()
+            if key:
+                _car_brand_map[key] = (r['valuecode'], r['name_ua'])
+        cur.close(); conn.close()
+        logger.info(f"Бренди авто завантажено: {len(_car_brand_map)} записів")
+    except Exception as e:
+        logger.warning(f"epicentr_car_brands недоступна: {e}")
+    return _car_brand_map
+
+
+def detect_car_brands_from_name(name: str, car_brand_map: dict) -> list[tuple[str, str]]:
+    """
+    Знаходить марки авто в назві товару по слову (word boundary).
+    Повертає список (valuecode, name_ua) — кожен як окремий <param paramcode="4866">.
+    Якщо жодного не знайдено — повертає [(CAR_BRAND_UNIVERSAL, 'універсальна')].
+    """
+    found = []
+    name_lower = name.lower()
+    for brand_lower, (valuecode, name_ua) in car_brand_map.items():
+        pattern = r'\b' + re.escape(brand_lower) + r'\b'
+        if re.search(pattern, name_lower):
+            found.append((valuecode, name_ua))
+    return found if found else [(CAR_BRAND_UNIVERSAL, 'універсальна')]
+
+
 # ── Хелпери ─────────────────────────────────────────────────────────────────
 
 def escape_xml(text) -> str:
@@ -708,6 +751,7 @@ def generate_xml(
     _load_pics()
     _load_feed_data(feed_file)
     _load_brand_map()
+    car_brand_map = _load_car_brand_map()
 
     # 4. Генерація XML
     lines = [
@@ -816,6 +860,7 @@ def generate_xml(
             f'    <category code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</category>',
             f'    <attribute_set code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</attribute_set>',
             f'    <name lang="ua">{escape_xml(name)}</name>',
+            f'    <name lang="ru">{escape_xml(name)}</name>',
         ]
 
         for pic_url in pictures[:10]:
@@ -823,14 +868,14 @@ def generate_xml(
                 offer.append(f'    <picture>{escape_xml(pic_url)}</picture>')
 
         if desc:
-            offer.append(f'    <description lang="ua"><![CDATA[{desc}]]></description>')
+            offer.append(f'    <description lang="ua">{escape_xml(desc)}</description>')
 
         if v_code:
             brand_param = f'    <param name="Бренд" paramcode="brand" valuecode="{escape_xml(v_code)}">{escape_xml(v_text)}</param>'
         else:
             brand_param = f'    <param name="Бренд" paramcode="brand">{escape_xml(v_text)}</param>'
 
-        extra_params = get_category_params(cat_code, name)
+        extra_params = get_category_params(cat_code, name, car_brand_map)
 
         offer += [
             f'    <vendor code="{escape_xml(v_code)}">{escape_xml(v_text)}</vendor>',
