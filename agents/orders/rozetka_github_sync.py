@@ -61,13 +61,24 @@ def tg(msg: str):
         logger.warning(f'TG: {e}')
 
 
-def calc_price(price: float, cat_id: str) -> float:
-    """Ціна Carvol + комісія Розетки по тиру."""
-    rules = CPA_RULES.get(str(cat_id), [(0, 9e9, 0.18)])
+def calc_price(opt: float, cat_id: str) -> float:
+    """Gross-up OPT ціни щоб покрити комісію Розетки.
+
+    Rozetka знімає commission з sell_price, тому:
+      sell * (1 - rate) >= opt  →  sell = ceil(opt / (1 - rate) / 10) * 10
+
+    Тір визначається за sell_price (не за opt). Якщо breakeven виходить
+    за межі тиру — піднімаємось до мінімуму наступного (вигіднішого) тиру.
+    """
+    rules = sorted(CPA_RULES.get(str(cat_id), [(0, 9e9, 0.18)]), key=lambda x: x[0])
     for low, high, rate in rules:
-        if low <= price <= high:
-            return math.ceil(price * (1 + rate) / 10) * 10
-    return math.ceil(price * 1.18 / 10) * 10
+        breakeven = math.ceil(opt / (1 - rate) / 10) * 10
+        if breakeven <= high:
+            # breakeven вписується в цей або нижчий тір
+            return max(breakeven, math.ceil(low / 10) * 10)
+    # opt перевищує всі тіри — використовуємо останній (найнижча комісія)
+    _, _, rate = rules[-1]
+    return math.ceil(opt / (1 - rate) / 10) * 10
 
 
 def fetch_carvol_live() -> dict:
