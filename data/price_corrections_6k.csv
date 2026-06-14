@@ -1,1 +1,1 @@
-article,name,category_id,opt_price,current_sell,correct_sell,commission_rate,current_margin,correct_margin,breakeven_price,breakeven_margin,price_for_5pct,margin_at_5pct,diff,needs_update,available,qty
+article,opt_usd,opt_uah,current_sell,correct_sell,margin_after
