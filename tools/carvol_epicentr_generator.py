@@ -65,6 +65,211 @@ EPICENTR_COMMISSION: dict[str, float] = {
 }
 DEFAULT_COMMISSION = 15.0
 
+# ── Єпіцентр PIM — valuecodes обов'язкових атрибутів ──────────────────────
+# Джерело: tools/epicentr_attrs_explorer.py → таблиця epicentr_required_attrs
+
+# attr 4866 — Марка автомобіля (multiselect, обов'язк. для 8743/3729/2866)
+CAR_BRAND_UNIVERSAL = '3ad4056127c7c0038b78a7f24cc80941'   # 'універсальна'
+
+# attr 6513 — Тип камери (select, обов'язк. 3729)
+CAM_TYPE_UNIVERSAL = '7299e5c152994121d88f9bcd470856b4'    # 'універсальна'
+CAM_TYPE_STOCK     = '7cf79577178c3c5c36f436083e063655'    # 'штатна'
+
+# attr 11926 — Вид камери (select, обов'язк. 3729)
+CAM_VIEW_EMBEDDED  = '7e95d2c4d062009c0be07a7f6977630a'   # 'врізна'
+CAM_VIEW_PLATE     = 'ca3e67de55b5f4715e6f07126b29c833'   # 'рамка номеру'
+CAM_VIEW_HANDLE    = 'bdfa916fc1b271066db95a8b50331c53'   # 'ручка багажника'
+
+# attr 1514 — Роздільна здатність (select, обов'язк. 3729)
+CAM_RES_640x480    = '9c9e3de91c6ed6fec1e4e1dd00ff42f5'   # '640x480'
+CAM_RES_800x600    = 'e8cf43113ee5de6956e9e2604fd30726'   # '800x600'
+
+# attr 51 — Вид рамки (multiselect, обов'язк. 8743)
+FRAME_VIEW_FRAME   = 'oygfpb2qe85gkxu2'                   # 'рамка'
+
+# attr 52 — Матеріал рамки (multiselect, обов'язк. 8743)
+FRAME_MATERIAL_PLASTIC = '59474de511ea0'                   # 'пластик'
+
+# attr 5575 — Розмір DIN (multiselect, обов'язк. 8743)
+DIN_1       = 'b1ae2e6b91a1585c7f8f41c4d9ccf31a'          # '1 DIN'
+DIN_2       = 'ac6de55906304dde5f3e2a9dce129472'          # '2 DIN'
+DIN_STOCK   = 'f4b058f379b8a1e4f51ab8a2d19967b3'          # 'штатний'
+
+# attr 12097 — Базовий колір (multiselect, обов'язк. 8743)
+COLOR_BLACK  = '3ec160321d45b95cf3a540ad3a2bf896'         # 'чорний'
+COLOR_GREY   = '59474de51f852'                             # 'сірий'
+COLOR_SILVER = 'cda97fb08eda186db32c35530a77c169'         # 'срібло'
+
+# attr 6547 — Монтажний розмір (select, обов'язк. 2866)
+HU_DIN_1    = 'f50736375652d028ada0830633d6eabb'          # '1 DIN'
+HU_DIN_2    = 'bf24a9c8dba87b73eff8558f920465dd'          # '2 DIN'
+HU_DIN_STK  = 'f80c33cd5ad122b0061bcef59e834cf3'          # 'штатний'
+
+# attr 6546 — Тип магнітоли (multiselect, обов'язк. 2866)
+HU_TYPE_MULTIMEDIA = '6c37e1c5438d5c1def462d317a0badf4'  # 'мультимедіа'
+HU_TYPE_NODISK     = '35f1542c708837463fa1ff36deeaa05f'  # 'бездискові'
+
+# attr 6534 — Роз'єми (multiselect, обов'язк. 2866)
+CONN_USB    = 'e0a4ed3c6ee0b0bd090f6fc9d3adae32'
+CONN_AUX    = '6f4bfa054da3527036ed99c99b056ed8'
+CONN_ISO    = '6f3dc117d0547a99070154f3b3d22cc1'
+CONN_SD     = '23b8a01e61f6865a9110b464893915e0'
+CONN_VIDEO_IN  = 'ce077fc1f63803d602423e1050710686'
+CONN_CAM_OUT   = '2ea7e4f7513debab41bbd993a7e3fdf0'
+
+# attr 11263 — Бездротові технології (multiselect, обов'язк. 2866)
+WIRELESS_BT   = 'aa4cebda1eede9c3c1da569d448e0fca'
+WIRELESS_WIFI = '24a7fbd807c8ae71bd5fe1b8a4029069'
+WIRELESS_FM   = '6e41ac3ba4c89064a8cdc28547f8656e'
+
+# attr 1548 — Тип тюнера (multiselect, обов'язк. 2866)
+TUNER_DIGITAL  = '53b3e9a8edcf1f6eb9ce25aa1fdfb321'      # 'цифровий'
+TUNER_ANALOG   = 'd528f19e248a8483d98ac08888337941'       # 'аналоговий'
+
+# attr 1382 — Діапазон радіосигналу (multiselect, обов'язк. 4907)
+RADIO_FM = '08eb2c3faa8be25954b063a2354e8886'
+
+# attr 1384 — Налаштування частоти (multiselect, обов'язк. 4907) — 1 option
+FREQ_DIGITAL = '46c7d550fed92fd045ac77e40674d8c0'          # 'цифрова'
+
+# attr 5093 — Живлення (multiselect, обов'язк. 4907)
+POWER_UNIVERSAL = 'a41774d7ec6d5740d58fe417dd76d8fa'       # 'універсальне'
+POWER_NETWORK   = '0380ad214b03e5ae48e604b6c0f54ed0'       # 'від мережі'
+
+# attr 6187 — ПДК (select, обов'язк. 4907)
+REMOTE_YES = 'c5f6ccdb5b9768be76e66076d0c4a4ac'            # 'з пультом'
+REMOTE_NO  = 'fb646e75fba1511bf08fa378fe404a54'            # 'без пульта'
+
+# attr 78 — Колір виробника (multiselect, обов'язк. 4907)
+COLOR_MFR_BLACK  = 'ff8cwdpi'                              # 'чорний'
+COLOR_MFR_SILVER = 'wdlnhtlh'                              # 'срібний'
+COLOR_MFR_RED    = '5uooq3p5'                              # 'червоний'
+
+
+def _p(name: str, code: str, valuecode: str, value: str) -> str:
+    """Генерує рядок <param> з valuecode."""
+    return f'    <param name="{name}" paramcode="{code}" valuecode="{valuecode}">{value}</param>'
+
+
+def _detect_din(name: str) -> str:
+    """Детектує DIN розмір з назви товару (1DIN / 2DIN / штатний)."""
+    n = name.lower()
+    if '1 din' in n or '1din' in n:
+        return '1 DIN'
+    if 'штатний' in n or 'штатн' in n:
+        return 'штатний'
+    # Більшість QIV/Teyes — 2DIN (9"/10" головні пристрої)
+    return '2 DIN'
+
+
+def _detect_frame_color(name: str) -> str:
+    """Детектує колір рамки з назви ('graphite'→grey, 'silver'→silver, default→black)."""
+    n = name.lower()
+    if 'graphite' in n or 'gray' in n or 'grey' in n or 'сір' in n:
+        return 'grey'
+    if 'silver' in n or 'срібл' in n:
+        return 'silver'
+    return 'black'
+
+
+def _detect_cam_view(name: str) -> str:
+    """Детектує вид камери з назви."""
+    n = name.lower()
+    if 'рамка номер' in n or 'номерн' in n or 'plate' in n:
+        return 'plate'
+    if 'ручка' in n or 'handle' in n:
+        return 'handle'
+    return 'embedded'
+
+
+def _detect_cam_resolution(name: str) -> str:
+    """Детектує роздільну здатність камери."""
+    n = name.lower()
+    if '1080' in n or 'fhd' in n or 'full hd' in n:
+        return '1920х1080'
+    if '720' in n or 'hd' in n:
+        return '1280x720'
+    if '800tvl' in n or '800 tvl' in n:
+        return '800x600'
+    return '640x480'
+
+
+def get_category_params(cat_code: str, name: str) -> list[str]:
+    """
+    Повертає список рядків <param> для обов'язкових атрибутів категорії.
+    Викликається при складанні XML offer.
+    """
+    params = []
+
+    if cat_code == '8743':
+        # Перехідні рамки для автомагнітол
+        din = _detect_din(name)
+        din_code = DIN_2 if din == '2 DIN' else (DIN_1 if din == '1 DIN' else DIN_STOCK)
+        color = _detect_frame_color(name)
+        color_code = COLOR_GREY if color == 'grey' else (COLOR_SILVER if color == 'silver' else COLOR_BLACK)
+        color_ua = {'grey': 'сірий', 'silver': 'срібло', 'black': 'чорний'}[color]
+        params += [
+            _p('Розмір', '5575', din_code, din),
+            _p('Вид', '51', FRAME_VIEW_FRAME, 'рамка'),
+            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            _p('Матеріал', '52', FRAME_MATERIAL_PLASTIC, 'пластик'),
+            _p('Базовий колір', '12097', color_code, color_ua),
+        ]
+
+    elif cat_code == '2866':
+        # Автомагнітоли (Android head units — QIV Q1/Q4/Q5, Mekede, Teyes)
+        din = _detect_din(name)
+        din_code = HU_DIN_2 if din == '2 DIN' else (HU_DIN_1 if din == '1 DIN' else HU_DIN_STK)
+        params += [
+            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            _p('Тип магнітоли', '6546', HU_TYPE_MULTIMEDIA, 'мультимедіа'),
+            _p('Монтажний розмір', '6547', din_code, din),
+            _p("Роз'єми", '6534', CONN_USB, 'USB'),
+            _p("Роз'єми", '6534', CONN_AUX, 'AUX'),
+            _p("Роз'єми", '6534', CONN_ISO, 'ISO'),
+            _p("Роз'єми", '6534', CONN_VIDEO_IN, 'відеовхід'),
+            _p("Роз'єми", '6534', CONN_CAM_OUT, 'вихід для камери заднього огляду'),
+            _p('Бездротові технології', '11263', WIRELESS_BT, 'Bluetooth'),
+            _p('Бездротові технології', '11263', WIRELESS_WIFI, 'Wi-Fi'),
+            _p('Тип тюнера', '1548', TUNER_DIGITAL, 'цифровий'),
+        ]
+
+    elif cat_code == '3729':
+        # Камери заднього огляду
+        view = _detect_cam_view(name)
+        view_code = {'plate': CAM_VIEW_PLATE, 'handle': CAM_VIEW_HANDLE}.get(view, CAM_VIEW_EMBEDDED)
+        view_ua   = {'plate': 'рамка номеру', 'handle': 'ручка багажника'}.get(view, 'врізна')
+        res = _detect_cam_resolution(name)
+        res_map = {
+            '1920х1080': 'cafccc0c1fdaad0ac4607a755b066978',
+            '1280x720':  '1170fde30dfd911f207e2467bc15419c',
+            '800x600':   CAM_RES_800x600,
+            '640x480':   CAM_RES_640x480,
+        }
+        res_code = res_map.get(res, CAM_RES_640x480)
+        params += [
+            _p('Марка автомобіля', '4866', CAR_BRAND_UNIVERSAL, 'універсальна'),
+            _p('Роздільна здатність екрана', '1514', res_code, res),
+            _p('Вид', '11926', view_code, view_ua),
+            _p('Тип', '6513', CAM_TYPE_UNIVERSAL, 'універсальна'),
+            _p('Паркувальна розмітка', '6510', 'yes', 'так'),
+            _p('Автозатемнення', '6564', 'no', 'ні'),
+        ]
+
+    elif cat_code == '4907':
+        # Магнітоли (портативні)
+        params += [
+            _p('Підтримуваний діапазон радіосигналу', '1382', RADIO_FM, 'FM'),
+            _p('Налаштування частоти', '1384', FREQ_DIGITAL, 'цифрова'),
+            _p('Живлення', '5093', POWER_UNIVERSAL, 'універсальне (мережа або батарейки)'),
+            _p('Пульт дистанційного керування', '6187', REMOTE_YES, 'з пультом дистанційного керування'),
+            _p('Колір виробника', '78', COLOR_MFR_BLACK, 'чорний'),
+        ]
+    # 2848 — тільки float dims (weight/width/height/length), вже є в offer
+    # 2821 — не знайдено в PIM API, пропускаємо
+
+    return params
+
 
 def calc_sell_price(rrc: float, cat_code: str) -> float:
     """Ціна продажу = РРЦ gross-up на комісію Єпіцентру, округлення вгору до 10."""
@@ -625,12 +830,15 @@ def generate_xml(
         else:
             brand_param = f'    <param name="Бренд" paramcode="brand">{escape_xml(v_text)}</param>'
 
+        extra_params = get_category_params(cat_code, name)
+
         offer += [
             f'    <vendor code="{escape_xml(v_code)}">{escape_xml(v_text)}</vendor>',
             f'    <country_of_origin code="{COUNTRY_CODE}">{COUNTRY_NAME}</country_of_origin>',
             '    <param name="Міра виміру" paramcode="measure" valuecode="measure_pcs">шт.</param>',
             '    <param name="Мінімальна кратність товару" paramcode="ratio">1</param>',
             brand_param,
+            *extra_params,
             f'    <weight>{DEFAULT_WEIGHT}</weight>',
             f'    <width>{DEFAULT_WIDTH}</width>',
             f'    <height>{DEFAULT_HEIGHT}</height>',
