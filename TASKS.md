@@ -54,6 +54,9 @@
 - [ ] AI Enrich pipeline для TOPTUL (товари без характеристик)
 
 ### Нові агенти
+- [ ] `agents/orders/rozetka_price_corrector.py` ✅ ГОТОВО — оновлює ціни ≥6000 грн через API
+      Команда: `python3 agents/orders/rozetka_price_corrector.py --dry-run`
+      Потребує: `ROZETKA_API_TOKEN` в .env, `data/margin_analysis_6k.csv`
 - [ ] `agents/orders/prom_order_agent.py` — агент замовлень Prom.ua (не існує)
 - [ ] `agents/orders/katran_order_agent.py` — агент замовлень Катран (пізніше)
 - [ ] `agents/orders/katran_xml_generator.py` — Катран → Розетка XML
