@@ -140,15 +140,38 @@ POWER_NETWORK   = '0380ad214b03e5ae48e604b6c0f54ed0'       # 'від мереж�
 REMOTE_YES = 'c5f6ccdb5b9768be76e66076d0c4a4ac'            # 'з пультом'
 REMOTE_NO  = 'fb646e75fba1511bf08fa378fe404a54'            # 'без пульта'
 
-# attr 78 — Колір виробника (multiselect, обов'язк. 4907)
+# attr 78 — Колір виробника (multiselect, обов'язк. 4907/2821)
 COLOR_MFR_BLACK  = 'ff8cwdpi'                              # 'чорний'
 COLOR_MFR_SILVER = 'wdlnhtlh'                              # 'срібний'
 COLOR_MFR_RED    = '5uooq3p5'                              # 'червоний'
+
+# attr 10986 — Призначення (select, обов'язк. 2821)
+CABLE_PURPOSE_POWER = '2803714201cad2ef609cb764e73f458d'  # 'кабелі живлення'
+
+# attr 11971 — Тип (select, обов'язк. 2821)
+CABLE_TYPE_ADAPTER  = '4f94742a0b422cd62c6e501270a3a142'  # 'перехідники'
+
+# attr 4857 — Довжина (select, обов'язк. 2821)
+CABLE_LEN_05M       = 'f3d01fbc6fd71bbf58f2bb539a431c7b'  # 'до 0.5 м'
+
+# attr 826 — Тип кабелю (select, обов'язк. 2821)
+CABLE_SUBTYPE_EPP   = 'c5vpi0ent7q1djaq'                  # 'Expansion Power Port'
+
+# attr 5290 — Вхідний роз'єм (select, обов'язк. 2821)
+CABLE_IN_USB        = '3dc1e63667c128348dea5263491a5822'  # 'USB'
+
+# attr 5291 — Вихідний роз'єм (select, обов'язк. 2821)
+CABLE_OUT_ISO       = 'e9cbcc2cb07e985d8f62814707b15b60'  # 'ISO'
 
 
 def _p(name: str, code: str, valuecode: str, value: str) -> str:
     """Генерує рядок <param> з valuecode."""
     return f'    <param name="{name}" paramcode="{code}" valuecode="{valuecode}">{value}</param>'
+
+
+def _pf(name: str, code: str, value) -> str:
+    """Генерує рядок <param> для числових атрибутів (без valuecode)."""
+    return f'    <param name="{name}" paramcode="{code}">{value}</param>'
 
 
 def _detect_din(name: str) -> str:
@@ -268,9 +291,22 @@ def get_category_params(cat_code: str, name: str, car_brand_map: dict | None = N
             _p('Живлення', '5093', POWER_UNIVERSAL, 'універсальне (мережа або батарейки)'),
             _p('Пульт дистанційного керування', '6187', REMOTE_YES, 'з пультом дистанційного керування'),
             _p('Колір виробника', '78', COLOR_MFR_BLACK, 'чорний'),
+            _pf('Потужність', '103', 4),
+            _pf('Кількість динаміків', '1386', 4),
+        ]
+
+    elif cat_code == '2821':
+        # Кабелі та перехідники
+        params += [
+            _p('Призначення', '10986', CABLE_PURPOSE_POWER, 'кабелі живлення'),
+            _p('Тип', '11971', CABLE_TYPE_ADAPTER, 'перехідники'),
+            _p('Довжина', '4857', CABLE_LEN_05M, 'до 0.5 м'),
+            _p('Колір виробника', '78', COLOR_MFR_BLACK, 'чорний'),
+            _p('Тип кабелю', '826', CABLE_SUBTYPE_EPP, 'Expansion Power Port'),
+            _p("Вхідний роз'єм", '5290', CABLE_IN_USB, 'USB'),
+            _p("Вихідний роз'єм", '5291', CABLE_OUT_ISO, 'ISO'),
         ]
     # 2848 — тільки float dims (weight/width/height/length), вже є в offer
-    # 2821 — не знайдено в PIM API, пропускаємо
 
     return params
 
