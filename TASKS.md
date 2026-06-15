@@ -1,16 +1,20 @@
 # TASKS.md — живий список задач
-Оновлено: 2026-06-13. Читати на початку кожної сесії разом з CLAUDE.md.
+Оновлено: 2026-06-15. Читати на початку кожної сесії разом з CLAUDE.md.
 
 ---
 
 ## ЗРОБЛЕНО ✅
 
 ### Єпіцентр — Carvol
-- [x] `tools/carvol_epicentr_generator.py` — SpreadsheetML прайс → Єпіцентр XML (7081 офер)
+- [x] `tools/carvol_epicentr_generator.py` — SpreadsheetML прайс → Єпіцентр XML (7075 офер)
 - [x] `tools/epicentr_pim_explorer.py` — PIM API explorer, кеш 54370 брендів в БД
 - [x] `tools/epicentr_quality_checker.py` — SEO скоринг XML (avg 73/100)
+- [x] `tools/epicentr_xml_checker.py` — повна перевірка XML перед імпортом (структура/дублі/params/фото)
+- [x] Params для всіх 6 категорій: 8743, 2866, 3729, 4907, 2848, 2821
+- [x] Car brand detection (394 марки, attr 4866) з epicentr_car_brands БД
 - [x] Бренди в XML: валідні valuecodes з epicentr_brand_map + fallback "Інше" (827b4a70...)
-- [x] Фільтр фото: 8171 → 7081 (видалено без фото)
+- [x] Постобробка: фото фільтр (8171→7081), дедуп (→7075), 2883→2848, trim назв
+- [x] Виправлено pipeline: generator → `_new.xml` → postprocess → `carvol_epicentr.xml`
 - [x] Опис з Rozetka фіду (7011 real + 1160 auto-generated)
 
 ### Інфраструктура
@@ -25,8 +29,11 @@
 ## В ПРОЦЕСІ 🔄
 
 - [ ] **Завантажити `exports/carvol_epicentr.xml` в кабінет Єпіцентру**
-      Файл готовий: 7081 офер, 37MB, avg score 73/100
+      Файл готовий: 7075 офер, 42MB, ГОТОВИЙ ДО ІМПОРТУ ✅ (перевірено xml_checker)
       URL кабінету: merchant.epicentrk.ua
+
+- [ ] **Модерація 7075 товарів Carvol на Єпіцентрі**
+      Після завантаження відстежити які не пройшли модерацію → виправити
 
 - [ ] **Перевірити TOPTUL чернетки в Єпіцентрі** (~5893)
       Які не пройшли модерацію? Які потрібно виправити?
@@ -75,11 +82,81 @@
 
 ---
 
+## EPICENTR PIPELINE (поточний стан)
+
+### Зроблено
+- [x] Генератор `carvol_epicentr_generator.py` з маппінгом 8 категорій
+- [x] Params для 8743, 2866, 3729, 4907, 2848, 2821
+- [x] Car brand detection (394 марки, attr 4866)
+- [x] Постобробка (фото фільтр, дедуп, 2883→2848, обрізка назв)
+- [x] `epicentr_xml_checker.py` — повна перевірка перед імпортом (exit 0/1)
+
+### В роботі
+- [ ] Модерація 7075 товарів Carvol на Єпіцентрі
+
+### Наступні задачі
+- [ ] `epicentr_category_builder.py` — автодискавері attrs+valuecodes з PIM API + генерація `elif` блоку
+- [ ] Таблиця `epicentr_attr_options` в БД (category_code, attr_code, valuecode, name_ua, regex_patterns)
+- [ ] AI mapping: назва товару → valuecode через Claude API з кешем в БД
+- [ ] Гібридний маппінг: regex → якщо не знайдено → Claude API → кеш
+
+---
+
+## ROZETKA PRICE MANAGER
+
+### Зроблено
+- [x] `rozetka_price_manager.py` (--generate / --apply)
+- [x] `rozetka_price_corrector.py`
+- [x] Виправлена формула `calc_price` (gross-up)
+
+### Наступні задачі
+- [ ] Інтеграція скрапера конкурентів в `price_manager`
+- [ ] Автоматичне оновлення цін на основі цін конкурентів (-X% від конкурента)
+- [ ] Мінімальна маржа як захист (не нижче собівартості + N%)
+
+---
+
+## COMPETITOR SCRAPER + SEO (НОВА ІДЕЯ)
+
+### Концепція
+Парсер конкурентів → аналіз цін → автоматична корекція наших цін.
++ Аналіз SEO конкурентів → переробка описів під наш магазин.
+
+### Задачі
+- [ ] Доробити `agents/scraper/` — додати підтримку URL магазину конкурента
+- [ ] Вигружати: назва, ціна, артикул, опис, характеристики
+- [ ] `price_sync_agent.py` — порівнює ціни конкурента з нашими → генерує CSV корекцій
+- [ ] Правила ціноутворення: якщо конкурент дешевше → ми на N% дешевше (але не нижче мін. маржі)
+- [ ] `seo_rewriter.py` — бере опис конкурента → Claude API → переписує унікальний текст
+- [ ] Інтеграція з Rozetka/Prom/Єпіцентр через існуючі агенти
+
+### Технічний стек
+- Playwright (вже є в `agents/scraper/playwright_base.py`)
+- Claude API (claude-haiku-4-5) для SEO переписування
+- PostgreSQL для кешу цін конкурентів
+- Порівняльна таблиця: наша ціна vs конкурент vs рекомендована
+
+---
+
+## АРХІТЕКТУРА АГЕНТІВ (загальна)
+- Оркестратор → Redis → агенти
+- Всі нові агенти підключати через Redis queue
+- Логи в PostgreSQL таблицю `agent_logs`
+
+---
+
 ## КОРИСНІ КОМАНДИ
 
 ```bash
-# Генерація Єпіцентр XML (на ноутбуці, з файлом прайсу)
-python3 tools/carvol_epicentr_generator.py data/carvol_opt_YYYYMMDD.xml
+# Повний пайплайн Єпіцентр (на сервері)
+python3 tools/carvol_epicentr_generator.py   # → exports/carvol_epicentr_new.xml
+python3 epicentr_postprocess.py              # → exports/carvol_epicentr.xml
+# scp і перевірка (на ноутбуці)
+scp tek@100.82.24.112:/home/tek/agent-system/exports/carvol_epicentr.xml ~/Downloads/
+python3 tools/epicentr_xml_checker.py ~/Downloads/carvol_epicentr.xml
+
+# Генерація Єпіцентр XML з кастомним прайсом (на сервері)
+python3 tools/carvol_epicentr_generator.py --input data/carvol_opt_YYYYMMDD.xml
 
 # SEO звіт
 ssh tek@100.82.24.112 "cd /home/tek/agent-system && source venv/bin/activate && python3 tools/epicentr_quality_checker.py --xml exports/carvol_epicentr.xml --report"

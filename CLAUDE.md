@@ -28,18 +28,20 @@ docker exec -it agent_postgres psql -U agentadmin agentdb
 ```
 (НЕ `-U agent` — правильно `-U agentadmin`)
 
-## Активні магазини і стан (2026-06-13)
+## Активні магазини і стан (2026-06-15)
 | Магазин | Постачальник | Товарів | Статус | XML/Sync |
 |---------|-------------|---------|--------|---------|
 | Prom.ua | TOPTUL | ~5908 | активний | GitHub, щодня |
 | Rozetka | Carvol | ~8244 | активний | GitHub, о 7:00 |
 | Єпіцентр | TOPTUL | ~5893 | чернетки | ручне завант. |
-| Єпіцентр | Carvol | 7081 | **готовий до завантаження** | exports/carvol_epicentr.xml |
+| Єпіцентр | Carvol | 7075 | **готовий до завантаження** | exports/carvol_epicentr.xml |
 
 ## Ключові інструменти (tools/)
 | Файл | Призначення |
 |------|------------|
-| `carvol_epicentr_generator.py` | Carvol прайс (SpreadsheetML) → Єпіцентр XML |
+| `carvol_epicentr_generator.py` | Carvol прайс (SpreadsheetML) → `carvol_epicentr_new.xml` |
+| `epicentr_postprocess.py` | Фільтр фото + дедуп + 2883→2848 → `carvol_epicentr.xml` |
+| `epicentr_xml_checker.py` | Повна перевірка XML перед імпортом (exit 0=OK, 1=помилки) |
 | `epicentr_pim_explorer.py` | Пошук брендів/країн в PIM API (кеш 54370 брендів) |
 | `epicentr_quality_checker.py` | SEO скоринг XML (score 0-100, avg 73/100) |
 | `prom_xml_generator.py` | XLSX → Prom XML (опція --no-filter) |
@@ -60,8 +62,7 @@ docker exec -it agent_postgres psql -U agentadmin agentdb
 | 4907 | Магнітоли | 4907 |
 | 3729 | Камери заднього огляду | 3729 |
 | 2821 | Кабелі та перехідники | 2821 |
-| 2848 | Аксесуари для автосигналізацій | 2848 |
-| 2883 | LED-світло для автомобіля | 2883 |
+| 2848 | Аксесуари для автосигналізацій (+ колишній 2883) | 2848 |
 | 2866 | Автомагнітоли | 2866 |
 
 ## Бренди Єпіцентр — валідні valuecodes
@@ -192,6 +193,49 @@ systemctl --user status epicentr-order-agent rozetka-order-agent tg-dispatcher f
 - `shared/knowledge_base/rozetka/api_full.txt`
 - `shared/knowledge_base/api_reference.md` — 123 API методи
 - `data/carvol_rozetka.xml` — еталон XML формату Розетки
+
+## Єпіцентр — пайплайн генерації XML
+
+**Послідовність (на сервері):**
+```bash
+python3 tools/carvol_epicentr_generator.py          # → exports/carvol_epicentr_new.xml
+python3 epicentr_postprocess.py                      # → exports/carvol_epicentr.xml
+```
+**Перевірка (на ноутбуці):**
+```bash
+scp tek@100.82.24.112:/home/tek/agent-system/exports/carvol_epicentr.xml ~/Downloads/
+python3 tools/epicentr_xml_checker.py ~/Downloads/carvol_epicentr.xml
+# exit 0 = готовий до імпорту, exit 1 = є помилки
+```
+
+### Додавання нової категорії Єпіцентр
+
+1. Знайти attrs через `epicentr_pim_explorer.py` або `epicentr_attrs_explorer.py`
+2. Додати константи в `carvol_epicentr_generator.py` після секції `# attr NNN`
+3. Додати `elif cat_code == 'XXXX'` в `get_category_params()`
+4. Додати `_pf()` для числових атрибутів (без valuecode), `_p()` для select
+5. Додати `'XXXX': [...]` в `REQUIRED_PARAMS` в `epicentr_xml_checker.py`
+6. Запустити повний пайплайн + перевірити `xml_checker`
+
+Планується: `epicentr_category_builder.py` — автодискавері attrs з PIM API → генерація `elif` блоку.
+
+## Competitor Scraper + Price Rules
+
+### Додавання конкурента для моніторингу
+```
+agents/scraper/ — Playwright-based
+```
+Новий магазин: успадковувати від `playwright_base.py`, реалізувати метод `scrape_product(url)`.
+Результат → PostgreSQL таблиця `competitor_prices(article, competitor, price, scraped_at)`.
+
+### Формули ціноутворення
+| Маркетплейс | Формула | Примітка |
+|-------------|---------|----------|
+| Єпіцентр | `ceil(rrc / (1 - comm/100) / 10) * 10` | gross-up на комісію |
+| Розетка | `ceil(rrc * (1 + comm/100) / 10) * 10` | mark-up на комісію |
+| Катран | `ceil(price_rrc * (1 + comm/100) / 10) * 10` | аналог Розетки |
+
+Конкурентне коригування (майбутнє): `if competitor_price < our_price → our_price = ceil(competitor_price * 0.97 / 10) * 10`, але не нижче `cost * 1.10`.
 
 ## Відомі проблеми
 - Логін/пароль Розетки в .env неправильні (hyper_store/Tovarka2025Rivne → incorrect_username_password)
