@@ -170,3 +170,12 @@ docker exec agent_postgres psql -U agentadmin agentdb -c "SELECT DISTINCT brand_
 # Перевірка API методів що не реалізовані
 docker exec agent_postgres psql -U agentadmin agentdb -c "SELECT marketplace, method_name, endpoint, priority FROM marketplace_api_methods WHERE NOT is_implemented ORDER BY priority, marketplace;"
 ```
+
+## EPICENTR XML CHECKER — доробити
+- [ ] Перевірка valuecodes через PIM API (чи існують реально)
+- [ ] dims > 0 для кожного офера (не тільки наявність)
+- [ ] HEAD запит на фото URL (чи реально відкривається)
+- [ ] Ціна в розумному діапазоні (не < 100 і не > 500000)
+- [ ] Дублікати назв між різними артикулами
+- [ ] Перевірка country_of_origin valuecode
+- [ ] Порівняння з попереднім імпортом (diff)
