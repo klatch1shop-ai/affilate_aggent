@@ -8,7 +8,7 @@ tools/carvol_epicentr_generator.py
     cd /home/tek/agent-system && source venv/bin/activate
     python3 tools/carvol_epicentr_generator.py
     python3 tools/carvol_epicentr_generator.py --input data/carvol_opt_20260613.xml
-    python3 tools/carvol_epicentr_generator.py --input data/carvol_opt_20260613.xml --output exports/carvol_epicentr.xml
+    python3 tools/carvol_epicentr_generator.py --input data/carvol_opt_20260613.xml --output exports/carvol_epicentr_new.xml
 """
 
 import os, sys, re, hashlib, json, argparse, math
@@ -27,7 +27,7 @@ from shared.utils.db import get_connection
 # ── Шляхи за замовчуванням ─────────────────────────────────────────────────
 
 INPUT_FILE  = os.path.join(BASE_DIR, 'data', 'carvol_opt_20260613.xml')
-OUTPUT_FILE = os.path.join(BASE_DIR, 'exports', 'carvol_epicentr.xml')
+OUTPUT_FILE = os.path.join(BASE_DIR, 'exports', 'carvol_epicentr_new.xml')
 FEED_FILE   = os.path.join(BASE_DIR, 'data', 'carvol_feed.xml')
 
 # SpreadsheetML namespace
