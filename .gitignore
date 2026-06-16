@@ -22,3 +22,10 @@ logs/*.csv
 shared/feeds/orders/*.xlsx
 shared/feeds/orders/ttn_pdfs/
 claw-code/
+
+# XML — великі файли, не в git
+*.xml
+!data/carvol_rozetka.xml
+!data/katran_rozetka.xml
+!exports/carvol_epicentr.xml
+!shared/feeds/rozetka_feed.xml
