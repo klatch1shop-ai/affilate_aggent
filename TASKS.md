@@ -274,3 +274,177 @@ docker exec agent_postgres psql -U agentadmin agentdb -c "SELECT marketplace, me
 3. Далі: Telegram текст (стадія 3) — практичне використання
 4. Пізніше: карта відповідей (стадія 4) — надійність
 5. Фінал: голос (стадія 5) — wow-ефект
+
+---
+
+## EPICENTR PRODUCT INTELLIGENCE MODULE (новий модуль)
+
+### Концепція
+Повний цикл: Конкурент → Парсинг → Аналіз → Генерація → Перевірка → Імпорт
+
+### Архітектура модуля
+tools/epicentr_intelligence/
+
+├── 01_category_mapper.py      # Маппінг наших категорій → Єпіцентр категорії
+
+├── 02_competitor_finder.py    # Пошук конкурентів по категорії/артикулу
+
+├── 03_card_parser.py          # Парсинг картки товару конкурента
+
+├── 04_attr_analyzer.py        # Аналіз характеристик конкурента
+
+├── 05_content_generator.py    # Генерація назви/опису через Claude API
+
+├── 06_xml_builder.py          # Збірка XML офера з усіх даних
+
+├── 07_xml_checker.py          # Перевірка (існуючий epicentr_xml_checker.py)
+
+└── pipeline.py                # Оркестратор всього процесу
+
+### Стадія 1 — Category Intelligence
+- [ ] Для кожної нашої категорії знайти 3-5 товарів конкурентів на Єпіцентрі
+- [ ] Зберігати еталонні URL по категоріях в БД таблиця `epicentr_category_samples`
+- [ ] `category_samples (category_code, url, parsed_at, attrs_json)`
+- [ ] Автоматично витягувати required attrs з реальних карток (не тільки з API)
+
+### Стадія 2 — Competitor Intelligence
+- [ ] `competitor_finder.py` — пошук конкурентів:
+  - Пошук на epicentrk.ua по артикулу/назві
+  - Пошук по категорії (топ продавці)
+  - Збереження в `competitor_products (article, epicentr_url, competitor_price, our_price, diff_pct)`
+- [ ] Порівняльна таблиця: наша ціна vs конкурент
+- [ ] Алерт якщо конкурент дешевше на >10%
+
+### Стадія 3 — Card Parser
+- [ ] `card_parser.py` — парсинг картки товару Єпіцентру:
+  - Назва (ua/ru)
+  - Опис (ua/ru)
+  - Всі характеристики з valuecodes
+  - Фото URLs
+  - Ціна конкурента
+  - Категорія і attribute_set
+  - Бренд valuecode
+- [ ] Зберігати в `parsed_cards (url, article, data_json, parsed_at)`
+- [ ] Playwright (headless) або requests + BeautifulSoup
+
+### Стадія 4 — Attribute Analyzer
+- [ ] `attr_analyzer.py` — аналіз зібраних карток:
+  - Які valuecodes використовують конкуренти для кожного attr
+  - Найпопулярніші значення по категорії
+  - Автоматичний маппінг: наш товар → valuecode конкурента
+  - Детектування марки авто, кольору, розміру з назви
+
+### Стадія 5 — Content Generator
+- [ ] `content_generator.py` — генерація контенту через Claude API:
+  - Вхід: назва товару + характеристики + опис конкурента
+  - Вихід: унікальна назва (≤150 символів) + SEO опис
+  - Переписування опису конкурента (не копіювання)
+  - Додавання ключових слів для пошуку
+  - Мова: ua (основна) + ru (опційно)
+
+### Стадія 6 — XML Builder
+- [ ] `xml_builder.py` — збірка повного XML офера:
+  - Всі required params з правильними valuecodes
+  - Перевірка розміру (<50MB)
+  - Виправлення битих фото URL
+  - name lang="ua" обов'язково, lang="ru" опційно
+
+### Стадія 7 — Pipeline Orchestrator
+- [ ] `pipeline.py --category 8743 --input data/carvol_opt.xml`:
+  1. Знайти еталонні картки конкурентів для категорії
+  2. Розпарсити їх атрибути
+  3. Згенерувати XML з правильними valuecodes
+  4. Перевірити через xml_checker
+  5. Вивести звіт готовності
+
+### БД таблиці
+```sql
+CREATE TABLE epicentr_category_samples (
+    category_code TEXT,
+    url TEXT PRIMARY KEY,
+    parsed_at TIMESTAMPTZ,
+    attrs_json JSONB
+);
+
+CREATE TABLE competitor_products (
+    article TEXT,
+    category_code TEXT,
+    epicentr_url TEXT,
+    competitor_price FLOAT,
+    our_price FLOAT,
+    scraped_at TIMESTAMPTZ
+);
+
+CREATE TABLE parsed_cards (
+    url TEXT PRIMARY KEY,
+    article TEXT,
+    data_json JSONB,
+    parsed_at TIMESTAMPTZ
+);
+
+CREATE TABLE epicentr_attr_options (
+    category_code TEXT,
+    attr_code TEXT,
+    valuecode TEXT,
+    name_ua TEXT,
+    usage_count INT DEFAULT 0,
+    PRIMARY KEY (category_code, attr_code, valuecode)
+);
+```
+
+### Методика перевірки (чеклист перед імпортом)
+□ 1. Структура XML валідна
+
+□ 2. yml_catalog/offers закриті по 1 разу
+
+□ 3. Дублікати артикулів = 0
+
+□ 4. Всі назви ≤ 150 символів
+
+□ 5. Всі фото: JPEG, https://, розмір >30 символів
+
+□ 6. Всі ціни > 0
+
+□ 7. Категорії тільки з активованих (зелених в кабінеті)
+
+□ 8. vendor з valuecode (не пустий)
+
+□ 9. country_of_origin є
+
+□ 10. weight/width/height/length > 0 (числа, не букви)
+
+□ 11. Всі required params присутні по категорії
+
+□ 12. Всі valuecodes існують в PIM API довіднику
+
+□ 13. Розмір файлу < 50MB (для ручного завантаження)
+
+□ 14. description lang="ua" є у кожного товару
+
+□ 15. Мінімум 1 фото на товар (рекомендовано 3+)
+
+### Пріоритет виконання
+1. Створити БД таблиці (швидко)
+2. card_parser.py — парсинг еталонних карток (основа)
+3. attr_analyzer.py — маппінг valuecodes
+4. xml_checker.py — додати перевірку valuecodes через API
+5. pipeline.py — зібрати все разом
+6. content_generator.py — SEO через Claude API
+
+### Команди CLI
+```bash
+# Знайти еталонні картки для категорії
+python3 tools/epicentr_intelligence/competitor_finder.py --category 8743
+
+# Розпарсити картку конкурента
+python3 tools/epicentr_intelligence/card_parser.py --url "https://epicentrk.ua/..."
+
+# Проаналізувати valuecodes категорії
+python3 tools/epicentr_intelligence/attr_analyzer.py --category 8743
+
+# Повний pipeline для категорії
+python3 tools/epicentr_intelligence/pipeline.py --category 8743 --input data/carvol_opt.xml
+
+# Перевірка XML перед імпортом (розширена)
+python3 tools/epicentr_xml_checker.py ~/Downloads/carvol_epicentr.xml --validate-valuecodes
+```
