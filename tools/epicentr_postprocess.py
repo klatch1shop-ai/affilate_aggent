@@ -17,10 +17,10 @@ print('Всього офферів:', len(offers_raw))
 with_photo = [o for o in offers_raw if '<picture>' in o]
 print('З фото:', len(with_photo))
 
-# 3. Замінюємо 2883 → 2848
+# 3. Замінюємо 2874 → 2848
 fixed = []
 for o in with_photo:
-    o = o.replace('code="2883">LED-світло для автомобіля', 'code="2848">Аксесуари для автосигналізацій')
+    o = o.replace('code="2874">Автосвітло', 'code="2848">Аксесуари для автосигналізацій')
     fixed.append(o)
 
 # 4. Дедупліація по id
