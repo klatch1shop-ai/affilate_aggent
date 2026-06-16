@@ -448,3 +448,221 @@ python3 tools/epicentr_intelligence/pipeline.py --category 8743 --input data/car
 # Перевірка XML перед імпортом (розширена)
 python3 tools/epicentr_xml_checker.py ~/Downloads/carvol_epicentr.xml --validate-valuecodes
 ```
+
+---
+
+## UNIVERSAL CATEGORY BUILDER (будь-яка категорія)
+
+### Концепція
+Система яка може підготувати валідний XML для БУДЬ-ЯКОЇ категорії Єпіцентру
+без хардкоду — повністю через API + парсинг + AI.
+
+### Проблема яку вирішуємо
+Зараз кожна нова категорія = ручна робота:
+1. Знайти required attrs через PIM API
+2. Знайти valuecodes для кожного attr
+3. Написати elif в генераторі
+4. Протестувати
+
+Ціль: цей процес має бути повністю автоматичним.
+
+### Модуль: tools/epicentr_category_builder.py
+
+#### Крок 1 — Discover (автовідкриття категорії)
+Вхід: category_code (напр. "2874")
+
+→ GET /v2/pim/attribute-sets/{code}
+
+→ Список всіх required attrs з типами
+
+→ Для кожного select/multiselect attr:
+
+GET /v2/pim/attribute-sets/{code}/attributes/{attr}/options
+
+→ Зберегти в epicentr_attr_options БД
+
+#### Крок 2 — Sample (знайти еталон)
+→ Парсинг epicentrk.ua/ua/shop/{category_slug}/
+
+→ Взяти перші 5 товарів
+
+→ Розпарсити їх картки (всі attrs + valuecodes)
+
+→ Зберегти як еталони в epicentr_category_samples
+
+#### Крок 3 — Map (маппінг наших полів)
+Для кожного required attr:
+
+IF тип float/integer:
+
+→ взяти дефолтне значення з еталону або 0
+
+IF тип select/multiselect:
+
+→ спробувати regex match по назві товару
+
+IF не знайшло:
+
+→ Claude API: "який valuecode підходить для цього товару?"
+
+→ зберегти результат в кеш
+
+#### Крок 4 — Generate (генерація elif блоку)
+```python
+# Автоматично генерується код:
+elif cat_code == '2874':
+    # Автосвітло — згенеровано автоматично {date}
+    params += [
+        _p('Тип лампи', '1234', 'led_code', 'LED'),
+        _p('Цоколь', '5678', 'h4_code', 'H4'),
+        _pf('Потужність', '103', 55),
+    ]
+```
+
+#### Крок 5 — Validate (перевірка)
+→ Тест-генерація 1 офера в новій категорії
+
+→ Перевірка через epicentr_xml_checker
+
+→ Тест-імпорт (1 товар) в кабінет
+
+→ Якщо OK → додати в генератор
+
+### Universal Attribute Handler
+```python
+class UniversalAttrHandler:
+    """
+    Обробляє будь-який атрибут будь-якої категорії.
+    Не потребує хардкоду.
+    """
+    
+    def resolve(self, attr_code, attr_type, name, category_code):
+        # 1. Перевірити кеш в БД
+        # 2. Спробувати regex по назві
+        # 3. Спробувати Claude API
+        # 4. Повернути дефолт якщо нічого не знайшло
+        pass
+    
+    def learn(self, attr_code, name_fragment, valuecode):
+        # Зберегти успішний маппінг для майбутнього
+        pass
+```
+
+### БД таблиці для Universal Builder
+```sql
+-- Кеш маппінгу: фраза → valuecode
+CREATE TABLE attr_mapping_cache (
+    category_code TEXT,
+    attr_code     TEXT,
+    name_fragment TEXT,  -- "volkswagen", "h4", "led"
+    valuecode     TEXT,
+    confidence    FLOAT, -- 0.0-1.0
+    source        TEXT,  -- 'regex'|'claude'|'manual'|'sample'
+    used_count    INT DEFAULT 0,
+    created_at    TIMESTAMPTZ DEFAULT NOW(),
+    PRIMARY KEY (category_code, attr_code, name_fragment)
+);
+
+-- Еталонні картки по категоріях
+CREATE TABLE epicentr_category_samples (
+    id            SERIAL PRIMARY KEY,
+    category_code TEXT,
+    url           TEXT UNIQUE,
+    title         TEXT,
+    attrs_json    JSONB,  -- {attr_code: valuecode}
+    parsed_at     TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Статус категорій: чи готова до використання
+CREATE TABLE epicentr_category_status (
+    category_code TEXT PRIMARY KEY,
+    name_ua       TEXT,
+    is_discovered BOOLEAN DEFAULT FALSE,  -- attrs отримані з API
+    is_sampled    BOOLEAN DEFAULT FALSE,  -- еталони розпарсені
+    is_mapped     BOOLEAN DEFAULT FALSE,  -- маппінг готовий
+    is_tested     BOOLEAN DEFAULT FALSE,  -- тест-імпорт успішний
+    is_active     BOOLEAN DEFAULT FALSE,  -- використовується в генераторі
+    attrs_count   INT,
+    samples_count INT,
+    last_updated  TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+### Команди CLI
+```bash
+# Повний цикл для нової категорії
+python3 tools/epicentr_category_builder.py --category 2874 --full
+
+# Тільки отримати attrs з API
+python3 tools/epicentr_category_builder.py --category 2874 --discover
+
+# Тільки знайти еталони
+python3 tools/epicentr_category_builder.py --category 2874 --sample
+
+# Згенерувати elif блок для генератора
+python3 tools/epicentr_category_builder.py --category 2874 --generate-code
+
+# Статус всіх категорій
+python3 tools/epicentr_category_builder.py --status
+
+# Додати нову категорію в активні
+python3 tools/epicentr_category_builder.py --category 2874 --activate
+```
+
+### Сценарій додавання НОВОЇ категорії (покроково)
+
+Знайти category_code на epicentrk.ua або через PIM API
+
+→ python3 tools/epicentr_category_builder.py --search "відеореєстратор"
+Запустити discover
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --discover
+
+Результат: всі required attrs збережені в БД
+Знайти еталони конкурентів
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --sample
+
+Результат: 5 реальних карток з valuecodes в БД
+Побудувати маппінг
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --map
+
+Результат: attr_mapping_cache заповнений
+Згенерувати код для генератора
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --generate-code
+
+Результат: готовий elif блок для вставки в carvol_epicentr_generator.py
+Протестувати на 1 товарі
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --test
+Активувати
+
+→ python3 tools/epicentr_category_builder.py --category 2855 --activate
+
+
+### Генератор стає Universal
+```python
+def get_category_params(cat_code, name, car_brand_map=None):
+    # Спочатку перевіряємо хардкодні (швидко, перевірені)
+    if cat_code == '8743':
+        return _params_8743(name, car_brand_map)
+    elif cat_code == '4907':
+        return _params_4907(name)
+    # ... інші перевірені категорії ...
+    
+    # Fallback: Universal Handler для всього іншого
+    else:
+        handler = UniversalAttrHandler(db_conn)
+        return handler.resolve_all(cat_code, name)
+```
+
+### Пріоритет реалізації
+1. БД таблиці (15 хв)
+2. --discover (отримати attrs з API) (1 год)
+3. --sample (парсинг еталонів) (2 год)
+4. --generate-code (генерація elif) (1 год)
+5. UniversalAttrHandler з кешем (3 год)
+6. --map через Claude API (2 год)
+7. Інтеграція в генератор як fallback (1 год)
