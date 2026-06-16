@@ -350,7 +350,7 @@ HTML = r'''<!DOCTYPE html>
 </div><!-- .layout -->
 
 <script>
-const QUICK = {{ quick_json }};
+const QUICK = {{ quick_json | safe }};
 let currentTabs = { body: '', headers: '', request: '', timing: '' };
 let activeTab = 'body';
 let lastResult = null;   // зберігаємо для "Зберегти в БД"
@@ -372,7 +372,7 @@ function updateUrlPreview() {
   const path = document.getElementById('endpointPath').value.trim();
   const params = document.getElementById('queryParams').value.trim();
   if (!marketplace || !path) { document.getElementById('urlPreview').textContent = '—'; return; }
-  const bases = {{ base_urls_json }};
+  const bases = {{ base_urls_json | safe }};
   const base = bases[marketplace] || '';
   const full = base.replace(/\/$/, '') + '/' + path.replace(/^\//, '') + (params.startsWith('?') ? params : (params ? '?' + params : ''));
   document.getElementById('urlPreview').textContent = full;
@@ -656,12 +656,24 @@ async function saveToDb() {
 // ── Копіювати / Завантажити ───────────────────────────────────────────────────
 function copyResult() {
   const text = document.getElementById('response-body').value;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    const orig = btn.textContent;
-    btn.textContent = '✅ Скопійовано';
-    setTimeout(() => btn.textContent = orig, 2000);
-  });
+  const btn = event.target;
+  const orig = btn.textContent;
+  try {
+    if (navigator.clipboard && location.protocol === 'https:') {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✅ Скопійовано';
+        setTimeout(() => btn.textContent = orig, 2000);
+      });
+    } else {
+      const t = document.createElement('textarea');
+      t.value = text; document.body.appendChild(t); t.select();
+      document.execCommand('copy'); document.body.removeChild(t);
+      btn.textContent = '✅ Скопійовано';
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+  } catch(e) {
+    btn.textContent = orig;
+  }
 }
 
 function downloadResult() {
