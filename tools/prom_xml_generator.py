@@ -61,9 +61,12 @@ def cell(row: tuple, idx: int, default: str = "") -> str:
 
 
 def build_name(name_ua: str, brand: str, model: str, year: str,
-               left_right: str, max_len: int = 110) -> str:
+               left_right: str, part_num: str = "", max_len: int = 110) -> str:
     parts = [p for p in [name_ua, brand, model, year, left_right] if p]
-    return " ".join(parts)[:max_len]
+    name = " ".join(parts)
+    if part_num:
+        name = f"{name} {part_num}"
+    return name[:max_len]
 
 
 def build_description(row: tuple) -> str:
@@ -154,10 +157,11 @@ def generate_xml(rows: list, category_name: str, cat_id_local: int,
             stats["skip_filter"] += 1
             continue
 
-        name = build_name(name_ua, brand, model, year, left_right)
+        name = build_name(name_ua, brand, model, year, left_right, part_num)
         desc = build_description(row)
 
         lines.append(f'      <offer id="{x(offer_id)}" available="true" type="vendor.model">')
+        lines.append(f'        <article>{x(str(offer_id))}</article>')
         lines.append(f'        <name>{x(name)}</name>')
         lines.append(f'        <name_ua>{x(name)}</name_ua>')
         photos = photos[:10]
