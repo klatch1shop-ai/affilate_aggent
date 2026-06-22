@@ -15,15 +15,17 @@ from collections import Counter
 
 # ── Константи ────────────────────────────────────────────────────────────────
 
-VALID_CATS = {'2821', '2848', '2866', '2874', '3729', '4907', '8743'}
-WARN_CATS  = {'2883'}   # 2883 замінена на 2848 в Єпіцентрі
+VALID_CATS = {'2821', '2848', '2866', '2874', '3729', '8743'}
+WARN_CATS  = {'2883', '4907'}   # 4907 → всі йдуть у 2866
 
 REQUIRED_PARAMS: dict[str, list[str]] = {
     '2821': ['10986', '11971', '4857', '5290', '5291', '78', '826', 'measure', 'ratio', 'brand'],
     '2848': ['measure', 'ratio', 'brand'],
+    # 2866 regular (1DIN/2DIN/Android)
     '2866': ['11263', '1548', '4866', '6534', '6546', '6547', 'measure', 'ratio', 'brand'],
+    # 2866 штатна — визначається за наявністю "штатн" у назві
+    '2866s': ['103', '1382', '1384', '1386', '5093', '6187', '78', 'measure', 'ratio', 'brand'],
     '3729': ['11926', '1514', '4866', '6510', '6513', '6564', 'measure', 'ratio', 'brand'],
-    '4907': ['103', '1382', '1384', '1386', '5093', '6187', '78', 'measure', 'ratio', 'brand'],
     '8743': ['12097', '4866', '51', '52', '5575', 'measure', 'ratio', 'brand'],
 }
 
@@ -213,10 +215,16 @@ def check_xml(filepath: str) -> dict:
 
         # 8. Обов'язкові params
         if cat_code in REQUIRED_PARAMS:
+            # 2866: штатні магнітоли мають інший набір атрибутів ніж 1DIN/2DIN
+            if cat_code == '2866':
+                offer_name = (ua_names[0].text or '').lower() if ua_names else ''
+                check_cat = '2866s' if 'штатн' in offer_name else '2866'
+            else:
+                check_cat = cat_code
             present = {(p.get('paramcode') or '').strip()
                        for p in offer.findall('param')}
-            missing = set(REQUIRED_PARAMS[cat_code]) - present
-            c = r['params_by_cat'][cat_code]
+            missing = set(REQUIRED_PARAMS[check_cat]) - present
+            c = r['params_by_cat'][check_cat]
             if missing:
                 c['bad'] += 1
                 for m in missing:

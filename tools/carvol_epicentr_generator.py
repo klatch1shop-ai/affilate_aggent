@@ -48,7 +48,7 @@ DEFAULT_HEIGHT  = 100
 DEFAULT_LENGTH  = 200
 
 # Категорія-дефолт якщо fuzzy-match не знайшов відповідника (≥0.6)
-DEFAULT_EPICENTR_CAT = ('4907', 'Магнітоли')
+DEFAULT_EPICENTR_CAT = ('2866', 'Автомагнітоли')
 DEFAULT_VENDOR = 'Carvol'
 OTHER_BRAND_CODE = '827b4a70220f11ea918e001e67ecc97b'
 
@@ -56,7 +56,6 @@ OTHER_BRAND_CODE = '827b4a70220f11ea918e001e67ecc97b'
 # Джерело: таблиця epicentr_cpa_rates; відсутні категорії → дефолт 15%
 EPICENTR_COMMISSION: dict[str, float] = {
     '8743': 15.0,  # Перехідні рамки для автомагнітол
-    '4907': 15.0,  # Магнітоли
     '3729': 15.0,  # Камери заднього огляду
     '2821': 15.0,  # Кабелі та перехідники
     '2848': 15.0,  # Аксесуари для автосигналізацій
@@ -126,21 +125,21 @@ WIRELESS_FM   = '6e41ac3ba4c89064a8cdc28547f8656e'
 TUNER_DIGITAL  = '53b3e9a8edcf1f6eb9ce25aa1fdfb321'      # 'цифровий'
 TUNER_ANALOG   = 'd528f19e248a8483d98ac08888337941'       # 'аналоговий'
 
-# attr 1382 — Діапазон радіосигналу (multiselect, обов'язк. 4907)
+# attr 1382 — Діапазон радіосигналу (multiselect, обов'язк. 2866 штатна)
 RADIO_FM = '08eb2c3faa8be25954b063a2354e8886'
 
-# attr 1384 — Налаштування частоти (multiselect, обов'язк. 4907) — 1 option
+# attr 1384 — Налаштування частоти (multiselect, обов'язк. 2866 штатна) — 1 option
 FREQ_DIGITAL = '46c7d550fed92fd045ac77e40674d8c0'          # 'цифрова'
 
-# attr 5093 — Живлення (multiselect, обов'язк. 4907)
+# attr 5093 — Живлення (multiselect, обов'язк. 2866 штатна)
 POWER_UNIVERSAL = 'a41774d7ec6d5740d58fe417dd76d8fa'       # 'універсальне'
 POWER_NETWORK   = '0380ad214b03e5ae48e604b6c0f54ed0'       # 'від мережі'
 
-# attr 6187 — ПДК (select, обов'язк. 4907)
+# attr 6187 — ПДК (select, обов'язк. 2866 штатна)
 REMOTE_YES = 'c5f6ccdb5b9768be76e66076d0c4a4ac'            # 'з пультом'
 REMOTE_NO  = 'fb646e75fba1511bf08fa378fe404a54'            # 'без пульта'
 
-# attr 78 — Колір виробника (multiselect, обов'язк. 4907/2821)
+# attr 78 — Колір виробника (multiselect, обов'язк. 2866 штатна / 2821)
 COLOR_MFR_BLACK  = 'ff8cwdpi'                              # 'чорний'
 COLOR_MFR_SILVER = 'wdlnhtlh'                              # 'срібний'
 COLOR_MFR_RED    = '5uooq3p5'                              # 'червоний'
@@ -242,23 +241,35 @@ def get_category_params(cat_code: str, name: str, car_brand_map: dict | None = N
         ]
 
     elif cat_code == '2866':
-        # Автомагнітоли (Android head units — QIV Q1/Q4/Q5, Mekede, Teyes)
-        din = _detect_din(name)
-        din_code = HU_DIN_2 if din == '2 DIN' else (HU_DIN_1 if din == '1 DIN' else HU_DIN_STK)
-        car_brands = detect_car_brands_from_name(name, cbm)
-        params += [
-            *[_p('Марка автомобіля', '4866', vc, nu) for vc, nu in car_brands],
-            _p('Тип магнітоли', '6546', HU_TYPE_MULTIMEDIA, 'мультимедіа'),
-            _p('Монтажний розмір', '6547', din_code, din),
-            _p("Роз'єми", '6534', CONN_USB, 'USB'),
-            _p("Роз'єми", '6534', CONN_AUX, 'AUX'),
-            _p("Роз'єми", '6534', CONN_ISO, 'ISO'),
-            _p("Роз'єми", '6534', CONN_VIDEO_IN, 'відеовхід'),
-            _p("Роз'єми", '6534', CONN_CAM_OUT, 'вихід для камери заднього огляду'),
-            _p('Бездротові технології', '11263', WIRELESS_BT, 'Bluetooth'),
-            _p('Бездротові технології', '11263', WIRELESS_WIFI, 'Wi-Fi'),
-            _p('Тип тюнера', '1548', TUNER_DIGITAL, 'цифровий'),
-        ]
+        if 'штатн' in name.lower():
+            # Штатна магнітола — специфічний набір атрибутів
+            params += [
+                _p('Підтримуваний діапазон радіосигналу', '1382', RADIO_FM, 'FM'),
+                _p('Налаштування частоти', '1384', FREQ_DIGITAL, 'цифрова'),
+                _p('Живлення', '5093', POWER_UNIVERSAL, 'універсальне (мережа або батарейки)'),
+                _p('Пульт дистанційного керування', '6187', REMOTE_YES, 'з пультом дистанційного керування'),
+                _p('Колір виробника', '78', COLOR_MFR_BLACK, 'чорний'),
+                _pf('Потужність', '103', 4),
+                _pf('Кількість динаміків', '1386', 4),
+            ]
+        else:
+            # Звичайна автомагнітола 1DIN/2DIN (QIV, Mekede, Teyes тощо)
+            din = _detect_din(name)
+            din_code = HU_DIN_2 if din == '2 DIN' else (HU_DIN_1 if din == '1 DIN' else HU_DIN_STK)
+            car_brands = detect_car_brands_from_name(name, cbm)
+            params += [
+                *[_p('Марка автомобіля', '4866', vc, nu) for vc, nu in car_brands],
+                _p('Тип магнітоли', '6546', HU_TYPE_MULTIMEDIA, 'мультимедіа'),
+                _p('Монтажний розмір', '6547', din_code, din),
+                _p("Роз'єми", '6534', CONN_USB, 'USB'),
+                _p("Роз'єми", '6534', CONN_AUX, 'AUX'),
+                _p("Роз'єми", '6534', CONN_ISO, 'ISO'),
+                _p("Роз'єми", '6534', CONN_VIDEO_IN, 'відеовхід'),
+                _p("Роз'єми", '6534', CONN_CAM_OUT, 'вихід для камери заднього огляду'),
+                _p('Бездротові технології', '11263', WIRELESS_BT, 'Bluetooth'),
+                _p('Бездротові технології', '11263', WIRELESS_WIFI, 'Wi-Fi'),
+                _p('Тип тюнера', '1548', TUNER_DIGITAL, 'цифровий'),
+            ]
 
     elif cat_code == '3729':
         # Камери заднього огляду
@@ -281,18 +292,6 @@ def get_category_params(cat_code: str, name: str, car_brand_map: dict | None = N
             _p('Тип', '6513', CAM_TYPE_UNIVERSAL, 'універсальна'),
             _p('Паркувальна розмітка', '6510', 'yes', 'так'),
             _p('Автозатемнення', '6564', 'no', 'ні'),
-        ]
-
-    elif cat_code == '4907':
-        # Магнітоли (портативні)
-        params += [
-            _p('Підтримуваний діапазон радіосигналу', '1382', RADIO_FM, 'FM'),
-            _p('Налаштування частоти', '1384', FREQ_DIGITAL, 'цифрова'),
-            _p('Живлення', '5093', POWER_UNIVERSAL, 'універсальне (мережа або батарейки)'),
-            _p('Пульт дистанційного керування', '6187', REMOTE_YES, 'з пультом дистанційного керування'),
-            _p('Колір виробника', '78', COLOR_MFR_BLACK, 'чорний'),
-            _pf('Потужність', '103', 4),
-            _pf('Кількість динаміків', '1386', 4),
         ]
 
     elif cat_code == '2821':
