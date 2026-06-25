@@ -666,3 +666,29 @@ def get_category_params(cat_code, name, car_brand_map=None):
 5. UniversalAttrHandler з кешем (3 год)
 6. --map через Claude API (2 год)
 7. Інтеграція в генератор як fallback (1 год)
+
+---
+
+## ROZETKA AUTOMATION AUDIT (25.06.2026) — ВИРІШЕНО ✅
+
+### Корінь проблеми (знайдено)
+Старий процес `tg_dispatcher/main.py` (PID 452258) висів з **8 червня** (17 днів) і
+блокував `getUpdates` для Telegram API — новий запуск бота завжди отримував
+`TelegramConflictError`. Через це жодні вхідні PDF з ТТН не доходили до бота,
+весь цикл ТТН доводилось робити вручну.
+
+### Виправлення
+1. [x] Знайдено і вбито старий зомбі-процес (PID 452258, запущений 8 черв.)
+2. [x] Запущено новий tg_dispatcher/main.py → Connection established без конфліктів
+3. [x] Виправлено rozetka_order_agent.py — статус waiting_payment більше не застрягає назавжди
+4. [x] Перезапущено rozetka_order_agent.py (PID 1818677)
+
+### Архітектура (підтверджено робочою)
+rozetka_order_agent.py (poll 5 хв) → нове замовлення → confirm_order() → Excel → Telegram Carvol
+Carvol → PDF з ТТН → Telegram
+tg_dispatcher/main.py (слухає Telegram) → ttn_pdf_parser.parse_ttn_pdf() → np_api.get_ttn_info() + match_order_by_np_data() → rozetka_order_agent.set_ttn() + change_status(3)
+
+### Залишилось зробити
+- [ ] Watchdog/systemd для критичних процесів (tg_dispatcher, rozetka_order_agent, epicentr_order_agent) — перевірка ps aux кожні 10 хв, pkill старих дублів перед запуском нового, Telegram-алерт при перезапуску
+- [ ] Перевірити epicentr_order_agent.py на аналогічні зомбі-дублікати
+- [ ] CLAUDE.md: додати розділ "Критичні daemon-процеси"
