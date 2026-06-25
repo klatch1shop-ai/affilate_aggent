@@ -417,6 +417,32 @@ def delete_from_db(order_id: int):
         logger.error(f'delete_from_db: {e}')
 
 
+def _get_db_processed_at(order_id: int):
+    """Повертає processed_at для замовлення або None."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute('SELECT processed_at FROM rozetka_processed_orders WHERE order_id = %s', (order_id,))
+        row = cur.fetchone()
+        cur.close(); conn.close()
+        return row['processed_at'] if row else None
+    except:
+        return None
+
+
+def _update_db_status(order_id: int, status: str):
+    """Оновлює тільки статус в БД без зміни processed_at."""
+    try:
+        conn = get_connection()
+        cur  = conn.cursor()
+        cur.execute('UPDATE rozetka_processed_orders SET status=%s WHERE order_id=%s', (status, order_id))
+        conn.commit()
+        cur.close(); conn.close()
+        logger.debug(f'#{order_id} статус БД → {status}')
+    except Exception as e:
+        logger.error(f'_update_db_status: {e}')
+
+
 def save_to_db(order: dict, status: str):
     """Зберігає замовлення в БД включно з phone/recipient/city для TTN-матчингу."""
     try:
@@ -646,6 +672,25 @@ def process_order(order: dict, feed: dict):
             logger.debug(f'#{order_id} pending_manual — статус Розетки ще 1, пропускаємо')
             return
         logger.info(f'#{order_id} pending_manual — статус Розетки змінився на {rz_status}, обробляємо знову')
+        delete_from_db(order_id)
+    elif db_status in ('waiting_payment', 'waiting_payment_alerted'):
+        current = get_order_details(order_id)
+        rz_status = current.get('status')
+        if rz_status == 26:
+            # Замовлення ще не оплачене
+            if db_status == 'waiting_payment':
+                saved_at = _get_db_processed_at(order_id)
+                if saved_at:
+                    age_hours = (datetime.now() - saved_at).total_seconds() / 3600
+                    if age_hours >= 24:
+                        ri = _order_recipient_info(current if current else order)
+                        tg(f'⏳⚠️ <b>{MARKETPLACE} #{order_id} — очікує оплату вже {int(age_hours)} год!</b>\n'
+                           f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
+                           f'💰 {ri["total"]:.0f} грн\nПеревірте статус оплати в кабінеті.')
+                        _update_db_status(order_id, 'waiting_payment_alerted')
+            logger.debug(f'#{order_id} waiting_payment — статус Розетки ще 26, пропускаємо')
+            return
+        logger.info(f'#{order_id} waiting_payment — статус змінився на {rz_status}, обробляємо знову')
         delete_from_db(order_id)
     elif db_status is not None:
         return
