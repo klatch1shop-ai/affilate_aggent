@@ -664,7 +664,8 @@ def process_order(order: dict, feed: dict):
     if not order_id:
         return
 
-    db_status = get_db_status(order_id)
+    db_status          = get_db_status(order_id)
+    skip_payment_check = False   # True коли оплата підтверджена, щоб не повторити waiting_payment
     if db_status == 'pending_manual':
         current = get_order_details(order_id)
         rz_status = current.get('status')
@@ -692,6 +693,7 @@ def process_order(order: dict, feed: dict):
             return
         logger.info(f'#{order_id} waiting_payment — статус змінився на {rz_status}, обробляємо знову')
         delete_from_db(order_id)
+        skip_payment_check = True  # payment_type не змінюється, але оплата вже підтверджена статусом
     elif db_status is not None:
         return
 
@@ -740,8 +742,8 @@ def process_order(order: dict, feed: dict):
            f'Відсутні SKU: {", ".join(unavailable)}\nСкасовано.')
         return
 
-    # Передоплата → чекаємо підтвердження оплати
-    if is_prepaid:
+    # Передоплата → чекаємо підтвердження оплати (пропускаємо якщо оплата вже підтверджена)
+    if is_prepaid and not skip_payment_check:
         save_to_db(details, 'waiting_payment')
         tg(f'⏳ <b>{MARKETPLACE} #{order_id} — очікує оплату</b>\n'
            f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
