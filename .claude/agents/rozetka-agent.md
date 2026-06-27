@@ -1,3 +1,8 @@
+---
+name: rozetka-agent
+description: Agent for the Rozetka + Katran direction — order processing, XML feed management, Telegram dispatcher (PDF TTN), and price correction.
+---
+
 # rozetka-agent
 
 ## Роль
