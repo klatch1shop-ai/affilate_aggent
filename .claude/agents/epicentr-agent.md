@@ -1,3 +1,8 @@
+---
+name: epicentr-agent
+description: Agent for the Epicentr direction — Carvol/TOPTUL XML generation, category mapping, attribute filling, and order processing.
+---
+
 # epicentr-agent
 
 ## Роль

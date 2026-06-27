@@ -1,3 +1,8 @@
+---
+name: orchestrator
+description: Orchestrator agent — monitors server daemon processes, coordinates all marketplace directions, manages git workflow and infrastructure.
+---
+
 # orchestrator
 
 ## Роль

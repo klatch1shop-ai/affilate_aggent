@@ -1,3 +1,8 @@
+---
+name: prom-agent
+description: Agent for the Prom.ua direction — price engine, daily price updates, order processing, and XML catalog generation for TOPTUL/Viktor.
+---
+
 # prom-agent
 
 ## Роль

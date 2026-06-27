@@ -1,3 +1,8 @@
+---
+name: khoroshop-agent
+description: Agent for the Khoroshop direction (adult goods, supplier Seks Opt) — MVP not yet implemented, starting from feed research and pipeline design.
+---
+
 # khoroshop-agent
 
 ## Роль
