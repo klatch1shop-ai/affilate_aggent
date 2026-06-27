@@ -11,6 +11,10 @@ data/code/
 credentials/
 *.tar.gz
 .claude/
+!.claude/agents/
+!.claude/agents/**
+!.claude/skills/
+!.claude/skills/**
 data/*.xml
 logs/*.csv
 
