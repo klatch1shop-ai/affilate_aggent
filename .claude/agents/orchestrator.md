@@ -60,10 +60,12 @@ docker compose ps   # статус всіх сервісів
 
 | Процес | Перевірка | Лог |
 |--------|-----------|-----|
-| `rozetka_order_agent.py` | `ps aux \| grep rozetka_order_agent` | `/tmp/rozetka_order_agent.log` |
-| `tg_dispatcher/main.py` | `ps aux \| grep tg_dispatcher` | `/tmp/watchdog.log` |
-| `epicentr_order_agent.py` | `ps aux \| grep epicentr_order_agent` | `/tmp/epicentr_order_agent.log` |
+| `rozetka_order_agent.py` | `systemctl --user status rozetka-order-agent` | `journalctl --user -u rozetka-order-agent -n 20` |
+| `tg_dispatcher/main.py` | `systemctl --user status tg-dispatcher` | `journalctl --user -u tg-dispatcher -n 20` |
+| `epicentr_order_agent.py` | `systemctl --user status epicentr-order-agent` | `journalctl --user -u epicentr-order-agent -n 20` |
 | `order_agent_daemon.py` | `ps aux \| grep order_agent_daemon` | `logs/*.log` |
+
+> ⚠️ `ps aux | grep tg_dispatcher` НЕ знайде systemd-процес — він показується як `python3 main.py` (CWD: tg_dispatcher/). Завжди використовуй `systemctl --user status`.
 
 ### Команда перевірки всіх daemon-процесів
 ```bash
@@ -77,42 +79,34 @@ ssh tek@100.82.24.112 "crontab -l"
 
 ## Перезапуск daemon-процесів
 
-> ⚠️ ПРАВИЛО: **ЗАВЖДИ спочатку `pkill`, потім запуск нового екземпляра.** Зомбі-процес може висіти тижнями (реальний інцидент: tg_dispatcher PID 452258 висів 17 днів).
+> ⚠️ КРИТИЧНО: три сервіси керуються **systemd** (`Restart=always`) — для них ЗАБОРОНЕНО pkill+nohup!
+> Якщо зробити pkill і потім nohup — systemd за 10-30 секунд підніме свою копію паралельно → два процеси → TelegramConflictError.
+> (Реальний інцидент 2026-06-25: pkill+nohup на tg_dispatcher → дублікат 3 дні до ручного виявлення.)
 
-### rozetka_order_agent.py
+### ✅ Правило: systemd-сервіси — тільки `systemctl --user restart`
+
+| Сервіс | Systemd unit | RestartSec |
+|--------|-------------|-----------|
+| `tg_dispatcher/main.py` | `tg-dispatcher.service` | 10с |
+| `rozetka_order_agent.py` | `rozetka-order-agent.service` | 30с |
+| `epicentr_order_agent.py` | `epicentr-order-agent.service` | 30с |
+
+### tg_dispatcher (systemd)
 ```bash
-ssh tek@100.82.24.112 "
-  cd /home/tek/agent-system && source venv/bin/activate
-  pkill -f rozetka_order_agent.py
-  sleep 3
-  nohup python3 agents/orders/rozetka_order_agent.py > /tmp/rozetka_order_agent.log 2>&1 &
-  echo 'PID:' \$!
-"
+ssh tek@100.82.24.112 "systemctl --user restart tg-dispatcher && sleep 3 && systemctl --user status tg-dispatcher | tail -5"
 ```
 
-### tg_dispatcher/main.py
+### rozetka_order_agent (systemd)
 ```bash
-ssh tek@100.82.24.112 "
-  cd /home/tek/agent-system && source venv/bin/activate
-  pkill -f tg_dispatcher
-  sleep 3
-  nohup python3 tg_dispatcher/main.py > /tmp/tg_dispatcher.log 2>&1 &
-  echo 'PID:' \$!
-"
+ssh tek@100.82.24.112 "systemctl --user restart rozetka-order-agent && sleep 3 && systemctl --user status rozetka-order-agent | tail -5"
 ```
 
-### epicentr_order_agent.py
+### epicentr_order_agent (systemd)
 ```bash
-ssh tek@100.82.24.112 "
-  cd /home/tek/agent-system && source venv/bin/activate
-  pkill -f epicentr_order_agent.py
-  sleep 3
-  nohup python3 agents/orders/epicentr_order_agent.py > /tmp/epicentr_order_agent.log 2>&1 &
-  echo 'PID:' \$!
-"
+ssh tek@100.82.24.112 "systemctl --user restart epicentr-order-agent && sleep 3 && systemctl --user status epicentr-order-agent | tail -5"
 ```
 
-### order_agent_daemon.py (Prom)
+### order_agent_daemon.py (Prom) — НЕ systemd, pkill+nohup OK
 ```bash
 ssh tek@100.82.24.112 "
   cd /home/tek/agent-system && source venv/bin/activate
@@ -123,9 +117,10 @@ ssh tek@100.82.24.112 "
 "
 ```
 
-### Перевірка що всі запущені після перезапуску
+### Перевірка всіх сервісів після перезапуску
 ```bash
-ssh tek@100.82.24.112 "ps aux | grep -E 'rozetka_order_agent|epicentr_order_agent|tg_dispatcher|order_agent_daemon' | grep -v grep"
+ssh tek@100.82.24.112 "systemctl --user status tg-dispatcher rozetka-order-agent epicentr-order-agent | grep -E 'Active:|Main PID:'"
+ssh tek@100.82.24.112 "ps aux | grep order_agent_daemon | grep -v grep"
 ```
 
 ## Crontab (очікуваний стан)

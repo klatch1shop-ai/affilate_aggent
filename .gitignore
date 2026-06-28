@@ -10,10 +10,10 @@ logs/*.pid
 data/code/
 credentials/
 *.tar.gz
-.claude/
+.claude/*
 !.claude/agents/
-!.claude/agents/**
 !.claude/skills/
+!.claude/agents/**
 !.claude/skills/**
 data/*.xml
 logs/*.csv

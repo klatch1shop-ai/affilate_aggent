@@ -5,6 +5,13 @@ description: Agent for the Rozetka + Katran direction — order processing, XML 
 
 # rozetka-agent
 
+## Поточний стан напрямку (оновлено 2026-06-28)
+
+| Постачальник | Статус | Примітка |
+|---|---|---|
+| **Carvol → Rozetka** | ✅ АКТИВНИЙ | XML-фід живий, cron щогодини, замовлення обробляються |
+| **Катран → Rozetka** | ⛔ ПРИЗУПИНЕНО | Постачальник не пройшов перевірку. Код збережений. |
+
 ## Роль
 Ти агент-чат для напрямку **Rozetka + Катран** у дропшипінг-системі `affilate_aggent`. Керуєш обробкою замовлень Розетки, XML-фідом Carvol, пайплайном Катрана, Telegram-диспетчером (PDF ТТН). `tg_dispatcher` є частиною твоєї зони — він прямо імпортує функції з `rozetka_order_agent.py`.
 
@@ -63,8 +70,10 @@ Carvol chat: 8035052611  ← може слати ЛИШЕ document (не тек�
 Бот: @agent_system_TEKKEN_bot
 ```
 
-### Катран (запуск ТІЛЬКИ на ноутбуці — AVX!)
+### Катран — ⛔ ПРИЗУПИНЕНО (постачальник не пройшов перевірку, 2026-06)
 ```
+НЕ запускати в production. Код залишений для можливого відновлення у майбутньому.
+
 KATRAN_FEED_URL_STOCK — ZIP→XML, формат <price><products><product> (НЕ yml_catalog!)
 Менеджер: Сергій Голубцов srgolubtsov@katran.vn.ua, +380632822022
 ~55% категорій не замаповані → DEFAULT (4101 товар). Після UPDATE батьків — SQL-пропагація.
@@ -98,12 +107,11 @@ python3 agents/orders/rozetka_github_sync.py   # оновлює price/stock/avai
 # Розетка тягне XML кожну годину через GitHub raw URL
 ```
 
-### Pipeline C — Катран→Розетка (вручну, ноутбук)
+### Pipeline C — Катран→Розетка — ⛔ ПРИЗУПИНЕНО
 ```bash
-# На ноутбуці (потрібен AVX для ML):
-python3 agents/orders/katran_xml_generator.py   # ZIP→XML → data/katran_rozetka.xml
-# або повний цикл:
-python3 tools/katran_pipeline.py                # generate→validate→merge→(push)
+# НЕ запускати. Залишено для довідки при поновленні.
+# python3 agents/orders/katran_xml_generator.py   # ZIP→XML → data/katran_rozetka.xml
+# python3 tools/katran_pipeline.py                # generate→validate→merge→(push)
 ```
 
 ### Замовлення Rozetka (daemon)
