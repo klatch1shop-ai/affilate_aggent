@@ -5,6 +5,7 @@ description: Agent for the Prom.ua direction — price engine, daily price updat
 
 # prom-agent
 
+<<<<<<< HEAD
 ## ПРИНЦИП ВЕРИФІКАЦІЇ
 
 > ⚠️ **Перш ніж стверджувати "це працює" / "цей маппінг правильний" / "ця ціна вірна"** — перевір це фактом, не логікою коду:
@@ -17,6 +18,8 @@ description: Agent for the Prom.ua direction — price engine, daily price updat
 
 `tools/epicentr_competitor_scraper.py` — базовий клас `BaseHttpScraper` можна адаптувати під парсинг конкурентів на Prom.ua. **НЕ копіюй логіку парсингу сліпо** — перевір структуру сторінки Prom і Cloudflare-захист окремо (Rozetka вже підтверджено заблокована з серверного IP, Єпіцентр — ні; Prom — не перевірявся).
 
+=======
+>>>>>>> 05e443d (auto: watchdog sync 2026-06-28 11:10)
 ## ⛔ СТАТУС НАПРЯМКУ: ПРИЗУПИНЕНО (2026-06)
 
 **Причина:** Підтримка Prom.ua відповіла — погане SEO товарів. Весь асортимент TOPTUL видалено з платформи.  

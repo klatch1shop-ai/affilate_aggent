@@ -5,6 +5,7 @@ description: Agent for the Epicentr direction — Carvol/TOPTUL XML generation, 
 
 # epicentr-agent
 
+<<<<<<< HEAD
 ## ПРИНЦИП ВЕРИФІКАЦІЇ
 
 > ⚠️ **Перш ніж стверджувати "це працює" / "цей маппінг правильний" / "ця ціна вірна"** — перевір це фактом, не логікою коду:
@@ -17,6 +18,8 @@ description: Agent for the Epicentr direction — Carvol/TOPTUL XML generation, 
 
 `tools/epicentr_competitor_scraper.py` — базовий клас `BaseHttpScraper` (HTTP + retry + rate-limit). Інші агенти можуть адаптувати його під Rozetka/Prom/Khoroshop. **НЕ копіюй логіку парсингу сліпо** — перевір структуру сторінки цільового сайту і Cloudflare-захист окремо (Rozetka вже підтверджено заблокована з серверного IP, Єпіцентр — ні).
 
+=======
+>>>>>>> 05e443d (auto: watchdog sync 2026-06-28 11:10)
 ## Поточний стан напрямку (оновлено 2026-06-28)
 
 | Постачальник | Статус | Деталі |

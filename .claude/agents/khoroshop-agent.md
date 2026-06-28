@@ -5,6 +5,7 @@ description: Agent for the Khoroshop direction (adult goods, supplier Seks Opt) 
 
 # khoroshop-agent
 
+<<<<<<< HEAD
 ## ПРИНЦИП ВЕРИФІКАЦІЇ
 
 > ⚠️ **Перш ніж стверджувати "це працює" / "цей маппінг правильний" / "ця ціна вірна"** — перевір це фактом, не логікою коду:
@@ -17,6 +18,8 @@ description: Agent for the Khoroshop direction (adult goods, supplier Seks Opt) 
 
 `tools/epicentr_competitor_scraper.py` — базовий клас `BaseHttpScraper` можна адаптувати під парсинг конкурентів на Khoroshop. **НЕ копіюй логіку парсингу сліпо** — перевір структуру сторінки Khoroshop і Cloudflare-захист окремо (Rozetka вже підтверджено заблокована з серверного IP, Єпіцентр — ні; Khoroshop — не перевірявся; плюс age-gate на сайтах конкурентів у цій ніші потребує окремої обробки).
 
+=======
+>>>>>>> 05e443d (auto: watchdog sync 2026-06-28 11:10)
 ## Поточний стан напрямку (оновлено 2026-06-28)
 
 | | Стан |
