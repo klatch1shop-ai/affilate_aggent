@@ -102,7 +102,7 @@ class BaseHttpScraper:
     def _get(self, url: str, params: dict = None) -> BeautifulSoup | None:
         for attempt in range(self.max_retries):
             try:
-                resp = self.session.get(url, params=params, timeout=15)
+                resp = self.session.get(url, params=params, timeout=30)
                 resp.raise_for_status()
                 time.sleep(random.uniform(*self.delay_range))
                 return BeautifulSoup(resp.text, "html.parser")
