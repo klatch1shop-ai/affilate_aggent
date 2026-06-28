@@ -40,6 +40,7 @@ REPORT_INTERVAL = timedelta(hours=6)
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
 SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
 CRON_FLAG       = "/tmp/watchdog_cron_warned.flag"
+SYNC_ERROR_FLAG = "/tmp/watchdog_sync_error_last.txt"
 
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
@@ -186,9 +187,29 @@ def check_sync_log() -> dict:
         last = lines[-1]
         if "FAILED" in last.upper() or ("ERROR" in last.upper() and "WARNING" not in last.upper()):
             log(f"[sync] FAILED виявлено: {last}")
-            tg(f"🚨 <b>Watchdog</b>: rozetka_sync_cron FAILED!\n<code>{last[:200]}</code>")
+
+            # Dedup: не відправляємо той самий алерт поки помилка не зміниться
+            last_sent = ""
+            if os.path.exists(SYNC_ERROR_FLAG):
+                try:
+                    last_sent = Path(SYNC_ERROR_FLAG).read_text().strip()
+                except Exception:
+                    pass
+
+            err_key = last[:200]
+            if err_key != last_sent:
+                tg(f"🚨 <b>Watchdog</b>: rozetka_sync_cron FAILED!\n<code>{last[:200]}</code>")
+                Path(SYNC_ERROR_FLAG).write_text(err_key)
+                log(f"[sync] алерт відправлено в Telegram")
+            else:
+                log(f"[sync] та сама помилка — алерт вже надсилали, пропускаємо дублікат")
+
             return {"ok": False, "msg": last[:80]}
 
+        # Успішний run — скидаємо прапор щоб наступна помилка знову тригернула алерт
+        if os.path.exists(SYNC_ERROR_FLAG):
+            os.remove(SYNC_ERROR_FLAG)
+            log(f"[sync] прапор помилки скинуто (успішний run)")
         return {"ok": True, "msg": last[:80]}
     except Exception as e:
         return {"ok": True, "msg": f"read error: {e}"}

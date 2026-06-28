@@ -12,7 +12,7 @@ rozetka_github_sync.py
 Cron (раз на добу о 7:00):
 0 7 * * * cd /home/tek/agent-system && source venv/bin/activate && python3 agents/orders/rozetka_github_sync.py
 """
-import sys, os, requests, math, subprocess
+import sys, os, requests, math, subprocess, time
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from loguru import logger
@@ -81,26 +81,50 @@ def calc_price(opt: float, cat_id: str) -> float:
     return math.ceil(opt / (1 - rate) / 10) * 10
 
 
-def fetch_carvol_live() -> dict:
-    """Повертає {article: {price, qty, available}} з живого фіду."""
-    logger.info('Завантажуємо Carvol фід...')
-    r = requests.get(CARVOL_FEED, timeout=120)
-    root = ET.fromstring(r.content)
-    offers = root.find('shop').find('offers').findall('offer')
-    data = {}
-    for offer in offers:
-        art_el = offer.find('article')
-        if art_el is None:
-            continue
-        article  = (art_el.text or '').strip()
-        price_el = offer.find('price')
-        qty_el   = offer.find('stock_quantity')
-        qty      = int(qty_el.text or 0) if qty_el is not None else 0
-        price    = float(price_el.text or 0) if price_el is not None else 0
-        available = offer.get('available','false').lower() == 'true' and qty > 0
-        data[article] = {'price': price, 'qty': qty, 'available': available}
-    logger.info(f'Carvol: {len(data)} SKU, в наявності: {sum(1 for v in data.values() if v["available"])}')
-    return data
+def fetch_carvol_live(max_attempts: int = 3, backoff: int = 60) -> dict:
+    """Повертає {article: {price, qty, available}} з живого фіду.
+
+    При ChunkedEncodingError або іншій RequestException — повторює max_attempts разів
+    з паузою backoff секунд. TG-алерт відправляється тільки якщо всі спроби провалились.
+    """
+    last_exc: Exception = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            logger.info(f'Завантажуємо Carvol фід (спроба {attempt}/{max_attempts})...')
+            r = requests.get(CARVOL_FEED, timeout=120)
+            r.raise_for_status()
+            root = ET.fromstring(r.content)
+            offers = root.find('shop').find('offers').findall('offer')
+            data = {}
+            for offer in offers:
+                art_el = offer.find('article')
+                if art_el is None:
+                    continue
+                article  = (art_el.text or '').strip()
+                price_el = offer.find('price')
+                qty_el   = offer.find('stock_quantity')
+                qty      = int(qty_el.text or 0) if qty_el is not None else 0
+                price    = float(price_el.text or 0) if price_el is not None else 0
+                available = offer.get('available','false').lower() == 'true' and qty > 0
+                data[article] = {'price': price, 'qty': qty, 'available': available}
+            logger.info(f'Carvol: {len(data)} SKU, в наявності: {sum(1 for v in data.values() if v["available"])}')
+            return data
+        except (requests.exceptions.ChunkedEncodingError, requests.exceptions.RequestException) as e:
+            last_exc = e
+            logger.warning(
+                f'Carvol fetch спроба {attempt}/{max_attempts} провалилась: '
+                f'{type(e).__name__}: {e}'
+            )
+            if attempt < max_attempts:
+                logger.info(f'Retry через {backoff}с...')
+                time.sleep(backoff)
+
+    logger.error(f'Carvol фід: всі {max_attempts} спроби провалились')
+    tg(
+        f'❌ <b>Rozetka GitHub Sync</b>: Carvol фід недоступний після {max_attempts} спроб.\n'
+        f'<code>{type(last_exc).__name__}: {last_exc}</code>'
+    )
+    raise last_exc
 
 
 def update_prices_only(live: dict) -> dict:
@@ -254,6 +278,9 @@ def main():
         if not pushed:
             tg(f'❌ <b>Rozetka GitHub Sync</b>: git push FAILED')
 
+    except requests.exceptions.RequestException:
+        # TG-алерт вже відправлено всередині fetch_carvol_live після всіх спроб
+        raise
     except Exception as e:
         logger.error(f'Помилка: {e}')
         tg(f'❌ <b>Rozetka GitHub Sync:</b> {e}')
