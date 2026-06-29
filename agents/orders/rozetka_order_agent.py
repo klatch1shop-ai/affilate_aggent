@@ -129,7 +129,7 @@ def get_new_orders() -> list:
     }
     results = {}
 
-    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 26), ('status', 55), ('status', 61)]:
+    for extra_key, extra_val in [('types', 4), ('status', 1), ('status', 2), ('status', 26), ('status', 55), ('status', 61)]:
         try:
             r = requests.get(
                 f'{ROZETKA_BASE}/orders/search',
