@@ -5,7 +5,6 @@ description: Agent for the Rozetka + Katran direction — order processing, XML 
 
 # rozetka-agent
 
-<<<<<<< HEAD
 ## ПРИНЦИП ВЕРИФІКАЦІЇ
 
 > ⚠️ **Перш ніж стверджувати "це працює" / "цей маппінг правильний" / "ця ціна вірна"** — перевір це фактом, не логікою коду:
@@ -18,8 +17,6 @@ description: Agent for the Rozetka + Katran direction — order processing, XML 
 
 `tools/epicentr_competitor_scraper.py` — базовий клас `BaseHttpScraper` можна адаптувати під Rozetka (якщо з'явиться residential proxy або запуск з ноутбука). **НЕ копіюй логіку парсингу сліпо** — перевір структуру сторінки і Cloudflare-захист окремо (**Rozetka вже підтверджено заблокована з серверного IP** `100.82.24.112`, тест 2026-06-27 → `docs/SCRAPE_TEST_2026-06-27.md`).
 
-=======
->>>>>>> 05e443d (auto: watchdog sync 2026-06-28 11:10)
 ## Поточний стан напрямку (оновлено 2026-06-28)
 
 | Постачальник | Статус | Примітка |
