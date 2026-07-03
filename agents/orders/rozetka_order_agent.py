@@ -93,29 +93,37 @@ def get_carvol_feed(force=False) -> dict:
         return _carvol_cache['data']
 
     logger.info('Завантажуємо Carvol фід...')
-    r = requests.get(CARVOL_FEED, timeout=120)
-    root = ET.fromstring(r.content)
-    offers = root.find('shop').find('offers').findall('offer')
+    try:
+        r = requests.get(CARVOL_FEED, timeout=120)
+        root = ET.fromstring(r.content)
+        offers = root.find('shop').find('offers').findall('offer')
 
-    data = {}
-    for offer in offers:
-        article_el = offer.find('article')
-        if article_el is None:
-            continue
-        article  = (article_el.text or '').strip()
-        price_el = offer.find('price')
-        qty_el   = offer.find('stock_quantity')
-        qty      = int(qty_el.text or 0) if qty_el is not None else 0
-        data[article] = {
-            'available': offer.get('available', 'false').lower() == 'true' and qty > 0,
-            'price':     float(price_el.text or 0) if price_el is not None else 0,
-            'qty':       qty,
-        }
+        data = {}
+        for offer in offers:
+            article_el = offer.find('article')
+            if article_el is None:
+                continue
+            article  = (article_el.text or '').strip()
+            price_el = offer.find('price')
+            qty_el   = offer.find('stock_quantity')
+            qty      = int(qty_el.text or 0) if qty_el is not None else 0
+            data[article] = {
+                'available': offer.get('available', 'false').lower() == 'true' and qty > 0,
+                'price':     float(price_el.text or 0) if price_el is not None else 0,
+                'qty':       qty,
+            }
 
-    _carvol_cache['data']    = data
-    _carvol_cache['updated'] = now
-    logger.info(f'Carvol фід: {len(data)} SKU')
-    return data
+        _carvol_cache['data']    = data
+        _carvol_cache['updated'] = now
+        logger.info(f'Carvol фід: {len(data)} SKU')
+        return data
+    except Exception as e:
+        logger.error(f'Carvol фід недоступний: {e}')
+        if _carvol_cache['data']:
+            logger.warning(f'Використовую кеш ({len(_carvol_cache["data"])} SKU)')
+            return _carvol_cache['data']
+        logger.warning('Кеш порожній — продовжуємо без фіду')
+        return {}
 
 
 # === РОЗЕТКА API ===
@@ -812,8 +820,8 @@ def main():
     tg(f'🚀 <b>{MARKETPLACE} Order Agent v4 запущено</b>')
 
     while True:
+        feed = get_carvol_feed()
         try:
-            feed   = get_carvol_feed()
             orders = get_new_orders()
             if orders:
                 logger.info(f'Знайдено {len(orders)} нових замовлень')
