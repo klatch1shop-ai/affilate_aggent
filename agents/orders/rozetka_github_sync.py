@@ -109,7 +109,7 @@ def fetch_carvol_live(max_attempts: int = 3, backoff: int = 60) -> dict:
                 data[article] = {'price': price, 'qty': qty, 'available': available}
             logger.info(f'Carvol: {len(data)} SKU, в наявності: {sum(1 for v in data.values() if v["available"])}')
             return data
-        except (requests.exceptions.ChunkedEncodingError, requests.exceptions.RequestException) as e:
+        except (requests.exceptions.ChunkedEncodingError, requests.exceptions.RequestException, ET.ParseError, Exception) as e:
             last_exc = e
             logger.warning(
                 f'Carvol fetch спроба {attempt}/{max_attempts} провалилась: '
