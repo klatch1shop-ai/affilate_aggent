@@ -126,13 +126,15 @@ ssh tek@100.82.24.112 "ps aux | grep order_agent_daemon | grep -v grep"
 ## Crontab (очікуваний стан)
 
 ```
-0 * * * *    python3 /home/tek/agent-system/agents/orders/rozetka_github_sync.py
-0 7 * * *    python3 /home/tek/agent-system/agents/orders/feed_sync.py
-0 8 * * *    python3 /home/tek/agent-system/agents/orders/price_updater.py
-*/10 * * * * python3 /home/tek/agent-system/tools/watchdog.py
+15  7 * * *    rozetka_github_sync.py        # Carvol→GitHub XML (ціни+наявність) — щодня 07:15
+0   7 * * *    feed_sync.py                  # Синхронізація фіду TOPTUL — щодня 07:00
+0   8 * * *    price_updater.py              # Оновлення цін Prom ⛔ ПРИЗУПИНЕНО
+*/10 * * * *   tools/watchdog.py             # Health check + локальний commit
+30  7 * * *    carvol_epicentr_sync.py       # Ціни/наявність для Єпіцентру — щодня 07:30
 ```
-> ⚠️ Порівняти з реальним `crontab -l` на сервері — може відрізнятись.
-> ⚠️ `docs/AGENT_RULES.md` вказує `feed_sync.py` як `0 */4` — це застарілий запис. Актуальний `0 7`.
+> ⚠️ Джерело правди — `crontab -l` на сервері. Документований crontab вище оновлено 2026-07-07.
+> ⚠️ `rozetka_github_sync.py` — **НЕ щогодини**, а щодня о 07:15! Попередня документація помилялась.
+> ⚠️ Katran (`katran_github_sync.py`) — відсутній у crontab (напрямок призупинено).
 
 ## Git-правила (критичні)
 

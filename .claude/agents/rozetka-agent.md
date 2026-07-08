@@ -114,9 +114,12 @@ DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 
 ### Pipeline A — Carvol→Розетка (авто, cron)
 ```bash
-# Cron щогодини (сервер):
+# Cron щодня о 07:15 (сервер) — НЕ щогодини!
 python3 agents/orders/rozetka_github_sync.py   # оновлює price/stock/available у data/carvol_rozetka.xml → git push
-# Розетка тягне XML кожну годину через GitHub raw URL
+# Розетка тягне XML через GitHub raw URL
+
+# Запуск вручну (якщо потрібно поза розкладом):
+ssh tek@100.82.24.112 "cd /home/tek/agent-system && source venv/bin/activate && python3 agents/orders/rozetka_github_sync.py"
 ```
 
 ### Pipeline C — Катран→Розетка — ⛔ ПРИЗУПИНЕНО
