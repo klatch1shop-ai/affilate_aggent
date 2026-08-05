@@ -231,6 +231,51 @@ def full_sync(dry=False) -> dict:
 
 FEED = os.path.join(BASE_DIR, 'output', 'noire_epicentr_phase1.xml')
 
+# Публікація фіду через GitHub — той самий підхід, що для Rozetka
+# (rozetka_github_sync.py), але в ОКРЕМОМУ репозиторії. Причина: .git
+# основного репо вже 1,5 ГБ через щоденні пуші 40-мегабайтного фіду Carvol.
+# Окремий репозиторій ізолює це зростання — його можна перестворити з нуля,
+# не чіпаючи робочий код.
+GH_REPO_DIR = os.getenv('NOIRE_GH_DIR', '/home/tek/noire-feed')
+GH_FILE = 'noire_epicentr.xml'
+RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
+           'main/' + GH_FILE)
+
+
+def publish_github() -> dict:
+    """Скопіювати свіжий фід у репозиторій і запушити.
+
+    Публікацію в кабінет Єпіцентру НЕ виконує — там стоїть постійний
+    raw-URL, який сам підтягує оновлений файл.
+    """
+    import subprocess, shutil
+    res = {'ok': False, 'skipped': False}
+    if not os.path.isdir(os.path.join(GH_REPO_DIR, '.git')):
+        logger.info(f'GitHub-репо {GH_REPO_DIR} не знайдено — публікацію пропущено')
+        res['skipped'] = True
+        return res
+    try:
+        shutil.copy2(FEED, os.path.join(GH_REPO_DIR, GH_FILE))
+        msg = f'feed: {datetime.now():%Y-%m-%d %H:%M}'
+        for cmd in (['git', 'add', GH_FILE],
+                    ['git', 'commit', '-m', msg],
+                    ['git', 'push', 'origin', 'main']):
+            r = subprocess.run(cmd, cwd=GH_REPO_DIR, capture_output=True,
+                               text=True, timeout=600)
+            if r.returncode != 0:
+                blob = (r.stdout or '') + (r.stderr or '')
+                if 'nothing to commit' in blob:
+                    logger.info('GitHub: фід не змінився')
+                    res['ok'] = True
+                    return res
+                logger.error(f'git {cmd[1]}: {blob[-250:]}')
+                return res
+        logger.success(f'Опубліковано: {RAW_URL}')
+        res['ok'] = True
+    except Exception as e:
+        logger.error(f'publish_github: {e}')
+    return res
+
 
 def regenerate_feed() -> dict:
     """Перезібрати XML і перевірити валідатором.
@@ -301,8 +346,11 @@ def main():
         st = quick_sync(dry=a.dry)
         changed = st['price'] + st['off'] + st['on'] + st['missing']
         feed = {}
+        gh = {}
         if changed and not a.dry and not a.no_regen:
             feed = regenerate_feed()
+            if feed.get('ok'):
+                gh = publish_github()
         elif not changed:
             logger.info('Змін немає — фід не перезбирався')
         bad = check_antidumping()
@@ -316,6 +364,10 @@ def main():
                     f"<b>{feed['pass'] + feed['warn']}</b>, FAIL {feed['fail']}")
         elif feed:
             msg += "\n\n❌ <b>Перезбирання фіду не вдалось</b> — дивись лог"
+        if gh.get('ok'):
+            msg += "\n🌐 GitHub оновлено"
+        elif gh and not gh.get('skipped'):
+            msg += "\n❌ <b>Push у GitHub не вдався</b>"
         if bad:
             msg += f"\n\n⚠️ <b>Демпінг: {len(bad)} поз.</b> — фід нижчий за прайс SexOpt"
             for sku, p, rp, need in bad[:5]:
