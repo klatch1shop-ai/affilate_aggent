@@ -257,19 +257,31 @@ def publish_github() -> dict:
     try:
         shutil.copy2(FEED, os.path.join(GH_REPO_DIR, GH_FILE))
         msg = f'feed: {datetime.now():%Y-%m-%d %H:%M}'
+        # Історію не накопичуємо: щоразу переписуємо єдиний кореневий коміт
+        # і робимо force-push. Інакше кожна публікація додавала б у репозиторій
+        # ще 38 МБ (git зберігає кожну версію файлу повністю), і за півроку
+        # він розрісся б до гігабайтів, як це сталося з фідом Carvol.
+        # Для raw.githubusercontent.com історія не потрібна — він віддає
+        # завжди останній стан гілки.
         for cmd in (['git', 'add', GH_FILE],
-                    ['git', 'commit', '-m', msg],
-                    ['git', 'push', 'origin', 'main']):
+                    ['git', 'commit', '--amend', '-m', msg],
+                    ['git', 'push', '--force', 'origin', 'main']):
             r = subprocess.run(cmd, cwd=GH_REPO_DIR, capture_output=True,
                                text=True, timeout=600)
             if r.returncode != 0:
                 blob = (r.stdout or '') + (r.stderr or '')
                 if 'nothing to commit' in blob:
+                    # amend без змін теж дає цей текст — фід ідентичний
                     logger.info('GitHub: фід не змінився')
                     res['ok'] = True
                     return res
                 logger.error(f'git {cmd[1]}: {blob[-250:]}')
                 return res
+        # локальне сміття після amend прибираємо одразу, щоб клон не ріс
+        subprocess.run(['git', 'reflog', 'expire', '--expire=now', '--all'],
+                       cwd=GH_REPO_DIR, capture_output=True, timeout=120)
+        subprocess.run(['git', 'gc', '--prune=now', '-q'],
+                       cwd=GH_REPO_DIR, capture_output=True, timeout=600)
         logger.success(f'Опубліковано: {RAW_URL}')
         res['ok'] = True
     except Exception as e:
