@@ -35,15 +35,23 @@ CHAT_ID   = (
     or os.getenv("TG_CHAT_ID")
 )
 
-SERVICES        = ["rozetka-order-agent", "tg-dispatcher"]
+SERVICES        = ["rozetka-order-agent", "tg-dispatcher", "noire-notifier"]
 REPORT_INTERVAL = timedelta(hours=6)
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
 SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
 CRON_FLAG       = "/tmp/watchdog_cron_warned.flag"
 SYNC_ERROR_FLAG = "/tmp/watchdog_sync_error_last.txt"
 
+# NOIRE: опублікований фід має бути доступним і не старішим за добу
+NOIRE_FEED      = "/home/tek/agent-system/output/noire_epicentr_phase1.xml"
+NOIRE_RAW_URL   = ("https://raw.githubusercontent.com/klatch1shop-ai/"
+                   "noire-feed/main/noire_epicentr.xml")
+NOIRE_MAX_AGE_H = 26          # 2-годинний цикл + запас на добовий простій
+NOIRE_FLAG      = "/tmp/watchdog_noire_last.txt"
+
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
+    ("noire_stock_sync.py",    "cd /home/tek/agent-system"),
     ("price_updater.py",       "cd /home/tek/agent-system"),
     ("feed_sync.py",           "cd /home/tek/agent-system"),
 ]
@@ -215,6 +223,49 @@ def check_sync_log() -> dict:
         return {"ok": True, "msg": f"read error: {e}"}
 
 
+def check_noire_feed() -> dict:
+    """Опублікований NOIRE-фід: доступність raw-URL і свіжість.
+
+    Локальний файл може бути свіжим, а публікація — відсталою (впав push),
+    тому перевіряються обидві сторони.
+    """
+    problems = []
+    if os.path.exists(NOIRE_FEED):
+        age_h = (time.time() - os.path.getmtime(NOIRE_FEED)) / 3600
+        if age_h > NOIRE_MAX_AGE_H:
+            problems.append(f"локальний фід не оновлювався {age_h:.0f} год")
+    else:
+        problems.append("локального фіду немає")
+
+    try:
+        r = requests.head(NOIRE_RAW_URL, timeout=30, allow_redirects=True)
+        if r.status_code != 200:
+            problems.append(f"raw-URL віддає HTTP {r.status_code}")
+        elif int(r.headers.get("content-length", 0)) < 1_000_000:
+            problems.append("raw-URL віддає підозріло малий файл")
+    except Exception as e:
+        problems.append(f"raw-URL недоступний: {type(e).__name__}")
+
+    if problems:
+        key = "; ".join(problems)[:200]
+        last = ""
+        if os.path.exists(NOIRE_FLAG):
+            try:
+                last = Path(NOIRE_FLAG).read_text().strip()
+            except Exception:
+                pass
+        if key != last:
+            tg(f"🚨 <b>Watchdog NOIRE</b>: {key}")
+            Path(NOIRE_FLAG).write_text(key)
+        log(f"[noire] ПРОБЛЕМА: {key}")
+        return {"ok": False, "msg": key[:80]}
+
+    if os.path.exists(NOIRE_FLAG):
+        os.remove(NOIRE_FLAG)
+    log("[noire] фід свіжий, raw-URL доступний")
+    return {"ok": True, "msg": "feed ok"}
+
+
 # ── report every 6h ───────────────────────────────────────────────────────────
 
 def should_report() -> bool:
@@ -270,11 +321,13 @@ def main():
     cron_r = check_cron()
     svc_r  = check_services()
     sync_r = check_sync_log()
+    noire_r = check_noire_feed()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
     log(f"[svc]  ok={svc_r['ok']}  {svc_r.get('services')}")
     log(f"[sync] ok={sync_r['ok']} {sync_r['msg']}")
+    log(f"[noire] ok={noire_r['ok']} {noire_r['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)
