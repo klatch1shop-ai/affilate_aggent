@@ -1198,11 +1198,16 @@ def generate_xml(
     where_parts = []
     params: list = []
 
-    # Товари, свідомо відкладені на наступний цикл (див. sexopt_products.phase)
-    where_parts.append("(phase IS NULL OR phase <> 'deferred_aroma')")
+    # deferred_aroma більше не виключаємо: ці товари фізично в наявності,
+    # відкладена лише робота з атрибутом «Аромат». Зникнення з фіду читалося б
+    # Єпіцентром як «закінчились», що неправда.
 
-    if not all_available:
-        # За замовчуванням: available=true або available IS NULL (не відомо = доступний)
+    # Фільтра наявності НЕМАЄ навмисно. Раніше недоступні товари просто
+    # зникали з фіду, і Єпіцентр трактував їх зникнення як «немає в наявності»
+    # на свій розсуд. Тепер віддаємо ВСІ раніше опубліковані SKU з чесним
+    # available="true|false" — маркетплейс отримує явну вказівку, а не здогад.
+    # Прапорець --only-available лишає старий режим для разових вивантажень.
+    if all_available:
         where_parts.append('(available IS TRUE OR available IS NULL)')
 
     if filter_category:
@@ -1230,7 +1235,7 @@ def generate_xml(
 
     cur.execute(f'''
         SELECT sku, category_id, name, description_html,
-               price_retail, vendor, pictures, country
+               price_retail, vendor, pictures, country, available
         FROM sexopt_products
         {where_sql}
         ORDER BY sku
@@ -1255,6 +1260,7 @@ def generate_xml(
     cnt_default_material = cnt_default_modes = cnt_country_unknown = 0
     cnt_country_by_brand = cnt_country_scraped = cnt_country_estimated = 0
     cnt_cat_override = 0
+    cnt_avail_true = cnt_avail_false = 0
     unknown_countries: dict[str, list] = {}
     missing_brands: dict[str, int] = {}
     cat_stats: dict[str, int] = {}
@@ -1304,6 +1310,13 @@ def generate_xml(
             h_mm  = FALLBACK_DIM['height_mm']
             l_mm  = FALLBACK_DIM['length_mm']
             cnt_fallback_dim += 1
+
+        avail_flag = p.get('available')
+        avail_flag = True if avail_flag is None else bool(avail_flag)
+        if avail_flag:
+            cnt_avail_true += 1
+        else:
+            cnt_avail_false += 1
 
         sell_price = calc_sell_price(price, cat_code)
         cat_stats[cat_name] = cat_stats.get(cat_name, 0) + 1
@@ -1359,7 +1372,8 @@ def generate_xml(
             unknown_countries.setdefault(cntry or '(порожньо)', []).append(sku)
 
         offer: list[str] = [
-            f'  <offer id="{escape_xml(sku)}" available="true">',
+            f'  <offer id="{escape_xml(sku)}" '
+            f'available="{"true" if avail_flag else "false"}">',
             f'    <price>{sell_price:.2f}</price>',
             f'    <category code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</category>',
             f'    <attribute_set code="{escape_xml(cat_code)}">{escape_xml(cat_name)}</attribute_set>',
@@ -1766,6 +1780,7 @@ def generate_xml(
     logger.info('─' * 60)
     logger.info(f"Згенеровано офферів : {cnt_total}")
     logger.info(f"Категорію перевизначено адресно : {cnt_cat_override}")
+    logger.info(f"available=true / false          : {cnt_avail_true} / {cnt_avail_false}")
     logger.info(f"Без маппінгу (skip) : {cnt_skip_no_map}")
     logger.info(f"Без ціни (skip)     : {cnt_skip_no_price}")
     logger.info(f"Fallback-габарити   : {cnt_fallback_dim}")
@@ -1801,8 +1816,9 @@ def main():
     parser.add_argument('--output', '-o', default=OUTPUT_FILE, help='Вихідний XML-файл')
     parser.add_argument('--category', '-c', help='Фільтр по epicentr_category_code (напр. 9466)')
     parser.add_argument('--limit', '-l', type=int, help='Максимум товарів (для тестів)')
-    parser.add_argument('--all-available', action='store_true',
-                        help='Включати товари з available=false (за замовчуванням виключаються)')
+    parser.add_argument('--only-available', dest='all_available',
+                        action='store_true',
+                        help='Лишити у фіді лише товари в наявності (старий режим)')
     parser.add_argument('--exclude-category', '-x', default='',
                         help='Виключити epicentr_category_code через кому (напр. 7216,9464)')
     args = parser.parse_args()
