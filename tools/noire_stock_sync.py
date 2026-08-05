@@ -346,6 +346,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--quick', action='store_true')
     ap.add_argument('--full', action='store_true')
+    ap.add_argument('--publish', action='store_true',
+                    help='перезібрати фід і запушити в GitHub (cron 23:00)')
     ap.add_argument('--dry', action='store_true')
     ap.add_argument('--no-tg', action='store_true')
     ap.add_argument('--no-regen', action='store_true',
@@ -361,8 +363,9 @@ def main():
         gh = {}
         if changed and not a.dry and not a.no_regen:
             feed = regenerate_feed()
-            if feed.get('ok'):
-                gh = publish_github()
+            # Публікація тут НЕ відбувається: Єпіцентр забирає фід раз на добу
+            # о 00:00–02:00, тому проміжні пуші протягом дня він не побачить.
+            # Єдина публікація — окремим викликом --publish о 23:00 (cron).
         elif not changed:
             logger.info('Змін немає — фід не перезбирався')
         bad = check_antidumping()
@@ -388,6 +391,24 @@ def main():
         logger.info(f'Анти-демпінг: порушень {len(bad)}')
         if not a.no_tg and (st['price'] or st['off'] or bad):
             tg(msg)
+    elif a.publish:
+        # Один раз на добу о 23:00: свіжий XML з поточного стану БД → GitHub.
+        # Далі Єпіцентр забирає його зі свого боку о 00:00–02:00.
+        feed = regenerate_feed()
+        if not feed.get('ok'):
+            logger.error('Фід не зібрався — публікацію скасовано')
+            if not a.no_tg:
+                tg('❌ <b>NOIRE</b>: нічна публікація скасована, фід не зібрався')
+            return
+        gh = publish_github()
+        if not a.no_tg:
+            if gh.get('ok'):
+                tg(f"🌙 <b>NOIRE: нічна публікація</b>\n"
+                   f"{feed['offers']} офферів, готово "
+                   f"<b>{feed['pass'] + feed['warn']}</b>, FAIL {feed['fail']}\n"
+                   f"Єпіцентр забере о 00:00–02:00")
+            else:
+                tg('❌ <b>NOIRE</b>: push у GitHub не вдався')
     elif a.full:
         st = full_sync(dry=a.dry)
         if not a.no_tg and st['new']:
