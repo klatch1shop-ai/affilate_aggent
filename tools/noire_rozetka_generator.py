@@ -1,0 +1,933 @@
+#!/usr/bin/env python3
+"""
+NOIRE / SexOpt → XML прайс-лист для Rozetka Маркетплейс
+========================================================
+Формат YML, за зразком робочого фіду Carvol (data/carvol_rozetka.xml).
+
+Відмінності від Єпіцентру, які визначили конструкцію:
+  • категорії передаються блоком <categories> з атрибутом rz_id;
+  • характеристики — вільні пари <param name="…">значення</param>,
+    без valuecodes із довідника (мінімум 3 на товар — вимога Rozetka);
+  • ціна без копійок — Rozetka однаково округлює;
+  • комісія береться з rozetka_cpa_rates за категорією.
+
+Запуск:
+    python3 tools/noire_rozetka_generator.py -o output/noire_rozetka.xml
+    python3 tools/noire_rozetka_generator.py --limit 10 --categories "Презервативи"
+"""
+import argparse
+import html
+import re
+import math
+import os
+import sys
+from datetime import datetime
+
+import psycopg2
+import psycopg2.extras
+from loguru import logger
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+from dotenv import load_dotenv  # noqa: E402
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+from shared.utils.db import get_connection  # noqa: E402
+
+OUT = os.path.join(BASE_DIR, 'output', 'noire_rozetka.xml')
+
+SHOP_NAME = 'klatch1 shop'
+SHOP_COMPANY = '3721108'
+SHOP_URL = 'https://cs4053918.prom.ua/'
+
+MARKUP = float(os.getenv('NOIRE_MARKUP', '1.0'))
+# Комісія Rozetka для дорослих категорій у rozetka_cpa_rates відсутня —
+# ставка уточнюється в кабінеті. До уточнення діє консервативне значення:
+# краще закласти більше й потім знизити, ніж торгувати в мінус.
+DEFAULT_COMMISSION = float(os.getenv('NOIRE_RZ_COMMISSION', '18.0'))
+
+MIN_PARAMS = 3          # вимога Rozetka
+MAX_PICTURES = 15       # вимога Rozetka
+
+# Межа між відкритим словником і закритим переліком значень.
+# Rozetka обіцяє додавати нові значення сама, але приклади в довідці —
+# «новий колір або розмір», тобто саме відкриті словники. І цифри це
+# підтверджують: Розмір 1051 значення, Колір 854, Обʼєм 482, Матеріал 203,
+# Аромат 117 — сюди справді доливають нове. Нижче межі йдуть переліки:
+# Вид олій 82, Тип 21, Чашка 9, Основа 4, Форма випуску 3. Там значення
+# поза списком означає не «нове», а «не з цієї категорії» — саме так у фід
+# потрапляли «Форма випуску: класична конусна» та «Вид: нереалістичні».
+OPEN_VOCABULARY = 100
+
+
+def esc(t) -> str:
+    return html.escape(str(t) if t is not None else '', quote=True)
+
+
+# ── Комісія Rozetka: прогресивна шкала за ціною ────────────────────────────
+# Наших шести категорій (5-й рівень) у тарифному файлі немає — діє
+# успадкування від батьківської. Джерело: data/rozetka/rozetka_tariffs_*.xlsx,
+# кабінет продавця → «Мій баланс» → «Історія тарифів».
+# Ставки беруться з rozetka_cpa_rates (source='noire'); значення нижче —
+# резерв на випадок недоступності БД, звірений з файлом станом на 15.08.2026.
+TARIFF_PARENT = {
+    '4675911': '4629305',   # Лубриканти          → Краса та здоровʼя
+    '4629824': '4629305',   # Презервативи        → Краса та здоровʼя
+    '4657502': '4629305',   # Олія для тіла       → Краса та здоровʼя
+    '4674103': '4629305',   # Олія та спреї       → Краса та здоровʼя
+    '4647534': '2033137',   # Жіноча білизна      → Одяг
+    '4649418': '1162030',   # Чоловіча білизна    → Одяг, взуття та аксесуари
+}
+TARIFF_FALLBACK = {
+    '4629305': [(0, 1399, 18.0), (1400, 3999, 15.0),
+                (4000, 5999, 10.0), (6000, 10**9, 7.0)],
+    '2033137': [(0, 1999, 23.0), (2000, 3999, 15.0),
+                (4000, 9999, 10.0), (10000, 10**9, 5.0)],
+    '1162030': [(0, 2249, 22.0), (2250, 3999, 15.0),
+                (4000, 9999, 10.0), (10000, 10**9, 5.0)],
+}
+
+
+def load_tariffs(cur) -> dict:
+    """rz_category_id → [(lo, hi, rate)] за успадкуванням від батьківської."""
+    try:
+        cur.execute("""SELECT category_id, price_ranges_new, price_ranges
+                       FROM rozetka_cpa_rates WHERE source = 'noire'""")
+        parents = {r['category_id']: (r['price_ranges_new']
+                                      or r['price_ranges'])
+                   for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        parents = {}
+    out = {}
+    for rz, parent in TARIFF_PARENT.items():
+        scale = parents.get(parent) or TARIFF_FALLBACK.get(parent)
+        if scale:
+            out[rz] = [tuple(x) for x in scale]
+    return out
+
+
+def calc_price(retail: float, scale, commission: float = None) -> int:
+    """Ціна продажу з gross-up на комісію, без копійок.
+
+    Тонкість, через яку не можна просто поділити на (1 − ставка): ставка
+    залежить від ЦІНИ ПРОДАЖУ, а ціна продажу — від ставки. Рівняння
+    неявне, і розвʼязується перебором діапазонів знизу вгору: у кожному
+    беремо найменшу ціну, яка й покриває закупівлю, і сама потрапляє в цей
+    діапазон. Перший знайдений розвʼязок і є мінімальним.
+
+    Приклад розриву, який ловить саме такий підхід. «Одяг», РРЦ 1560:
+      діапазон 0–1999 (23%) → 1560/0,77 = 2026, а це вже поза діапазоном;
+      діапазон 2000–3999 (15%) → 1560/0,85 = 1836, теж поза, знизу.
+    Відповідь — 2000 грн: нижня межа другого діапазону. Утримають 15%,
+    на руки 1700, що покриває РРЦ. Дешевше не буває: на 1999 грн діє 23%
+    і лишається 1539 — менше за закупівлю.
+
+    Анти-демпінг: результат ніколи не нижчий за роздрібну ціну постачальника.
+    """
+    base = retail * MARKUP
+    if not scale:
+        commission = commission if commission is not None else DEFAULT_COMMISSION
+        return max(math.ceil(base / (1 - commission / 100)), math.ceil(base))
+    for lo, hi, rate in sorted(scale):
+        need = math.ceil(base / (1 - rate / 100))
+        price = max(need, int(lo))
+        if price <= hi:
+            return max(price, math.ceil(base))
+    lo, hi, rate = sorted(scale)[-1]
+    return max(math.ceil(base / (1 - rate / 100)), math.ceil(base))
+
+
+def load_mapping(cur) -> dict:
+    """sexopt_category_id → (rz_id, rozetka_category_name, cpa_rate)"""
+    cur.execute("""
+        SELECT sexopt_category_id AS sid, rozetka_category_id AS rz,
+               rozetka_category_name AS rzname, cpa_rate
+        FROM rozetka_category_mapping
+        WHERE source = 'noire' AND sexopt_category_id IS NOT NULL
+    """)
+    return {r['sid']: (r['rz'], r['rzname'], r['cpa_rate']) for r in cur.fetchall()}
+
+
+# ── Зіставлення наших назв характеристик з офіційним довідником Rozetka ────
+# Rozetka показує лише ті характеристики, назви яких збігаються з довідником
+# категорії (див. p210: «Якщо характеристика в категорії відсутня, вона не
+# буде показана на сайті»). Тому вільні назви на кшталт «Тип товару» чи
+# «Сумісність з секс-іграшками» просто зникають з картки. Нижче — переклад
+# наших назв у офіційні, окремо для кожної категорії.
+PARAM_ALIAS = {
+    '4675911': {          # Лубриканти
+        'Основа засобу': 'Основа',
+        'Сумісність з презервативами': 'Сумісність з презервативом',
+        'Країна-виробник': 'Країна виробник',
+        'Форма': 'Форма випуску',
+    },
+    '4629824': {          # Презервативи
+        'Країна-виробник': 'Країна виробник',
+    },
+    '4647534': {          # Еротична білизна
+        'Країна-виробник': 'Країна-виробник товару',
+        'Тип товару': 'Тип',
+    },
+    '4649418': {          # Еротична білизна для чоловіків
+        'Країна-виробник': 'Країна-виробник товару',
+        'Тип товару': 'Тип',
+    },
+    '4657502': {          # Олія для тіла
+        'Країна-виробник': 'Країна-виробник',
+        'Тип товару': 'Вид',
+    },
+    '4674103': {
+        'Країна бренду': 'Країна реєстрації бренду',
+        'Країна-виробник': 'Країна виробник',
+    },
+}
+
+# Значення, які треба перекласти в терміни довідника Rozetka.
+# Ключ — (rz_category_id, офіційна назва параметра), далі наше значення → їхнє.
+VALUE_ALIAS = {
+    ('4647534', 'Тип'): {
+        'бюстгальтер та топи': 'Бюстгальтер', 'бюстгальтер': 'Бюстгальтер',
+        'колготки та легінси': 'Колготки', 'панчохи, мітенки, колготки': 'Панчохи',
+        'сукня': 'Плаття', 'сукні та спідниці': 'Плаття',
+        'труси, шорти, боді': 'Трусики', 'комплекти': 'Комплект',
+        'корсети': 'Корсет', 'пеньюари та сорочки': 'Пеньюар',
+        'рольові костюми': 'Костюми для рольових ігор',
+        'маски - прикраси': 'Маска', 'боді': 'Боді', 'трусики': 'Трусики',
+    },
+    ('4647534', 'Теги'): {
+        'бодістокінг': 'Бодістокінг',
+        'еротичні бодістокінги та костюми-сітка': 'Бодістокінг',
+    },
+}
+
+# ── Тип виробу для категорій білизни — за НАЗВОЮ товару ────────────────────
+# Тип, узятий з категорії постачальника, розходиться з назвою у 626 випадках
+# із 3043 (21%): у «Корсетах» лежать панчохи, у «Бюстгальтерах» — топи й
+# комплекти. Назва товару точніша за категорію, тому вона й вирішує.
+# Порядок правил важливий: комплект перевіряється раніше за окремі предмети,
+# інакше «Комплект: бюстгальтер і трусики» стане бюстгальтером.
+# Врахована й неохайність даних постачальника: «Пончохи», «Колготи», «Боди».
+LINGERIE_TYPE_RULES = [
+    (r'комплект|\bset\b|\bкомплект\b', 'Комплект'),
+    (r'бодістокінг|боді-?стокінг|бодистокинг', 'Боді'),
+    (r'колготк|колгот|панчішн.{0,6}колгот', 'Колготки'),
+    (r'панчох|пончох|чулк', 'Панчохи'),
+    (r'мітенк|митенк|рукавич|перчатк', 'Рукавички'),
+    (r'легінс|лосин|леггинс', 'Легінси'),
+    (r'\bбоді\b|\bбоди\b|комбідрес|монокіні|монокини', 'Боді'),
+    (r'корсет|корсаж|бюстьє|бюстье', 'Корсет'),
+    (r'бюстгальтер|ліфчик|\bліф\b|\bбра\b|\bbra\b', 'Бюстгальтер'),
+    (r'сукн|плать', 'Плаття'),
+    (r'пеньюар|нічна сорочк|сорочк|бебі.?дол|baby.?doll', 'Пеньюар'),
+    (r'халат', 'Халат'),
+    (r'піжам|пижам', 'Піжама'),
+    (r'\bтоп\b|топік', 'Топ'),
+    (r'спідниц|юбк|\bskirt\b', 'Спідниця'),
+    (r'шорт|\bshorts\b', 'Шорти'),
+    (r'комбінезон|комбинезон|\bcatsuit\b', 'Комбінезон'),
+    (r'трусик|стрінг|танга|бразиліан|сліп|\bтруси\b|\bstring\b', 'Трусики'),
+    (r'рольов|костюм', 'Костюми для рольових ігор'),
+    (r'маска', 'Маска'),
+    (r'пестіс|наклейк|nipple sticker|стікер', 'Наклейки на соски'),
+    (r'гартер|підв.язк|портупе|стреп|пояс для панчіх', 'Аксесуари'),
+]
+LINGERIE_CATS = {'4647534', '4649418'}
+
+
+def lingerie_type(name: str):
+    for rx, val in LINGERIE_TYPE_RULES:
+        if re.search(rx, name, re.I):
+            return val
+    return None
+
+
+# ── Характеристики, які є в довіднику Rozetka, але яких немає в даних ──────
+# У постачальника ці властивості записані лише прозою в назві. Довідник
+# категорії їх чекає, і без них товар не набирає трьох характеристик:
+# 722 з 947 відсіяних товарів не дотягували рівно одну.
+# Порядок правил значущий — перше влучання виграє.
+NAME_PARAM_RULES = {
+    '4675911': {          # Лубриканти
+        # гібрид перевіряємо першим: «водно-силіконова» містить «водн»
+        'Основа': [
+            (r'водно-?силікон|гібридн|гибридн|комбінован|\bhybrid\b', 'Водно-силіконова'),
+            (r'на силіконов|силіконов основ|\bsilicone\b', 'Силіконова'),
+            (r'на олійн|олійн основ|на масляній|\boil[- ]based\b', 'Олійна'),
+            (r'на водн|водн основ|\bwater[- ]based\b', 'Водна'),
+        ],
+        # «змазка-крем» → крем, тому крем раніше за гель
+        'Форма випуску': [
+            (r'спрей|\bspray\b', 'Спрей'),
+            (r'крем\b|кремоподібн|\bcream\b', 'Крем'),
+            (r'\bгель|гель-|желе|\bjelly\b|\bgel\b', 'Гель'),
+        ],
+        'Призначення': [
+            (r'анальн|\banal\b', 'Для анального сексу'),
+            (r'їстівн|оральн|зі смаком|\bedible\b', 'Для орального сексу (їстівний лубрикант)'),
+            (r'для масажу|масажн', 'Для масажу'),
+            (r'для мастурбац|мастурбац', 'Для мастурбації'),
+            (r'чутлив.{0,4} шкір|для чутлив', 'Для чутливої шкіри'),
+            (r'для іграш|сумісн.{0,15}іграш', 'Для іграшок (сумісний із секс-іграшками)'),
+            (r'вагінальн', 'Для вагінального сексу'),
+        ],
+    },
+    '4629824': {          # Презервативи
+        'Тип': [
+            (r'безлатекс|без латекс|поліуретан|полиуретан', 'Безлатексні'),
+            (r'анестетик|пролонг|бензокаїн|benzocaine', 'З анестетиком'),
+            (r'гіпоалерген', 'Гіпоалергенні'),
+            (r'ультратонк|надтонк|\bultra ?thin\b', 'Ультратонкі'),
+            (r'збільшен.{0,10}розмір|\bxxl\b|\blarge\b|\bmagnum\b', 'Збільшеного розміру'),
+            (r'зі смаком|ароматизован|\bflavou?r', 'Зі смаком'),
+            (r'анатоміч', 'Анатомічні'),
+            (r'класичн|\bclassic\b', 'Класичні'),
+        ],
+        'Текстура': [
+            (r'вусик|з вусами', 'З вусиками'),
+            (r'ребрист|\bribbed\b', 'Ребристі'),
+            (r'з точк|точков|крапк|з пухирц|\bdotted\b|\bstudded\b', 'З точками'),
+            (r'гладеньк|гладк|\bsmooth\b', 'Гладкі'),
+        ],
+    },
+    '4649418': {          # Еротична білизна для чоловіків
+        # довідник знає лише шість видів; «Тип» у цій категорії відсутній
+        'Вид': [
+            (r'комбінезон|комбинезон|\bcatsuit\b', 'Комбінезони'),
+            (r'костюм|рольов', 'Костюми'),
+            (r'\bбоді\b|\bбоди\b|бодістокінг|\bbodysuit\b', 'Боді'),
+            (r'футболк|майк|\bтоп\b|\bt-?shirt\b', 'Футболки'),
+            (r'штан|лосин|легінс|\bpants\b', 'Штани'),
+            (r'трус|стрінг|танга|сліп|шорт|бокс|\bjock|\bbriefs\b|\bthong\b', 'Труси'),
+        ],
+    },
+    '4657502': {          # Олія для тіла
+        # Довідник цієї категорії загальнокосметичний: чекає клас косметики,
+        # домішки та вид олії. З наших даних надійно читається призначення
+        # (майже все — масажні олії) та органічність.
+        'Призначення': [
+            (r'масажн|для масажу', 'Масажна'),
+            (r'зволожув', 'Зволожувальна'),
+            (r'поживн|живильн', 'Поживна'),
+            (r'для сяйв|шимер|з блиск', 'Для сяйва'),
+            (r"пом.якшув", "Пом'якшувальна"),
+        ],
+        'Клас косметики': [
+            (r'органічн|\borganic\b', 'Органічна'),
+            (r'натуральн|\bnatural\b', 'Натуральна'),
+        ],
+        'Особливості': [
+            (r'блискітк|шимер|glitter|shimmer', 'З блискітками'),
+            (r'спрей|\bspray\b', 'Спрей'),
+            (r'холодн.{0,6}віджим', 'Холодного віджиму'),
+            (r'сух(а|е|ий)\b|\bdry\b', 'Сухе'),
+        ],
+        'Вид': [
+            (r'кокосов|\bcoconut\b', 'Кокосова'),
+            (r'мигдал|\balmond\b', 'Мигдальна'),
+            (r'жожоба|\bjojoba\b', 'Жожоба'),
+            (r'арган|\bargan\b', 'Арганова'),
+            (r'олив(ков|к)|\bolive\b', 'Оливкова'),
+            (r'авокадо|\bavocado\b', 'Авокадо'),
+            (r'виноградн.{0,12}кісточ|\bgrape ?seed\b', 'Виноградних кісточок'),
+            (r'абрикос|\bapricot\b', 'Абрикосової кісточки'),
+            (r'\bалое\b|\baloe\b', 'Алое'),
+            (r'коноплян|\bhemp\b', 'Конопляна'),
+        ],
+    },
+    '4647534': {          # Еротична білизна
+        'Модель': [
+            (r'бдсм|\bbdsm\b', 'БДСМ'),
+            (r'з пажами|підв.язк.{0,12}панчіх|пояс для панчіх|гартер', 'З пажами для панчіх'),
+            (r'відкрит.{0,12}доступ|з доступом|open crotch|без ластовиц|відкрит.{0,4} попк',
+             'З відкритим доступом'),
+            (r'гігієнічн.{0,4} ластовиц', 'З гігієнічною ластовицею'),
+        ],
+        'Трусики': [
+            (r'стрінг|\bstring\b|\bthong\b', 'Стринги'),
+            (r'бразиліан', 'Бразиліана'),
+            (r'\bтанга\b', 'Танга'),
+            (r'хіпстер', 'Хіпстери'),
+            (r'шорт|\bshorts\b', 'Шорти'),
+            (r'\bсліп', 'Сліпи'),
+            (r'бікіні|\bbikini\b', 'Бікіні'),
+            (r'максі|високі трусик', 'Максі (високі)'),
+        ],
+        'Чашка': [
+            (r'відкрит.{0,6}чашк|open cup', 'Відкрита'),
+            (r'push-?up|пуш-?ап', 'Push-up'),
+            (r'на кісточк|на каркас|з кісточк', 'На кісточках (на каркасах)'),
+            (r'без кісточ', 'Без кісточок'),
+            (r'безшовн', 'Безшовна'),
+            (r"м.як.{0,4} чашк", "М'яка"),
+        ],
+        'Форма бюстгальтера': [
+            (r'балконет', 'Балконет'), (r'бандо', 'Бандо'),
+            (r'бралет', 'Бралет'), (r'трикутн', 'Трикутна'),
+        ],
+        'Застібка': [
+            (r'на блискавц|блискавк', 'Блискавка'),
+            (r'на гачк|гачк', 'Гачки'),
+            (r"зав.язк|шнурівк", "Зав'язки"),
+            (r'без застібк', 'Без застібки'),
+        ],
+        'Теги': [
+            (r'бодістокінг|боді-?стокінг', 'Бодістокінг'),
+            (r'бебі.?дол|baby.?doll', 'Бебі дол'),
+            (r'боді в сіточк', 'Боді в сіточку'),
+        ],
+    },
+}
+
+# Для чоловічої білизни правила читають ще й опис. Для жіночої — ні:
+# описи там радять, з чим носити річ («під пояс для панчіх», «до шортів»),
+# і правило ловило чужу властивість — панчохи ставали «з пажами для панчіх».
+DESC_PARAM_CATS = {'4649418'}
+
+# Характеристики, які мають сенс лише для певних типів виробу. Без цієї
+# перевірки «Трусики: Стринги» потрапляли на панчохи, а «Чашка» — на колготки.
+TYPE_GATE = {
+    'Трусики': {'Трусики', 'Комплект'},
+    'Чашка': {'Бюстгальтер', 'Комплект', 'Боді', 'Корсет'},
+    'Форма бюстгальтера': {'Бюстгальтер', 'Комплект'},
+    'Модель': {'Трусики', 'Комплект', 'Боді', 'Корсет', 'Бюстгальтер',
+               'Плаття', 'Пеньюар', 'Комбінезон'},
+}
+
+# Колір та розмір — тільки з назви. Постачальник пише їх у кінці назви,
+# часто чужою мовою: Passion використовує італійське «nero», Leg Avenue —
+# англійське «black», розміри бувають «T1», «1/2», «OS».
+COLOR_FROM_NAME = [
+    (r'\bnero\b|\bblack\b|чорн', 'Чорний'),
+    (r'\bwhite\b|\bbianco\b|біл(ий|а|е)\b', 'Білий'),
+    (r'\bred\b|\brosso\b|червон', 'Червоний'),
+    (r'\bpink\b|\brosa\b|рожев', 'Рожевий'),
+    (r'\bblue\b|\bnavy\b|син(ій|я)|блакитн', 'Синій'),
+    (r'\bgreen\b|зелен', 'Зелений'),
+    (r'\bpurple\b|\bviolet\b|фіолетов|бузков', 'Фіолетовий'),
+    (r'\bgold\b|золот', 'Золотий'),
+    (r'\bsilver\b|срібн', 'Сріблястий'),
+    (r'\bbeige\b|бежев', 'Бежевий'),
+    (r'\bnude\b|тілесн', 'Тілесний'),
+    (r'\bbrown\b|коричнев', 'Коричневий'),
+    (r'\bgr[ae]y\b|сір(ий|а)', 'Сірий'),
+    (r'\btransparent\b|прозор', 'Прозорий'),
+]
+SIZE_FROM_NAME = [
+    (r'\bone ?size\b|\bos\b(?![a-z])|універсальн', 'One Size'),
+    (r'\b(?:xxxl|3xl)\b', '3XL'), (r'\b(?:xxl|2xl)\b', '2XL'),
+    (r'\bxl\b', 'XL'), (r'\bxs\b', 'XS'),
+    (r'\bt[1-4]\b', None),          # розмірна сітка Anne De Ales
+    (r'\b[1-4]/[2-4]\b', None),     # розмірна сітка Passion
+    (r'\bl\b(?![a-z])', 'L'), (r'\bm\b(?![a-z])', 'M'), (r'\bs\b(?![a-z])', 'S'),
+]
+
+
+# ── Резервний опис ─────────────────────────────────────────────────────────
+# Для 377 товарів білизни постачальник не дав опису взагалі — і в картці
+# Rozetka лишалося саме порожнє місце. Текст нижче збирається виключно з
+# перевірених характеристик того самого товару: нічого не додумується,
+# жодних оцінних слів. Це та сама тактика, що застосована для Єпіцентру.
+DESC_TYPE_PHRASE = {
+    'Комплект': 'Комплект жіночої білизни',
+    'Боді': 'Жіноче боді', 'Корсет': 'Жіночий корсет',
+    'Бюстгальтер': 'Жіночий бюстгальтер', 'Трусики': 'Жіночі трусики',
+    'Панчохи': 'Жіночі панчохи', 'Колготки': 'Жіночі колготки',
+    'Плаття': 'Жіноче плаття', 'Пеньюар': 'Жіночий пеньюар',
+    'Топ': 'Жіночий топ', 'Спідниця': 'Жіноча спідниця',
+    'Шорти': 'Жіночі шорти', 'Комбінезон': 'Жіночий комбінезон',
+    'Легінси': 'Жіночі легінси', 'Рукавички': 'Рукавички',
+    'Халат': 'Жіночий халат', 'Піжама': 'Жіноча піжама',
+    'Маска': 'Маска', 'Аксесуари': 'Аксесуар',
+}
+DESC_FEATURE = {
+    'Модель': {'З відкритим доступом': 'відкритий доступ',
+               'З пажами для панчіх': 'пажі для панчіх',
+               'З гігієнічною ластовицею': 'гігієнічна ластовиця',
+               'БДСМ': 'у стилі БДСМ'},
+    'Чашка': {'Відкрита': 'відкриті чашки', 'Push-up': 'чашки push-up',
+              'На кісточках (на каркасах)': 'чашки на кісточках',
+              'Без кісточок': 'чашки без кісточок',
+              'Безшовна': 'безшовні чашки', "М'яка": "м'які чашки"},
+    'Застібка': {'Блискавка': 'застібка-блискавка', 'Гачки': 'застібка на гачки',
+                 "Зав'язки": "зав'язки", 'Без застібки': 'без застібки'},
+    'Трусики': {'Стринги': 'трусики-стринги', 'Бразиліана': 'трусики-бразиліана',
+                'Танга': 'трусики-танга', 'Хіпстери': 'трусики-хіпстери',
+                'Шорти': 'трусики-шорти', 'Сліпи': 'трусики-сліпи',
+                'Бікіні': 'трусики-бікіні', 'Максі (високі)': 'високі трусики'},
+    'Форма бюстгальтера': {'Балконет': 'бюстгальтер-балконет', 'Бандо': 'бандо',
+                           'Бралет': 'бралет', 'Класична': 'класична форма',
+                           'Трикутна': 'трикутна форма'},
+}
+
+
+# Складених розмірів («S/M», «L/XL») у довіднику Rozetka немає взагалі,
+# тож у характеристику йде лише перша складова. В описі ж пишемо позначення
+# так, як воно стоїть на етикетці — інакше товар S/M виглядав би як просто S.
+SIZE_LABEL = re.compile(
+    r'\b((?:XS|S|M|L|XL|XXL|2XL|3XL)\s*/\s*(?:S|M|L|XL|XXL|2XL|3XL|XXXL)'
+    r'|One ?Size|T[1-4])\b', re.I)
+
+
+def size_label(name: str, fallback: str):
+    m = SIZE_LABEL.search(name or '')
+    return re.sub(r'\s*/\s*', '/', m.group(1)) if m else fallback
+
+
+def synth_description(name: str, prm: dict, vendor: str) -> str:
+    """Короткий опис із назви та вже підтверджених характеристик."""
+    brand = re.sub(r'\s*\(.*?\)', '', vendor or '').strip()
+    head = DESC_TYPE_PHRASE.get(prm.get('Тип') or prm.get('Вид'), 'Виріб')
+    parts = [f'{head} {brand}'.strip() if brand else head]
+
+    detail = []
+    if c := prm.get('Колір'):
+        detail.append(f'{c.lower()} колір')
+    if s := size_label(name, prm.get('Розмір')):
+        detail.append(f'розмір {s}')
+    if detail:
+        parts.append(', '.join(detail))
+    first = '. '.join([' — '.join(parts)]) if len(parts) > 1 else parts[0]
+
+    out = [first + '.']
+    if m := prm.get('Матеріал'):
+        out.append(f'Матеріал — {m.lower()}.')
+    feats = [DESC_FEATURE[k][v] for k, v in prm.items()
+             if k in DESC_FEATURE and v in DESC_FEATURE[k]]
+    if feats:
+        out.append(f'Особливості моделі: {", ".join(feats)}.')
+    if country := prm.get('Країна-виробник товару'):
+        out.append(f'Країна виробництва — {country}.')
+    return ' '.join(out)
+
+
+def quantity_from_name(name: str):
+    """Справжня кількість в упаковці з назви: «Презерватив …, 3 шт» → «3».
+
+    Раніше тут стояла константа '1' для всіх товарів — вона тримала третю
+    характеристику у 759 позицій, але нічого не повідомляла покупцеві й для
+    презервативів була просто хибною: їх продають упаковками по 3, 12, 24.
+    """
+    m = re.search(r'(\d+)\s*(?:шт|предмет)', name, re.I)
+    return m.group(1) if m else None
+
+
+def _first_match(rules, text):
+    for rx, val in rules:
+        m = re.search(rx, text, re.I)
+        if m:
+            return val if val is not None else m.group(0).upper()
+    return None
+
+
+def params_from_name(text: str, rz_id: str) -> dict:
+    out = {}
+    for pname, rules in NAME_PARAM_RULES.get(rz_id, {}).items():
+        val = _first_match(rules, text)
+        if val:
+            out[pname] = val
+    return out
+
+
+# ── Характеристики, які краще не показувати взагалі ────────────────────────
+# «Колір» у лубрикантів та олій виводився з назви лінійки, а не з товару:
+# pjur Aqua → синій, Golden Touch → золотий, Woman Nude → тілесний,
+# Swiss Navy → синій, Orange Creamsicle → оранжевий. Це смак чи бренд, а не
+# колір гелю. Після появи «Обʼєм» і «Основа» ці категорії набирають три
+# характеристики без нього.
+PARAM_DROP = {
+    '4675911': {'Колір'},
+    '4657502': {'Колір'},
+}
+
+# Товари-дублі: та сама позиція під двома артикулами постачальника.
+# Лишаємо наш стандартний формат артикула, другу картку не публікуємо.
+EXCLUDE_SKUS = {'PSS002W'}      # дубль SO8947 (Passion S002 white)
+
+# Назви, які постачальник дав лише англійською. Переклад точний, без
+# домислів: те саме, що в оригіналі, українською.
+NAME_OVERRIDE = {
+    'SO7897': 'Боді-сітка Leg Avenue зі стразами, One Size, чорне',
+    'SO7898': 'Боді Leg Avenue із сітки та мережива з халтером, One Size, чорне',
+    'SO7931': 'Комплект Leg Avenue: бюстгальтер з відкритими чашками та трусики з перлинною ниткою, One Size, чорний',
+}
+
+
+# Наші булеві характеристики → значення офіційного списку «Ефекти»
+EFFECTS = {'Зігріваючий': 'Зігріваючі', 'Охолоджуючий': 'Охолоджуючі',
+           'Збуджуючий': 'Збуджуючі', 'Пролонгуючий': 'Пролонгуючі'}
+
+
+def load_official(cur) -> dict:
+    """rz_category_id → {param_name_lower: (офіційна назва, [дозволені значення])}"""
+    cur.execute("""SELECT rz_category_id, param_name, allowed_values
+                   FROM rozetka_category_params""")
+    out = {}
+    for r in cur.fetchall():
+        vals = r['allowed_values'] or []
+        vals = [v for v in vals if v and v != 'N/D']
+        out.setdefault(r['rz_category_id'], {})[r['param_name'].lower()] = (
+            r['param_name'], vals)
+    return out
+
+
+def _brand_country(vendor: str):
+    """Країна з дужок у назві постачальника: 'Obsessive (Польща)' → 'Польща'."""
+    m = re.search(r'\(([^)]+)\)', vendor or '')
+    return m.group(1).strip() if m else None
+
+
+def _unit_candidates(v: str):
+    """Голе число — у формах, які знає довідник Rozetka.
+
+    Постачальник зберігає обʼєм числом без одиниці («100»), а довідник
+    очікує «100 мл». Через це «Обʼєм» відкидався у всіх 514 лубрикантів —
+    і саме цієї характеристики бракувало 395 з них до мінімальних трьох.
+    Дробова частина теж записана по-різному: у нас «29,5», у них «29.5 мл».
+    """
+    m = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*(мл|ml|л|г|гр|g)?', v.strip(), re.I)
+    if not m:
+        return []
+    num = m.group(1).replace(',', '.')
+    if '.' in num:
+        num = num.rstrip('0').rstrip('.')
+    unit = (m.group(2) or '').lower()
+    unit = {'ml': 'мл', 'гр': 'г', 'g': 'г'}.get(unit, unit)
+    return [f'{num} {u}' for u in ([unit] if unit else ['мл', 'г', 'л'])]
+
+
+def _match_value(value: str, allowed: list, vmap: dict):
+    """Підібрати значення зі списку довідника.
+
+    Постачальник часто дає складені значення: «S/M», «Тканина, Латекс»,
+    «80 % поліамід, 20 % еластан». Rozetka таких не знає — беремо першу
+    складову, яка є в довіднику, інакше відкидаємо характеристику.
+    """
+    low = {a.lower(): a for a in allowed}
+    v = value.strip()
+    if v.lower() in vmap:
+        return vmap[v.lower()]
+    if v.lower() in low:
+        return low[v.lower()]
+    for cand in _unit_candidates(v):
+        if cand.lower() in low:
+            return low[cand.lower()]
+    for part in re.split(r'[\/,;]|\s+та\s+|\s+і\s+', v):
+        part = re.sub(r'^\d+\s*%?\s*', '', part).strip(' .%')
+        if not part:
+            continue
+        if part.lower() in vmap:
+            return vmap[part.lower()]
+        if part.lower() in low:
+            return low[part.lower()]
+    return None
+
+
+def fit_params(raw: dict, rz_id: str, official: dict) -> dict:
+    """Лишити тільки те, що Rozetka справді покаже.
+
+    Суворість тут асиметрична, і це не недогляд — так написано в довідці
+    продавця (p210), де дві сусідні фрази означають різне:
+
+      «Якщо ви вказали ЗНАЧЕННЯ характеристики, якого ще немає в категорії
+       ROZETKA (наприклад: новий колір або розмір) — ми додамо його
+       автоматично.»
+      «Якщо ХАРАКТЕРИСТИКА в категорії відсутня, вона не буде показана.»
+
+    Тому назва звіряється з довідником суворо: невідому Rozetka просто не
+    покаже, і характеристика зникне з картки. Значення ж звіряється мʼяко —
+    спершу пробуємо підібрати відоме (щоб товар групувався з чужими
+    картками), а якщо не вийшло, віддаємо своє: маркетплейс додасть його
+    в довідник сам. Сувора перевірка значень коштувала 212 товарів.
+    """
+    spec = official.get(rz_id, {})
+    if not spec:
+        return raw
+    alias = PARAM_ALIAS.get(rz_id, {})
+    out, effects = {}, []
+    for name, value in raw.items():
+        v = str(value).strip()
+        if not v:
+            continue
+        if name in EFFECTS and v.lower() in ('так', 'yes', 'true'):
+            effects.append(EFFECTS[name])
+            continue
+        target = alias.get(name, name)
+        hit = spec.get(target.lower())
+        if not hit:
+            continue
+        off_name, allowed = hit
+        if len(allowed) > 1:
+            matched = _match_value(v, allowed,
+                                   VALUE_ALIAS.get((rz_id, off_name), {}))
+            if matched is None:
+                if len(allowed) < OPEN_VOCABULARY:
+                    continue        # закритий перелік — своє значення тут хибне
+                pass                # відкритий словник — Rozetka додасть нове
+            else:
+                v = matched
+        out[off_name] = v
+    if effects and 'ефекти' in spec:
+        out[spec['ефекти'][0]] = ', '.join(sorted(set(effects)))
+    return out
+
+
+# ── Дані, знайдені на EasyToys (SKILL-04..08) ──────────────────────────────
+# Беремо ЛИШЕ match_type='exact' — точний збіг коду моделі або всіх токенів
+# назви. Правило SKILL-04 діє: знайдене для однієї моделі бренду ніколи не
+# переноситься на інші моделі того ж бренду.
+NL_MATERIAL = {
+    'polyamide': 'Поліамід', 'polyamid': 'Поліамід', 'elastaan': 'Еластан',
+    'polyester': 'Поліестер', 'nylon': 'Нейлон', 'katoen': 'Бавовна',
+    'kant': 'Мереживо', 'satijn': 'Атлас', 'leer': 'Шкіра', 'latex': 'Латекс',
+    'siliconen': 'Силікон', 'viscose': 'Віскоза', 'polyurethaan': 'Поліуретан',
+    'spandex': 'Еластан', 'lycra': 'Еластан', 'vinyl': 'Вініл',
+    'acryl': 'Акрил', 'wol': 'Вовна', 'mesh': 'Сітка', 'tule': 'Сітка',
+}
+NL_COLOR = {
+    'zwart': 'Чорний', 'wit': 'Білий', 'rood': 'Червоний', 'roze': 'Рожевий',
+    'blauw': 'Синій', 'groen': 'Зелений', 'paars': 'Фіолетовий',
+    'goud': 'Золотий', 'zilver': 'Сріблястий', 'grijs': 'Сірий',
+    'bruin': 'Коричневий', 'beige': 'Бежевий', 'nude': 'Тілесний',
+    'transparant': 'Прозорий', 'ecru': 'Бежевий', 'geel': 'Жовтий',
+    'oranje': 'Оранжевий', 'multicolor': 'Різнокольоровий',
+}
+NL_COUNTRY = {
+    'polen': 'Польща', 'china': 'Китай', 'duitsland': 'Німеччина',
+    'italië': 'Італія', 'italie': 'Італія', 'spanje': 'Іспанія',
+    'frankrijk': 'Франція', 'verenigde staten': 'США', 'usa': 'США',
+    'nederland': 'Нідерланди', 'taiwan': 'Тайвань', 'japan': 'Японія',
+    'verenigd koninkrijk': 'Велика Британія', 'letland': 'Латвія',
+    'litouwen': 'Литва', 'tsjechië': 'Чехія', 'turkije': 'Туреччина',
+    'portugal': 'Португалія', 'india': 'Індія', 'mexico': 'Мексика',
+}
+
+
+def _nl(value: str, table: dict):
+    """Нідерландське значення (можливо складене) → українське."""
+    if not value:
+        return None
+    out = []
+    for part in re.split(r'[,/]', value):
+        part = re.sub(r'^\s*\d+\s*%?\s*', '', part).strip().lower()
+        if part in table and table[part] not in out:
+            out.append(table[part])
+    return ', '.join(out) or None
+
+
+def load_easytoys(cur) -> dict:
+    """sku → {характеристика: українське значення} з точних збігів EasyToys."""
+    try:
+        cur.execute("""SELECT sku, specs FROM sexopt_easytoys_specs
+                       WHERE match_type = 'exact' AND specs IS NOT NULL""")
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+    out = {}
+    for r in cur.fetchall():
+        sp = r['specs'] or {}
+        vals = {}
+        if m := _nl(sp.get('Materiaal'), NL_MATERIAL):
+            vals['Матеріал'] = m
+        if c := _nl(sp.get('Kleur'), NL_COLOR):
+            vals['Колір'] = c.split(',')[0]
+        if k := _nl(sp.get('Herkomst'), NL_COUNTRY):
+            vals['Країна-виробник'] = k
+        if vals:
+            out[r['sku']] = vals
+    return out
+
+
+def load_params(cur, skus: list) -> dict:
+    cur.execute("""
+        SELECT sku, param_name, param_value FROM sexopt_extracted_params
+        WHERE sku = ANY(%s) AND param_value IS NOT NULL
+          AND TRIM(param_value) <> ''
+    """, (skus,))
+    out = {}
+    for r in cur.fetchall():
+        out.setdefault(r['sku'], {})[r['param_name']] = r['param_value']
+    return out
+
+
+def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
+             synth_desc=True):
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    mapping = load_mapping(cur)
+    official = load_official(cur)
+    easytoys = load_easytoys(cur)
+    tariffs = load_tariffs(cur)
+    if not mapping:
+        logger.error('rozetka_category_mapping порожній для source=noire')
+        return 0
+
+    sids = [s for s in mapping
+            if not only_cats or mapping[s][1] in only_cats]
+    cur.execute("""
+        SELECT sku, category_id, name, description_html, price_retail,
+               vendor, pictures, country, available, quantity
+        FROM sexopt_products
+        WHERE category_id = ANY(%s)
+        ORDER BY sku
+    """, (sids,))
+    products = cur.fetchall()
+    if limit:
+        products = products[:limit]
+    logger.info(f'Товарів у вибірці: {len(products)}')
+
+    params = load_params(cur, [p['sku'] for p in products])
+    conn.close()
+
+    # ── блок категорій: локальний id → rz_id ────────────────────────────────
+    rz_used, local_id = {}, {}
+    for sid in sids:
+        rz, rzname, _ = mapping[sid]
+        if rzname not in rz_used:
+            rz_used[rzname] = (len(rz_used) + 1, rz)
+        local_id[sid] = rz_used[rzname][0]
+
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             f'<yml_catalog date="{datetime.now():%Y-%m-%d %H:%M}">',
+             '  <shop>',
+             f'    <name>{esc(SHOP_NAME)}</name>',
+             f'    <company>{esc(SHOP_COMPANY)}</company>',
+             f'    <url>{esc(SHOP_URL)}</url>',
+             '    <currencies><currency id="UAH" rate="1" /></currencies>',
+             '    <categories>']
+    for rzname, (lid, rz) in sorted(rz_used.items(), key=lambda x: x[1][0]):
+        rz_attr = f' rz_id="{esc(rz)}"' if rz else ''
+        lines.append(f'      <category id="{lid}"{rz_attr}>{esc(rzname)}</category>')
+    lines += ['    </categories>', '    <offers>']
+
+    stats = {'total': 0, 'skip_price': 0, 'skip_pic': 0, 'skip_params': 0,
+             'no_rz_id': 0, 'avail_true': 0, 'avail_false': 0, 'skip_dup': 0}
+
+    for p in products:
+        sku = p['sku']
+        if sku in EXCLUDE_SKUS:
+            stats['skip_dup'] += 1
+            continue
+        rz, rzname, rate = mapping[p['category_id']]
+        if not rz and not include_unmapped:
+            stats['no_rz_id'] += 1
+            continue
+
+        price = float(p['price_retail'] or 0)
+        if price <= 0:
+            stats['skip_price'] += 1
+            continue
+        pics = [u for u in (p['pictures'] or []) if u][:MAX_PICTURES]
+        if not pics:
+            stats['skip_pic'] += 1
+            continue
+        name = NAME_OVERRIDE.get(sku, p['name'] or '')
+        raw = dict(params.get(sku, {}))
+        for k, v in easytoys.get(sku, {}).items():
+            raw.setdefault(k, v)          # дані постачальника мають пріоритет
+        for drop in PARAM_DROP.get(rz, ()):
+            raw.pop(drop, None)
+        if rz in LINGERIE_CATS:
+            # тип за назвою має пріоритет над типом з категорії постачальника
+            t = lingerie_type(name)
+            if t:
+                raw['Тип'] = t
+            else:
+                raw.pop('Тип', None)
+                raw.pop('Тип товару', None)
+        src = name
+        if rz in DESC_PARAM_CATS:
+            src += ' ' + re.sub(r'<[^>]+>', ' ', p['description_html'] or '')
+        for k, v in params_from_name(src, rz).items():
+            gate = TYPE_GATE.get(k)
+            if gate and raw.get('Тип') not in gate:
+                continue
+            raw.setdefault(k, v)
+        if rz in LINGERIE_CATS:
+            if c := _first_match(COLOR_FROM_NAME, name):
+                raw.setdefault('Колір', c)
+            if s := _first_match(SIZE_FROM_NAME, name):
+                raw.setdefault('Розмір', s)
+        if q := quantity_from_name(name):
+            raw['Кількість в упаковці'] = q
+        if p['country']:
+            raw.setdefault('Країна-виробник', p['country'].split('(')[0].strip())
+        if vendor_country := _brand_country(p['vendor']):
+            raw.setdefault('Країна бренду', vendor_country)
+        prm = fit_params(raw, rz, official)
+        if len(prm) < MIN_PARAMS:
+            stats['skip_params'] += 1
+            continue
+
+        avail = p['available'] is None or bool(p['available'])
+        stats['avail_true' if avail else 'avail_false'] += 1
+        commission = float(rate) if rate else DEFAULT_COMMISSION
+        scale = tariffs.get(rz)
+        vendor = (p['vendor'] or '').split('(')[0].strip()
+
+        o = [f'      <offer id="{esc(sku)}" available="{"true" if avail else "false"}">',
+             f'        <price>{calc_price(price, scale, commission)}</price>',
+             '        <currencyId>UAH</currencyId>',
+             f'        <categoryId>{local_id[p["category_id"]]}</categoryId>']
+        o += [f'        <picture>{esc(u)}</picture>' for u in pics]
+        if vendor:
+            o.append(f'        <vendor>{esc(vendor)}</vendor>')
+        o.append(f'        <article>{esc(sku)}</article>')
+        # Реальний залишок постачальника. Rozetka вміє показувати кількість,
+        # а не тільки «є/немає»; Carvol передає цей тег для всіх 8244 позицій.
+        # Нижче порога MIN_STOCK віддаємо 0: останню одиницю встигають
+        # викупити між нашими оновленнями, і підтверджене замовлення на
+        # відсутній товар коштує рейтингу.
+        qty = p['quantity']
+        o.append(f'        <stock_quantity>{int(qty) if avail and qty else 0}'
+                 f'</stock_quantity>')
+        o.append(f'        <name_ua>{esc(name)}</name_ua>')
+        o.append(f'        <name>{esc(name)}</name>')
+        desc = (p['description_html'] or '').strip()
+        if not desc and synth_desc:
+            desc = synth_description(name, prm, p['vendor'])
+        if desc:
+            # Тільки description_ua: другий тег дублював той самий текст,
+            # у робочому фіді Carvol його немає на жодній з 8244 позицій.
+            o.append(f'        <description_ua>{esc(desc)}</description_ua>')
+        for k, v in prm.items():
+            o.append(f'        <param name="{esc(k)}">{esc(str(v)[:500])}</param>')
+        o.append('      </offer>')
+        lines += o
+        stats['total'] += 1
+
+    lines += ['    </offers>', '  </shop>', '</yml_catalog>', '']
+    os.makedirs(os.path.dirname(out_file), exist_ok=True)
+    with open(out_file, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines))
+
+    logger.success(f'Згенеровано офферів: {stats["total"]} → {out_file}')
+    logger.info(f"  available true/false : {stats['avail_true']}/{stats['avail_false']}")
+    logger.info(f"  пропущено без ціни   : {stats['skip_price']}")
+    logger.info(f"  пропущено без фото   : {stats['skip_pic']}")
+    logger.info(f"  пропущено <3 характеристик: {stats['skip_params']}")
+    if stats['skip_dup']:
+        logger.info(f"  пропущено дублів артикула : {stats['skip_dup']}")
+    if stats['no_rz_id']:
+        logger.warning(f"  пропущено без rz_id категорії: {stats['no_rz_id']} "
+                       f"(заповни rozetka_category_id у rozetka_category_mapping)")
+    return stats['total']
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-o', '--output', default=OUT)
+    ap.add_argument('--limit', type=int)
+    ap.add_argument('--categories', help='через кому, назви категорій Rozetka')
+    ap.add_argument('--no-synth-desc', action='store_true',
+                    help='не збирати резервний опис для товарів без опису')
+    ap.add_argument('--include-unmapped', action='store_true',
+                    help='включати категорії без rz_id (для тестового прогону)')
+    a = ap.parse_args()
+    cats = [c.strip() for c in a.categories.split(',')] if a.categories else None
+    n = generate(a.output, a.limit, cats, a.include_unmapped,
+                 synth_desc=not a.no_synth_desc)
+    sys.exit(0 if n else 1)
+
+
+if __name__ == '__main__':
+    main()

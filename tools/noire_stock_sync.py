@@ -119,6 +119,11 @@ def quick_sync(dry=False) -> dict:
 
         new_price = info['price']
         new_avail = info['qty'] > MIN_STOCK
+        # Кількість потрібна фіду Rozetka (тег stock_quantity), тому
+        # зберігаємо її, а не тільки похідний булевий прапорець.
+        if not dry:
+            cur.execute('UPDATE sexopt_products SET quantity=%s WHERE sku=%s',
+                        (int(info['qty']), sku))
 
         if new_price > 0 and abs(new_price - old_price) > 0.01:
             if not dry:
@@ -248,21 +253,39 @@ GH_FILE = 'noire_epicentr.xml'
 RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
            'main/' + GH_FILE)
 
+# Rozetka забирає прайс раз на годину (Єпіцентр — раз на добу о 00:00–02:00),
+# тому її фід публікується щогодини й лежить у тому самому репозиторії
+# окремим файлом.
+RZ_FEED = os.path.join(BASE_DIR, 'output', 'noire_rozetka.xml')
+RZ_GH_FILE = 'noire_rozetka.xml'
+RZ_RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
+              'main/' + RZ_GH_FILE)
 
-def publish_github() -> dict:
+# Обидві публікації правлять той самий єдиний коміт через amend + force-push.
+# Якщо щогодинний Rozetka і нічний Єпіцентр зійдуться в одну хвилину, другий
+# запис затре перший. Блокування робить їх послідовними.
+GH_LOCK = '/tmp/noire_gh_publish.lock'
+
+
+def publish_github(feed=None, gh_file=None, raw_url=None) -> dict:
     """Скопіювати свіжий фід у репозиторій і запушити.
 
-    Публікацію в кабінет Єпіцентру НЕ виконує — там стоїть постійний
-    raw-URL, який сам підтягує оновлений файл.
+    Публікацію в кабінети маркетплейсів НЕ виконує — там стоять постійні
+    raw-URL, які самі підтягують оновлений файл.
     """
-    import subprocess, shutil
+    import subprocess, shutil, fcntl
+    feed = feed or FEED
+    gh_file = gh_file or GH_FILE
+    raw_url = raw_url or RAW_URL
     res = {'ok': False, 'skipped': False}
     if not os.path.isdir(os.path.join(GH_REPO_DIR, '.git')):
         logger.info(f'GitHub-репо {GH_REPO_DIR} не знайдено — публікацію пропущено')
         res['skipped'] = True
         return res
+    lock = open(GH_LOCK, 'w')
     try:
-        shutil.copy2(FEED, os.path.join(GH_REPO_DIR, GH_FILE))
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        shutil.copy2(feed, os.path.join(GH_REPO_DIR, gh_file))
         msg = f'feed: {datetime.now():%Y-%m-%d %H:%M}'
         # Історію не накопичуємо: щоразу переписуємо єдиний кореневий коміт
         # і робимо force-push. Інакше кожна публікація додавала б у репозиторій
@@ -270,7 +293,7 @@ def publish_github() -> dict:
         # він розрісся б до гігабайтів, як це сталося з фідом Carvol.
         # Для raw.githubusercontent.com історія не потрібна — він віддає
         # завжди останній стан гілки.
-        for cmd in (['git', 'add', GH_FILE],
+        for cmd in (['git', 'add', gh_file],
                     ['git', 'commit', '--amend', '-m', msg],
                     ['git', 'push', '--force', 'origin', 'main']):
             r = subprocess.run(cmd, cwd=GH_REPO_DIR, capture_output=True,
@@ -289,10 +312,13 @@ def publish_github() -> dict:
                        cwd=GH_REPO_DIR, capture_output=True, timeout=120)
         subprocess.run(['git', 'gc', '--prune=now', '-q'],
                        cwd=GH_REPO_DIR, capture_output=True, timeout=600)
-        logger.success(f'Опубліковано: {RAW_URL}')
+        logger.success(f'Опубліковано: {raw_url}')
         res['ok'] = True
     except Exception as e:
         logger.error(f'publish_github: {e}')
+    finally:
+        fcntl.flock(lock, fcntl.LOCK_UN)
+        lock.close()
     return res
 
 
@@ -349,12 +375,65 @@ def regenerate_feed() -> dict:
     return res
 
 
+def regenerate_rozetka_feed() -> dict:
+    """Перезібрати фід Rozetka і перевірити валідатором.
+
+    Окремо від regenerate_feed(): у Rozetka інший генератор, інший валідатор
+    і інший ритм — вона забирає прайс щогодини, тому фід збирається перед
+    кожною публікацією, а не раз на добу.
+    """
+    import subprocess, tempfile, shutil, time as _t
+    py = sys.executable
+    t0 = _t.time()
+    tmp = tempfile.NamedTemporaryFile(suffix='.xml', delete=False,
+                                      dir=os.path.dirname(RZ_FEED)).name
+    res = {'ok': False, 'seconds': 0, 'offers': 0, 'fail': 0}
+    try:
+        r = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
+                                             'noire_rozetka_generator.py'),
+                            '-o', tmp], capture_output=True, text=True,
+                           timeout=900)
+        if r.returncode != 0 or not os.path.getsize(tmp):
+            logger.error(f'Генератор Rozetka впав (rc={r.returncode}): '
+                         f'{(r.stderr or "")[-300:]}')
+            return res
+        v = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
+                                             'noire_rozetka_validator.py'), tmp],
+                           capture_output=True, text=True, timeout=900)
+        out = v.stdout or ''
+        for key, pat in (('offers', r'Офферів:\s*(\d+)'),
+                         ('fail', r'ПОМИЛКИ\s*:\s*(\d+)')):
+            m = re.search(pat, out)
+            if m:
+                res[key] = int(m.group(1))
+        if res['fail']:
+            logger.error(f"Валідатор Rozetka: {res['fail']} помилок — "
+                         f"публікацію скасовано")
+            return res
+        os.chmod(tmp, 0o644)
+        shutil.move(tmp, RZ_FEED)
+        res['ok'] = True
+        res['seconds'] = round(_t.time() - t0, 1)
+        logger.info(f"Фід Rozetka зібрано за {res['seconds']}с: "
+                    f"{res['offers']} офферів, помилок {res['fail']}")
+    except subprocess.TimeoutExpired:
+        logger.error('Генерація фіду Rozetka перевищила ліміт часу')
+    except Exception as e:
+        logger.error(f'regenerate_rozetka_feed: {e}')
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--quick', action='store_true')
     ap.add_argument('--full', action='store_true')
     ap.add_argument('--publish', action='store_true',
-                    help='перезібрати фід і запушити в GitHub (cron 23:00)')
+                    help='перезібрати фід Єпіцентру і запушити (cron 23:00)')
+    ap.add_argument('--publish-rozetka', action='store_true',
+                    help='перезібрати фід Rozetka і запушити (cron щогодини)')
     ap.add_argument('--dry', action='store_true')
     ap.add_argument('--no-tg', action='store_true')
     ap.add_argument('--no-regen', action='store_true',
@@ -429,6 +508,21 @@ def main():
                    f"Єпіцентр забере о 00:00–02:00")
             else:
                 tg('❌ <b>NOIRE</b>: push у GitHub не вдався')
+    elif a.publish_rozetka:
+        # Щогодини: Rozetka забирає прайс раз на годину, тож немає сенсу
+        # тримати опублікований файл старішим за цей інтервал.
+        feed = regenerate_rozetka_feed()
+        if not feed.get('ok'):
+            logger.error('Фід Rozetka не зібрався — публікацію скасовано')
+            if not a.no_tg:
+                tg('❌ <b>NOIRE Rozetka</b>: фід не зібрався, публікацію '
+                   'скасовано — дивись лог')
+            return
+        gh = publish_github(RZ_FEED, RZ_GH_FILE, RZ_RAW_URL)
+        logger.info(f"Rozetka: {feed['offers']} офферів, "
+                    f"публікація {'ok' if gh.get('ok') else 'НЕ ВДАЛАСЬ'}")
+        if not gh.get('ok') and not gh.get('skipped') and not a.no_tg:
+            tg('❌ <b>NOIRE Rozetka</b>: push у GitHub не вдався')
     elif a.full:
         st = full_sync(dry=a.dry)
         if not a.no_tg and st['new']:
