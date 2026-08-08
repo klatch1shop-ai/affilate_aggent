@@ -49,8 +49,18 @@ NOIRE_RAW_URL   = ("https://raw.githubusercontent.com/klatch1shop-ai/"
 NOIRE_MAX_AGE_H = 26          # 2-годинний цикл + запас на добовий простій
 NOIRE_FLAG      = "/tmp/watchdog_noire_last.txt"
 
+# Rozetka забирає прайс щогодини, тому й публікація щогодинна, і поріг
+# свіжості вужчий: три пропущені цикли — вже привід сповістити.
+NOIRE_RZ_FEED     = "/home/tek/agent-system/output/noire_rozetka.xml"
+NOIRE_RZ_RAW_URL  = ("https://raw.githubusercontent.com/klatch1shop-ai/"
+                     "noire-feed/main/noire_rozetka.xml")
+NOIRE_RZ_MAX_AGE_H = 3
+NOIRE_RZ_MIN_BYTES = 5_000_000     # фід ~16 МБ; менше — ознака обрізаного файлу
+NOIRE_RZ_FLAG      = "/tmp/watchdog_noire_rz_last.txt"
+
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
+    ("--publish-rozetka",      "cd /home/tek/agent-system"),
     ("noire_stock_sync.py",    "cd /home/tek/agent-system"),
     ("price_updater.py",       "cd /home/tek/agent-system"),
     ("feed_sync.py",           "cd /home/tek/agent-system"),
@@ -266,6 +276,49 @@ def check_noire_feed() -> dict:
     return {"ok": True, "msg": "feed ok"}
 
 
+def check_noire_rozetka_feed() -> dict:
+    """Фід Rozetka: свіжість локального файлу і доступність raw-URL.
+
+    Окремо від epicentr-перевірки: інший файл, інший URL і втричі вужчий
+    поріг свіжості — Rozetka оновлюється щогодини, а не раз на добу.
+    """
+    problems = []
+    if os.path.exists(NOIRE_RZ_FEED):
+        age_h = (time.time() - os.path.getmtime(NOIRE_RZ_FEED)) / 3600
+        if age_h > NOIRE_RZ_MAX_AGE_H:
+            problems.append(f"фід Rozetka не оновлювався {age_h:.0f} год")
+    else:
+        problems.append("локального фіду Rozetka немає")
+
+    try:
+        r = requests.head(NOIRE_RZ_RAW_URL, timeout=30, allow_redirects=True)
+        if r.status_code != 200:
+            problems.append(f"raw-URL Rozetka віддає HTTP {r.status_code}")
+        elif int(r.headers.get("content-length", 0)) < NOIRE_RZ_MIN_BYTES:
+            problems.append("raw-URL Rozetka віддає підозріло малий файл")
+    except Exception as e:
+        problems.append(f"raw-URL Rozetka недоступний: {type(e).__name__}")
+
+    if problems:
+        key = "; ".join(problems)[:200]
+        last = ""
+        if os.path.exists(NOIRE_RZ_FLAG):
+            try:
+                last = Path(NOIRE_RZ_FLAG).read_text().strip()
+            except Exception:
+                pass
+        if key != last:
+            tg(f"🚨 <b>Watchdog NOIRE Rozetka</b>: {key}")
+            Path(NOIRE_RZ_FLAG).write_text(key)
+        log(f"[noire-rz] ПРОБЛЕМА: {key}")
+        return {"ok": False, "msg": key[:80]}
+
+    if os.path.exists(NOIRE_RZ_FLAG):
+        os.remove(NOIRE_RZ_FLAG)
+    log("[noire-rz] фід свіжий, raw-URL доступний")
+    return {"ok": True, "msg": "feed ok"}
+
+
 # ── report every 6h ───────────────────────────────────────────────────────────
 
 def should_report() -> bool:
@@ -322,12 +375,14 @@ def main():
     svc_r  = check_services()
     sync_r = check_sync_log()
     noire_r = check_noire_feed()
+    noire_rz = check_noire_rozetka_feed()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
     log(f"[svc]  ok={svc_r['ok']}  {svc_r.get('services')}")
     log(f"[sync] ok={sync_r['ok']} {sync_r['msg']}")
     log(f"[noire] ok={noire_r['ok']} {noire_r['msg']}")
+    log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)
