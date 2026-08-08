@@ -56,6 +56,11 @@ NOIRE_RZ_RAW_URL  = ("https://raw.githubusercontent.com/klatch1shop-ai/"
                      "noire-feed/main/noire_rozetka.xml")
 NOIRE_RZ_MAX_AGE_H = 3
 NOIRE_RZ_MIN_BYTES = 5_000_000     # фід ~16 МБ; менше — ознака обрізаного файлу
+
+# raw.githubusercontent віддає XML стиснутим, і content-length тоді показує
+# розмір gzip (1,2 МБ замість 16 МБ) — перевірка розміру на цьому хибно
+# спрацьовувала. Просимо нестиснуту відповідь, щоб бачити справжню довжину.
+IDENTITY = {"Accept-Encoding": "identity"}
 NOIRE_RZ_FLAG      = "/tmp/watchdog_noire_rz_last.txt"
 
 CRON_CHECKS = [
@@ -248,7 +253,8 @@ def check_noire_feed() -> dict:
         problems.append("локального фіду немає")
 
     try:
-        r = requests.head(NOIRE_RAW_URL, timeout=30, allow_redirects=True)
+        r = requests.head(NOIRE_RAW_URL, timeout=30, allow_redirects=True,
+                          headers=IDENTITY)
         if r.status_code != 200:
             problems.append(f"raw-URL віддає HTTP {r.status_code}")
         elif int(r.headers.get("content-length", 0)) < 1_000_000:
@@ -291,7 +297,8 @@ def check_noire_rozetka_feed() -> dict:
         problems.append("локального фіду Rozetka немає")
 
     try:
-        r = requests.head(NOIRE_RZ_RAW_URL, timeout=30, allow_redirects=True)
+        r = requests.head(NOIRE_RZ_RAW_URL, timeout=30, allow_redirects=True,
+                          headers=IDENTITY)
         if r.status_code != 200:
             problems.append(f"raw-URL Rozetka віддає HTTP {r.status_code}")
         elif int(r.headers.get("content-length", 0)) < NOIRE_RZ_MIN_BYTES:
