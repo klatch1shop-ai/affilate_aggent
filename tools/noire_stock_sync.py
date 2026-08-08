@@ -95,12 +95,17 @@ def quick_sync(dry=False) -> dict:
     live = fetch_xls()
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute('SELECT sku, price_retail, available FROM sexopt_products')
+    cur.execute('SELECT sku, name, price_retail, available FROM sexopt_products')
+    rows = cur.fetchall()
     ours = {r['sku'].strip().upper(): (float(r['price_retail'] or 0),
-                                       bool(r['available'])) for r in cur.fetchall()}
+                                       bool(r['available'])) for r in rows}
+    names = {r['sku'].strip().upper(): r['name'] for r in rows}
 
     st = {'price': 0, 'off': 0, 'on': 0, 'missing': 0, 'raised': 0}
     price_up, turned_off = [], []
+    # Повний список змін ціни — для звірки з сайтом. Окремий від price_up:
+    # той обрізаний до 10 позицій і потрібен лише для тексту звіту.
+    price_changed = []
 
     for sku, (old_price, old_avail) in ours.items():
         info = live.get(sku)
@@ -120,6 +125,7 @@ def quick_sync(dry=False) -> dict:
                 cur.execute('UPDATE sexopt_products SET price_retail=%s WHERE sku=%s',
                             (new_price, sku))
             st['price'] += 1
+            price_changed.append((sku, names.get(sku, ''), new_price))
             if new_price > old_price:
                 st['raised'] += 1
                 price_up.append((sku, old_price, new_price))
@@ -144,6 +150,7 @@ def quick_sync(dry=False) -> dict:
                 f"немає у прайсі: {st['missing']}")
     st['price_up'] = price_up[:10]
     st['turned_off'] = turned_off[:10]
+    st['price_changed'] = price_changed
     return st
 
 
@@ -369,6 +376,15 @@ def main():
         elif not changed:
             logger.info('Змін немає — фід не перезбирався')
         bad = check_antidumping()
+        # Ціна сайту звіряється лише по товарах, у яких вона щойно змінилась:
+        # решта карток за цей цикл не могла розійтися з прайсом.
+        site = {}
+        if st.get('price_changed') and not a.dry:
+            try:
+                from noire_site_price_check import check as check_site
+                site = check_site(st['price_changed'])
+            except Exception as e:
+                logger.warning(f'Звірка цін сайту не виконана: {e}')
         msg = (f"🔄 <b>NOIRE sync</b> {datetime.now():%H:%M}\n"
                f"Ціни: {st['price']} (↑{st['raised']})\n"
                f"Знято з продажу: {st['off']} | повернуто: {st['on']}\n"
@@ -388,8 +404,12 @@ def main():
             for sku, p, rp, need in bad[:5]:
                 msg += f"\n{sku}: {p:.0f} &lt; {rp:.0f} (треба {need:.0f})"
             msg += "\nПотрібна перегенерація фіду"
+        if site:
+            from noire_site_price_check import tg_lines
+            msg += tg_lines(site)
         logger.info(f'Анти-демпінг: порушень {len(bad)}')
-        if not a.no_tg and (st['price'] or st['off'] or bad):
+        if not a.no_tg and (st['price'] or st['off'] or bad
+                            or site.get('below')):
             tg(msg)
     elif a.publish:
         # Один раз на добу о 23:00: свіжий XML з поточного стану БД → GitHub.
