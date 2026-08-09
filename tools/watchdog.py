@@ -63,9 +63,20 @@ NOIRE_RZ_MIN_BYTES = 5_000_000     # фід ~16 МБ; менше — ознак�
 IDENTITY = {"Accept-Encoding": "identity"}
 NOIRE_RZ_FLAG      = "/tmp/watchdog_noire_rz_last.txt"
 
+# Prom забирає прайс раз на 4 години у вікні 07:00-22:00, тому публікація
+# теж чотиригодинна. Поріг свіжості врахоує нічну паузу: після 19:40
+# наступна збірка аж о 07:40, тобто 12 годин тиші — це норма.
+NOIRE_PROM_FEED     = "/home/tek/agent-system/output/noire_prom.xml"
+NOIRE_PROM_RAW_URL  = ("https://raw.githubusercontent.com/klatch1shop-ai/"
+                       "noire-feed/main/noire_prom.xml")
+NOIRE_PROM_MAX_AGE_H = 14
+NOIRE_PROM_MIN_BYTES = 20_000_000    # фід ~44 МБ; менше — обрізаний файл
+NOIRE_PROM_FLAG      = "/tmp/watchdog_noire_prom_last.txt"
+
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
     ("--publish-rozetka",      "cd /home/tek/agent-system"),
+    ("--publish-prom",         "cd /home/tek/agent-system"),
     ("noire_stock_sync.py",    "cd /home/tek/agent-system"),
     ("price_updater.py",       "cd /home/tek/agent-system"),
     ("feed_sync.py",           "cd /home/tek/agent-system"),
@@ -282,6 +293,50 @@ def check_noire_feed() -> dict:
     return {"ok": True, "msg": "feed ok"}
 
 
+def check_noire_prom_feed() -> dict:
+    """Фід Prom: свіжість локального файлу і доступність raw-URL.
+
+    Поріг ширший за Rozetka: публікація йде лише вдень (07:00-22:00), тож
+    уночі файл законно старіє до 12 годин.
+    """
+    problems = []
+    if os.path.exists(NOIRE_PROM_FEED):
+        age_h = (time.time() - os.path.getmtime(NOIRE_PROM_FEED)) / 3600
+        if age_h > NOIRE_PROM_MAX_AGE_H:
+            problems.append(f"фід Prom не оновлювався {age_h:.0f} год")
+    else:
+        problems.append("локального фіду Prom немає")
+
+    try:
+        r = requests.head(NOIRE_PROM_RAW_URL, timeout=30, allow_redirects=True,
+                          headers=IDENTITY)
+        if r.status_code != 200:
+            problems.append(f"raw-URL Prom віддає HTTP {r.status_code}")
+        elif int(r.headers.get("content-length", 0)) < NOIRE_PROM_MIN_BYTES:
+            problems.append("raw-URL Prom віддає підозріло малий файл")
+    except Exception as e:
+        problems.append(f"raw-URL Prom недоступний: {type(e).__name__}")
+
+    if problems:
+        key = "; ".join(problems)[:200]
+        last = ""
+        if os.path.exists(NOIRE_PROM_FLAG):
+            try:
+                last = Path(NOIRE_PROM_FLAG).read_text().strip()
+            except Exception:
+                pass
+        if key != last:
+            tg(f"🚨 <b>Watchdog NOIRE Prom</b>: {key}")
+            Path(NOIRE_PROM_FLAG).write_text(key)
+        log(f"[noire-prom] ПРОБЛЕМА: {key}")
+        return {"ok": False, "msg": key[:80]}
+
+    if os.path.exists(NOIRE_PROM_FLAG):
+        os.remove(NOIRE_PROM_FLAG)
+    log("[noire-prom] фід свіжий, raw-URL доступний")
+    return {"ok": True, "msg": "feed ok"}
+
+
 def check_noire_rozetka_feed() -> dict:
     """Фід Rozetka: свіжість локального файлу і доступність raw-URL.
 
@@ -383,6 +438,7 @@ def main():
     sync_r = check_sync_log()
     noire_r = check_noire_feed()
     noire_rz = check_noire_rozetka_feed()
+    noire_prom = check_noire_prom_feed()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
@@ -390,6 +446,7 @@ def main():
     log(f"[sync] ok={sync_r['ok']} {sync_r['msg']}")
     log(f"[noire] ok={noire_r['ok']} {noire_r['msg']}")
     log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
+    log(f"[noire-prom] ok={noire_prom['ok']} {noire_prom['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)
