@@ -261,6 +261,13 @@ RZ_GH_FILE = 'noire_rozetka.xml'
 RZ_RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
               'main/' + RZ_GH_FILE)
 
+# Prom забирає прайс за посиланням раз на 4 години у вікні 07:00–22:00,
+# тому його фід перезбирається й публікується за тим самим ритмом.
+PROM_FEED = os.path.join(BASE_DIR, 'output', 'noire_prom.xml')
+PROM_GH_FILE = 'noire_prom.xml'
+PROM_RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
+                'main/' + PROM_GH_FILE)
+
 # Обидві публікації правлять той самий єдиний коміт через amend + force-push.
 # Якщо щогодинний Rozetka і нічний Єпіцентр зійдуться в одну хвилину, другий
 # запис затре перший. Блокування робить їх послідовними.
@@ -426,6 +433,89 @@ def regenerate_rozetka_feed() -> dict:
     return res
 
 
+def regenerate_prom_feed() -> dict:
+    """Перезібрати фід Prom і перевірити перед публікацією.
+
+    Окремого валідатора у Prom-напрямку немає, тому перевірка вбудована:
+    вона повторює те, на чому вже спіткнувся перший імпорт — обовʼязкові
+    поля, ліміт фото, і головне — коректність різновидів. Prom відхиляє
+    різновид без унікального значення характеристики і різновид, у якого
+    є ключ, відсутній в основного товару.
+    """
+    import subprocess, tempfile, shutil, time as _t
+    import xml.etree.ElementTree as ET
+    py = sys.executable
+    t0 = _t.time()
+    tmp = tempfile.NamedTemporaryFile(suffix='.xml', delete=False,
+                                      dir=os.path.dirname(PROM_FEED)).name
+    res = {'ok': False, 'seconds': 0, 'offers': 0, 'problems': []}
+    try:
+        r = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
+                                             'noire_prom_generator.py'),
+                            '-o', tmp], capture_output=True, text=True,
+                           timeout=900)
+        if r.returncode != 0 or not os.path.getsize(tmp):
+            logger.error(f'Генератор Prom впав (rc={r.returncode}): '
+                         f'{(r.stderr or "")[-300:]}')
+            return res
+
+        root = ET.parse(tmp).getroot()
+        offers = root.findall('.//offer')
+        res['offers'] = len(offers)
+        if not offers:
+            res['problems'].append('у фіді немає жодного оффера')
+
+        need = ('name', 'name_ua', 'price', 'categoryId', 'portal_category_id',
+                'description', 'description_ua')
+        empty = sum(1 for o in offers for t in need
+                    if not (o.findtext(t) or '').strip())
+        if empty:
+            res['problems'].append(f'порожні обовʼязкові поля: {empty}')
+        big = sum(1 for o in offers if len(o.findall('picture')) > 10)
+        if big:
+            res['problems'].append(f'фото понад 10: {big}')
+        long_name = sum(1 for o in offers
+                        if len(o.findtext('name') or '') > 110)
+        if long_name:
+            res['problems'].append(f'назви понад 110 символів: {long_name}')
+
+        groups = {}
+        for o in offers:
+            if o.get('group_id'):
+                groups.setdefault(o.get('group_id'), []).append(o)
+        dup = sum(1 for v in groups.values()
+                  if len({frozenset((x.get('name'), x.text)
+                                    for x in o.findall('param'))
+                          for o in v}) < len(v))
+        mixed = sum(1 for v in groups.values()
+                    if len({frozenset(x.get('name') for x in o.findall('param'))
+                            for o in v}) > 1)
+        if dup:
+            res['problems'].append(f'різновиди без унікальних значень: {dup}')
+        if mixed:
+            res['problems'].append(f'різновиди з різними наборами ключів: {mixed}')
+
+        if res['problems']:
+            logger.error(f"Фід Prom не пройшов перевірку: "
+                         f"{'; '.join(res['problems'])}")
+            return res
+
+        os.chmod(tmp, 0o644)
+        shutil.move(tmp, PROM_FEED)
+        res['ok'] = True
+        res['seconds'] = round(_t.time() - t0, 1)
+        logger.info(f"Фід Prom зібрано за {res['seconds']}с: "
+                    f"{res['offers']} офферів, {len(groups)} груп різновидів")
+    except subprocess.TimeoutExpired:
+        logger.error('Генерація фіду Prom перевищила ліміт часу')
+    except Exception as e:
+        logger.error(f'regenerate_prom_feed: {e}')
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--quick', action='store_true')
@@ -434,6 +524,8 @@ def main():
                     help='перезібрати фід Єпіцентру і запушити (cron 23:00)')
     ap.add_argument('--publish-rozetka', action='store_true',
                     help='перезібрати фід Rozetka і запушити (cron щогодини)')
+    ap.add_argument('--publish-prom', action='store_true',
+                    help='перезібрати фід Prom і запушити (cron кожні 4 год)')
     ap.add_argument('--dry', action='store_true')
     ap.add_argument('--no-tg', action='store_true')
     ap.add_argument('--no-regen', action='store_true',
@@ -521,8 +613,33 @@ def main():
         gh = publish_github(RZ_FEED, RZ_GH_FILE, RZ_RAW_URL)
         logger.info(f"Rozetka: {feed['offers']} офферів, "
                     f"публікація {'ok' if gh.get('ok') else 'НЕ ВДАЛАСЬ'}")
+        # Заморожуємо ЛИШЕ після успішного push: знімок має відповідати
+        # тому, що Rozetka справді побачила. Якщо публікація не вдалась,
+        # картка на сайті не змінилась — фіксувати нічого.
+        if gh.get('ok'):
+            import subprocess
+            subprocess.run([sys.executable,
+                            os.path.join(BASE_DIR, 'tools',
+                                         'noire_freeze_snapshot.py'),
+                            '--from-feed', RZ_FEED],
+                           capture_output=True, text=True, timeout=600)
         if not gh.get('ok') and not gh.get('skipped') and not a.no_tg:
             tg('❌ <b>NOIRE Rozetka</b>: push у GitHub не вдався')
+    elif a.publish_prom:
+        # Кожні 4 години у вікні 07:00-22:00 — ритм, з яким Prom забирає
+        # прайс за посиланням.
+        feed = regenerate_prom_feed()
+        if not feed.get('ok'):
+            logger.error('Фід Prom не зібрався — публікацію скасовано')
+            if not a.no_tg:
+                tg('❌ <b>NOIRE Prom</b>: фід не зібрався, публікацію '
+                   'скасовано\n' + '; '.join(feed.get('problems', []))[:300])
+            return
+        gh = publish_github(PROM_FEED, PROM_GH_FILE, PROM_RAW_URL)
+        logger.info(f"Prom: {feed['offers']} офферів, "
+                    f"публікація {'ok' if gh.get('ok') else 'НЕ ВДАЛАСЬ'}")
+        if not gh.get('ok') and not gh.get('skipped') and not a.no_tg:
+            tg('❌ <b>NOIRE Prom</b>: push у GitHub не вдався')
     elif a.full:
         st = full_sync(dry=a.dry)
         if not a.no_tg and st['new']:
