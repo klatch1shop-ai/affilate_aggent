@@ -808,6 +808,25 @@ def _unit_candidates(v: str):
 COMPOSITE_SOURCE = 'composite_first_component'
 _composite_trace = []
 
+# Відповідь відділу адаптації (Барановська Ольга, 11.08.2026 08:58):
+#   «Для товарів зі спареним розміром вказуйте в параметрі "Розмір" два
+#    значення (наприклад, S та M), а також зазначайте їх у назві товару.»
+# Тобто «S/M» — це НЕ одне значення й не перша складова, а два окремих теги
+# <param name="Розмір"> у межах того самого оффера. Назва вже містить обидва
+# («Боді Passion ADARA L/XL Чорний»), її не чіпаємо.
+MULTI_VALUE_PARAMS = {'Розмір'}
+_multi_values = {}          # (sku, param) → [значення, значення]
+
+# Один і той самий розмір різні категорії Rozetka називають по-різному:
+# у частині довідників «XXL», у частині «2XL». Постачальник дає обидві форми,
+# тому складову шукаємо і в тому, і в іншому написанні.
+SIZE_FORMS = {
+    'XXL': ['XXL', '2XL'], '2XL': ['2XL', 'XXL'],
+    'XXXL': ['XXXL', '3XL'], '3XL': ['3XL', 'XXXL'],
+    'XXXXL': ['XXXXL', '4XL'], '4XL': ['4XL', 'XXXXL'],
+    '5XL': ['5XL', 'XXXXXL'], '6XL': ['6XL'], '7XL': ['7XL'],
+}
+
 
 def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
                  _sku: str = ''):
@@ -819,6 +838,28 @@ def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
     """
     low = {a.lower(): a for a in allowed}
     v = value.strip()
+
+    def _lookup(part: str):
+        """Складова довідника з урахуванням альтернативних написань розміру."""
+        for form in SIZE_FORMS.get(part.upper(), [part]):
+            hit = vmap.get(form.lower()) or low.get(form.lower())
+            if hit:
+                return hit
+        return None
+
+    # Для «Розмір» розбиття має пріоритет над збігом цілого значення: у частині
+    # категорій довідник містить і сам складений варіант («XXL/XXXL»), і тоді
+    # без цієї перевірки ми повертали б одне значення замість двох, як просить
+    # відділ адаптації.
+    if _param in MULTI_VALUE_PARAMS and re.search(r'[\/]', v):
+        parts = [p.strip() for p in v.split('/') if p.strip()]
+        found = [h for h in (_lookup(p) for p in parts) if h]
+        found = list(dict.fromkeys(found))
+        if len(found) > 1:
+            _composite_trace.append((_sku, _param, v, found[0]))
+            _multi_values[(_sku, _param)] = found
+            return found[0]
+
     if v.lower() in vmap:
         return vmap[v.lower()]
     if v.lower() in low:
@@ -826,15 +867,25 @@ def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
     for cand in _unit_candidates(v):
         if cand.lower() in low:
             return low[cand.lower()]
+    # Збираємо ВСІ складові, що є в довіднику, а не лише першу: для «Розмір»
+    # Rozetka чекає окремий тег на кожну (див. MULTI_VALUE_PARAMS). Повертаємо
+    # усе одно першу — решта логіки (назва, опис) працює зі скалярним значенням.
+    hits, composite = [], False
     for part in re.split(r'[\/,;]|\s+та\s+|\s+і\s+', v):
         part = re.sub(r'^\d+\s*%?\s*', '', part).strip(' .%')
         if not part:
             continue
-        hit = vmap.get(part.lower()) or low.get(part.lower())
-        if hit:
+        hit = _lookup(part)
+        if hit and hit not in hits:
+            hits.append(hit)
             if part.strip().lower() != v.lower():
-                _composite_trace.append((_sku, _param, v, hit))
-            return hit
+                composite = True
+    if hits:
+        if composite:
+            _composite_trace.append((_sku, _param, v, hits[0]))
+        if len(hits) > 1 and _param in MULTI_VALUE_PARAMS:
+            _multi_values[(_sku, _param)] = hits
+        return hits[0]
     return None
 
 
@@ -1068,7 +1119,9 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
 
     stats = {'total': 0, 'skip_price': 0, 'skip_pic': 0, 'skip_params': 0,
              'no_rz_id': 0, 'avail_true': 0, 'avail_false': 0, 'skip_dup': 0,
-             'frozen': 0, 'назву перезібрано': 0}
+             'frozen': 0, 'назву перезібрано': 0,
+             'складених розмірів розбито': 0}
+    _multi_values.clear()
 
     for p in products:
         sku = p['sku']
@@ -1186,7 +1239,13 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             # у робочому фіді Carvol його немає на жодній з 8244 позицій.
             o.append(f'        <description_ua>{esc(desc)}</description_ua>')
         for k, v in prm.items():
-            o.append(f'        <param name="{esc(k)}">{esc(str(v)[:500])}</param>')
+            # Складений розмір — окремий тег на кожну складову (вимога
+            # відділу адаптації), решта параметрів як були.
+            for one in _multi_values.get((sku, k), [v]):
+                o.append(f'        <param name="{esc(k)}">'
+                         f'{esc(str(one)[:500])}</param>')
+            if len(_multi_values.get((sku, k), [v])) > 1:
+                stats['складених розмірів розбито'] += 1
         o.append('      </offer>')
         lines += o
         stats['total'] += 1
