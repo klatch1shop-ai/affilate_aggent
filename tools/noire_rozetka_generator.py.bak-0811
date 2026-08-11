@@ -39,19 +39,13 @@ SHOP_NAME = 'klatch1 shop'
 SHOP_COMPANY = '3721108'
 SHOP_URL = 'https://cs4053918.prom.ua/'
 
-# Власна націнка поверх РРЦ SexOpt, ОКРЕМА для кожного маркетплейсу.
-# Раніше змінна звалась NOIRE_MARKUP і читалась лише тут, тоді як Єпіцентр
-# мав жорстко вшиту одиницю — назва натякала на спільність, якої не було.
-# 1.10 дає простір для акцій: при 1.0 ціна стоїть рівно на беззбитковості,
-# і будь-яка знижка порушує правило SexOpt про мінімальну ціну.
-MARKUP = float(os.getenv('NOIRE_MARKUP_ROZETKA', '1.10'))
+MARKUP = float(os.getenv('NOIRE_MARKUP', '1.0'))
 # Комісія Rozetka для дорослих категорій у rozetka_cpa_rates відсутня —
 # ставка уточнюється в кабінеті. До уточнення діє консервативне значення:
 # краще закласти більше й потім знизити, ніж торгувати в мінус.
 DEFAULT_COMMISSION = float(os.getenv('NOIRE_RZ_COMMISSION', '18.0'))
 
 MIN_PARAMS = 3          # вимога Rozetka
-MAX_NAME = 255          # ліміт назви
 MAX_PICTURES = 15       # вимога Rozetka
 
 # Межа між відкритим словником і закритим переліком значень.
@@ -143,47 +137,6 @@ def calc_price(retail: float, scale, commission: float = None) -> int:
     return max(math.ceil(base / (1 - rate / 100)), math.ceil(base))
 
 
-def load_overrides(cur) -> dict:
-    """sku → ручна ціна, лише для чинних перевизначень.
-
-    Ставить їх tools/noire_price_override.py — акції, реакція на конкурента,
-    точкові правки. Перевизначення з простроченим `until` не беруться: акція
-    має згасати сама, без пам'ятки прибрати її вручну.
-    """
-    try:
-        cur.execute("""SELECT sku, price_manual FROM sexopt_price_override
-                       WHERE until IS NULL OR until >= CURRENT_DATE""")
-        return {r['sku']: int(r['price_manual']) for r in cur.fetchall()}
-    except psycopg2.Error:
-        cur.connection.rollback()
-        return {}
-
-
-def load_snapshots(cur) -> dict:
-    """sku → заморожена картка (усе, крім ціни та наявності).
-
-    Після модерації Rozetka картку не можна змінювати: правити дозволено
-    лише ціну та залишок. Але наш фід перезбирається з бази щогодини, і
-    будь-яка зміна в sexopt_products чи sexopt_extracted_params — оновлення
-    від постачальника, допрогін EasyToys-скрейпера, нове правило в
-    генераторі — мовчки переписала б назву, опис, фото чи характеристики
-    вже опублікованої картки.
-
-    Тому перша успішна публікація фіксує картку: далі з живих даних
-    рахуються тільки <price> і <stock_quantity>/available, решта береться
-    звідси. Розморожування — окремою свідомою командою
-    tools/noire_freeze_snapshot.py --unfreeze.
-    """
-    try:
-        cur.execute("""SELECT sku, rz_id, category_name, name, description,
-                              vendor, pictures, params
-                       FROM rozetka_published_snapshot""")
-        return {r['sku']: r for r in cur.fetchall()}
-    except psycopg2.Error:
-        cur.connection.rollback()
-        return {}
-
-
 def load_mapping(cur) -> dict:
     """sexopt_category_id → (rz_id, rozetka_category_name, cpa_rate)"""
     cur.execute("""
@@ -203,28 +156,23 @@ def load_mapping(cur) -> dict:
 # наших назв у офіційні, окремо для кожної категорії.
 PARAM_ALIAS = {
     '4675911': {          # Лубриканти
-        'Країна бренду': 'Країна реєстрації бренду',
         'Основа засобу': 'Основа',
         'Сумісність з презервативами': 'Сумісність з презервативом',
         'Країна-виробник': 'Країна виробник',
         'Форма': 'Форма випуску',
     },
     '4629824': {          # Презервативи
-        'Країна бренду': 'Країна реєстрації бренда',
         'Країна-виробник': 'Країна виробник',
     },
     '4647534': {          # Еротична білизна
-        'Країна бренду': 'Країна реєстрації бренду',
         'Країна-виробник': 'Країна-виробник товару',
         'Тип товару': 'Тип',
     },
     '4649418': {          # Еротична білизна для чоловіків
-        'Країна бренду': 'Країна реєстрації бренду',
         'Країна-виробник': 'Країна-виробник товару',
         'Тип товару': 'Тип',
     },
     '4657502': {          # Олія для тіла
-        'Країна бренду': 'Країна реєстрації бренда',
         'Країна-виробник': 'Країна-виробник',
         'Тип товару': 'Вид',
     },
@@ -300,19 +248,6 @@ def lingerie_type(name: str):
 # Порядок правил значущий — перше влучання виграє.
 NAME_PARAM_RULES = {
     '4675911': {          # Лубриканти
-        # ── доповнення після листа відділу адаптації Rozetka 10.08.2026 ──
-        'Тип упаковки': [
-            (r'\bсаше\b|пробник|sachet', 'Саше'),
-            (r'з дозатором|помпа-?дозатор|pump', 'Флакон з дозатором'),
-            (r'\bтюбик\b|туба\b', 'Тюбик'),
-        ],
-        'Сумісність з презервативом': [
-            (r'сумісн\w*\s+(з|із)\s+(усіма|всіма)|з усіма типами презерватив'
-             r'|підходить.{0,20}(усіх|всіх) типів презерватив', 'З усіма типами'),
-            (r'сумісн\w*.{0,20}латексн|з латексними презерватив'
-             r'|підходить.{0,20}латексн', 'З латексним'),
-            (r'поліуретанов\w*\s+презерватив', 'З поліуретановим'),
-        ],
         # гібрид перевіряємо першим: «водно-силіконова» містить «водн»
         'Основа': [
             (r'водно-?силікон|гібридн|гибридн|комбінован|\bhybrid\b', 'Водно-силіконова'),
@@ -326,17 +261,6 @@ NAME_PARAM_RULES = {
             (r'крем\b|кремоподібн|\bcream\b', 'Крем'),
             (r'\bгель|гель-|желе|\bjelly\b|\bgel\b', 'Гель'),
         ],
-        'Аромат': [
-            (r'полуниц|strawberry', 'Полуниця'), (r'ваніл|vanilla', 'Ваніль'),
-            (r'кокос|coconut', 'Кокос'), (r'шоколад|chocolate', 'Шоколад'),
-            (r'\bм.ят|mint', 'Мʼята'), (r'вишн|cherry', 'Вишня'),
-            (r'яблук|apple', 'Яблуко'), (r'апельсин|orange', 'Апельсин'),
-            (r'манго|mango', 'Манго'), (r'диня|melon', 'Диня'),
-            (r'банан|banana', 'Банан'), (r'карамел|caramel', 'Карамель'),
-            (r'кав[аи]\b|coffee', 'Кава'), (r'лимон|lemon', 'Лимон'),
-            (r'малин|raspberry', 'Малина'), (r'персик|peach', 'Персик'),
-            (r'виноград|grape', 'Виноград'),
-        ],
         'Призначення': [
             (r'анальн|\banal\b', 'Для анального сексу'),
             (r'їстівн|оральн|зі смаком|\bedible\b', 'Для орального сексу (їстівний лубрикант)'),
@@ -348,22 +272,6 @@ NAME_PARAM_RULES = {
         ],
     },
     '4629824': {          # Презервативи
-        # ── доповнення після листа відділу адаптації Rozetka 10.08.2026 ──
-        'Основа мастила': [
-            (r'без мастил|без змазк|сух(ий|і)\s+презерватив', 'Без мастила'),
-            (r'водно-?силікон|гібридн\w*\s+(основ|мастил|змазк)', 'Водно-силіконова'),
-            (r'силіконов\w*\s*(основ|мастил|змазк|лубрикант)|на силіконов', 'Силіконова'),
-            (r'водн\w*\s*(основ|мастил|змазк|лубрикант)|на водній', 'Водна'),
-        ],
-        'Для кого': [
-            (r'жіноч|для жінок|femidom', 'Для жінок'),
-            (r'чоловіч|для чоловіків', 'Для чоловіків'),
-        ],
-        'Призначення': [
-            (r'анальн', 'Для анального сексу'),
-            (r'оральн|зі смаком|їстівн', 'Для орального сексу (їстівний лубрикант)'),
-            (r'\bузд\b|для узі', 'Для УЗІ'),
-        ],
         'Тип': [
             (r'безлатекс|без латекс|поліуретан|полиуретан', 'Безлатексні'),
             (r'анестетик|пролонг|бензокаїн|benzocaine', 'З анестетиком'),
@@ -452,14 +360,6 @@ NAME_PARAM_RULES = {
             (r'безшовн', 'Безшовна'),
             (r"м.як.{0,4} чашк", "М'яка"),
         ],
-        'Бретелі': [
-            (r'без бретел|безбретел', 'Без бретелей'),
-            (r'бретел.{0,18}трансформер|трансформер\w*\s+бретел', 'Бретелі-трансформери'),
-            (r'(знімн|відстібн)\w*\s+(бретел|лямк)|бретел\w*\s+(знімн|відстібн)', 'Знімні'),
-            (r'регульован\w*\s+(бретел|лямк)|бретел\w*\s+регульован'
-             r'|з регульованими', 'Регульовані'),
-            (r'незнімн\w*\s+бретел|бретел\w*\s+незнімн', 'Незнімні'),
-        ],
         'Форма бюстгальтера': [
             (r'балконет', 'Балконет'), (r'бандо', 'Бандо'),
             (r'бралет', 'Бралет'), (r'трикутн', 'Трикутна'),
@@ -482,13 +382,6 @@ NAME_PARAM_RULES = {
 # описи там радять, з чим носити річ («під пояс для панчіх», «до шортів»),
 # і правило ловило чужу властивість — панчохи ставали «з пажами для панчіх».
 DESC_PARAM_CATS = {'4649418'}
-
-# Характеристики, для яких дозволено читати ОПИС навіть у категоріях, де
-# опис загалом не використовується. Обмеження точкове й перевірене: у жіночій
-# білизні опис радить, з чим носити річ, і правило «Модель» ловило чужу
-# властивість. Але «Бретелі», «Основа мастила» та «Сумісність з презервативом»
-# у назвах не трапляються взагалі — тільки в описі (463, 121 і 76 товарів).
-DESC_ALLOWED_PARAMS = {'Бретелі', 'Основа мастила', 'Сумісність з презервативом'}
 
 # Характеристики, які мають сенс лише для певних типів виробу. Без цієї
 # перевірки «Трусики: Стринги» потрапляли на панчохи, а «Чашка» — на колготки.
@@ -571,102 +464,13 @@ DESC_FEATURE = {
 # тож у характеристику йде лише перша складова. В описі ж пишемо позначення
 # так, як воно стоїть на етикетці — інакше товар S/M виглядав би як просто S.
 SIZE_LABEL = re.compile(
-    r'\b((?:XS|S|M|L|XL|XXL|2XL|3XL|4XL|5XL|6XL|7XL)\s*/\s*'
-    r'(?:S|M|L|XL|XXL|2XL|3XL|XXXL|4XL|5XL|6XL|7XL)'
-    r'|One ?Size|T[1-4]|[1-4]\s*/\s*[2-4]'
-    r'|\b(?:XS|XXL|XXXL|2XL|3XL)\b)', re.I)
+    r'\b((?:XS|S|M|L|XL|XXL|2XL|3XL)\s*/\s*(?:S|M|L|XL|XXL|2XL|3XL|XXXL)'
+    r'|One ?Size|T[1-4])\b', re.I)
 
 
 def size_label(name: str, fallback: str):
     m = SIZE_LABEL.search(name or '')
     return re.sub(r'\s*/\s*', '/', m.group(1)) if m else fallback
-
-
-# ── Складання назви товару за вимогою Rozetka ──────────────────────────────
-# Відділ адаптації (лист 10.08.2026) вимагає порядок:
-#     Тип - Виробник - Модель - Розмір - Колір - Артикул у дужках
-# і окремо: «коми в назвах не ставляться», «виробник у назві має збігатися
-# зі значенням <vendor>».
-#
-# Назви постачальника цього не тримають: 2585 з 3731 містять коми, а тип,
-# розмір і колір стоять у довільному порядку впереміш із описом
-# («Комплект білизни Passion MELISSA BIKINI S/M, black, ліф зі шнурівкою
-# і трусики стрінги»). Тому назву не правимо текстово, а СКЛАДАЄМО з полів,
-# які вже маємо як окремі характеристики — і коми зникають самі собою.
-#
-# Розмір беремо СКЛАДЕНИЙ, як у назві постачальника («L/XL», а не «L»):
-# живі картки каталогу Rozetka роблять так само («Passion Nancy Body
-# Чорний L/XL», «Passion MALWIA BIKINI 6XL/7XL»). Характеристика «Розмір»
-# лишається обрізаною, бо в довіднику складених значень немає — це різні
-# поля з різними правилами.
-
-# Слова, з яких постачальник починає назву; прибираємо їх з моделі, бо тип
-# ставимо окремо й з довідника
-# Модель у цьому каталозі майже завжди латиницею: «ADARA BODY»,
-# «MELISSA BIKINI», «TI019», «Lora», «Hydro 7». Кирилиця в назві — це тип,
-# матеріал і опис, тобто те, що ми й так віддаємо окремими характеристиками.
-# Тому модель беремо як послідовність латинських токенів, а не вирізанням
-# усього зайвого: так надійніше, ніж перелічувати сотні описових слів.
-_LATIN_RUN = re.compile(r"[A-Za-z0-9][A-Za-z0-9''\-\.&+]*")
-_STOP_LATIN = {'fishnet', 'set', 'body', 'bikini', 'panty', 'bra', 'top',
-               'ml', 'den', 'new', 'the', 'and', 'for', 'with', 'plus',
-               'black', 'white', 'red', 'pink', 'blue', 'green', 'nero',
-               'bianco', 'rosso', 'ecru', 'nude', 'gold', 'silver'}
-
-
-def _model_from(name: str, vendor: str) -> str:
-    """Модель — латинська частина назви без бренду, розміру й кольору."""
-    head = (name or '').split(',')[0]
-    if vendor:
-        head = re.sub(re.escape(vendor), ' ', head, flags=re.I)
-    head = SIZE_LABEL.sub(' ', head)
-    vend_tokens = {t.lower() for t in _LATIN_RUN.findall(vendor or '')}
-
-    toks, seen = [], set()
-    for t in _LATIN_RUN.findall(head):
-        low = t.lower()
-        if low in vend_tokens or low in seen:
-            continue
-        if re.fullmatch(r'\d+([.,]\d+)?', t):      # обʼєм і розміри — окремо
-            continue
-        seen.add(low)
-        toks.append(t)
-    # службові латинські слова лишаємо лише якщо без них моделі не стане
-    core = [t for t in toks if t.lower() not in _STOP_LATIN]
-    return ' '.join(core or toks)[:80].strip()
-
-
-# Для категорій, де довідник Rozetka не має «Типу» (лубриканти, олії),
-# тип беремо з назви категорії — інакше назва почалася б з бренду.
-CATEGORY_KIND = {
-    '4675911': 'Лубрикант', '4629824': 'Презервативи',
-    '4657502': 'Олія для тіла', '4674103': 'Засіб для догляду',
-}
-
-
-def build_name(raw_name: str, vendor: str, prm: dict, sku: str,
-               rz_id: str = '') -> str:
-    """Тип · Виробник · Модель · Розмір · Колір · (Артикул), без ком."""
-    parts = []
-    kind = prm.get('Тип') or prm.get('Вид') or CATEGORY_KIND.get(rz_id)
-    if kind:
-        parts.append(kind)
-    if vendor:
-        parts.append(vendor)                       # має збігатися з <vendor>
-    model = _model_from(raw_name, vendor)
-    if model and model.lower() != (kind or '').lower():
-        parts.append(model)
-    if size := size_label(raw_name, prm.get('Розмір')):
-        parts.append(size)
-    if volume := prm.get("Об'єм"):
-        parts.append(volume)
-    if color := prm.get('Колір'):
-        parts.append(color)
-    name = re.sub(r'\s+', ' ', ' '.join(p for p in parts if p)).strip()
-    tail = f' ({sku})'
-    if len(name) + len(tail) > MAX_NAME:
-        name = name[:MAX_NAME - len(tail)].rsplit(' ', 1)[0]
-    return (name + tail).replace(',', '')
 
 
 def synth_description(name: str, prm: dict, vendor: str) -> str:
@@ -715,18 +519,10 @@ def _first_match(rules, text):
     return None
 
 
-def params_from_name(text: str, rz_id: str, desc: str = '') -> dict:
-    """Характеристики з назви; для окремих — ще й з опису.
-
-    Опис читається лише для DESC_ALLOWED_PARAMS: у назвах цих ознак немає
-    взагалі, а суцільне читання опису дає хибні спрацювання (панчохи
-    діставали «З пажами для панчіх», бо опис радив, з чим їх носити).
-    """
+def params_from_name(text: str, rz_id: str) -> dict:
     out = {}
     for pname, rules in NAME_PARAM_RULES.get(rz_id, {}).items():
         val = _first_match(rules, text)
-        if not val and desc and pname in DESC_ALLOWED_PARAMS:
-            val = _first_match(rules, desc)
         if val:
             out[pname] = val
     return out
@@ -799,18 +595,7 @@ def _unit_candidates(v: str):
     return [f'{num} {u}' for u in ([unit] if unit else ['мл', 'г', 'л'])]
 
 
-# Сюди пишемо кожен випадок, коли зі складеного значення взято першу
-# складову. Це технічний дефолт, а не остаточне рішення: у довіднику Rozetka
-# складених розмірів («S/M», «L/XL») немає взагалі, тож характеристика
-# інакше не пройшла б. Питання про правильну конвенцію поставлене відділу
-# адаптації; до відповіді значення позначені джерелом, щоб їх можна було
-# знайти й переграти одним запитом.
-COMPOSITE_SOURCE = 'composite_first_component'
-_composite_trace = []
-
-
-def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
-                 _sku: str = ''):
+def _match_value(value: str, allowed: list, vmap: dict):
     """Підібрати значення зі списку довідника.
 
     Постачальник часто дає складені значення: «S/M», «Тканина, Латекс»,
@@ -830,15 +615,14 @@ def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
         part = re.sub(r'^\d+\s*%?\s*', '', part).strip(' .%')
         if not part:
             continue
-        hit = vmap.get(part.lower()) or low.get(part.lower())
-        if hit:
-            if part.strip().lower() != v.lower():
-                _composite_trace.append((_sku, _param, v, hit))
-            return hit
+        if part.lower() in vmap:
+            return vmap[part.lower()]
+        if part.lower() in low:
+            return low[part.lower()]
     return None
 
 
-def fit_params(raw: dict, rz_id: str, official: dict, _sku: str = '') -> dict:
+def fit_params(raw: dict, rz_id: str, official: dict) -> dict:
     """Лишити тільки те, що Rozetka справді покаже.
 
     Суворість тут асиметрична, і це не недогляд — так написано в довідці
@@ -874,8 +658,7 @@ def fit_params(raw: dict, rz_id: str, official: dict, _sku: str = '') -> dict:
         off_name, allowed = hit
         if len(allowed) > 1:
             matched = _match_value(v, allowed,
-                                   VALUE_ALIAS.get((rz_id, off_name), {}),
-                                   off_name, _sku)
+                                   VALUE_ALIAS.get((rz_id, off_name), {}))
             if matched is None:
                 if len(allowed) < OPEN_VOCABULARY:
                     continue        # закритий перелік — своє значення тут хибне
@@ -966,48 +749,6 @@ def load_params(cur, skus: list) -> dict:
     return out
 
 
-def _save_composite_trace(out_file):
-    """Скласти трасування складених значень у БД.
-
-    Пишемо ЗАВЖДИ, навіть коли фід іде в тимчасовий файл: сенс таблиці —
-    відповісти на питання «звідки взялося це значення» будь-коли, а не
-    тільки після публікації.
-    """
-    if not _composite_trace:
-        return
-    try:
-        conn = get_connection()
-        cur = conn.cursor()
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS noire_param_assumptions (
-                sku        TEXT NOT NULL,
-                param_name TEXT NOT NULL,
-                raw_value  TEXT NOT NULL,
-                used_value TEXT NOT NULL,
-                source     TEXT NOT NULL,
-                feed       TEXT,
-                noted_at   TIMESTAMPTZ DEFAULT NOW(),
-                PRIMARY KEY (sku, param_name, source)
-            )
-        """)
-        psycopg2.extras.execute_values(cur, """
-            INSERT INTO noire_param_assumptions
-              (sku, param_name, raw_value, used_value, source, feed)
-            VALUES %s
-            ON CONFLICT (sku, param_name, source) DO UPDATE SET
-              raw_value=EXCLUDED.raw_value, used_value=EXCLUDED.used_value,
-              feed=EXCLUDED.feed, noted_at=NOW()
-        """, [(sku, p, raw, used, COMPOSITE_SOURCE, os.path.basename(out_file))
-              for sku, p, raw, used in _composite_trace], page_size=500)
-        conn.commit()
-        logger.info(f'Трасування складених значень: {len(_composite_trace)} '
-                    f'записів, source={COMPOSITE_SOURCE}')
-        cur.close()
-        conn.close()
-    except Exception as e:
-        logger.warning(f'Трасування не збережено: {e}')
-
-
 def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
              synth_desc=True):
     conn = get_connection()
@@ -1015,9 +756,7 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     mapping = load_mapping(cur)
     official = load_official(cur)
     easytoys = load_easytoys(cur)
-    snapshots = load_snapshots(cur)
     tariffs = load_tariffs(cur)
-    overrides = load_overrides(cur)
     if not mapping:
         logger.error('rozetka_category_mapping порожній для source=noire')
         return 0
@@ -1046,12 +785,6 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         if rzname not in rz_used:
             rz_used[rzname] = (len(rz_used) + 1, rz)
         local_id[sid] = rz_used[rzname][0]
-    # Категорія замороженої картки могла зникнути з поточного мапінгу —
-    # блок <categories> усе одно мусить її містити, інакше товар лишиться
-    # без categoryId.
-    for snap in snapshots.values():
-        if snap['category_name'] not in rz_used:
-            rz_used[snap['category_name']] = (len(rz_used) + 1, snap['rz_id'])
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              f'<yml_catalog date="{datetime.now():%Y-%m-%d %H:%M}">',
@@ -1067,8 +800,7 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     lines += ['    </categories>', '    <offers>']
 
     stats = {'total': 0, 'skip_price': 0, 'skip_pic': 0, 'skip_params': 0,
-             'no_rz_id': 0, 'avail_true': 0, 'avail_false': 0, 'skip_dup': 0,
-             'frozen': 0, 'назву перезібрано': 0}
+             'no_rz_id': 0, 'avail_true': 0, 'avail_false': 0, 'skip_dup': 0}
 
     for p in products:
         sku = p['sku']
@@ -1076,11 +808,6 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             stats['skip_dup'] += 1
             continue
         rz, rzname, rate = mapping[p['category_id']]
-        snap = snapshots.get(sku)
-        if snap:
-            # Картка вже на сайті: категорія теж заморожена, бо саме в ній
-            # товар пройшов модерацію — а разом з нею і тарифний тир.
-            rz, rzname = snap['rz_id'], snap['category_name']
         if not rz and not include_unmapped:
             stats['no_rz_id'] += 1
             continue
@@ -1089,23 +816,11 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         if price <= 0:
             stats['skip_price'] += 1
             continue
-
-        if snap:
-            # Жоден фільтр вмісту тут не застосовуємо. Якщо у постачальника
-            # зникло фото чи характеристика, викидати опубліковану позицію
-            # з фіду не можна — для Rozetka це зняття товару з продажу.
-            pics = list(snap['pictures'] or [])
-            prm = dict(snap['params'] or {})
-            vendor_frozen = snap['vendor']
-            desc_frozen = snap['description']
-            stats['frozen'] += 1
-        else:
-            pics = [u for u in (p['pictures'] or []) if u][:MAX_PICTURES]
-            if not pics:
-                stats['skip_pic'] += 1
-                continue
-            vendor_frozen = desc_frozen = None
-        name = snap['name'] if snap else NAME_OVERRIDE.get(sku, p['name'] or '')
+        pics = [u for u in (p['pictures'] or []) if u][:MAX_PICTURES]
+        if not pics:
+            stats['skip_pic'] += 1
+            continue
+        name = NAME_OVERRIDE.get(sku, p['name'] or '')
         raw = dict(params.get(sku, {}))
         for k, v in easytoys.get(sku, {}).items():
             raw.setdefault(k, v)          # дані постачальника мають пріоритет
@@ -1122,8 +837,7 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         src = name
         if rz in DESC_PARAM_CATS:
             src += ' ' + re.sub(r'<[^>]+>', ' ', p['description_html'] or '')
-        plain_desc = re.sub(r'<[^>]+>', ' ', p['description_html'] or '')
-        for k, v in params_from_name(src, rz, plain_desc).items():
+        for k, v in params_from_name(src, rz).items():
             gate = TYPE_GATE.get(k)
             if gate and raw.get('Тип') not in gate:
                 continue
@@ -1139,30 +853,21 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             raw.setdefault('Країна-виробник', p['country'].split('(')[0].strip())
         if vendor_country := _brand_country(p['vendor']):
             raw.setdefault('Країна бренду', vendor_country)
-        if not snap:
-            prm = fit_params(raw, rz, official, sku)
-            if len(prm) < MIN_PARAMS:
-                stats['skip_params'] += 1
-                continue
+        prm = fit_params(raw, rz, official)
+        if len(prm) < MIN_PARAMS:
+            stats['skip_params'] += 1
+            continue
 
         avail = p['available'] is None or bool(p['available'])
         stats['avail_true' if avail else 'avail_false'] += 1
         commission = float(rate) if rate else DEFAULT_COMMISSION
         scale = tariffs.get(rz)
-        vendor = (vendor_frozen if snap
-                  else (p['vendor'] or '').split('(')[0].strip())
-        # Назву складаємо з полів у порядку, який вимагає відділ адаптації.
-        # Заморожені картки не чіпаємо: там назва вже пройшла модерацію.
-        if not snap:
-            rebuilt = build_name(name, vendor, prm, sku, rz)
-            if rebuilt != name:
-                stats['назву перезібрано'] += 1
-            name = rebuilt
+        vendor = (p['vendor'] or '').split('(')[0].strip()
 
         o = [f'      <offer id="{esc(sku)}" available="{"true" if avail else "false"}">',
-             f'        <price>{overrides.get(sku) or calc_price(price, scale, commission)}</price>',
+             f'        <price>{calc_price(price, scale, commission)}</price>',
              '        <currencyId>UAH</currencyId>',
-             f'        <categoryId>{rz_used[rzname][0]}</categoryId>']
+             f'        <categoryId>{local_id[p["category_id"]]}</categoryId>']
         o += [f'        <picture>{esc(u)}</picture>' for u in pics]
         if vendor:
             o.append(f'        <vendor>{esc(vendor)}</vendor>')
@@ -1177,9 +882,8 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
                  f'</stock_quantity>')
         o.append(f'        <name_ua>{esc(name)}</name_ua>')
         o.append(f'        <name>{esc(name)}</name>')
-        desc = (desc_frozen if snap
-                else (p['description_html'] or '').strip())
-        if not desc and not snap and synth_desc:
+        desc = (p['description_html'] or '').strip()
+        if not desc and synth_desc:
             desc = synth_description(name, prm, p['vendor'])
         if desc:
             # Тільки description_ua: другий тег дублював той самий текст,
@@ -1196,15 +900,11 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     with open(out_file, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines))
 
-    _save_composite_trace(out_file)
     logger.success(f'Згенеровано офферів: {stats["total"]} → {out_file}')
     logger.info(f"  available true/false : {stats['avail_true']}/{stats['avail_false']}")
     logger.info(f"  пропущено без ціни   : {stats['skip_price']}")
     logger.info(f"  пропущено без фото   : {stats['skip_pic']}")
     logger.info(f"  пропущено <3 характеристик: {stats['skip_params']}")
-    if stats['frozen']:
-        logger.info(f"  заморожених карток      : {stats['frozen']} "
-                    f"(з живих даних лише ціна й наявність)")
     if stats['skip_dup']:
         logger.info(f"  пропущено дублів артикула : {stats['skip_dup']}")
     if stats['no_rz_id']:
