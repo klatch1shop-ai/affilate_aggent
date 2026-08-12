@@ -422,6 +422,31 @@ def load_overrides(cur) -> dict:
         return {}
 
 
+def load_ru(cur) -> dict:
+    """Російський контент постачальника (окремий фід import-retail-2.xml).
+
+    У Prom `<name>`/`<description>` — це РОСІЙСЬКІ поля, а `_ua` — українські.
+    Доти сюди клався той самий український текст, і картка мала два однакові
+    описи. Дослідження прямо називає це причиною блокування в Google Merchant
+    Center, а Prom вважає дублюванням контенту.
+
+    Fallback свідомий: якщо російського тексту немає (703 позиції) або він
+    насправді український (`is_ru = false`), лишаємо українську версію —
+    порожнє поле гірше за дубль, бо без пари `description`/`description_ua`
+    Prom не застосує ані українську назву, ані опис.
+    """
+    try:
+        cur.execute("""SELECT sku, name_ru, description_ru, is_ru
+                       FROM sexopt_products_ru""")
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('sexopt_products_ru недоступна — рос. текст = укр.')
+        return {}
+    out = {r['sku']: r for r in cur.fetchall()}
+    logger.info(f'Російських карток завантажено: {len(out)}')
+    return out
+
+
 def load_keywords() -> dict:
     """Пошукові запити з Рівня 1 (tools/prom_keywords.py + prom_kw_finalize).
 
@@ -463,6 +488,7 @@ def generate(out_file=OUT, limit=None):
     overrides = load_overrides(cur)
     unknown_vendors = load_unknown_vendors(cur)
     keywords = load_keywords()
+    ru = load_ru(cur)
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
 
@@ -578,8 +604,20 @@ def generate(out_file=OUT, limit=None):
             attr = (f'      <offer id="{esc(sku)}" available="true" '
                     f'selling_type="r"'
                     + (f' group_id="{group_id}"' if group_id else '') + '>')
+            # <name>/<description> — російські поля Prom, `_ua` — українські
+            rr = ru.get(sku) or {}
+            name_ru = (rr.get('name_ru') or '').strip() if rr.get('is_ru') else ''
+            # Ліміт 110 символів діє на обидві мови, а російська назва
+            # довша за українську на префіксах на кшталт «Мастурбатор-яйцо».
+            if len(name_ru) > MAX_NAME:
+                name_ru = name_ru[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
+                st['назву рос. вкорочено'] += 1
+            if name_ru:
+                st['назва рос. з окремого фіду'] += 1
+            else:
+                st['назва рос. = укр. (немає перекладу)'] += 1
             o = [attr,
-                 f'        <name>{esc(name)}</name>',
+                 f'        <name>{esc(name_ru or name)}</name>',
                  f'        <name_ua>{esc(name)}</name_ua>']
             o += [f'        <picture>{esc(u)}</picture>' for u in pics]
             o += [f'        <price>{price}</price>',
@@ -597,7 +635,12 @@ def generate(out_file=OUT, limit=None):
                      f'</quantity_in_stock>')
             # description і description_ua ЗАВЖДИ разом: без пари Prom не
             # застосує ані український опис, ані українську назву.
-            o.append(f'        <description>{cdata(desc)}</description>')
+            desc_ru = strip_links((rr.get('description_ru') or '').strip(), st)
+            if desc_ru:
+                st['опис рос. з окремого фіду'] += 1
+            else:
+                st['опис рос. = укр. (немає перекладу)'] += 1
+            o.append(f'        <description>{cdata(desc_ru or desc)}</description>')
             o.append(f'        <description_ua>{cdata(desc)}</description_ua>')
             if kw := keywords.get(sku):
                 o.append(f'        <keywords>{esc(kw)}</keywords>')
