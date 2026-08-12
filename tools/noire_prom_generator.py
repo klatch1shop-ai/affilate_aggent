@@ -153,6 +153,35 @@ def strip_links(text: str, stats=None):
     return out.strip()
 
 
+def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
+    """Пошукові запити для РОСІЙСЬКОГО поля.
+
+    Українські фрази в російському полі не працюють на російськомовний
+    пошук, тому будуємо окремий набір із російської назви постачальника:
+    перші слова назви + бренд. Категорійних фраз тут немає свідомо — наш
+    довідник типів україномовний, а вигадувати переклад не можна.
+    """
+    name_ru = (ru_row or {}).get('name_ru') or ''
+    if not name_ru or not (ru_row or {}).get('is_ru'):
+        return ''
+    t = name_ru.split(vendor)[0] if vendor and vendor in name_ru else name_ru
+    t = re.split(r'[,(]', t)[0]
+    words = [w for w in t.split()
+             if w and not w.isdigit() and not re.fullmatch(r'[A-Za-z0-9\-.]+', w)]
+    out = []
+    head = ' '.join(words[:2]).strip().lower()
+    if head and vendor:
+        out.append(f'{head} {vendor}'.lower())
+    if head and len(head.split()) >= 2:
+        out.append(head)
+    seen, res = set(), []
+    for x in out:
+        if 2 <= len(x.split()) <= 4 and x not in seen:
+            seen.add(x)
+            res.append(x)
+    return ', '.join(res[:MIN_KEYWORDS + 2])[:MAX_KEYWORDS]
+
+
 def calc_price(retail: float, commission: float) -> int:
     """Ціна продажу = РРЦ постачальника напряму, без gross-up на комісію.
 
@@ -557,6 +586,32 @@ def load_ru(cur) -> dict:
     return out
 
 
+def load_dimensions(cur) -> dict:
+    """epicentr_code → (вага_г, ширина_мм, висота_мм, довжина_мм).
+
+    Габарити потрібні Promу для розрахунку доставки; порожні поля змушують
+    систему брати середні по категорії, і це може заблокувати відправку
+    поштоматом через штучне перевищення розмірів (SKILL-14.2).
+
+    Джерело — та сама таблиця, що вже працює для Єпіцентру. Значення
+    оцінкові (`source='estimated'`) і описують ПАКОВАННЯ, тому беруться
+    комплектом: змішувати реальну довжину товару з оцінковою шириною
+    паковання означало б отримати неузгоджений набір.
+    """
+    try:
+        cur.execute("""SELECT epicentr_category_code ec, weight_g, width_mm,
+                              height_mm, length_mm
+                       FROM epicentr_default_dimensions""")
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('epicentr_default_dimensions недоступна — габарити порожні')
+        return {}
+    out = {r['ec']: (r['weight_g'], r['width_mm'], r['height_mm'], r['length_mm'])
+           for r in cur.fetchall()}
+    logger.info(f'Категорійних габаритів завантажено: {len(out)}')
+    return out
+
+
 def load_keywords() -> dict:
     """Пошукові запити з Рівня 1 (tools/prom_keywords.py + prom_kw_finalize).
 
@@ -598,6 +653,7 @@ def generate(out_file=OUT, limit=None):
     overrides = load_overrides(cur)
     unknown_vendors = load_unknown_vendors(cur)
     keywords = load_keywords()
+    dims = load_dimensions(cur)
     ru = load_ru(cur)
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
@@ -752,11 +808,37 @@ def generate(out_file=OUT, limit=None):
                 st['опис рос. = укр. (немає перекладу)'] += 1
             o.append(f'        <description>{cdata(desc_ru or desc)}</description>')
             o.append(f'        <description_ua>{cdata(desc)}</description_ua>')
+            # <keywords> — РОСІЙСЬКЕ поле кабінету, <keywords_ua> —
+            # українське. Обидва задокументовані в специфікації YML. Доти
+            # українські фрази йшли в російське поле, і українська пошукова
+            # аудиторія не бачила жодного нашого ключа.
             if kw := keywords.get(sku):
-                o.append(f'        <keywords>{esc(kw)}</keywords>')
-                st['з пошуковими запитами'] += 1
+                o.append(f'        <keywords_ua>{esc(kw)}</keywords_ua>')
+                st['пошукові запити укр.'] += 1
+                kw_ru = ru_keywords(kw, rr, vendor)
+                if kw_ru:
+                    o.append(f'        <keywords>{esc(kw_ru)}</keywords>')
+                    st['пошукові запити рос.'] += 1
             else:
                 st['без пошукових запитів'] += 1
+
+            if dim := dims.get(p['ec']):
+                w_g, wd, ht, ln = dim
+                # реальна довжина товару може перевищувати оцінку паковання —
+                # тоді паковання не може бути коротшим
+                real = _number((params.get(sku) or {}).get('Довжина (мм)', ''))
+                if real and real > (ln or 0):
+                    ln = real
+                o.append('        <dimensions>')
+                if w_g:
+                    o.append(f'          <weight unit="kg">{w_g / 1000:g}</weight>')
+                for tag, mm in (('width', wd), ('height', ht), ('length', ln)):
+                    if mm:
+                        o.append(f'          <{tag} unit="cm">{mm / 10:g}</{tag}>')
+                o.append('        </dimensions>')
+                st['габарити проставлено'] += 1
+            else:
+                st['габаритів немає (категорія не в довіднику)'] += 1
             for k, v in list(prm.items())[:MAX_PARAMS]:
                 o.append(f'        <param name="{esc(k)}">{esc(v)}</param>')
             o.append('      </offer>')
