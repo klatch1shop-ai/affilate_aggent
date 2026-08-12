@@ -153,6 +153,26 @@ def strip_links(text: str, stats=None):
     return out.strip()
 
 
+_PACK_RE = re.compile(r'(\d{1,4})\s*шт', re.I)
+
+
+def pack_scale(name: str) -> float:
+    """Множник габаритів для наборів «N шт».
+
+    Категорійний дефолт описує звичайну пачку. Набір презервативів на 100
+    штук фізично більший у рази, і занижені габарити дали б неправильну
+    вартість доставки на позиції до 20 000 грн. Масштабуємо за коренем
+    кубічним від кількості: обʼєм росте лінійно, лінійний розмір — як корінь.
+    """
+    m = _PACK_RE.search(name or '')
+    if not m:
+        return 1.0
+    n = int(m.group(1))
+    if n < 24:
+        return 1.0
+    return min((n / 12) ** (1 / 3), 3.0)
+
+
 def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
     """Пошукові запити для РОСІЙСЬКОГО поля.
 
@@ -824,6 +844,13 @@ def generate(out_file=OUT, limit=None):
 
             if dim := dims.get(p['ec']):
                 w_g, wd, ht, ln = dim
+                k = pack_scale(name)
+                if k > 1:
+                    w_g = int(w_g * k ** 3) if w_g else w_g
+                    wd = int(wd * k) if wd else wd
+                    ht = int(ht * k) if ht else ht
+                    ln = int(ln * k) if ln else ln
+                    st['габарити масштабовано під набір'] += 1
                 # реальна довжина товару може перевищувати оцінку паковання —
                 # тоді паковання не може бути коротшим
                 real = _number((params.get(sku) or {}).get('Довжина (мм)', ''))
