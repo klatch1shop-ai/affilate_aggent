@@ -40,7 +40,9 @@ OUTPUT_FILE = os.path.join(BASE_DIR, 'exports', 'noire_epicentr.xml')
 # Скоригуй MARKUP під власну маржу перед першим реальним імпортом.
 # За замовчуванням 1.0 = ціна постачальника без додаткової надбавки.
 
-MARKUP = 1.0
+# Власна націнка поверх РРЦ SexOpt. Окрема від Rozetka: там 1.10, тут
+# свідомо 1.0 — перша партія вже опублікована за цими цінами.
+MARKUP = float(os.getenv('NOIRE_MARKUP_EPICENTR', '1.0'))
 
 # Джерело: epicentr_cpa_rates. Ставка залежить від КОРЕНЕВОЇ гілки, а не від
 # конкретної категорії:
@@ -548,9 +550,13 @@ def escape_xml(text) -> str:
 
 
 def calc_sell_price(retail: float, cat_code: str) -> float:
-    """Ціна продажу = ціна постачальника × MARKUP, gross-up на комісію Єпіцентру, округлення вгору до 10 грн."""
-    comm = EPICENTR_COMMISSION.get(cat_code, DEFAULT_COMMISSION)
-    return math.ceil(retail * MARKUP / (1 - comm / 100) / 10) * 10
+    """Ціна продажу = РРЦ постачальника напряму, без gross-up на комісію.
+
+    Рішення власника 11.08.2026: комісію несе бізнес, не покупець. Разом із
+    gross-up знято й округлення вгору до 10 грн — воно піднімало ціну ще на
+    до 9.99 грн понад РРЦ, а домовленість саме «РРЦ напряму».
+    """
+    return math.ceil(retail * MARKUP)
 
 
 # Різне написання тієї самої країни в даних постачальника → назва в довіднику
@@ -789,9 +795,16 @@ def load_extracted_params(conn) -> dict[str, dict[str, tuple[str, str]]]:
     """
     source_priority = {'classification_regex': 1, 'regex_description': 2}
     cur = conn.cursor()
+    # rozetka_boost сюди не пускаємо. Ці значення писались під вільні пари
+    # Rozetka й не мають кодів атрибутів Єпіцентру, тому потрапляли у фід як
+    # paramcode="" — атрибут ніби заповнений, а насправді невидимий для
+    # валідатора. Саме так 19 презервативів дістали «Кількість в упаковці»
+    # зі значенням «1 шт» і порожнім кодом замість коду 2847 з числом, і
+    # заразом заблокували підстановку правильного дефолту.
     cur.execute("""
         SELECT sku, param_name, param_code, param_value, source
         FROM sexopt_extracted_params
+        WHERE source IS DISTINCT FROM 'rozetka_boost'
         ORDER BY sku, id
     """)
     result: dict[str, dict[str, tuple[str, str, str]]] = {}
