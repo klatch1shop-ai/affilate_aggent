@@ -173,6 +173,49 @@ def pack_scale(name: str) -> float:
     return min((n / 12) ** (1 / 3), 3.0)
 
 
+_CAPS_OK = {'BDSM', 'БДСМ', 'XL', 'XXL', 'USB', 'LED', 'ABS', 'TPE', 'TPR',
+            'PVC', 'ПВХ', 'IPX', '3D', '2D', 'DVD', 'CD', 'UV', 'SM'}
+
+
+def fix_caps(name: str, vendor: str) -> str:
+    """Прибрати надлишковий капс, лишивши фірмове написання бренду.
+
+    Визначення капсу тут ТЕ САМЕ, що у валідаторі (`prom_validator._is_all_caps`):
+    слово з великою літерою й без жодної малої, включно з дволітерними («JO»)
+    та з цифрами («H2O»). Перша версія рахувала інакше — лише алфавітні слова
+    довші за 2 символи — і через це 92 назви лишились із помилкою.
+
+    Нормалізуємо не все підряд: слова бренду лишаються як є, решта переходить
+    у Title Case, і рівно стільки, щоб капсових лишилось не більше трьох.
+    """
+    words = name.split()
+    if len(words) <= 3:
+        return name
+
+    def is_caps(w):
+        return bool(re.search(r'[А-ЯЁІЇЄA-Z]', w)) and not re.search(r'[а-яёіїєa-z]', w)
+
+    caps = [w for w in words if is_caps(w)]
+    if len(caps) <= 3:
+        return name
+
+    vt = {x.upper() for x in (vendor or '').split()}
+    # спершу знижуємо ті, що не належать бренду й не є короткими абревіатурами
+    order = sorted(range(len(words)),
+                   key=lambda k: (words[k].upper() in vt,
+                                  words[k].upper() in _CAPS_OK,
+                                  len(words[k]) <= 3))
+    need = len(caps) - 3
+    out = list(words)
+    for k in order:
+        if need <= 0:
+            break
+        if is_caps(out[k]) and out[k].isalpha():
+            out[k] = out[k].capitalize()
+            need -= 1
+    return ' '.join(out)
+
+
 def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
     """Пошукові запити для РОСІЙСЬКОГО поля.
 
@@ -804,6 +847,10 @@ def generate(out_file=OUT, limit=None):
             # серія Doc Johnson «Girls of Social Media», де модель названа
             # нікнеймом (@viking.barbie). Знімаємо лише «@»: сам токен — це
             # ідентифікатор моделі, без нього товар не відрізнити від сусіднього.
+            fixed = fix_caps(name, (p['vendor'] or '').strip())
+            if fixed != name:
+                name = fixed
+                st['капс у назві нормалізовано'] += 1
             if '@' in name:
                 name = re.sub(r'@(?=\w)', '', name)
                 st['«@» прибрано з назви'] += 1
@@ -857,6 +904,7 @@ def generate(out_file=OUT, limit=None):
             name_ru = (rr.get('name_ru') or '').strip() if rr.get('is_ru') else ''
             # Ліміт 110 символів діє на обидві мови, а російська назва
             # довша за українську на префіксах на кшталт «Мастурбатор-яйцо».
+            name_ru = fix_caps(name_ru, (p['vendor'] or '').strip())
             if len(name_ru) > MAX_NAME:
                 name_ru = name_ru[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
                 st['назву рос. вкорочено'] += 1
