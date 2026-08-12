@@ -177,9 +177,15 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
     """Пошукові запити для РОСІЙСЬКОГО поля.
 
     Українські фрази в російському полі не працюють на російськомовний
-    пошук, тому будуємо окремий набір із російської назви постачальника:
-    перші слова назви + бренд. Категорійних фраз тут немає свідомо — наш
-    довідник типів україномовний, а вигадувати переклад не можна.
+    пошук. Будуємо окремий набір із російської назви постачальника —
+    єдиного джерела російського тексту, яке в нас є. Категорійних фраз
+    немає свідомо: наш довідник типів україномовний, а вигадувати переклад
+    типу товару не можна (SKILL-14.8).
+
+    Три шаблони, усі з тієї самої назви:
+      «перші два слова + бренд», «перші два слова», «перші три слова».
+    Плюс «бренд + модель», якщо в назві є латинська модель — така фраза
+    мовно нейтральна й працює в обох мовах.
     """
     name_ru = (ru_row or {}).get('name_ru') or ''
     if not name_ru or not (ru_row or {}).get('is_ru'):
@@ -188,18 +194,31 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
     t = re.split(r'[,(]', t)[0]
     words = [w for w in t.split()
              if w and not w.isdigit() and not re.fullmatch(r'[A-Za-z0-9\-.]+', w)]
-    out = []
-    head = ' '.join(words[:2]).strip().lower()
-    if head and vendor:
-        out.append(f'{head} {vendor}'.lower())
-    if head and len(head.split()) >= 2:
-        out.append(head)
+    head2 = ' '.join(words[:2]).strip()
+    head3 = ' '.join(words[:3]).strip()
+    model = ''
+    m = re.search(re.escape(vendor) + r'\s+([A-Za-z][A-Za-z0-9\-]+)', name_ru) \
+        if vendor else None
+    if m:
+        model = m.group(1)
+
+    cand = []
+    if head2 and vendor:
+        cand.append(f'{head2} {vendor}')
+    if vendor and model:
+        cand.append(f'{vendor} {model}')
+    if head3:
+        cand.append(head3)
+    if head2:
+        cand.append(head2)
+
     seen, res = set(), []
-    for x in out:
+    for x in cand:
+        x = re.sub(r'\s+', ' ', x).strip().lower()
         if 2 <= len(x.split()) <= 4 and x not in seen:
             seen.add(x)
             res.append(x)
-    return ', '.join(res[:MIN_KEYWORDS + 2])[:MAX_KEYWORDS]
+    return ', '.join(res[:5])[:MAX_KEYWORDS]
 
 
 def calc_price(retail: float, commission: float) -> int:
@@ -448,9 +467,14 @@ def _number(value: str):
 
 _OUT_OF_RANGE = []
 _sku_ctx = ['']
+st_composite = []
+# Характеристики, які не варто дублювати в «Користувацьких»: вони вже є
+# окремими тегами оффера, і повтор виглядав би сміттям у картці.
+CUSTOM_SKIP = {'Бренд', 'Країна бренду', 'Країна-виробник', 'Виробник'}
 
 
-def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '') -> dict:
+def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
+               boost: dict = None) -> dict:
     """Наші характеристики → характеристики довідника Prom.
 
     Все, чого немає в довіднику категорії, відкидаємо: такі значення
@@ -506,6 +530,21 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '') -> dict:
             key = VALUE_ALIAS.get(v.lower(), v).lower()
             if key in allowed:
                 out[hit] = allowed[key]
+            else:
+                # «TPE, Поліпропілен» — постачальник дає склад через кому,
+                # у переліку Prom такого значення немає, і раніше воно
+                # відкидалось цілком. Розбиваємо й віддаємо ВСІ складові,
+                # що є в довіднику, через «|»: товар потрапляє у фільтр за
+                # кожним матеріалом окремо (SKILL-13.4).
+                parts = []
+                for part in re.split(r'[,;/]| та | і ', v):
+                    pk = VALUE_ALIAS.get(part.strip().lower(),
+                                         part.strip()).lower()
+                    if pk in allowed and allowed[pk] not in parts:
+                        parts.append(allowed[pk])
+                if parts:
+                    out[hit] = ' | '.join(parts)
+                    st_composite.append(name)
         else:
             out[hit] = v[:500]
 
@@ -514,6 +553,20 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '') -> dict:
         ok = [e for e in effects if e.lower() in allowed]
         if ok:
             out['Додатковий ефект'] = ' | '.join(sorted(set(ok)))
+
+    # Усе, що не лягло в портальні поля, віддаємо як користувацькі
+    # характеристики: у фільтри вони не потраплять, але заповнюють картку
+    # й підвищують показник якості. Раніше ці 29 831 значення просто
+    # зникали.
+    for name, value in list(raw.items()) + list((boost or {}).items()):
+        v = str(value).strip()
+        if not v or name in CUSTOM_SKIP or name in FEATURE_MAP \
+                or name in EFFECT_MAP:
+            continue
+        targets = PARAM_ALIAS.get(name, (name,))
+        if any(t in out for t in targets) or name in out:
+            continue
+        out.setdefault(name, v[:500])
 
     if features and 'Особливості' in spec:
         allowed = spec['Особливості'][2]
@@ -540,15 +593,23 @@ def load_products(cur):
 
 
 def load_params(cur) -> dict:
-    """rozetka_boost сюди не пускаємо — ті значення робились під вільні пари."""
-    cur.execute("""SELECT sku, param_name, param_value
+    """Наші характеристики; окремо — ті, що робились під вільні пари Rozetka.
+
+    `rozetka_boost` не можна пускати в ПОРТАЛЬНІ поля Prom: значення там
+    підбирались під вільний формат Rozetka й у закриті переліки не лягають.
+    Але «Користувацькі характеристики» Prom — теж вільні пари, і там ці
+    значення доречні: вони заповнюють картку, хоч і не працюють у фільтрах.
+    """
+    cur.execute("""SELECT sku, param_name, param_value, source
                    FROM sexopt_extracted_params
-                   WHERE source <> 'rozetka_boost'
-                     AND param_value IS NOT NULL AND TRIM(param_value) <> ''""")
-    out = collections.defaultdict(dict)
+                   WHERE param_value IS NOT NULL AND TRIM(param_value) <> ''""")
+    out, boost = collections.defaultdict(dict), collections.defaultdict(dict)
     for r in cur.fetchall():
-        out[r['sku']][r['param_name']] = r['param_value']
-    return out
+        tgt = boost if r['source'] == 'rozetka_boost' else out
+        tgt[r['sku']][r['param_name']] = r['param_value']
+    logger.info(f'Характеристик: портальних {len(out)} товарів, '
+                f'лише-користувацьких {len(boost)}')
+    return out, boost
 
 
 def load_unknown_vendors(cur) -> set:
@@ -669,7 +730,7 @@ def generate(out_file=OUT, limit=None):
     attrs = load_attributes(cur)
     cat_names = load_categories(cur)
     products = load_products(cur)
-    params = load_params(cur)
+    params, params_boost = load_params(cur)
     overrides = load_overrides(cur)
     unknown_vendors = load_unknown_vendors(cur)
     keywords = load_keywords()
@@ -771,7 +832,8 @@ def generate(out_file=OUT, limit=None):
             if p['country']:
                 raw.setdefault('Країна-виробник',
                                p['country'].split('(')[0].strip())
-            prm = fit_params(raw, pid, attrs, sku)
+            prm = fit_params(raw, pid, attrs, sku,
+                             params_boost.get(sku) or {})
             if group_id:
                 dropped = len(prm)
                 prm = {k: v for k, v in prm.items() if k in (common_keys or set())}
