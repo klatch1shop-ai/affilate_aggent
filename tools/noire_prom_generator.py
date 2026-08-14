@@ -216,52 +216,84 @@ def fix_caps(name: str, vendor: str) -> str:
     return ' '.join(out)
 
 
-def ru_keywords(kw_ua: str, ru_row: dict, vendor: str) -> str:
-    """Пошукові запити для РОСІЙСЬКОГО поля.
+# Російські відповідники категорій. Написані руками свідомо: gemma3:4b на
+# коротких рядках не перекладає, а повертає вхід незміненим — перевірено на
+# всіх 30 записах. Тридцять рядків надійніше вивірити очима, ніж промпт.
+_RU_CAT = {}
+_RU_MATERIAL = {
+    'Силікон': ('силиконовый', 'силиконовая', 'силиконовое', 'силиконовые'),
+    'Метал': ('металлический', 'металлическая', 'металлическое', 'металлические'),
+    'Латекс': ('латексный', 'латексная', 'латексное', 'латексные'),
+    'Скло': ('стеклянный', 'стеклянная', 'стеклянное', 'стеклянные'),
+    'ПВХ': ('виниловый', 'виниловая', 'виниловое', 'виниловые'),
+    'ABS-пластик': ('пластиковый', 'пластиковая', 'пластиковое', 'пластиковые'),
+    'Нержавіюча сталь': ('стальной', 'стальная', 'стальное', 'стальные'),
+}
+_RU_GENDER = {'m': 0, 'f': 1, 'n': 2, 'p': 3}
 
-    Українські фрази в російському полі не працюють на російськомовний
-    пошук. Будуємо окремий набір із російської назви постачальника —
-    єдиного джерела російського тексту, яке в нас є. Категорійних фраз
-    немає свідомо: наш довідник типів україномовний, а вигадувати переклад
-    типу товару не можна (SKILL-14.8).
 
-    Три шаблони, усі з тієї самої назви:
-      «перші два слова + бренд», «перші два слова», «перші три слова».
-    Плюс «бренд + модель», якщо в назві є латинська модель — така фраза
-    мовно нейтральна й працює в обох мовах.
+def _load_ru_cat():
+    import json
+    path = os.path.join(BASE_DIR, 'docs', 'prom_category_ru.json')
+    if _RU_CAT or not os.path.exists(path):
+        return _RU_CAT
+    with open(path, encoding='utf-8') as f:
+        _RU_CAT.update(json.load(f))
+    return _RU_CAT
+
+
+def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
+                prm: dict = None) -> str:
+    """Пошукові запити для РОСІЙСЬКОГО поля — тими самими шаблонами, що й укр.
+
+    Раніше тут була лише голова російської назви плюс бренд: 1.8 фрази проти
+    3.6 українських. Тепер працює той самий набір шаблонів, бо зʼявився
+    російський довідник категорій; прикметник матеріалу узгоджується за родом
+    російського типу, а не українського.
     """
+    prm = prm or {}
     name_ru = (ru_row or {}).get('name_ru') or ''
     if not name_ru or not (ru_row or {}).get('is_ru'):
         return ''
+    cat = _load_ru_cat().get((category or '').strip())
+    single, gender, purpose = cat if cat else ('', 'm', '')
+
     t = name_ru.split(vendor)[0] if vendor and vendor in name_ru else name_ru
     t = re.split(r'[,(]', t)[0]
     words = [w for w in t.split()
              if w and not w.isdigit() and not re.fullmatch(r'[A-Za-z0-9\-.]+', w)]
-    head2 = ' '.join(words[:2]).strip()
-    head3 = ' '.join(words[:3]).strip()
-    model = ''
+    while words and words[-1].lower() in ('с', 'из', 'для', 'на', 'в', 'к', 'и'):
+        words.pop()
+    head = ' '.join(words[:3]).strip()
+    material = (prm.get('Матеріал') or '').split('|')[0].split(',')[0].strip()
+
+    cand = []
+    if head and vendor:
+        cand.append(f'{head} {vendor}')
+    if single and vendor:
+        cand.append(f'{single} {vendor}')
+    if material in _RU_MATERIAL and single:
+        cand.append(f'{_RU_MATERIAL[material][_RU_GENDER[gender]]} {single}')
+    if single and purpose:
+        cand.append(f'{single} {purpose}')
     m = re.search(re.escape(vendor) + r'\s+([A-Za-z][A-Za-z0-9\-]+)', name_ru) \
         if vendor else None
     if m:
-        model = m.group(1)
+        cand.append(f'{vendor} {m.group(1)}')
+    if head:
+        cand.append(head)
 
-    cand = []
-    if head2 and vendor:
-        cand.append(f'{head2} {vendor}')
-    if vendor and model:
-        cand.append(f'{vendor} {model}')
-    if head3:
-        cand.append(head3)
-    if head2:
-        cand.append(head2)
-
-    seen, res = set(), []
+    seen, res, total = set(), [], 0
     for x in cand:
         x = re.sub(r'\s+', ' ', x).strip().lower()
-        if 2 <= len(x.split()) <= 4 and x not in seen:
-            seen.add(x)
-            res.append(x)
-    return ', '.join(res[:5])[:MAX_KEYWORDS]
+        if not (2 <= len(x.split()) <= 4) or x in seen:
+            continue
+        if total + len(x) + 2 > MAX_KEYWORDS:
+            break
+        seen.add(x)
+        res.append(x)
+        total += len(x) + 2
+    return ', '.join(res[:5])
 
 
 def calc_price(retail: float, commission: float) -> int:
@@ -632,8 +664,10 @@ def load_products(cur):
     cur.execute("""
         SELECT p.sku, p.name, p.description_html, p.price_retail, p.vendor,
                p.pictures, p.country, p.quantity, p.available,
-               m.epicentr_category_code AS ec
+               m.epicentr_category_code AS ec,
+               sc.name AS cat_name
         FROM sexopt_products p
+        LEFT JOIN sexopt_categories sc ON sc.id = p.category_id
         JOIN epicentr_category_mapping m
           ON m.sexopt_category_id = p.category_id
          AND COALESCE(m.confidence, 1) > 0
@@ -779,16 +813,22 @@ def load_keywords() -> dict:
         logger.warning('prom_kw_level1_all.json не знайдено — '
                        'поле пошукових запитів лишається порожнім')
         return {}
-    out = {}
+    out, cats = {}, {}
     with open(path, encoding='utf-8') as f:
         for r in json.load(f):
+            # категорія верхнього рівня — та сама, з якої будувались
+            # українські фрази. sexopt_categories.name дає ЛИСТОВУ
+            # («Попки», «Вібратори-кролики»), і словник по ній не працює.
+            if r.get('category'):
+                cats[r['sku']] = r['category']
             phrases = r.get('final') or []
             if len(phrases) >= MIN_KEYWORDS:
                 kw = ', '.join(phrases)[:MAX_KEYWORDS]
                 if kw:
                     out[r['sku']] = kw
-    logger.info(f'Пошукових запитів завантажено: {len(out)}')
-    return out
+    logger.info(f'Пошукових запитів завантажено: {len(out)}, '
+                f'категорій верхнього рівня: {len(cats)}')
+    return out, cats
 
 
 def generate(out_file=OUT, limit=None):
@@ -802,7 +842,7 @@ def generate(out_file=OUT, limit=None):
     params, params_boost = load_params(cur)
     overrides = load_overrides(cur)
     unknown_vendors = load_unknown_vendors(cur)
-    keywords = load_keywords()
+    keywords, kw_cats = load_keywords()
     dims = load_dimensions(cur)
     ru = load_ru(cur)
     conn.close()
@@ -986,7 +1026,7 @@ def generate(out_file=OUT, limit=None):
             if kw := keywords.get(sku):
                 o.append(f'        <keywords_ua>{esc(kw)}</keywords_ua>')
                 st['пошукові запити укр.'] += 1
-                kw_ru = ru_keywords(kw, rr, vendor)
+                kw_ru = ru_keywords(kw, rr, vendor, kw_cats.get(sku, ''), raw)
                 if kw_ru:
                     o.append(f'        <keywords>{esc(kw_ru)}</keywords>')
                     st['пошукові запити рос.'] += 1
