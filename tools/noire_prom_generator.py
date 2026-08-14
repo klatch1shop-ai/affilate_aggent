@@ -554,7 +554,9 @@ _sku_ctx = ['']
 st_composite = []
 # Характеристики, які не варто дублювати в «Користувацьких»: вони вже є
 # окремими тегами оффера, і повтор виглядав би сміттям у картці.
-CUSTOM_SKIP = {'Бренд', 'Країна бренду', 'Країна-виробник', 'Виробник'}
+# «Бренд» дублює тег <vendor>, тому не потрібен. А от країну виробництва
+# фід Prom окремим тегом не передає — там вона доречна як характеристика.
+CUSTOM_SKIP = {'Бренд', 'Виробник'}
 
 
 def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
@@ -569,7 +571,7 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
     spec = attrs.get(pid, {})
     if not spec:
         return {}
-    out, features, effects = {}, [], []
+    out, features, effects, unplaced = {}, [], [], []
 
     for name, value in raw.items():
         v = str(value).strip()
@@ -578,10 +580,12 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
 
         if name in FEATURE_MAP and v.lower() in ('так', 'yes', 'true'):
             features.append(FEATURE_MAP[name])
+            unplaced.append((name, 'Так'))
             continue
 
         if name in EFFECT_MAP and v.lower() in ('так', 'yes', 'true'):
             effects.append(EFFECT_MAP[name])
+            unplaced.append((name, 'Так'))
             continue
 
         targets = PARAM_ALIAS.get(name, (name,))
@@ -606,8 +610,10 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
             # Публікувати такий факт не можна — характеристику відкидаємо.
             if (vmin is not None and num < vmin) or \
                (vmax is not None and num > vmax):
-                st_out = f'{num:g}'
-                _OUT_OF_RANGE.append((_sku_ctx[0], hit, st_out, unit, vmax))
+                _OUT_OF_RANGE.append((_sku_ctx[0], hit, f'{num:g}', unit, vmax))
+                # у портальне поле не лягає (межі категорії), але сам факт
+                # цінний — віддаємо користувацькою характеристикою з одиницею
+                unplaced.append((f'{hit}, {unit}' if unit else hit, f'{num:g}'))
                 continue
             out[hit] = f'{num:g}'
         elif allowed:
@@ -651,6 +657,10 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
         if any(t in out for t in targets) or name in out:
             continue
         out.setdefault(name, v[:500])
+
+    # булеві та числові, що не знайшли місця в портальних переліках
+    for nm, val in unplaced:
+        out.setdefault(nm, val)
 
     if features and 'Особливості' in spec:
         allowed = spec['Особливості'][2]
