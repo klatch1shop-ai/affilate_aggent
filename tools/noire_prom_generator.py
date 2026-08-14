@@ -714,7 +714,24 @@ def load_ru(cur) -> dict:
         cur.connection.rollback()
         logger.warning('sexopt_products_ru недоступна — рос. текст = укр.')
         return {}
-    out = {r['sku']: r for r in cur.fetchall()}
+    out = {r['sku']: dict(r) for r in cur.fetchall()}
+    # Постачальник дає російський опис не на весь асортимент. Для решти
+    # беремо власний машинний переклад — але ЛИШЕ той, що пройшов валідатор
+    # (status='ok'). Позиції зі status='manual' лишаються з українським
+    # описом: краще дубль, ніж напівперекладений текст у картці.
+    try:
+        cur.execute("""SELECT sku, result FROM noire_ru_translation
+                       WHERE status = 'ok' AND COALESCE(result, '') <> ''""")
+        n = 0
+        for r in cur.fetchall():
+            row = out.setdefault(r['sku'], {'name_ru': '', 'is_ru': False})
+            if not (row.get('description_ru') or '').strip():
+                row['description_ru'] = r['result']
+                n += 1
+        logger.info(f'Машинних перекладів підставлено: {n}')
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('noire_ru_translation недоступна')
     logger.info(f'Російських карток завантажено: {len(out)}')
     return out
 
