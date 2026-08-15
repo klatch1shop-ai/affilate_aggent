@@ -106,12 +106,17 @@ def main():
     cards = {r[0] for r in rows}
     print(f'{a.param}: конфліктних фото {len(rows)} на {len(cards)} картках')
 
-    # запобіжник: картка не має лишитись без жодного фото
+    # Запобіжник «не лишити картку без фото» стосується лише параметрів, за
+    # якими генератор ВИДАЛЯЄ знімок. Для кольору ми нічого не видаляємо —
+    # лише зсуваємо в кінець, — і застосування цього запобіжника викидало з
+    # таблиці саме ті картки, де всі кадри спільні: зокрема SO5189, де в
+    # картці «Золотий» головним стояло фото червоних трусиків.
     offers = ET.parse(FEED).getroot().findall('.//offer')
     pics = {o.get('id'): [p.text for p in o.findall('picture') if p.text]
             for o in offers}
     drop = collections.Counter(r[0] for r in rows)
-    empty = [s for s in cards if drop[s] >= len(pics.get(s, []))]
+    empty = ([s for s in cards if drop[s] >= len(pics.get(s, []))]
+             if a.param == "Об'єм" else [])
     if empty:
         print(f'   УВАГА: {len(empty)} карток лишились би без фото — '
               f'їх пропускаємо: {" ".join(sorted(empty)[:10])}')

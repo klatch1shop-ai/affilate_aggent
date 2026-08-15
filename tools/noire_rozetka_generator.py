@@ -200,12 +200,23 @@ def load_photo_conflicts(cur) -> dict:
     Рахуються окремим інструментом rozetka_photo_conflicts.py, а не тут:
     маркер спирається на порівняння карток між собою, і рішення, який
     параметр вважати конфліктним, має лишатись видимим і переглядабельним.
+
+    Обробляються по-різному, і різниця перевірена очима на вибірці:
+      Обʼєм — ВИДАЛЯЄМО. Кадр із пʼятьма пляшками різної фасовки не показує
+              жодну з них окремо.
+      Колір — ЛИШЕ ЗСУВАЄМО В КІНЕЦЬ. Більшість таких зображень виявились
+              розмірними сітками бренду (Passion, Noir Handmade), спільними
+              для всієї лінійки: видаляти їх означало б прибрати корисну
+              інформацію з 1851 картки. Але головним кадром вони бути не
+              можуть — як і фото червоних трусиків у картці «Золотий»
+              (SO5189), яке теж потрапило в цю групу.
     """
     try:
-        cur.execute('SELECT sku, url FROM rozetka_photo_conflicts')
+        cur.execute('SELECT sku, url, param FROM rozetka_photo_conflicts')
         out = {}
         for r in cur.fetchall():
-            out.setdefault(r['sku'], set()).add(r['url'])
+            out.setdefault(r['sku'], {}).setdefault(r['param'], set()).add(
+                r['url'])
         return out
     except psycopg2.Error:
         cur.connection.rollback()
@@ -239,7 +250,9 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
     """
     if not audit:
         return pics
-    bad = (conflicts or {}).get(sku, set())
+    per_param = (conflicts or {}).get(sku, {})
+    bad = per_param.get("Об'єм", set())
+    demote = per_param.get('Колір', set())
     kept, seen_hashes = [], []
     for url in pics:
         ph, codes = audit.get(url, (None, None))
@@ -261,6 +274,14 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
         return pics
     if len(kept) < len(pics):
         _pic_stats['карток почищено'] += 1
+    # Зауваження раунду 1 п.7 і раунду 2 п.6: головним має бути кадр самого
+    # товару. Спільне для лінійки зображення зсуваємо в кінець, зберігаючи
+    # відносний порядок решти — але тільки якщо є чим його замінити.
+    if demote and kept[0] in demote:
+        rest = [u for u in kept if u not in demote]
+        if rest:
+            kept = rest + [u for u in kept if u in demote]
+            _pic_stats['головне фото замінено'] += 1
     return kept
 
 
