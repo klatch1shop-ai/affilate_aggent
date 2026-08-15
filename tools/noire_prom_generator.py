@@ -30,6 +30,7 @@ import argparse
 import collections
 import hashlib
 import html
+import json
 import math
 import os
 import re
@@ -58,6 +59,16 @@ DEFAULT_COMMISSION = float(os.getenv('NOIRE_PROM_COMMISSION', '18.88'))
 
 MAX_PICTURES = 10        # офіційний ліміт Prom (у Rozetka 15)
 MAX_NAME = 110           # правила оформлення карток
+
+# Скорочення назв для видимої зони — рахується окремо
+# (tools/prom_name_shorten.py) і лежить у docs/, щоб зміну можна було
+# переглянути очима, а не шукати в коді.
+try:
+    with open(os.path.join(BASE_DIR, 'docs', 'prom_name_shorten.json'),
+              encoding='utf-8') as _f:
+        NAME_SHORTEN = json.load(_f)
+except (OSError, ValueError):
+    NAME_SHORTEN = {}
 MAX_PARAMS = 100
 MAX_ARTICLE = 25
 MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні характеристики»
@@ -985,6 +996,12 @@ def generate(out_file=OUT, limit=None):
             if '@' in name:
                 name = re.sub(r'@(?=\w)', '', name)
                 st['«@» прибрано з назви'] += 1
+            # Видима зона Prom — перші ~70 символів. Якщо початок назви
+            # збігається з іншою карткою, у видачі вони не відрізняються
+            # (докладно — tools/prom_name_shorten.py).
+            if sku in NAME_SHORTEN:
+                name = NAME_SHORTEN[sku]
+                st['назву скорочено для видимої зони'] += 1
             if len(name) > MAX_NAME:
                 name = name[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
                 st['назву вкорочено'] += 1
