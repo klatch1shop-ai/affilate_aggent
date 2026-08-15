@@ -62,6 +62,28 @@ CATS_RU = {
     'Секс-машини': 'секс машина',
 }
 BAD = re.compile(r'купити|ціна|дешев|акці|знижк|доставк|магазин|prom|розетк', re.I)
+# Мовні маркери. Фраза, зібрана як російська, не має містити суто
+# українських літер — і навпаки. Без цієї перевірки мовне куки Prom
+# тихо підмінює російську видачу українською, і помилка потрапляє у фід.
+UA_ONLY = re.compile(r'[іїєґ]')
+RU_ONLY = re.compile(r'[ыъэё]')
+# Широкий шар за визначенням безбрендовий: тегова сторінка на кшталт
+# «usb-кабель для зарядки lelo» рознесла б чужий бренд по 18 картках.
+BRANDS = re.compile(
+    r'\b(lelo|satisfyer|womanizer|nexus|fun factory|doc johnson|pipedream|'
+    r'baile|chisa|svakom|zalo|we-vibe|lovense|kiiroo|tenga|dorcel|'
+    r'лело|сатисфай|сатисфаєр|вуманайзер|ловенс|тенга)\b', re.I)
+
+
+def pure(phrase: str, lang: str) -> bool:
+    """Фраза справді тією мовою, за яку її видають."""
+    if lang == 'ru':
+        return not UA_ONLY.search(phrase)
+    return not RU_ONLY.search(phrase)
+
+
+def brandy(phrase: str) -> bool:
+    return bool(BRANDS.search(phrase))
 
 
 def ensure(cur):
@@ -116,30 +138,40 @@ def main():
         return
 
     from camoufox.sync_api import Camoufox
-    total = 0
+    total = rejected = 0
     with Camoufox(headless=True, humanize=True, geoip=True, locale='uk-UA') as br:
-        page = br.new_page(); page.set_default_timeout(60000)
-        jobs = ([(c, 'ua', q) for c, q in CATS.items()]
-                + [(c, 'ru', q) for c, q in CATS_RU.items()])
-        for cat, lang, term in jobs:
-            # російська версія — без мовного префікса в шляху
-            pref = 'ua/' if lang == 'ua' else ''
-            url = (f'https://prom.ua/{pref}search?search_term='
-                   + term.replace(' ', '%20'))
-            try:
-                tags = harvest(page, url)
-            except Exception as e:
-                print(f'{cat}: {type(e).__name__}'); continue
-            if tags:
-                psycopg2.extras.execute_values(cur, """
-                    INSERT INTO prom_category_tags (category, phrase, url, lang)
-                    VALUES %s ON CONFLICT DO NOTHING""",
-                    [(cat, t, h, lang) for t, h in tags])
-                conn.commit()
-            total += len(tags)
-            print(f'{cat[:24]:26} [{lang}] {len(tags):3} фраз', flush=True)
-            time.sleep(2)
-    print(f'\nусього зібрано: {total}')
+        # Окремий контекст на кожну мову. Prom тримає мову в сесії: коли
+        # українські запити йшли першими в тому самому браузері, наступні
+        # російські мовчки віддавались українською — джерельні URL були
+        # /ua/…, і 105 українських фраз потрапили в поле keywords під
+        # міткою 'ru'. Свіжий контекст прибирає куки разом із мовою.
+        for lang, cats in (('ua', CATS), ('ru', CATS_RU)):
+            ctx = br.new_context(locale='uk-UA' if lang == 'ua' else 'ru-RU')
+            page = ctx.new_page(); page.set_default_timeout(60000)
+            for cat, term in cats.items():
+                # російська версія — без мовного префікса в шляху
+                pref = 'ua/' if lang == 'ua' else ''
+                url = (f'https://prom.ua/{pref}search?search_term='
+                       + term.replace(' ', '%20'))
+                try:
+                    tags = harvest(page, url)
+                except Exception as e:
+                    print(f'{cat}: {type(e).__name__}'); continue
+                keep = [(t, h) for t, h in tags if pure(t, lang) and not brandy(t)]
+                rejected += len(tags) - len(keep)
+                if keep:
+                    psycopg2.extras.execute_values(cur, """
+                        INSERT INTO prom_category_tags (category, phrase, url, lang)
+                        VALUES %s ON CONFLICT DO NOTHING""",
+                        [(cat, t, h, lang) for t, h in keep])
+                    conn.commit()
+                total += len(keep)
+                drop = len(tags) - len(keep)
+                print(f'{cat[:24]:26} [{lang}] {len(keep):3} фраз'
+                      + (f'  (відкинуто {drop})' if drop else ''), flush=True)
+                time.sleep(2)
+            ctx.close()
+    print(f'\nусього зібрано: {total}, відкинуто фільтрами: {rejected}')
 
 
 if __name__ == '__main__':
