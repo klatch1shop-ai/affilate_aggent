@@ -42,6 +42,7 @@ from loguru import logger
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'tools'))
 from dotenv import load_dotenv  # noqa: E402
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 from shared.utils.db import get_connection  # noqa: E402
@@ -267,9 +268,22 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
     head = ' '.join(words[:3]).strip()
     material = (prm.get('Матеріал') or '').split('|')[0].split(',')[0].strip()
 
+    # бренд кирилицею — та сама таблиця, що для української, але російська
+    # форма: «сатисфайер», не «сатисфаєр». Без цього російська сторона
+    # відставала б від української рівно на цей шаблон.
+    try:
+        from prom_keywords import brand_cyr as _bcyr
+        cyr = _bcyr(vendor, 'ru')
+    except Exception:
+        cyr = ''
+
     cand = []
     if head and vendor:
         cand.append(f'{head} {vendor}')
+    if single and cyr:
+        cand.append(f'{single} {cyr}')
+    if head and cyr:
+        cand.append(f'{head} {cyr}')
     if single and vendor:
         cand.append(f'{single} {vendor}')
     if material in _RU_MATERIAL and single:
@@ -293,7 +307,7 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
         seen.add(x)
         res.append(x)
         total += len(x) + 2
-    return ', '.join(res[:5])
+    return ', '.join(res[:8])   # та сама стеля 8, що й для української
 
 
 def calc_price(retail: float, commission: float) -> int:
@@ -780,6 +794,31 @@ def load_ru(cur) -> dict:
     return out
 
 
+def load_tags(cur) -> dict:
+    """(категорія, мова) → широкі фрази з тегових сторінок Prom.
+
+    Шаблони дають переважно «точний» шар семантичного ядра: тип + бренд +
+    модель. Широкий шар — «гумова вагіна», «анальний гак», «вібратор мова» —
+    вони не породжують у принципі, бо цієї лексики немає в наших даних.
+    Тегові сторінки Prom дають її прямо: це фрази, під які майданчик завів
+    окремі сторінки, тобто вважає вартими індексації.
+
+    Одна фраза застосовна до ВСІХ товарів категорії, тому 62 нові фрази
+    закривають дефіцит у тисяч позицій.
+    """
+    try:
+        cur.execute("""SELECT category, phrase, COALESCE(lang, 'ua') lang
+                       FROM prom_category_tags""")
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+    out = collections.defaultdict(list)
+    for r in cur.fetchall():
+        out[(r['category'], r['lang'])].append(r['phrase'])
+    logger.info(f'Тегових фраз завантажено: {sum(len(v) for v in out.values())}')
+    return out
+
+
 def load_dimensions(cur) -> dict:
     """epicentr_code → (вага_г, ширина_мм, висота_мм, довжина_мм).
 
@@ -854,6 +893,7 @@ def generate(out_file=OUT, limit=None):
     unknown_vendors = load_unknown_vendors(cur)
     keywords, kw_cats = load_keywords()
     dims = load_dimensions(cur)
+    tags = load_tags(cur)
     ru = load_ru(cur)
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
@@ -1033,10 +1073,28 @@ def generate(out_file=OUT, limit=None):
             # українське. Обидва задокументовані в специфікації YML. Доти
             # українські фрази йшли в російське поле, і українська пошукова
             # аудиторія не бачила жодного нашого ключа.
-            if kw := keywords.get(sku):
+            kw = keywords.get(sku, '')
+            cat_ua = kw_cats.get(sku, '')
+            # добираємо широкими фразами категорії до цілі у 8 (лист
+            # підтримки Prom 14.08.2026), не дублюючи вже наявні
+            def _fill(base, lang):
+                cur_ph = [x.strip() for x in base.split(',') if x.strip()]
+                seen = {x.lower() for x in cur_ph}
+                for t in tags.get((cat_ua, lang), []):
+                    if len(cur_ph) >= 8:
+                        break
+                    if t.lower() not in seen:
+                        seen.add(t.lower())
+                        cur_ph.append(t)
+                return ', '.join(cur_ph)[:MAX_KEYWORDS]
+
+            kw = _fill(kw, 'ua')
+            if kw:
+                st['фраз добрано тегами'] += 1
+            if kw:
                 o.append(f'        <keywords_ua>{esc(kw)}</keywords_ua>')
                 st['пошукові запити укр.'] += 1
-                kw_ru = ru_keywords(kw, rr, vendor, kw_cats.get(sku, ''), raw)
+                kw_ru = _fill(ru_keywords(kw, rr, vendor, cat_ua, raw), 'ru')
                 if kw_ru:
                     o.append(f'        <keywords>{esc(kw_ru)}</keywords>')
                     st['пошукові запити рос.'] += 1
