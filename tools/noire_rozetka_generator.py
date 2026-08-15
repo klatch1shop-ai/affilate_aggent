@@ -15,6 +15,7 @@ NOIRE / SexOpt → XML прайс-лист для Rozetka Маркетплейс
     python3 tools/noire_rozetka_generator.py -o output/noire_rozetka.xml
     python3 tools/noire_rozetka_generator.py --limit 10 --categories "Презервативи"
 """
+import collections
 import argparse
 import html
 import re
@@ -161,6 +162,93 @@ def load_snapshots(cur) -> dict:
     except psycopg2.Error:
         cur.connection.rollback()
         return {}
+
+
+def load_photo_audit(cur) -> dict:
+    """url → (phash, коди на зображенні). Порожньо, якщо аудит не робився."""
+    try:
+        cur.execute("""SELECT url, phash, codes FROM noire_photo_audit
+                       WHERE error IS NULL""")
+        return {r['url']: (r['phash'], r['codes']) for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+
+
+# Відстань Геммінга, за якої два кадри вважаємо одним і тим самим. Поріг 4,
+# не 6: на 6 у вибірці вже траплялись різні ракурси того самого товару, і
+# зрізати їх означало б збіднити картку заради формального показника.
+DUP_DISTANCE = 4
+# Коди на зображенні = скан упаковки. EAN13 тримаємо в переліку разом із
+# QRCODE: дрібний QR читається не завжди, а штрихкод на тому ж скані —
+# майже завжди, тож він працює як другий, надійніший маркер того самого.
+CODE_MARKERS = ('QRCODE', 'EAN13', 'EAN8', 'CODE128')
+_pic_stats = collections.Counter()
+
+
+def clean_pics(sku: str, pics: list, audit: dict) -> list:
+    """Прибрати скани упаковки та повтори кадрів.
+
+    Три зауваження Ольги (лист 14.08.2026) мають одне джерело — скан
+    упаковки постачальника: на ньому QR-коди (п.5), усі кольори моделі в
+    одному кадрі (п.4) і той самий скан під двома різними URL (п.7).
+
+    Застосовується й до заморожених карток. Заморозка захищає від ТИХОГО
+    дрейфу опублікованої картки, а не від виправлення на вимогу модератора:
+    тут зміна свідома, названа і перевірена. Але картка не має права
+    залишитись без зображень — якщо чистка забирає все, лишаємо як було
+    й пишемо в статистику, щоб такі випадки розбирались очима.
+    """
+    if not audit:
+        return pics
+    kept, seen_hashes = [], []
+    for url in pics:
+        ph, codes = audit.get(url, (None, None))
+        if codes and any(m in codes for m in CODE_MARKERS):
+            _pic_stats['код на фото'] += 1
+            continue
+        if ph:
+            h = int(ph, 16)
+            if any(bin(h ^ p).count('1') <= DUP_DISTANCE for p in seen_hashes):
+                _pic_stats['повтор кадру'] += 1
+                continue
+            seen_hashes.append(h)
+        kept.append(url)
+    if not kept:
+        _pic_stats['лишили як було (інакше 0 фото)'] += 1
+        return pics
+    if len(kept) < len(pics):
+        _pic_stats['карток почищено'] += 1
+    return kept
+
+
+_VOL_RE = re.compile(r'(\d+(?:[.,]\d+)?)\s*мл', re.I)
+_vol_fixed = []
+
+
+def fix_volume(desc: str, prm: dict, sku: str) -> str:
+    """Узгодити об'єм в описі з характеристикою.
+
+    Зауваження Ольги на BM-270: у назві й характеристиці «93 мл», в описі
+    «100 мл». Причина не в нас — постачальник пише один опис на всі фасовки
+    лінійки, тож саше на 2 мл успадковує текст флакона на 30 мл. Для
+    покупця це пряма дезінформація про кількість товару.
+
+    Правимо тільки число біля «мл» і тільки коли характеристика задана:
+    вона походить із поля постачальника, а не з тексту, тож надійніша.
+    Решту опису не чіпаємо — переписувати чужий текст ширше, ніж треба,
+    означало б плодити помилки замість того, щоб прибрати одну.
+    """
+    vol = prm.get("Об'єм") or ''
+    m = _VOL_RE.search(vol)
+    if not m:
+        return desc
+    want = m.group(1).replace(',', '.')
+    found = {g.replace(',', '.') for g in _VOL_RE.findall(desc)}
+    if not found or found == {want}:
+        return desc
+    _vol_fixed.append((sku, sorted(found), want))
+    return _VOL_RE.sub(lambda x: f'{want} мл', desc)
 
 
 def load_mapping(cur) -> dict:
@@ -1048,6 +1136,7 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     snapshots = load_snapshots(cur)
     tariffs = load_tariffs(cur)
     overrides = load_overrides(cur)
+    photo_audit = load_photo_audit(cur)
     if not mapping:
         logger.error('rozetka_category_mapping порожній для source=noire')
         return 0
@@ -1137,6 +1226,9 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
                 stats['skip_pic'] += 1
                 continue
             vendor_frozen = desc_frozen = None
+        # Чистка фото — після заморозки й для замороженого теж: це виправлення
+        # на вимогу відділу адаптації, а не самовільна зміна картки.
+        pics = clean_pics(sku, pics, photo_audit)
         name = snap['name'] if snap else NAME_OVERRIDE.get(sku, p['name'] or '')
         raw = dict(params.get(sku, {}))
         for k, v in easytoys.get(sku, {}).items():
@@ -1214,6 +1306,7 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         if not desc and not snap and synth_desc:
             desc = synth_description(name, prm, p['vendor'])
         if desc:
+            desc = fix_volume(desc, prm, sku)
             # Тільки description_ua: другий тег дублював той самий текст,
             # у робочому фіді Carvol його немає на жодній з 8244 позицій.
             o.append(f'        <description_ua>{esc(desc)}</description_ua>')
@@ -1239,6 +1332,13 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     logger.info(f"  available true/false : {stats['avail_true']}/{stats['avail_false']}")
     logger.info(f"  пропущено без ціни   : {stats['skip_price']}")
     logger.info(f"  пропущено без фото   : {stats['skip_pic']}")
+    if _pic_stats:
+        logger.info('  чистка фото          : ' + ', '.join(
+            f'{k} — {v}' for k, v in sorted(_pic_stats.items())))
+    if _vol_fixed:
+        logger.info(f'  обʼєм узгоджено      : {len(_vol_fixed)} карток')
+        for sku, was, now in _vol_fixed:
+            logger.info(f'      {sku}: {", ".join(was)} → {now} мл')
     logger.info(f"  пропущено <3 характеристик: {stats['skip_params']}")
     if stats['frozen']:
         logger.info(f"  заморожених карток      : {stats['frozen']} "
