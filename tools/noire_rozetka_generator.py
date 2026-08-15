@@ -285,6 +285,22 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
     return kept
 
 
+# Опис не має містити інформації про доставку й оплату (офіційна вимога,
+# sellerhelp p212 «Опис товару», ред. 12.06.2026). У шаблоні постачальника
+# стоїть хвіст «Придбати X (Країна) з доставкою по Україні» — змістовно
+# порожній і водночас заборонений.
+_DELIVERY = re.compile(
+    r'[^.!?]*\b(доставк\w*|оплат\w*|способи оплати)\b[^.!?]*[.!?]\s*', re.I)
+
+
+def strip_delivery(desc: str, sku: str) -> str:
+    out = _DELIVERY.sub('', desc or '')
+    if out != desc:
+        _delivery_stripped.append(sku)
+    return out.strip()
+
+
+_delivery_stripped = []
 _VOL_RE = re.compile(r'(\d+(?:[.,]\d+)?)\s*мл', re.I)
 _vol_fixed = []
 
@@ -1373,7 +1389,11 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
              f'        <price>{overrides.get(sku) or calc_price(price, scale, commission)}</price>',
              '        <currencyId>UAH</currencyId>',
              f'        <categoryId>{rz_used[rzname][0]}</categoryId>']
-        o += [f'        <picture>{esc(u)}</picture>' for u in pics]
+        # Вимога p185: посилання на зображення має бути https. У фіді
+        # постачальника 698 посилань ішли по http — валідатор Rozetka це
+        # позначає, а частина клієнтів такі картинки просто не покаже.
+        o += [f'        <picture>{esc(re.sub("^http://", "https://", u))}'
+              f'</picture>' for u in pics]
         if vendor:
             o.append(f'        <vendor>{esc(vendor)}</vendor>')
         o.append(f'        <article>{esc(sku)}</article>')
@@ -1392,9 +1412,13 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         if not desc and not snap and synth_desc:
             desc = synth_description(name, prm, p['vendor'])
         if desc:
-            desc = fix_volume(desc, prm, sku)
-            # Тільки description_ua: другий тег дублював той самий текст,
-            # у робочому фіді Carvol його немає на жодній з 8244 позицій.
+            desc = strip_delivery(fix_volume(desc, prm, sku), sku)
+            # Офіційні вимоги (sellerhelp p185, ред. 29.06.2026) позначають
+            # <description> ОБОВʼЯЗКОВИМ, а <description_ua> — необовʼязковим.
+            # Раніше тут стояв лише український тег «бо у Carvol так»: чужий
+            # робочий фід — не заміна специфікації. Текст той самий: іншого
+            # для Rozetka в нас немає, а порожній обовʼязковий тег гірший.
+            o.append(f'        <description>{esc(desc)}</description>')
             o.append(f'        <description_ua>{esc(desc)}</description_ua>')
         for k, v in prm.items():
             # Складений розмір — окремий тег на кожну складову (вимога
@@ -1424,6 +1448,8 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     if _derived_used:
         logger.info('  характеристики з тексту: ' + ', '.join(
             f'{k} — {v}' for k, v in sorted(_derived_used.items())))
+    if _delivery_stripped:
+        logger.info(f'  згадок доставки прибрано: {len(_delivery_stripped)}')
     if _vol_fixed:
         logger.info(f'  обʼєм узгоджено      : {len(_vol_fixed)} карток')
         for sku, was, now in _vol_fixed:
