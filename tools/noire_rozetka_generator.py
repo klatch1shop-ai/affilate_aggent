@@ -66,6 +66,11 @@ MAX_PICTURES = 15       # вимога Rozetka
 OPEN_VOCABULARY = 100
 
 
+def cdata(t: str) -> str:
+    """Багатозначний параметр Rozetka: значення через <br> усередині CDATA."""
+    return '<![CDATA[' + (t or '').replace(']]>', ']]&gt;') + ']]>'
+
+
 def esc(t) -> str:
     return html.escape(str(t) if t is not None else '', quote=True)
 
@@ -1421,13 +1426,19 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             o.append(f'        <description>{esc(desc)}</description>')
             o.append(f'        <description_ua>{esc(desc)}</description_ua>')
         for k, v in prm.items():
-            # Складений розмір — окремий тег на кожну складову (вимога
-            # відділу адаптації), решта параметрів як були.
-            for one in _multi_values.get((sku, k), [v]):
-                o.append(f'        <param name="{esc(k)}">'
-                         f'{esc(str(one)[:500])}</param>')
-            if len(_multi_values.get((sku, k), [v])) > 1:
+            # Багатозначний параметр — ОДИН тег, значення через <br> у CDATA
+            # (вимога p185). Два окремі теги з тим самим іменем валідатор
+            # рахує дублем: 1403 попередження «Дубль параметра с именем
+            # "Розмір"» у звіті від 15.08.2026. Вимога Ольги «вказуйте два
+            # значення» при цьому виконується — значень справді два.
+            multi = _multi_values.get((sku, k), [v])
+            if len(multi) > 1:
+                body = cdata(' <br> '.join(str(x)[:240] for x in multi))
+                o.append(f'        <param name="{esc(k)}">{body}</param>')
                 stats['складених розмірів розбито'] += 1
+            else:
+                o.append(f'        <param name="{esc(k)}">'
+                         f'{esc(str(multi[0])[:500])}</param>')
         o.append('      </offer>')
         lines += o
         stats['total'] += 1
