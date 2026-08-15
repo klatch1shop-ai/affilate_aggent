@@ -175,6 +175,43 @@ def load_photo_audit(cur) -> dict:
         return {}
 
 
+def load_derived_params(cur) -> dict:
+    """sku → {параметр: [значення]}, витягнуті з назви й опису.
+
+    Заповнюють фільтрові характеристики, яких постачальник не дав окремим
+    полем, але назвав у тексті. Значення — лише з офіційного списку Rozetka
+    і лише якщо слово справді є в тексті саме цього товару (SKILL-14.8).
+    """
+    try:
+        cur.execute('SELECT sku, param, value FROM rozetka_derived_params')
+        out = {}
+        for r in cur.fetchall():
+            out.setdefault(r['sku'], {}).setdefault(r['param'], []).append(
+                r['value'])
+        return out
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+
+
+def load_photo_conflicts(cur) -> dict:
+    """sku → {url}: знімки лінійки, а не цього товару.
+
+    Рахуються окремим інструментом rozetka_photo_conflicts.py, а не тут:
+    маркер спирається на порівняння карток між собою, і рішення, який
+    параметр вважати конфліктним, має лишатись видимим і переглядабельним.
+    """
+    try:
+        cur.execute('SELECT sku, url FROM rozetka_photo_conflicts')
+        out = {}
+        for r in cur.fetchall():
+            out.setdefault(r['sku'], set()).add(r['url'])
+        return out
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+
+
 # Відстань Геммінга, за якої два кадри вважаємо одним і тим самим. Поріг 4,
 # не 6: на 6 у вибірці вже траплялись різні ракурси того самого товару, і
 # зрізати їх означало б збіднити картку заради формального показника.
@@ -184,9 +221,10 @@ DUP_DISTANCE = 4
 # майже завжди, тож він працює як другий, надійніший маркер того самого.
 CODE_MARKERS = ('QRCODE', 'EAN13', 'EAN8', 'CODE128')
 _pic_stats = collections.Counter()
+_derived_used = collections.Counter()
 
 
-def clean_pics(sku: str, pics: list, audit: dict) -> list:
+def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> list:
     """Прибрати скани упаковки та повтори кадрів.
 
     Три зауваження Ольги (лист 14.08.2026) мають одне джерело — скан
@@ -201,9 +239,13 @@ def clean_pics(sku: str, pics: list, audit: dict) -> list:
     """
     if not audit:
         return pics
+    bad = (conflicts or {}).get(sku, set())
     kept, seen_hashes = [], []
     for url in pics:
         ph, codes = audit.get(url, (None, None))
+        if url in bad:
+            _pic_stats['знімок лінійки'] += 1
+            continue
         if codes and any(m in codes for m in CODE_MARKERS):
             _pic_stats['код на фото'] += 1
             continue
@@ -882,6 +924,17 @@ _composite_trace = []
 # <param name="Розмір"> у межах того самого оффера. Назва вже містить обидва
 # («Боді Passion ADARA L/XL Чорний»), її не чіпаємо.
 MULTI_VALUE_PARAMS = {'Розмір'}
+# Довідник Rozetka сам каже, які параметри багатозначні: тип `List` проти
+# `ComboBox`. Беремо це з нього, а не з памʼяті — у Лубрикантах, наприклад,
+# List мають Ефекти, Форма випуску, Призначення й Тип упаковки, і кожне
+# значення має йти окремим тегом, як уже робиться для Розміру.
+def load_multi_params(cur):
+    try:
+        cur.execute("""SELECT DISTINCT param_name FROM rozetka_category_params
+                       WHERE param_type = 'List'""")
+        MULTI_VALUE_PARAMS.update(r['param_name'] for r in cur.fetchall())
+    except psycopg2.Error:
+        cur.connection.rollback()
 _multi_values = {}          # (sku, param) → [значення, значення]
 
 # Один і той самий розмір різні категорії Rozetka називають по-різному:
@@ -938,7 +991,10 @@ def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
     # Rozetka чекає окремий тег на кожну (див. MULTI_VALUE_PARAMS). Повертаємо
     # усе одно першу — решта логіки (назва, опис) працює зі скалярним значенням.
     hits, composite = [], False
-    for part in re.split(r'[\/,;]|\s+та\s+|\s+і\s+', v):
+    # Вертикальна риска — роздільник наших витягнутих значень («Гель | Крем»).
+    # Без неї складене значення не збігалося з довідником узагалі, і частина
+    # заповнених характеристик мовчки не доходила до фіду.
+    for part in re.split(r'[\/,;|]|\s+та\s+|\s+і\s+', v):
         part = re.sub(r'^\d+\s*%?\s*', '', part).strip(' .%')
         if not part:
             continue
@@ -1137,6 +1193,9 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     tariffs = load_tariffs(cur)
     overrides = load_overrides(cur)
     photo_audit = load_photo_audit(cur)
+    photo_conflicts = load_photo_conflicts(cur)
+    derived = load_derived_params(cur)
+    load_multi_params(cur)
     if not mapping:
         logger.error('rozetka_category_mapping порожній для source=noire')
         return 0
@@ -1228,11 +1287,17 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             vendor_frozen = desc_frozen = None
         # Чистка фото — після заморозки й для замороженого теж: це виправлення
         # на вимогу відділу адаптації, а не самовільна зміна картки.
-        pics = clean_pics(sku, pics, photo_audit)
+        pics = clean_pics(sku, pics, photo_audit, photo_conflicts)
         name = snap['name'] if snap else NAME_OVERRIDE.get(sku, p['name'] or '')
         raw = dict(params.get(sku, {}))
         for k, v in easytoys.get(sku, {}).items():
             raw.setdefault(k, v)          # дані постачальника мають пріоритет
+        # Витягнуте з тексту йде останнім і лише туди, де порожньо: пряме
+        # поле постачальника завжди надійніше за слово, знайдене в описі.
+        for k, vals in derived.get(sku, {}).items():
+            if not raw.get(k):
+                raw[k] = ' | '.join(sorted(set(vals)))
+                _derived_used[k] += 1
         for drop in PARAM_DROP.get(rz, ()):
             raw.pop(drop, None)
         if rz in LINGERIE_CATS:
@@ -1335,6 +1400,9 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     if _pic_stats:
         logger.info('  чистка фото          : ' + ', '.join(
             f'{k} — {v}' for k, v in sorted(_pic_stats.items())))
+    if _derived_used:
+        logger.info('  характеристики з тексту: ' + ', '.join(
+            f'{k} — {v}' for k, v in sorted(_derived_used.items())))
     if _vol_fixed:
         logger.info(f'  обʼєм узгоджено      : {len(_vol_fixed)} карток')
         for sku, was, now in _vol_fixed:

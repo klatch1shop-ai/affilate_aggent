@@ -72,7 +72,15 @@ def ensure_table(cur):
     # моделі (п.4, асортимент у картці) і той самий скан трапляється двічі
     # під різними URL (п.7, дублікати). Тому позначка «на фото є код» —
     # спільний маркер для трьох пунктів, а не лише для QR.
-    for col in ('codes TEXT', 'has_qr BOOLEAN'):
+    # Раунд 1 п.7 і раунд 2 п.6: перше фото має показувати товар повністю й
+    # лицьовою стороною. У метаданих сигналу немає — у прикладі Ольги всі
+    # шість кадрів однакові, 1100×1100. Але сам предмет у кадрі вимірюється:
+    # модель у повний зріст дає вузький високий силует на білому (21% × 94%),
+    # а фрагмент — ширшу пляму (38% × 100%). Збираємо ці числа під час того
+    # самого завантаження, щоб гіпотезу можна було перевірити на масиві,
+    # а не на одній картці.
+    for col in ('codes TEXT', 'has_qr BOOLEAN', 'white_pct NUMERIC',
+                'box_w NUMERIC', 'box_h NUMERIC'):
         cur.execute(f'ALTER TABLE noire_photo_audit ADD COLUMN IF NOT EXISTS {col}')
 
 
@@ -94,15 +102,38 @@ def fetch_one(task):
             # codes/has_qr у INSERT зробило коротший кортеж фатальним —
             # execute_values падав з IndexError на першому ж HTTP 404.
             return (url, sku, pos, None, None, None, None,
-                    f'HTTP {r.status_code}', None, None)
+                    f'HTTP {r.status_code}', None, None, None, None, None)
         img = Image.open(io.BytesIO(r.content))
         w, h = img.size
         rgb = img.convert('RGB')
         ph = str(imagehash.phash(rgb))
-        return (url, sku, pos, ph, w, h, len(r.content), None) + scan_codes(rgb)
+        return ((url, sku, pos, ph, w, h, len(r.content), None)
+                + scan_codes(rgb) + subject_box(rgb))
     except Exception as e:
         return (url, sku, pos, None, None, None, None, type(e).__name__,
-                None, None)
+                None, None, None, None, None)
+
+
+def subject_box(img) -> tuple:
+    """Частка білого тла й розміри предмета в кадрі, у відсотках.
+
+    Дає змогу відрізнити знімок товару цілком від фрагмента крупним планом,
+    чого не видно з ширини й висоти файлу: у прикладі Ольги всі кадри були
+    1100×1100, але предмет займав від 21% до 96% ширини.
+    """
+    try:
+        import numpy as np
+        a = np.asarray(img.resize((256, 256)))
+        white = (a > 235).all(axis=2)
+        rows = np.where(~white.all(axis=1))[0]
+        cols = np.where(~white.all(axis=0))[0]
+        if not len(rows) or not len(cols):
+            return (round(float(white.mean()) * 100, 1), 0.0, 0.0)
+        return (round(float(white.mean()) * 100, 1),
+                round((cols[-1] - cols[0] + 1) / 2.56, 1),
+                round((rows[-1] - rows[0] + 1) / 2.56, 1))
+    except Exception:
+        return (None, None, None)
 
 
 def scan_codes(img) -> tuple:
@@ -136,7 +167,7 @@ def cmd_scan(cur, conn, limit):
     # Готовим лише ті, де є і phash, і результат перевірки на коди: 18 819
     # зображень зняті до появи QR-детекції, їх треба пройти ще раз.
     cur.execute('SELECT url FROM noire_photo_audit '
-                'WHERE phash IS NOT NULL AND has_qr IS NOT NULL')
+                'WHERE phash IS NOT NULL AND box_w IS NOT NULL')
     known = {r['url'] for r in cur.fetchall()}
     for o in root.findall('.//offer'):
         for i, pic in enumerate(o.findall('picture')):
@@ -168,12 +199,14 @@ def _save(cur, conn, batch):
     psycopg2.extras.execute_values(cur, """
         INSERT INTO noire_photo_audit
           (url, sku, position, phash, width, height, bytes, error,
-           codes, has_qr)
+           codes, has_qr, white_pct, box_w, box_h)
         VALUES %s
         ON CONFLICT (url) DO UPDATE SET phash=EXCLUDED.phash,
           width=EXCLUDED.width, height=EXCLUDED.height,
           bytes=EXCLUDED.bytes, error=EXCLUDED.error, checked_at=NOW(),
-          codes=EXCLUDED.codes, has_qr=EXCLUDED.has_qr
+          codes=EXCLUDED.codes, has_qr=EXCLUDED.has_qr,
+          white_pct=EXCLUDED.white_pct, box_w=EXCLUDED.box_w,
+          box_h=EXCLUDED.box_h
     """, batch, page_size=300)
     conn.commit()
 
