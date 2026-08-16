@@ -1103,6 +1103,14 @@ def generate(out_file=OUT, limit=None):
                     if t.lower() not in seen:
                         seen.add(t.lower())
                         cur_ph.append(t)
+                # Артикул останнім, поза лімітом у 8 фраз. Prom шукає по
+                # тексту назви й пошукових запитів, поле <vendorCode> у
+                # пошуку не бере участі. Перевірено на EGG-001L: за
+                # артикулом видача дає десять карток конкурентів, які
+                # пишуть його в назві, і жодної нашої.
+                if sku and sku.lower() not in seen:
+                    cur_ph.append(sku)
+                    st['артикул у пошукових запитах'] += 1
                 return ', '.join(cur_ph)[:MAX_KEYWORDS]
 
             kw = _fill(kw, 'ua')
