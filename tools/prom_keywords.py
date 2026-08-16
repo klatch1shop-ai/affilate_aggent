@@ -281,6 +281,27 @@ SYNONYMS = {
     'страпон': ('страпон з кріпленням', 'фалопротез'),
 }
 
+
+def _stems(text: str) -> set:
+    return {w[:5] for w in re.findall(r'[а-яіїєґa-z]{4,}', (text or '').lower())}
+
+
+def _echoes(phrase: str, name: str, category: str = '') -> bool:
+    """Чи підтверджує назва товару цей синонім.
+
+    Порівнюємо корені (перші пʼять літер): «очищувач» ↔ «Очищувальний»
+    збігаються, «спрей» ↔ «спрей» теж.
+
+    Слова з назви КАТЕГОРІЇ зі збігу виключаємо. Без цього «Кріплення для
+    душу … для іграшок» приймало синонім «очищувач для іграшок» через
+    спільне слово «іграшок» — а воно є в назві самої категорії й нічого
+    про товар не каже (SO1984).
+    """
+    stems = _stems(name) - _stems(category)
+    return any(w[:5] in stems
+               for w in re.findall(r'[а-яіїєґa-z]{4,}', phrase.lower()))
+
+
 def build(name: str, vendor: str, category: str, prm: dict) -> list:
     vendor = real_vendor(vendor)
     cat = CATEGORY.get((category or '').strip())
@@ -304,6 +325,13 @@ def build(name: str, vendor: str, category: str, prm: dict) -> list:
     # Потрібні насамперед слабким карткам: у 61 позиції категорія дає лише
     # дві фрази, і генератор відкидав їх цілком за порогом у три.
     for syn in SYNONYMS.get(single, ()):
+        # Синонім категорії застосовуємо, лише якщо він перегукується з
+        # назвою САМОГО товару. Категорія «Засоби для догляду за інтимними
+        # іграшками» містить і чистячі спреї, і аксесуари: без цієї умови
+        # «Кріплення для душу Doc Johnson» отримувало фрази «очищувач для
+        # іграшок» і «антибактеріальний спрей» (SO1984).
+        if not _echoes(syn, name, category):
+            continue
         add(syn)
         if vendor:
             add(f'{syn} {vendor}')

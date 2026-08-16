@@ -58,6 +58,9 @@ MARKUP = float(os.getenv('NOIRE_MARKUP_PROM', '1.0'))
 DEFAULT_COMMISSION = float(os.getenv('NOIRE_PROM_COMMISSION', '18.88'))
 
 MAX_PICTURES = 10        # офіційний ліміт Prom (у Rozetka 15)
+IN_STOCK = os.getenv('NOIRE_PROM_IN_STOCK', '0') == '1'
+BROKEN_PICS = set()
+ACTUAL_CAT = {}
 MAX_NAME = 110           # правила оформлення карток
 
 # Скорочення назв для видимої зони — рахується окремо
@@ -72,7 +75,11 @@ except (OSError, ValueError):
 MAX_PARAMS = 100
 MAX_ARTICLE = 25
 MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні характеристики»
-MIN_KEYWORDS = 3         # поле з однієї-двох загальних фраз користі не дає
+# Було 3: правило писалося тоді, коли поле лишалось ПОРОЖНІМ, і дві
+# найзагальніші фрази справді не давали користі. Тепер у полі завжди є
+# артикул і широкі фрази з тегових сторінок, тож викидати одну-дві
+# ПРАВДИВІ фрази — чиста втрата: «кріплення для душу» краще за нічого.
+MIN_KEYWORDS = 1
 MAX_KEYWORDS = 1000      # офіційний ліміт не задокументований, тримаємось нижче
 
 # Порогів «відкритого словника», як у Rozetka, тут немає: найбільший список
@@ -856,6 +863,27 @@ def load_dimensions(cur) -> dict:
     return out
 
 
+def load_actual_categories(cur) -> dict:
+    """sku → категорія, яку Prom присвоїв товару насправді."""
+    try:
+        cur.execute('SELECT sku, category_id FROM prom_actual_category')
+        return {r['sku']: r['category_id'] for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+
+
+def load_broken_pics(cur) -> set:
+    """Посилання на фото, які постачальник віддає з помилкою."""
+    try:
+        cur.execute("""SELECT url FROM noire_photo_audit
+                       WHERE error IS NOT NULL""")
+        return {re.sub(r'^https?://', '', r['url']) for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return set()
+
+
 def load_keywords() -> dict:
     """Пошукові запити з Рівня 1 (tools/prom_keywords.py + prom_kw_finalize).
 
@@ -905,6 +933,10 @@ def generate(out_file=OUT, limit=None):
     keywords, kw_cats = load_keywords()
     dims = load_dimensions(cur)
     tags = load_tags(cur)
+    global BROKEN_PICS
+    BROKEN_PICS = load_broken_pics(cur)
+    global ACTUAL_CAT
+    ACTUAL_CAT = load_actual_categories(cur)
     ru = load_ru(cur)
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
@@ -921,6 +953,17 @@ def generate(out_file=OUT, limit=None):
     for key, items in groups.items():
         head = items[0]
         pid, excluded = resolve_category(mapping, head['ec'], head['name'] or '')
+        # Якщо Prom уже перекласифікував цей товар — беремо його рішення.
+        # Звіт імпорту 16.08.2026: 949 позицій із автовизначеною категорією,
+        # 337 із них лягли не туди, куди ми відправляли. Для каталогу
+        # ProSale правильна категорія — основний критерій видачі, а наш
+        # мапінг іде через два шари (sexopt → epicentr → prom) і на межових
+        # товарах помиляється. Наполягати на своєму означає щоразу давати
+        # системі привід переносити товар.
+        actual = ACTUAL_CAT.get(head['sku'])
+        if actual and actual != pid:
+            pid = actual
+            st['категорію взято з Prom'] += len(items)
         if not pid:
             st['без мапінгу'] += len(items)
             continue
@@ -1005,7 +1048,12 @@ def generate(out_file=OUT, limit=None):
             if len(name) > MAX_NAME:
                 name = name[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
                 st['назву вкорочено'] += 1
-            pics = [u for u in (p['pictures'] or []) if u]
+            # Биті посилання Prom не просто пропускає — він рахує їх як
+            # помилки імпорту («3 не можуть бути завантажені» у звіті
+            # 16.08.2026). Ті, про які ми вже знаємо з фотоаудиту (HTTP 404
+            # у постачальника), відсіюємо заздалегідь.
+            pics = [u for u in (p['pictures'] or []) if u
+                    and re.sub(r'^https?://', '', u) not in BROKEN_PICS]
             if len(pics) > MAX_PICTURES:
                 st['фото обрізано'] += 1
             pics = pics[:MAX_PICTURES]
@@ -1044,9 +1092,19 @@ def generate(out_file=OUT, limit=None):
 
             price = overrides.get(sku) or calc_price(
                 float(p['price_retail']), rate)
+            # in_stock="true" — «Готово до відправки». Атрибут офіційний,
+            # підтверджений специфікацією YML (support.prom.ua, стаття
+            # 360004963538): <offer id available in_stock type selling_type>.
+            # Такі товари мають пріоритет у видачі («Як формується видача на
+            # маркетплейсі»). Але це ЗАЯВА покупцеві, що товар відправлять
+            # одразу, а ми возимо від постачальника — тому за замовчуванням
+            # вимкнено, вмикається свідомо через NOIRE_PROM_IN_STOCK=1.
+            ready = ' in_stock="true"' if IN_STOCK else ''
             attr = (f'      <offer id="{esc(sku)}" available="true" '
-                    f'selling_type="r"'
+                    f'selling_type="r"{ready}'
                     + (f' group_id="{group_id}"' if group_id else '') + '>')
+            if IN_STOCK:
+                st['позначено «Готово до відправки»'] += 1
             # <name>/<description> — російські поля Prom, `_ua` — українські
             rr = ru.get(sku) or {}
             name_ru = (rr.get('name_ru') or '').strip() if rr.get('is_ru') else ''
