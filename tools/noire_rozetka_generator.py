@@ -170,11 +170,20 @@ def load_snapshots(cur) -> dict:
 
 
 def load_photo_audit(cur) -> dict:
-    """url → (phash, коди на зображенні). Порожньо, якщо аудит не робився."""
+    """url → (phash, коди, менша сторона в пікселях). Ключ без схеми.
+
+    Схему відрізаємо одразу: посилання постачальника йдуть по http, а
+    таблиця аудиту зібрана з фіду, де ми перевели все на https.
+    """
     try:
-        cur.execute("""SELECT url, phash, codes FROM noire_photo_audit
-                       WHERE error IS NULL""")
-        return {r['url']: (r['phash'], r['codes']) for r in cur.fetchall()}
+        cur.execute("""SELECT url, phash, codes, width, height
+                       FROM noire_photo_audit WHERE error IS NULL""")
+        out = {}
+        for r in cur.fetchall():
+            side = min(r['width'] or 0, r['height'] or 0) or None
+            out[re.sub(r'^https?://', '', r['url'])] = (r['phash'], r['codes'],
+                                                        side)
+        return out
     except psycopg2.Error:
         cur.connection.rollback()
         return {}
@@ -236,6 +245,11 @@ DUP_DISTANCE = 4
 # QRCODE: дрібний QR читається не завжди, а штрихкод на тому ж скані —
 # майже завжди, тож він працює як другий, надійніший маркер того самого.
 CODE_MARKERS = ('QRCODE', 'EAN13', 'EAN8', 'CODE128')
+# Rozetka рекомендує 1000×1000 (лист модератора 09.02.2026), але вимагати це
+# від фіду постачальника означало б викинути 428 карток. Рішення власника
+# 16.08.2026 — поріг 500×500: дрібніші зображення не показують товар, їх
+# прибираємо, і якщо в картці не лишається жодного, картка виходить із фіду.
+MIN_PHOTO_SIDE = 500
 _pic_stats = collections.Counter()
 _derived_used = collections.Counter()
 
@@ -256,12 +270,26 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
     if not audit:
         return pics
     per_param = (conflicts or {}).get(sku, {})
-    bad = per_param.get("Об'єм", set())
-    demote = per_param.get('Колір', set())
+    # Обʼєм — знімок лінійки фасовок. Розсип — кадр із кількома одиницями
+    # товару, який продається поштучно (рішення власника 16.08.2026 по
+    # MG22382: 12 саше в кадрі, у картці одне). Обидва видаляємо.
+    # Схему нормалізуємо з обох боків: у постачальника посилання по http, а
+    # конфлікти рахувались із фіду, де ми вже перевели все на https. Без
+    # цього правило мовчки не спрацьовувало — MG22382 лишався з фото
+    # розсипу попри явно заведене правило.
+    def _key(u):
+        return re.sub(r'^https?://', '', u or '')
+
+    bad = {_key(u) for u in
+           per_param.get("Об'єм", set()) | per_param.get('Розсип', set())}
+    demote = {_key(u) for u in per_param.get('Колір', set())}
     kept, seen_hashes = [], []
     for url in pics:
-        ph, codes = audit.get(url, (None, None))
-        if url in bad:
+        ph, codes, side = audit.get(_key(url), (None, None, None))
+        if side and side < MIN_PHOTO_SIDE:
+            _pic_stats[f'дрібне фото (<{MIN_PHOTO_SIDE}px)'] += 1
+            continue
+        if _key(url) in bad:
             _pic_stats['знімок лінійки'] += 1
             continue
         if codes and any(m in codes for m in CODE_MARKERS):
@@ -275,6 +303,14 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
             seen_hashes.append(h)
         kept.append(url)
     if not kept:
+        # Якщо все, що лишилось, — дрібні кадри, картку не рятуємо: показати
+        # товар нічим, і Rozetka однаково вимагає щонайменше одне фото.
+        # Для решти причин (коди, повтори) лишаємо як було — краще картка
+        # зі спірним фото, ніж її зникнення з продажу.
+        if all((audit.get(_key(u), (None, None, None))[2] or 10 ** 6)
+               < MIN_PHOTO_SIDE for u in pics):
+            _pic_stats['картку знято: усі фото дрібні'] += 1
+            return []
         _pic_stats['лишили як було (інакше 0 фото)'] += 1
         return pics
     if len(kept) < len(pics):
@@ -282,10 +318,10 @@ def clean_pics(sku: str, pics: list, audit: dict, conflicts: dict = None) -> lis
     # Зауваження раунду 1 п.7 і раунду 2 п.6: головним має бути кадр самого
     # товару. Спільне для лінійки зображення зсуваємо в кінець, зберігаючи
     # відносний порядок решти — але тільки якщо є чим його замінити.
-    if demote and kept[0] in demote:
-        rest = [u for u in kept if u not in demote]
+    if demote and _key(kept[0]) in demote:
+        rest = [u for u in kept if _key(u) not in demote]
         if rest:
-            kept = rest + [u for u in kept if u in demote]
+            kept = rest + [u for u in kept if _key(u) in demote]
             _pic_stats['головне фото замінено'] += 1
     return kept
 
@@ -1054,6 +1090,67 @@ def _match_value(value: str, allowed: list, vmap: dict, _param: str = '',
     return None
 
 
+# Постачальник називає характеристики по-своєму, і назва, якої немає в
+# довіднику категорії, просто зникає з картки. Виміряно на живих даних:
+# «Тип товару» втрачався 2450 разів, «Сумісність з презервативами» 126,
+# «Зігріваючий» 136. Дані були — не збігалась назва.
+#
+# Перейменування застосовується ЛИШЕ якщо цільова назва є в довіднику саме
+# цієї категорії: у білизні «Тип» є, у чоловічій білизні натомість «Вид».
+NAME_ALIAS = {
+    'Тип товару': ('Тип', 'Вид'),
+    'Тип приладу': ('Тип',),
+    'Тип аксесуара': ('Тип',),
+    'Вид товару': ('Вид', 'Тип'),
+    'Довжина (мм)': ('Довжина',),
+    'Стать': ('Для кого',),
+    'Основа': ('Основа мастила', 'Основа'),
+    'Сумісність з презервативами': ('Сумісність з презервативом',),
+}
+# Прапорці постачальника («Зігріваючий: так») — це не окрема характеристика,
+# а ЗНАЧЕННЯ іншої. Ставимо його, лише якщо і назва, і значення є в довіднику.
+FLAG_TO_VALUE = {
+    'Зігріваючий': (('Ефекти', 'Ефект'), 'Зігріваючі'),
+    'Охолоджуючий': (('Ефекти', 'Ефект'), 'Охолоджуючі'),
+    'Збуджуючий': (('Ефекти', 'Ефект'), 'Збуджуючі'),
+    'Пролонгуючий': (('Ефекти', 'Ефект'), 'Пролонгуючі'),
+    'Їстівна формула': (('Призначення',),
+                        'Для орального сексу (їстівний лубрикант)'),
+    'Сумісність з секс-іграшками': (('Призначення',),
+                                    'Для іграшок (сумісний із секс-іграшками)'),
+}
+_NO = {'ні', 'нет', 'no', 'false', '0', ''}
+_alias_used = collections.Counter()
+
+
+def apply_aliases(raw: dict, spec: dict) -> dict:
+    """Привести назви постачальника до довідника цієї категорії."""
+    if not spec:
+        return raw
+    out = dict(raw)
+    for src, targets in NAME_ALIAS.items():
+        if src not in out:
+            continue
+        for t in targets:
+            if t.lower() in spec and not out.get(t):
+                out[t] = out.pop(src)
+                _alias_used[f'{src} → {t}'] += 1
+                break
+    for flag, (targets, value) in FLAG_TO_VALUE.items():
+        v = str(out.get(flag, '')).strip().lower()
+        if not v or v in _NO:
+            continue
+        for t in targets:
+            entry = spec.get(t.lower())
+            if entry and value in entry[1]:
+                cur_v = out.get(t)
+                out[t] = f'{cur_v} | {value}' if cur_v else value
+                out.pop(flag, None)
+                _alias_used[f'{flag} → {t}: {value}'] += 1
+                break
+    return out
+
+
 def fit_params(raw: dict, rz_id: str, official: dict, _sku: str = '') -> dict:
     """Лишити тільки те, що Rozetka справді покаже.
 
@@ -1074,6 +1171,7 @@ def fit_params(raw: dict, rz_id: str, official: dict, _sku: str = '') -> dict:
     spec = official.get(rz_id, {})
     if not spec:
         return raw
+    raw = apply_aliases(raw, spec)
     alias = PARAM_ALIAS.get(rz_id, {})
     out, effects = {}, []
     for name, value in raw.items():
@@ -1330,6 +1428,9 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         # Чистка фото — після заморозки й для замороженого теж: це виправлення
         # на вимогу відділу адаптації, а не самовільна зміна картки.
         pics = clean_pics(sku, pics, photo_audit, photo_conflicts)
+        if not pics:
+            stats['skip_pic'] += 1
+            continue
         name = snap['name'] if snap else NAME_OVERRIDE.get(sku, p['name'] or '')
         raw = dict(params.get(sku, {}))
         for k, v in easytoys.get(sku, {}).items():
@@ -1466,14 +1567,21 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
         for sku, was, now in _vol_fixed:
             logger.info(f'      {sku}: {", ".join(was)} → {now} мл')
     logger.info(f"  пропущено <3 характеристик: {stats['skip_params']}")
+    if _alias_used:
+        logger.info('  зіставлено назв характеристик: ' + ', '.join(
+            f'{k} — {v}' for k, v in _alias_used.most_common(8)))
     if stats['frozen']:
         logger.info(f"  заморожених карток      : {stats['frozen']} "
                     f"(з живих даних лише ціна й наявність)")
     if stats['skip_dup']:
         logger.info(f"  пропущено дублів артикула : {stats['skip_dup']}")
     if stats['no_rz_id']:
-        logger.warning(f"  пропущено без rz_id категорії: {stats['no_rz_id']} "
-                       f"(заповни rozetka_category_id у rozetka_category_mapping)")
+        # Це не дефект мапінгу. Усі ці позиції — «Товари для жіночого
+        # здоровʼя» (вагінальні кульки, тренажери Кегеля): рішення власника
+        # від 16.08.2026 — на Rozetka цю групу не виводимо. rz_id лишається
+        # порожнім свідомо, як позначка виключення.
+        logger.info(f"  свідомо не виводимо (жіноче здоровʼя): "
+                    f"{stats['no_rz_id']}")
     return stats['total']
 
 

@@ -62,7 +62,15 @@ def flat(t: str) -> str:
 
 
 def near_hit(text: str, value: str, keys) -> bool:
-    for m in re.finditer(re.escape(value.lower()), text):
+    """Значення поряд зі словом своєї характеристики — і як ціле слово.
+
+    Без межі слова «Нім» (олія неєму) знаходився всередині «незабутнім», а
+    «Мед» — у «медичний». Підрядок тут не годиться так само, як і в
+    прямому пошуку.
+    """
+    rx = re.compile(r'(?<![а-яіїєґa-z])' + re.escape(value.lower()) +
+                    r'(?![а-яіїєґa-z])')
+    for m in rx.finditer(text):
         a = max(0, m.start() - WINDOW)
         if any(k in text[a:m.end() + WINDOW] for k in keys):
             return True
