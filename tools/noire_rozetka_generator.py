@@ -180,7 +180,11 @@ def load_photo_audit(cur) -> dict:
                        FROM noire_photo_audit WHERE error IS NULL""")
         out = {}
         for r in cur.fetchall():
-            side = min(r['width'] or 0, r['height'] or 0) or None
+            # Рахуємо БІЛЬШУ сторону: кадр 400×600 показує товар нормально,
+            # він просто вузький. За меншою стороною ми знімали б 110 карток
+            # замість 6 справді дрібних — рішення власника 16.08.2026:
+            # такі пропорції дозволяємо.
+            side = max(r['width'] or 0, r['height'] or 0) or None
             out[re.sub(r'^https?://', '', r['url'])] = (r['phash'], r['codes'],
                                                         side)
         return out
