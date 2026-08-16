@@ -61,6 +61,7 @@ MAX_PICTURES = 10        # офіційний ліміт Prom (у Rozetka 15)
 IN_STOCK = os.getenv('NOIRE_PROM_IN_STOCK', '0') == '1'
 BROKEN_PICS = set()
 ACTUAL_CAT = {}
+SUPPLIER_PARAMS = {}
 MAX_NAME = 110           # правила оформлення карток
 
 # Скорочення назв для видимої зони — рахується окремо
@@ -76,10 +77,11 @@ MAX_PARAMS = 100
 MAX_ARTICLE = 25
 MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні характеристики»
 # Було 3: правило писалося тоді, коли поле лишалось ПОРОЖНІМ, і дві
-# найзагальніші фрази справді не давали користі. Тепер у полі завжди є
-# артикул і широкі фрази з тегових сторінок, тож викидати одну-дві
-# ПРАВДИВІ фрази — чиста втрата: «кріплення для душу» краще за нічого.
+# найзагальніші фрази справді не давали користі. Тепер поле добирається
+# широкими фразами з тегових сторінок, тож викидати одну-дві ПРАВДИВІ
+# фрази — чиста втрата: «кріплення для душу» краще за нічого.
 MIN_KEYWORDS = 1
+KEYWORD_TARGET = 9
 MAX_KEYWORDS = 1000      # офіційний ліміт не задокументований, тримаємось нижче
 
 # Порогів «відкритого словника», як у Rozetka, тут немає: найбільший список
@@ -873,6 +875,19 @@ def load_actual_categories(cur) -> dict:
         return {}
 
 
+def load_supplier_params(cur) -> dict:
+    """sku → {атрибут Prom: значення} з таблиці постачальника."""
+    try:
+        cur.execute('SELECT sku, param, value FROM prom_derived_params')
+        out = {}
+        for r in cur.fetchall():
+            out.setdefault(r['sku'], {})[r['param']] = r['value']
+        return out
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return {}
+
+
 def load_broken_pics(cur) -> set:
     """Посилання на фото, які постачальник віддає з помилкою."""
     try:
@@ -937,6 +952,8 @@ def generate(out_file=OUT, limit=None):
     BROKEN_PICS = load_broken_pics(cur)
     global ACTUAL_CAT
     ACTUAL_CAT = load_actual_categories(cur)
+    global SUPPLIER_PARAMS
+    SUPPLIER_PARAMS = load_supplier_params(cur)
     ru = load_ru(cur)
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
@@ -1075,6 +1092,15 @@ def generate(out_file=OUT, limit=None):
             if p['country']:
                 raw.setdefault('Країна-виробник',
                                p['country'].split('(')[0].strip())
+            # Характеристики з кабінету постачальника (tools/sexopt_prices.py
+            # → tools/prom_supplier_params.py): матеріал, довжина, діаметр,
+            # маса, вібрація. Це структурована таблиця з картки товару, а не
+            # витяг регулярками з опису, тому точніша за все, що ми мали.
+            # Ставимо лише туди, де порожньо: пряме поле фіду надійніше.
+            for k, v in SUPPLIER_PARAMS.get(sku, {}).items():
+                if not raw.get(k):
+                    raw[k] = v
+                    st['характеристики від постачальника'] += 1
             prm = fit_params(raw, pid, attrs, sku,
                              params_boost.get(sku) or {})
             if group_id:
@@ -1155,20 +1181,17 @@ def generate(out_file=OUT, limit=None):
             def _fill(base, lang):
                 cur_ph = [x.strip() for x in base.split(',') if x.strip()]
                 seen = {x.lower() for x in cur_ph}
+                # Ціль 9, а не 8. Дев'ятий слот раніше займав артикул —
+                # рішення власника 16.08.2026 прибрати його: внутрішній код
+                # постачальника покупець ніде не бачить і в пошук не вводить.
+                # Слот віддаємо ще одній фразі з семантичного ядра, яка має
+                # шанс збігтися з реальним запитом.
                 for t in tags.get((cat_ua, lang), []):
-                    if len(cur_ph) >= 8:
+                    if len(cur_ph) >= KEYWORD_TARGET:
                         break
                     if t.lower() not in seen:
                         seen.add(t.lower())
                         cur_ph.append(t)
-                # Артикул останнім, поза лімітом у 8 фраз. Prom шукає по
-                # тексту назви й пошукових запитів, поле <vendorCode> у
-                # пошуку не бере участі. Перевірено на EGG-001L: за
-                # артикулом видача дає десять карток конкурентів, які
-                # пишуть його в назві, і жодної нашої.
-                if sku and sku.lower() not in seen:
-                    cur_ph.append(sku)
-                    st['артикул у пошукових запитах'] += 1
                 return ', '.join(cur_ph)[:MAX_KEYWORDS]
 
             kw = _fill(kw, 'ua')
