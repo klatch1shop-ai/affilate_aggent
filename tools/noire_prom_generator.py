@@ -888,6 +888,29 @@ def load_supplier_params(cur) -> dict:
         return {}
 
 
+def load_rewritten(cur) -> dict:
+    """Унікальні описи замість тексту постачальника.
+
+    Опис від SexOpt дослівно збігається з картками інших дропшиперів того
+    самого постачальника — замір `prom_dup_check.py` дав середні 90%, девʼять
+    позицій із вісімнадцяти збіглись слово в слово. Тут підставляється текст,
+    складений із фактів (`prom_desc_rewrite.py`).
+
+    Беремо ЛИШЕ `status = 'ok'`. Позиція, що не пройшла валідатор, лишається
+    з оригінальним описом: дубль гірший за унікальність, але вигадана
+    характеристика гірша за дубль.
+    """
+    try:
+        cur.execute("""SELECT sku, rewritten, rewritten_ru
+                       FROM prom_rewritten_desc
+                       WHERE status = 'ok' AND COALESCE(rewritten, '') <> ''""")
+        return {r['sku']: dict(r) for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('prom_rewritten_desc недоступна — описи від постачальника')
+        return {}
+
+
 def load_broken_pics(cur) -> set:
     """Посилання на фото, які постачальник віддає з помилкою."""
     try:
@@ -955,6 +978,8 @@ def generate(out_file=OUT, limit=None):
     global SUPPLIER_PARAMS
     SUPPLIER_PARAMS = load_supplier_params(cur)
     ru = load_ru(cur)
+    rewritten = load_rewritten(cur)
+    logger.info(f'Унікальних описів підставлено: {len(rewritten)}')
     conn.close()
     logger.info(f'Товарів у вибірці: {len(products)}')
 
@@ -1087,6 +1112,11 @@ def generate(out_file=OUT, limit=None):
                              if (x['description_html'] or '').strip()), '')
                 st['опис узято з різновиду'] += 1
             desc = strip_links(desc, st)
+            # Унікальний опис має пріоритет над текстом постачальника.
+            rw = rewritten.get(sku) or {}
+            if rw.get('rewritten'):
+                desc = rw['rewritten']
+                st['опис унікальний (переписаний)'] += 1
 
             raw = dict(params.get(sku, {}))
             if p['country']:
@@ -1164,6 +1194,10 @@ def generate(out_file=OUT, limit=None):
             # description і description_ua ЗАВЖДИ разом: без пари Prom не
             # застосує ані український опис, ані українську назву.
             desc_ru = strip_links((rr.get('description_ru') or '').strip(), st)
+            # Російське поле теж має бути унікальним: інакше картка лишається
+            # дублем для тих, хто дивиться її російською.
+            if rw.get('rewritten_ru'):
+                desc_ru = rw['rewritten_ru']
             if desc_ru:
                 st['опис рос. з окремого фіду'] += 1
             else:

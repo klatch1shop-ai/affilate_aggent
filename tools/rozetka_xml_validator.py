@@ -253,11 +253,19 @@ class RozetkaXMLValidator:
             result["warns"] += 1
 
         # stock_quantity
+        # Нуль сам собою не помилка: у парі з available="false" це штатне
+        # позначення «немає в наявності» (sellerhelp: «при досягненні 0 товар
+        # зникає з продажу»). Помилка — лише коли товар оголошено доступним,
+        # а залишку немає: тоді Rozetka прийме оффер і одразу його сховає.
+        # Доти правило давало 1178 хибних помилок на 4147 офферів і робило
+        # звіт нечитним — справжні дефекти тонули в шумі.
+        available = (offer.get("available") or "true").strip().lower()
         sq_txt = _txt(offer, "stock_quantity")
         try:
             sq = int(float(sq_txt))
-            if sq <= 0:
-                self._err(oid, "stock_quantity", f"stock_quantity <= 0: {sq}")
+            if sq <= 0 and available != "false":
+                self._err(oid, "stock_quantity",
+                          f"stock_quantity <= 0 при available=\"{available}\": {sq}")
                 result["errors"] += 1
         except ValueError:
             self._err(oid, "stock_quantity", f"stock_quantity не є числом: '{sq_txt}'")

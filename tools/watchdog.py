@@ -123,6 +123,39 @@ def tg(msg: str):
         log(f"[tg] помилка: {e}")
 
 
+def probe_raw(url: str, min_bytes: int, label: str = "",
+              attempts: int = 3, pause: float = 20.0) -> str:
+    """Доступність опублікованого фіду. Порожній рядок = все гаразд.
+
+    Одного запиту замало. raw.githubusercontent.com — CDN, і він регулярно
+    віддає 429/502/503 на секунди. 17.08.2026 з 15:40 до 18:10 watchdog
+    надіслав вісім тривог, тоді як паралельна перевірка з іншої мережі дала
+    45 успішних відповідей поспіль: фід був доступний увесь час.
+
+    Тому проблемою вважається лише стійка недоступність — кілька спроб із
+    паузою, і достатньо однієї вдалої, щоб визнати фід живим.
+    """
+    what = f"raw-URL {label}".strip()
+    last = ""
+    for i in range(attempts):
+        try:
+            r = requests.head(url, timeout=30, allow_redirects=True,
+                              headers=IDENTITY)
+            if r.status_code == 200:
+                if int(r.headers.get("content-length", 0)) < min_bytes:
+                    return f"{what} віддає підозріло малий файл"
+                return ""
+            last = f"HTTP {r.status_code}"
+        except Exception as e:
+            last = type(e).__name__
+        if i < attempts - 1:
+            time.sleep(pause)
+    # Код відповіді НЕ входить у текст: доти він був частиною ключа
+    # дедуплікації, і чергування 429 → 503 → 502 щоразу вважалось новою
+    # проблемою. Одна несправність давала вісім тривог замість однієї.
+    return f"{what} недоступний {attempts} спроби поспіль (останнє: {last})"
+
+
 # ── check 1: git ──────────────────────────────────────────────────────────────
 
 def check_git() -> dict:
@@ -263,15 +296,9 @@ def check_noire_feed() -> dict:
     else:
         problems.append("локального фіду немає")
 
-    try:
-        r = requests.head(NOIRE_RAW_URL, timeout=30, allow_redirects=True,
-                          headers=IDENTITY)
-        if r.status_code != 200:
-            problems.append(f"raw-URL віддає HTTP {r.status_code}")
-        elif int(r.headers.get("content-length", 0)) < 1_000_000:
-            problems.append("raw-URL віддає підозріло малий файл")
-    except Exception as e:
-        problems.append(f"raw-URL недоступний: {type(e).__name__}")
+    bad = probe_raw(NOIRE_RAW_URL, 1_000_000)
+    if bad:
+        problems.append(bad)
 
     if problems:
         key = "; ".join(problems)[:200]
@@ -307,15 +334,9 @@ def check_noire_prom_feed() -> dict:
     else:
         problems.append("локального фіду Prom немає")
 
-    try:
-        r = requests.head(NOIRE_PROM_RAW_URL, timeout=30, allow_redirects=True,
-                          headers=IDENTITY)
-        if r.status_code != 200:
-            problems.append(f"raw-URL Prom віддає HTTP {r.status_code}")
-        elif int(r.headers.get("content-length", 0)) < NOIRE_PROM_MIN_BYTES:
-            problems.append("raw-URL Prom віддає підозріло малий файл")
-    except Exception as e:
-        problems.append(f"raw-URL Prom недоступний: {type(e).__name__}")
+    bad = probe_raw(NOIRE_PROM_RAW_URL, NOIRE_PROM_MIN_BYTES, "Prom")
+    if bad:
+        problems.append(bad)
 
     if problems:
         key = "; ".join(problems)[:200]
@@ -351,15 +372,9 @@ def check_noire_rozetka_feed() -> dict:
     else:
         problems.append("локального фіду Rozetka немає")
 
-    try:
-        r = requests.head(NOIRE_RZ_RAW_URL, timeout=30, allow_redirects=True,
-                          headers=IDENTITY)
-        if r.status_code != 200:
-            problems.append(f"raw-URL Rozetka віддає HTTP {r.status_code}")
-        elif int(r.headers.get("content-length", 0)) < NOIRE_RZ_MIN_BYTES:
-            problems.append("raw-URL Rozetka віддає підозріло малий файл")
-    except Exception as e:
-        problems.append(f"raw-URL Rozetka недоступний: {type(e).__name__}")
+    bad = probe_raw(NOIRE_RZ_RAW_URL, NOIRE_RZ_MIN_BYTES, "Rozetka")
+    if bad:
+        problems.append(bad)
 
     if problems:
         key = "; ".join(problems)[:200]
