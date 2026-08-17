@@ -888,6 +888,32 @@ def load_supplier_params(cur) -> dict:
         return {}
 
 
+def load_param_overrides(cur) -> dict:
+    """sku → {характеристика: значення} — виправлення поверх даних постачальника.
+
+    `SUPPLIER_PARAMS` лише заповнює порожнє (`if not raw.get(k)`), тому хибне
+    значення ним не перебити. А хибні значення бувають: постачальник ставив
+    `Тип = Анальний душ` усім 33 позиціям категорії «Анальні пробки», зокрема
+    вібропробкам Satisfyer і We-Vibe. Опис і назва казали одне, характеристика
+    на тій самій сторінці — інше; це рівно та «розбіжність даних», за яку
+    знімає з публікації модерація Rozetka.
+
+    Порожнє значення = прибрати характеристику зовсім (краще, ніж хибна).
+    Значення береться з довідника категорії Prom, а не вигадується:
+    `prom_attribute_values`.
+    """
+    try:
+        cur.execute("""SELECT sku, param, value FROM prom_param_override""")
+        out = {}
+        for r in cur.fetchall():
+            out.setdefault(r['sku'], {})[r['param']] = (r['value'] or '').strip()
+        return out
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('prom_param_override недоступна')
+        return {}
+
+
 def load_rewritten(cur) -> dict:
     """Унікальні описи замість тексту постачальника.
 
@@ -978,6 +1004,8 @@ def generate(out_file=OUT, limit=None):
     global SUPPLIER_PARAMS
     SUPPLIER_PARAMS = load_supplier_params(cur)
     ru = load_ru(cur)
+    param_over = load_param_overrides(cur)
+    logger.info(f'Позицій із виправленими характеристиками: {len(param_over)}')
     rewritten = load_rewritten(cur)
     logger.info(f'Унікальних описів підставлено: {len(rewritten)}')
     conn.close()
@@ -1131,6 +1159,15 @@ def generate(out_file=OUT, limit=None):
                 if not raw.get(k):
                     raw[k] = v
                     st['характеристики від постачальника'] += 1
+            # Виправлення застосовуються ОСТАННІМИ — вони мають перебивати і
+            # постачальника, і наші похідні значення.
+            for k, v in (param_over.get(sku) or {}).items():
+                if v:
+                    raw[k] = v
+                    st['характеристику виправлено'] += 1
+                else:
+                    raw.pop(k, None)
+                    st['характеристику прибрано'] += 1
             prm = fit_params(raw, pid, attrs, sku,
                              params_boost.get(sku) or {})
             if group_id:
