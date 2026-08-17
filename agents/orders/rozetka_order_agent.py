@@ -126,6 +126,47 @@ def get_carvol_feed(force=False) -> dict:
         return {}
 
 
+# === АРТИКУЛИ NOIRE ===
+#
+# У кабінеті тепер два асортименти під одним акаунтом: автотовари Carvol і
+# NOIRE. Фіди різні, перетин артикулів нульовий (7108 проти 4147, перевірено
+# 17.08.2026).
+#
+# Це критично саме через семантику фіду Carvol: у ньому НЕМАЄ записів з
+# available="false" — постачальник викладає лише наявне. Тому для товарів
+# Carvol «немає у фіді» законно означає «немає в наявності», і скасування
+# правильне. Але для NOIRE той самий висновок хибний: його артикулів у фіді
+# Carvol немає ніколи, і без цього поділу кожне NOIRE-замовлення
+# скасовувалось би автоматично.
+NOIRE_FEED_FILE = os.getenv(
+    'NOIRE_ROZETKA_FEED', '/home/tek/agent-system/output/noire_rozetka.xml')
+_noire_cache = {'data': set(), 'updated': None}
+
+
+def get_noire_articles(force=False) -> set:
+    """Артикули NOIRE. Порожня множина = прочитати не вдалось."""
+    now = datetime.now()
+    if (not force and _noire_cache['updated'] and
+            (now - _noire_cache['updated']).seconds < 3600):
+        return _noire_cache['data']
+    try:
+        root = ET.parse(NOIRE_FEED_FILE).getroot()
+        arts = set()
+        for offer in root.findall('.//offer'):
+            a = (offer.findtext('article') or '').strip()
+            if a:
+                arts.add(a)
+        if not arts:
+            raise ValueError('у фіді NOIRE немає артикулів')
+        _noire_cache['data']    = arts
+        _noire_cache['updated'] = now
+        logger.info(f'Артикулів NOIRE: {len(arts)}')
+        return arts
+    except Exception as e:
+        logger.error(f'Фід NOIRE недоступний: {e}')
+        return _noire_cache['data']
+
+
 # === РОЗЕТКА API ===
 
 def get_new_orders() -> list:
@@ -720,15 +761,43 @@ def process_order(order: dict, feed: dict):
     items_info    = []
     all_available = True
 
+    # Три різні стани, а не два. Доти «немає доказу наявності» і «є доказ
+    # відсутності» зливались в один, і замовлення скасовувалось у обох
+    # випадках. 17.08.2026 це знищило замовлення Єпіцентру #0307dcfb: база
+    # ще піднімалась після перезавантаження, фід не прочитався — агент
+    # скасував товар, який був у наявності.
+    #
+    # Окремо: у цьому акаунті тепер два асортименти. Фід Carvol містить лише
+    # автотовари (7108 артикулів), NOIRE — інші 4147, перетин нульовий. Без
+    # цього поділу кожне NOIRE-замовлення скасовувалось би автоматично.
+    unknown = []          # не наш висновок робити: NOIRE або невідомий постачальник
+    out_of_stock = []     # товар Carvol, якого немає у фіді → справді немає
+
+    noire = get_noire_articles()
+
     for purchase in purchases:
         offer_id  = (purchase.get('item') or {}).get('article') or purchase.get('article', '')
         sku       = str(offer_id).strip()
-        feed_item = feed.get(sku, {})
-        available = feed_item.get('available', False)
-        qty       = feed_item.get('qty', 0)
-        if not available:
-            all_available = False
-            logger.warning(f'  {sku} — немає в Carvol (qty={qty})')
+        feed_item = feed.get(sku) if feed else None
+        qty       = (feed_item or {}).get('qty', 0)
+        if feed_item is not None and feed_item.get('available'):
+            available = True
+        elif sku in noire:
+            available = None
+            unknown.append(sku)
+            logger.info(f'  {sku} — товар NOIRE, автоматично не обробляється')
+        elif not noire or not feed:
+            # Один зі списків недоступний: або не відрізнити постачальника,
+            # або не перевірити наявність. Скасовувати не маємо права.
+            # Головний цикл із порожнім фідом сюди не дійде, але правило має
+            # бути безпечним і без цієї охорони.
+            available = None
+            unknown.append(sku)
+            logger.warning(f'  {sku} — дані неповні, постачальник/наявність невідомі')
+        else:
+            available = False
+            out_of_stock.append(sku)
+            logger.warning(f'  {sku} — товар Carvol поза фідом → немає в наявності')
         items_info.append({
             'sku':       sku,
             'name':      purchase.get('item_name') or purchase.get('name', ''),
@@ -738,16 +807,39 @@ def process_order(order: dict, feed: dict):
             'feed_qty':  qty,
         })
 
+    all_available = not unknown and not out_of_stock
     ri = _order_recipient_info(details)
 
-    # Товар відсутній → скасування
-    if not all_available:
-        unavailable = [i['sku'] for i in items_info if not i['available']]
-        cancel_order(order_id, 'Товар відсутній у постачальника')
-        save_to_db(details, 'cancelled_no_stock')
-        tg(f'❌ <b>{MARKETPLACE} #{order_id} — товар відсутній!</b>\n'
+    # Доказ відсутності є → скасовуємо (поведінка Carvol збережена).
+    if out_of_stock:
+        # Результат скасування ПЕРЕВІРЯЄМО. Доти він ігнорувався, і Telegram
+        # рапортував «Скасовано» навіть коли API відмовляв: 17.08.2026 так
+        # прийшло повідомлення про скасування #903360600, яке насправді
+        # лишилось у статусі 61.
+        done = cancel_order(order_id, 'Товар відсутній у постачальника')
+        save_to_db(details, 'cancelled_no_stock' if done else 'cancel_failed')
+        if done:
+            tg(f'❌ <b>{MARKETPLACE} #{order_id} — товар відсутній!</b>\n'
+               f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
+               f'Відсутні SKU: {", ".join(out_of_stock)}\nСкасовано.')
+        else:
+            tg(f'⚠️ <b>{MARKETPLACE} #{order_id} — скасувати НЕ вдалось</b>\n'
+               f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
+               f'Відсутні SKU: {", ".join(out_of_stock)}\n'
+               f'Замовлення лишається активним — розібратись вручну.')
+        return
+
+    # Доказу немає — не скасовуємо нічого. Статус 'manual_review' зберігається
+    # в базі, тому наступний цикл не візьме замовлення знову і Telegram не
+    # засипле однаковими сповіщеннями.
+    if unknown:
+        save_to_db(details, 'manual_review')
+        tg(f'🖐 <b>{MARKETPLACE} #{order_id} — ручна обробка</b>\n'
            f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
-           f'Відсутні SKU: {", ".join(unavailable)}\nСкасовано.')
+           f'SKU не з фіду Carvol: {", ".join(unknown)}\n'
+           f'💰 {ri["total"]:.0f} грн\n'
+           f'<b>Замовлення НЕ скасовано</b> — обробити вручну в кабінеті.')
+        logger.info(f'#{order_id} → ручна обробка ({len(unknown)} SKU поза Carvol)')
         return
 
     # Передоплата → чекаємо підтвердження оплати (пропускаємо якщо оплата вже підтверджена)
@@ -819,9 +911,24 @@ def main():
 
     tg(f'🚀 <b>{MARKETPLACE} Order Agent v4 запущено</b>')
 
+    feed_alerted = False
     while True:
         feed = get_carvol_feed()
         try:
+            # Порожній фід — це «не знаю», а не «нічого немає». Раніше цикл
+            # ішов далі й скасовував усе підряд; тепер пропускаємо цикл і
+            # пробуємо ще раз, бо після рестарту кеш порожній за визначенням.
+            if not feed:
+                if not feed_alerted:
+                    tg(f'⚠️ <b>{MARKETPLACE} Order Agent</b>: фід Carvol '
+                       f'недоступний — замовлення не обробляються, '
+                       f'жодне не скасовано. Чекаю наступного циклу.')
+                    feed_alerted = True
+                logger.warning('Фід Carvol порожній — цикл пропущено')
+                time.sleep(POLL_INTERVAL)
+                continue
+            feed_alerted = False
+
             orders = get_new_orders()
             if orders:
                 logger.info(f'Знайдено {len(orders)} нових замовлень')

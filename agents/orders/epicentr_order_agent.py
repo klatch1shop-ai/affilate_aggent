@@ -123,7 +123,15 @@ def get_new_orders() -> list:
         if r.status_code != 200:
             logger.error(f'OMS помилка {r.status_code}: {r.text[:200]}')
             return []
-        return r.json().get('items', [])
+        items = r.json().get('items', [])
+        # Фільтр statusCode=new у запиті Єпіцентр не застосовує: 17.08.2026
+        # він повернув чотири замовлення зі статусом "canceled", створені ще
+        # у квітні. Тому статус перевіряємо самі, а не віримо параметру.
+        fresh = [o for o in items if (o.get('statusCode') or '').lower() == 'new']
+        if len(fresh) != len(items):
+            logger.warning(f'OMS віддав {len(items)} замовлень, з них справді '
+                           f'нових {len(fresh)} — решту відкинуто за статусом')
+        return fresh
     except Exception as e:
         logger.error(f'get_new_orders: {e}')
         return []
@@ -214,8 +222,14 @@ def save_to_db(order: dict, status: str):
         logger.error(f'save_to_db: {e}')
 
 
-def is_already_processed(order_id: str) -> bool:
-    """Перевірити чи замовлення вже оброблялось."""
+def is_already_processed(order_id: str):
+    """True — оброблялось, False — ні, None — перевірити не вдалось.
+
+    Раніше при недоступній базі поверталось False, тобто «не оброблялось».
+    17.08.2026 після перезавантаження PostgreSQL ще піднімався — агент
+    втратив памʼять і взяв у роботу чотири замовлення, скасовані ще в квітні
+    й липні, розіславши тривоги про них заново.
+    """
     try:
         conn = get_connection()
         cur  = conn.cursor()
@@ -226,8 +240,9 @@ def is_already_processed(order_id: str) -> bool:
         exists = cur.fetchone() is not None
         cur.close(); conn.close()
         return exists
-    except:
-        return False
+    except Exception as e:
+        logger.error(f'is_already_processed({order_id}): {e}')
+        return None
 
 
 # === EXCEL БЛАНК ===
@@ -362,7 +377,11 @@ def process_order(order: dict, feed: dict):
     order_id  = order.get('id', '')
     ext_id    = order.get('externalId') or order_id[:8]
 
-    if is_already_processed(order_id):
+    processed = is_already_processed(order_id)
+    if processed is None:
+        logger.warning(f'#{ext_id} — стан у базі невідомий, пропускаємо цикл')
+        return
+    if processed:
         return
 
     logger.info(f'Обробляємо {MARKETPLACE} замовлення #{ext_id}')
@@ -382,6 +401,15 @@ def process_order(order: dict, feed: dict):
     items_info   = []
     all_available = True
 
+    # Три стани замість двох: є доказ наявності, є доказ відсутності, і
+    # «перевірити не вдалось». Останній доти зливався з відсутністю.
+    # 17.08.2026 о 18:25 це коштувало замовлення #0307dcfb: після
+    # перезавантаження PostgreSQL ще піднімався, маппінг не прочитався,
+    # артикул 2934020997 не знайшовся у фіді під сирим номером — і товар,
+    # який був у наявності, скасувався автоматично.
+    unknown = []
+    out_of_stock = []
+
     for item in items:
         # SKU береться з productExternalId або з маппінгу
         product_ext_id = item.get('productExternalId') or item.get('sku', '')
@@ -389,6 +417,7 @@ def process_order(order: dict, feed: dict):
 
         # Шукаємо наш SKU через epicentr_sku_mapping
         our_sku = sku
+        mapping_ok = False
         try:
             conn = get_connection()
             cur  = conn.cursor()
@@ -400,15 +429,24 @@ def process_order(order: dict, feed: dict):
             if row:
                 our_sku = row['our_sku'].upper()
             cur.close(); conn.close()
-        except:
-            pass
+            mapping_ok = True
+        except Exception as e:
+            # Мовчазний `except: pass` тут і був коренем аварії: помилка бази
+            # зникала без сліду, а далі код працював із сирим артикулом, наче
+            # маппінг просто нічого не знайшов.
+            logger.error(f'  {product_ext_id} — маппінг недоступний: {e}')
 
-        feed_item = feed.get(our_sku, {})
-        available = feed_item.get('available', False)
-
-        if not available:
-            all_available = False
-            logger.warning(f'  {our_sku} — відсутній у фіді')
+        feed_item = feed.get(our_sku) if feed else None
+        if not mapping_ok or feed_item is None:
+            available = None
+            reason = 'маппінг недоступний' if not mapping_ok else 'немає у фіді'
+            unknown.append(our_sku)
+            logger.warning(f'  {our_sku} — наявність невідома ({reason})')
+        else:
+            available = bool(feed_item.get('available'))
+            if not available:
+                out_of_stock.append(our_sku)
+                logger.warning(f'  {our_sku} — фід підтверджує відсутність')
 
         items_info.append({
             'sku':       our_sku,
@@ -419,21 +457,42 @@ def process_order(order: dict, feed: dict):
             'available': available,
         })
 
+    all_available = not unknown and not out_of_stock
+
     total = sum(i.get('subtotal', 0) for i in items)
     addr  = details.get('address') or {}
     customer = f"{addr.get('lastName','')} {addr.get('firstName','')}".strip()
     phone    = addr.get('phone', '')
 
-    if not all_available:
-        # Скасовуємо
-        unavailable = [i['sku'] for i in items_info if not i['available']]
-        cancel_order(order_id)
-        save_to_db(details, 'cancelled_no_stock')
-        tg(f"""❌ <b>{MARKETPLACE} замовлення #{ext_id} — товар відсутній!</b>
+    # Скасовуємо лише за доказом відсутності.
+    if out_of_stock:
+        # Результат скасування перевіряємо, а не припускаємо (див. той самий
+        # дефект у rozetka_order_agent).
+        done = cancel_order(order_id)
+        save_to_db(details, 'cancelled_no_stock' if done else 'cancel_failed')
+        if done:
+            tg(f"""❌ <b>{MARKETPLACE} замовлення #{ext_id} — товар відсутній!</b>
 Клієнт: {customer} {phone}
-Відсутні: {', '.join(unavailable)}
+Відсутні: {', '.join(out_of_stock)}
 Замовлення скасовано автоматично.""")
-        logger.warning(f'Замовлення #{ext_id} скасовано — немає товару')
+            logger.warning(f'Замовлення #{ext_id} скасовано — немає товару')
+        else:
+            tg(f"""⚠️ <b>{MARKETPLACE} #{ext_id} — скасувати НЕ вдалось</b>
+Клієнт: {customer} {phone}
+Відсутні: {', '.join(out_of_stock)}
+Замовлення лишається активним — розібратись вручну.""")
+            logger.error(f'Замовлення #{ext_id} — cancel_order повернув False')
+        return
+
+    # Перевірити не вдалось — замовлення лишається живим і чекає людини.
+    if unknown:
+        save_to_db(details, 'manual_review')
+        tg(f"""🖐 <b>{MARKETPLACE} замовлення #{ext_id} — ручна обробка</b>
+Клієнт: {customer} {phone}
+Наявність не перевірена: {', '.join(unknown)}
+💰 {total:.0f} грн
+<b>Замовлення НЕ скасовано</b> — перевірити вручну в кабінеті.""")
+        logger.info(f'#{ext_id} → ручна обробка ({len(unknown)} поз. без перевірки)')
         return
 
     # Підтверджуємо
@@ -467,6 +526,13 @@ def main():
         try:
             logger.info('Перевіряємо нові замовлення...')
             feed   = get_feed_data()
+            # Порожній фід = «не знаю». Після рестарту кеш порожній за
+            # визначенням, тому цикл пропускаємо, а не обробляємо наосліп.
+            if not feed:
+                logger.warning('Фід TOPTUL порожній — цикл пропущено, '
+                               'замовлення не обробляються')
+                time.sleep(POLL_INTERVAL)
+                continue
             orders = get_new_orders()
 
             if orders:
