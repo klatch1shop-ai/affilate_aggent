@@ -1,0 +1,1332 @@
+[
+ {
+  "toptul_id": "73494428",
+  "toptul_name": "Расходные материалы и аксессуары для споттера",
+  "goods": 24,
+  "first_id": 4670626,
+  "first_name": "Аксесуари та супутні товари для зварювального устаткування",
+  "second_id": 4670626,
+  "second_name": "Аксесуари та супутні товари для зварювального устаткування",
+  "agree": true
+ },
+ {
+  "toptul_id": "73406345",
+  "toptul_name": "Ключи шарнирные",
+  "goods": 22,
+  "first_id": 4670035,
+  "first_name": "Набори шарнірно-губцевих інструментів",
+  "second_id": 4668931,
+  "second_name": "Торцеві головки",
+  "agree": false
+ },
+ {
+  "toptul_id": "73542447",
+  "toptul_name": "Инструмент обжимной",
+  "goods": 22,
+  "first_id": 4660202,
+  "first_name": "Кримпери",
+  "second_id": 4660202,
+  "second_name": "Кримпери",
+  "agree": true
+ },
+ {
+  "toptul_id": "73081970",
+  "toptul_name": "Лопатки и подложки рихтовочные",
+  "goods": 22,
+  "first_id": 4654188,
+  "first_name": "Рихтувальне обладнання",
+  "second_id": 4654188,
+  "second_name": "Рихтувальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "73555732",
+  "toptul_name": "Стойка амортизатора",
+  "goods": 20,
+  "first_id": 4668895,
+  "first_name": "Торцеві ключі",
+  "second_id": 298224,
+  "second_name": "Набори інструментів",
+  "agree": false
+ },
+ {
+  "toptul_id": "88692933",
+  "toptul_name": "Динамометры",
+  "goods": 20,
+  "first_id": 4668865,
+  "first_name": "Динамометричні ключі",
+  "second_id": 4628432,
+  "second_name": "Стільці майстра",
+  "agree": false
+ },
+ {
+  "toptul_id": "73555582",
+  "toptul_name": "Обслуживание тормозных цилиндров",
+  "goods": 19,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73040890",
+  "toptul_name": "Верстаки",
+  "goods": 19,
+  "first_id": 4656012,
+  "first_name": "Промислові меблі",
+  "second_id": 4656012,
+  "second_name": "Промислові меблі",
+  "agree": true
+ },
+ {
+  "toptul_id": "73546708",
+  "toptul_name": "Притирка клапанов",
+  "goods": 19,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 298224,
+  "second_name": "Набори інструментів",
+  "agree": true
+ },
+ {
+  "toptul_id": "73548290",
+  "toptul_name": "Рассухариватели",
+  "goods": 18,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73470117",
+  "toptul_name": "Индукционный нагреватель",
+  "goods": 18,
+  "first_id": 4670641,
+  "first_name": "Зварювальні апарати",
+  "second_id": 4670641,
+  "second_name": "Зварювальні апарати",
+  "agree": true
+ },
+ {
+  "toptul_id": "73365657",
+  "toptul_name": "Держатели бит",
+  "goods": 17,
+  "first_id": 3510485,
+  "first_name": "Патрони та перехідники",
+  "second_id": 3510478,
+  "second_name": "Мітчики та плашки",
+  "agree": false
+ },
+ {
+  "toptul_id": "73269779",
+  "toptul_name": "Комплектующие для шиномонтажного оборудования",
+  "goods": 16,
+  "first_id": 4644040,
+  "first_name": "Комплектуючі для підіймачів",
+  "second_id": 4643968,
+  "second_name": "Вулканізатори",
+  "agree": false
+ },
+ {
+  "toptul_id": "73471204",
+  "toptul_name": "Оборудование для обслуживания автокондиционеров",
+  "goods": 16,
+  "first_id": 4676159,
+  "first_name": "Автоклімат",
+  "second_id": 4676159,
+  "second_name": "Автоклімат",
+  "agree": true
+ },
+ {
+  "toptul_id": "73542318",
+  "toptul_name": "Стяжка пружин",
+  "goods": 15,
+  "first_id": 4668955,
+  "first_name": "Знімачі",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73271813",
+  "toptul_name": "Пневмотрещотки",
+  "goods": 14,
+  "first_id": 4674543,
+  "first_name": "Пневмогайковерти",
+  "second_id": 4674549,
+  "second_name": "Пневматичні багатофункціональні інструменти",
+  "agree": false
+ },
+ {
+  "toptul_id": "73544721",
+  "toptul_name": "Инструмент для восстановления резьбы",
+  "goods": 14,
+  "first_id": 3510478,
+  "first_name": "Мітчики та плашки",
+  "second_id": 3510478,
+  "second_name": "Мітчики та плашки",
+  "agree": true
+ },
+ {
+  "toptul_id": "73484361",
+  "toptul_name": "Прессы гидравлические",
+  "goods": 13,
+  "first_id": 4642032,
+  "first_name": "Преси",
+  "second_id": 4642032,
+  "second_name": "Преси",
+  "agree": true
+ },
+ {
+  "toptul_id": "73546156",
+  "toptul_name": "Ключи прокачки тормозов",
+  "goods": 13,
+  "first_id": 4668877,
+  "first_name": "Накидні ключі",
+  "second_id": 4668937,
+  "second_name": "Балонні ключі",
+  "agree": false
+ },
+ {
+  "toptul_id": "73544848",
+  "toptul_name": "Развальцовки",
+  "goods": 13,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 4642008,
+  "second_name": "Трубогини",
+  "agree": false
+ },
+ {
+  "toptul_id": "73041434",
+  "toptul_name": "Подставки под авто",
+  "goods": 12,
+  "first_id": 4643992,
+  "first_name": "Підіймачі",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73038765",
+  "toptul_name": "Пескоструйное оборудование",
+  "goods": 12,
+  "first_id": 4673719,
+  "first_name": "Набори пневмоінструментів",
+  "second_id": 162118,
+  "second_name": "Повітряні компресори",
+  "agree": false
+ },
+ {
+  "toptul_id": "73266309",
+  "toptul_name": "Подъемники для мотоциклов",
+  "goods": 11,
+  "first_id": 329355,
+  "first_name": "Домкрати",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73541364",
+  "toptul_name": "Переносные лампы",
+  "goods": 11,
+  "first_id": 4654251,
+  "first_name": "Інспекційне світло для СТО",
+  "second_id": 85432,
+  "second_name": "Ліхтарі й аксесуари",
+  "agree": false
+ },
+ {
+  "toptul_id": "73275813",
+  "toptul_name": "Пневмопистолеты распылительные",
+  "goods": 11,
+  "first_id": 154981,
+  "first_name": "Фарбопульти",
+  "second_id": 4673722,
+  "second_name": "Пневмопістолети будівельні",
+  "agree": false
+ },
+ {
+  "toptul_id": "25636741",
+  "toptul_name": "Головки на шуруповерт",
+  "goods": 11,
+  "first_id": 4668931,
+  "first_name": "Торцеві головки",
+  "second_id": 4668931,
+  "second_name": "Торцеві головки",
+  "agree": true
+ },
+ {
+  "toptul_id": "73553882",
+  "toptul_name": "Инструменты для кузовного ремонта",
+  "goods": 11,
+  "first_id": 4654188,
+  "first_name": "Рихтувальне обладнання",
+  "second_id": 4654188,
+  "second_name": "Рихтувальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "73544812",
+  "toptul_name": "Труборезы",
+  "goods": 11,
+  "first_id": 4669717,
+  "first_name": "Труборізи та ножиці для різання труб",
+  "second_id": 4669717,
+  "second_name": "Труборізи та ножиці для різання труб",
+  "agree": true
+ },
+ {
+  "toptul_id": "84587408",
+  "toptul_name": "Измерители уровня шума (шумомеры)",
+  "goods": 11,
+  "first_id": 4672223,
+  "first_name": "Шумоміри",
+  "second_id": 4672223,
+  "second_name": "Шумоміри",
+  "agree": true
+ },
+ {
+  "toptul_id": "73040486",
+  "toptul_name": "Тестеры инжектора",
+  "goods": 10,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": true
+ },
+ {
+  "toptul_id": "73482640",
+  "toptul_name": "Установки для нагнетания масел и смазок",
+  "goods": 10,
+  "first_id": 4643984,
+  "first_name": "Рухомі платформи",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73881136",
+  "toptul_name": "Магнитный инструмент",
+  "goods": 10,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73495480",
+  "toptul_name": "Споттеры",
+  "goods": 10,
+  "first_id": 4670641,
+  "first_name": "Зварювальні апарати",
+  "second_id": 4670641,
+  "second_name": "Зварювальні апарати",
+  "agree": true
+ },
+ {
+  "toptul_id": "73037655",
+  "toptul_name": "Бачки для краскопультов",
+  "goods": 10,
+  "first_id": 154981,
+  "first_name": "Фарбопульти",
+  "second_id": 154981,
+  "second_name": "Фарбопульти",
+  "agree": true
+ },
+ {
+  "toptul_id": "74166869",
+  "toptul_name": "Клапаны, глушители",
+  "goods": 10,
+  "first_id": 4673713,
+  "first_name": "Пристрої підготовки та очищення повітря",
+  "second_id": 4673713,
+  "second_name": "Пристрої підготовки та очищення повітря",
+  "agree": true
+ },
+ {
+  "toptul_id": "84587411",
+  "toptul_name": "Измерители сопротивления высокого напряжения (мегаомметры)",
+  "goods": 10,
+  "first_id": 4672188,
+  "first_name": "Мультиметри",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": false
+ },
+ {
+  "toptul_id": "73275833",
+  "toptul_name": "Регуляторы давления для пневмоинструмента",
+  "goods": 9,
+  "first_id": 4673713,
+  "first_name": "Пристрої підготовки та очищення повітря",
+  "second_id": 4673713,
+  "second_name": "Пристрої підготовки та очищення повітря",
+  "agree": true
+ },
+ {
+  "toptul_id": "73543011",
+  "toptul_name": "Шрус",
+  "goods": 9,
+  "first_id": 4670023,
+  "first_name": "Кліщі",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73544871",
+  "toptul_name": "Экстракторы",
+  "goods": 9,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 4668937,
+  "second_name": "Балонні ключі",
+  "agree": false
+ },
+ {
+  "toptul_id": "73542500",
+  "toptul_name": "Поршень",
+  "goods": 9,
+  "first_id": 4668955,
+  "first_name": "Знімачі",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": false
+ },
+ {
+  "toptul_id": "91428413",
+  "toptul_name": "Нутромеры",
+  "goods": 9,
+  "first_id": 4672288,
+  "first_name": "Штангенциркулі і мікрометри",
+  "second_id": 4672218,
+  "second_name": "Індикатори",
+  "agree": false
+ },
+ {
+  "toptul_id": "73272022",
+  "toptul_name": "Пескоструйные пистолеты",
+  "goods": 9,
+  "first_id": 4673722,
+  "first_name": "Пневмопістолети будівельні",
+  "second_id": 4673722,
+  "second_name": "Пневмопістолети будівельні",
+  "agree": true
+ },
+ {
+  "toptul_id": "73482737",
+  "toptul_name": "Масленки",
+  "goods": 9,
+  "first_id": 4668961,
+  "first_name": "Інструмент для змащувальних матеріалів",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": true
+ },
+ {
+  "toptul_id": "73484577",
+  "toptul_name": "Стойки трансмиссионные",
+  "goods": 9,
+  "first_id": 4643992,
+  "first_name": "Підіймачі",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73040482",
+  "toptul_name": "Стробоскопы",
+  "goods": 9,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4643992,
+  "second_name": "Підіймачі",
+  "agree": false
+ },
+ {
+  "toptul_id": "74017461",
+  "toptul_name": "Шпильковерты",
+  "goods": 8,
+  "first_id": 4668943,
+  "first_name": "Ключі розрізні",
+  "second_id": 4668931,
+  "second_name": "Торцеві головки",
+  "agree": false
+ },
+ {
+  "toptul_id": "74051458",
+  "toptul_name": "Система охлаждения",
+  "goods": 8,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4643992,
+  "second_name": "Підіймачі",
+  "agree": false
+ },
+ {
+  "toptul_id": "73275920",
+  "toptul_name": "Заклепочники пневматические",
+  "goods": 8,
+  "first_id": 4660272,
+  "first_name": "Заклепники",
+  "second_id": 4660272,
+  "second_name": "Заклепники",
+  "agree": true
+ },
+ {
+  "toptul_id": "73556541",
+  "toptul_name": "Индикаторы напряжения",
+  "goods": 8,
+  "first_id": 4672233,
+  "first_name": "Детектори напруги та фазометри",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": false
+ },
+ {
+  "toptul_id": "74166870",
+  "toptul_name": "Инструмент для пайки",
+  "goods": 8,
+  "first_id": 84098,
+  "first_name": "Газові паяльники",
+  "second_id": 4649508,
+  "second_name": "Допоміжні матеріали",
+  "agree": false
+ },
+ {
+  "toptul_id": "133071305",
+  "toptul_name": "Oбжимныe пpeccы для РВД",
+  "goods": 8,
+  "first_id": 4642032,
+  "first_name": "Преси",
+  "second_id": 4642032,
+  "second_name": "Преси",
+  "agree": true
+ },
+ {
+  "toptul_id": "73493596",
+  "toptul_name": "Инфракрасные сушки",
+  "goods": 7,
+  "first_id": 80247,
+  "first_name": "Інфрачервоні обігрівачі",
+  "second_id": 80247,
+  "second_name": "Інфрачервоні обігрівачі",
+  "agree": true
+ },
+ {
+  "toptul_id": "73041415",
+  "toptul_name": "Траверсы, домкраты канавные",
+  "goods": 7,
+  "first_id": 4644016,
+  "first_name": "Траверси",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": false
+ },
+ {
+  "toptul_id": "73404642",
+  "toptul_name": "Отвертки-битодержатели",
+  "goods": 7,
+  "first_id": 2798762,
+  "first_name": "Викрутки",
+  "second_id": 2798762,
+  "second_name": "Викрутки",
+  "agree": true
+ },
+ {
+  "toptul_id": "74063064",
+  "toptul_name": "Щетки по металлу",
+  "goods": 7,
+  "first_id": 4656440,
+  "first_name": "Щітки та скребки",
+  "second_id": 4656440,
+  "second_name": "Щітки та скребки",
+  "agree": true
+ },
+ {
+  "toptul_id": "85470316",
+  "toptul_name": "Линейки строительные",
+  "goods": 7,
+  "first_id": 4672238,
+  "first_name": "Лінійки будівельні",
+  "second_id": 4672238,
+  "second_name": "Лінійки будівельні",
+  "agree": true
+ },
+ {
+  "toptul_id": "85474600",
+  "toptul_name": "Инструменты для ремонта шин",
+  "goods": 6,
+  "first_id": 4668943,
+  "first_name": "Ключі розрізні",
+  "second_id": 4643968,
+  "second_name": "Вулканізатори",
+  "agree": false
+ },
+ {
+  "toptul_id": "73848555",
+  "toptul_name": "Шкалы доворотные",
+  "goods": 6,
+  "first_id": 4668865,
+  "first_name": "Динамометричні ключі",
+  "second_id": 4672238,
+  "second_name": "Лінійки будівельні",
+  "agree": false
+ },
+ {
+  "toptul_id": "73552687",
+  "toptul_name": "Провода прикуривания",
+  "goods": 6,
+  "first_id": 4654139,
+  "first_name": "Стартові дроти",
+  "second_id": 4654139,
+  "second_name": "Стартові дроти",
+  "agree": true
+ },
+ {
+  "toptul_id": "73557174",
+  "toptul_name": "Редуктор усилитель",
+  "goods": 6,
+  "first_id": 4669237,
+  "first_name": "Гайковерти",
+  "second_id": 4668931,
+  "second_name": "Торцеві головки",
+  "agree": false
+ },
+ {
+  "toptul_id": "73875618",
+  "toptul_name": "Рекламная продукция",
+  "goods": 6,
+  "first_id": 4642984,
+  "first_name": "POS-матеріали для торгового залу",
+  "second_id": 187716,
+  "second_name": "Скрині та сумки для інструментів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73983995",
+  "toptul_name": "Трубопровод",
+  "goods": 6,
+  "first_id": 4670023,
+  "first_name": "Кліщі",
+  "second_id": 4668937,
+  "second_name": "Балонні ключі",
+  "agree": false
+ },
+ {
+  "toptul_id": "115710529",
+  "toptul_name": "Hacaдки для чиcтки cтупицы",
+  "goods": 6,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 298224,
+  "second_name": "Набори інструментів",
+  "agree": true
+ },
+ {
+  "toptul_id": "73881351",
+  "toptul_name": "Зеркало",
+  "goods": 5,
+  "first_id": 4672803,
+  "first_name": "Дзеркала телескопічні",
+  "second_id": 4672803,
+  "second_name": "Дзеркала телескопічні",
+  "agree": true
+ },
+ {
+  "toptul_id": "73040283",
+  "toptul_name": "Стенды для ремонта двигателя",
+  "goods": 5,
+  "first_id": 1742727,
+  "first_name": "Вантажопідіймальне обладнання",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "73482727",
+  "toptul_name": "Насосы масляные для бочек",
+  "goods": 5,
+  "first_id": 4644520,
+  "first_name": "Насоси для перекачування палива",
+  "second_id": 4670466,
+  "second_name": "Гідравлічні насоси та комплектуючі",
+  "agree": false
+ },
+ {
+  "toptul_id": "74166862",
+  "toptul_name": "Ключи серповидные",
+  "goods": 5,
+  "first_id": 4668943,
+  "first_name": "Ключі розрізні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73541262",
+  "toptul_name": "Шуруповерт аккумуляторный",
+  "goods": 5,
+  "first_id": 152499,
+  "first_name": "Шурупокрути",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73041439",
+  "toptul_name": "Дископравильные станки",
+  "goods": 5,
+  "first_id": 4644000,
+  "first_name": "Стенди розвал-сходження",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "74017484",
+  "toptul_name": "Пинцеты",
+  "goods": 5,
+  "first_id": 4670017,
+  "first_name": "Плоскогубці, щипці",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73471108",
+  "toptul_name": "Роклы гидравлические",
+  "goods": 5,
+  "first_id": 4644560,
+  "first_name": "Рокли",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "84587403",
+  "toptul_name": "Виброметры",
+  "goods": 5,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": true
+ },
+ {
+  "toptul_id": "74166871",
+  "toptul_name": "Тепловизоры",
+  "goods": 5,
+  "first_id": 4672198,
+  "first_name": "Пірометри",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73474269",
+  "toptul_name": "Оборудование для обслуживания АКПП",
+  "goods": 5,
+  "first_id": 4644032,
+  "first_name": "Установки для АКПП",
+  "second_id": 4644032,
+  "second_name": "Установки для АКПП",
+  "agree": true
+ },
+ {
+  "toptul_id": "118409593",
+  "toptul_name": "Измepитeли пpoтeктopa и диcкa",
+  "goods": 5,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": true
+ },
+ {
+  "toptul_id": "84587401",
+  "toptul_name": "Весы ручные цифровые, кантеры",
+  "goods": 5,
+  "first_id": 4625292,
+  "first_name": "Ваговимірювальне обладнання",
+  "second_id": 4625292,
+  "second_name": "Ваговимірювальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "150575804",
+  "toptul_name": "Подъемники колес",
+  "goods": 5,
+  "first_id": 4643992,
+  "first_name": "Підіймачі",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "150577107",
+  "toptul_name": "Аксессуары к стендам развал схождение",
+  "goods": 5,
+  "first_id": 4644000,
+  "first_name": "Стенди розвал-сходження",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73469525",
+  "toptul_name": "Приборы для проверки свечей",
+  "goods": 4,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4643992,
+  "second_name": "Підіймачі",
+  "agree": false
+ },
+ {
+  "toptul_id": "74060183",
+  "toptul_name": "Крюки",
+  "goods": 4,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73806393",
+  "toptul_name": "Сцепление",
+  "goods": 4,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73041438",
+  "toptul_name": "Борторасширители",
+  "goods": 4,
+  "first_id": 4643960,
+  "first_name": "Шиномонтажні стенди",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73496319",
+  "toptul_name": "Упоры, башмаки",
+  "goods": 4,
+  "first_id": 4654174,
+  "first_name": "Пристрої проти ковзання коліс",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73498290",
+  "toptul_name": "Бустер",
+  "goods": 4,
+  "first_id": 162118,
+  "first_name": "Повітряні компресори",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "71512023",
+  "toptul_name": "Пневмоножницы",
+  "goods": 4,
+  "first_id": 4670041,
+  "first_name": "Ножиці по металу",
+  "second_id": 4673719,
+  "second_name": "Набори пневмоінструментів",
+  "agree": false
+ },
+ {
+  "toptul_id": "73266245",
+  "toptul_name": "Запчасти для автоподъемников",
+  "goods": 4,
+  "first_id": 4644040,
+  "first_name": "Комплектуючі для підіймачів",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "85499223",
+  "toptul_name": "Тестеры герметичности",
+  "goods": 4,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "84587417",
+  "toptul_name": "Энергометр",
+  "goods": 4,
+  "first_id": 4672188,
+  "first_name": "Мультиметри",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "84587413",
+  "toptul_name": "Тестеры электромагнитного излучения",
+  "goods": 4,
+  "first_id": 4672188,
+  "first_name": "Мультиметри",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": false
+ },
+ {
+  "toptul_id": "74166883",
+  "toptul_name": "Ванны и тележки для колес",
+  "goods": 4,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "113810223",
+  "toptul_name": "Повербанки",
+  "goods": 4,
+  "first_id": 387969,
+  "first_name": "Універсальні мобільні батареї",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73486361",
+  "toptul_name": "Гидроцилиндры",
+  "goods": 3,
+  "first_id": 1742727,
+  "first_name": "Вантажопідіймальне обладнання",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73471701",
+  "toptul_name": "Напильник пневматический",
+  "goods": 3,
+  "first_id": 4674537,
+  "first_name": "Пневмошліфмашинки",
+  "second_id": 4674549,
+  "second_name": "Пневматичні багатофункціональні інструменти",
+  "agree": false
+ },
+ {
+  "toptul_id": "73485275",
+  "toptul_name": "Растяжки гидравлические для правки кузова",
+  "goods": 3,
+  "first_id": 4654188,
+  "first_name": "Рихтувальне обладнання",
+  "second_id": 4654188,
+  "second_name": "Рихтувальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "73040480",
+  "toptul_name": "Тестеры давления масла",
+  "goods": 3,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4644008,
+  "second_name": "Тестери і вимірники автомобільні",
+  "agree": true
+ },
+ {
+  "toptul_id": "73479021",
+  "toptul_name": "Ломы",
+  "goods": 3,
+  "first_id": 4660265,
+  "first_name": "Ломи і монтування",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73496328",
+  "toptul_name": "Установки для мойки деталей",
+  "goods": 3,
+  "first_id": 155534,
+  "first_name": "Універсальні мийки",
+  "second_id": 155534,
+  "second_name": "Універсальні мийки",
+  "agree": true
+ },
+ {
+  "toptul_id": "73556528",
+  "toptul_name": "Инструмент для электрооборудования",
+  "goods": 3,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": 298224,
+  "second_name": "Набори інструментів",
+  "agree": true
+ },
+ {
+  "toptul_id": "73471009",
+  "toptul_name": "Стапели для рихтовки кузова",
+  "goods": 3,
+  "first_id": 4654188,
+  "first_name": "Рихтувальне обладнання",
+  "second_id": 4654188,
+  "second_name": "Рихтувальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "150659097",
+  "toptul_name": "Стенды ADAS",
+  "goods": 3,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "127805245",
+  "toptul_name": "Инклинометры",
+  "goods": 3,
+  "first_id": 4672263,
+  "first_name": "Кутоміри",
+  "second_id": 4672263,
+  "second_name": "Кутоміри",
+  "agree": true
+ },
+ {
+  "toptul_id": "73484565",
+  "toptul_name": "Краны подкатные",
+  "goods": 2,
+  "first_id": 1742727,
+  "first_name": "Вантажопідіймальне обладнання",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": true
+ },
+ {
+  "toptul_id": "73040473",
+  "toptul_name": "Тележки под колесо",
+  "goods": 2,
+  "first_id": 1742727,
+  "first_name": "Вантажопідіймальне обладнання",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73470128",
+  "toptul_name": "Прибор для регулировки фар",
+  "goods": 2,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "74017479",
+  "toptul_name": "Присоски для стекол",
+  "goods": 2,
+  "first_id": 1742727,
+  "first_name": "Вантажопідіймальне обладнання",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "150578344",
+  "toptul_name": "Обслуживание посадочных мест",
+  "goods": 2,
+  "first_id": 4644024,
+  "first_name": "Стенди для чищення форсунок",
+  "second_id": 4644032,
+  "second_name": "Установки для АКПП",
+  "agree": false
+ },
+ {
+  "toptul_id": "73040468",
+  "toptul_name": "Молотки обратные для рихтовки",
+  "goods": 2,
+  "first_id": 4654188,
+  "first_name": "Рихтувальне обладнання",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73556563",
+  "toptul_name": "Нагрузочные вилки",
+  "goods": 2,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 155293,
+  "second_name": "Пускозарядні пристрої",
+  "agree": false
+ },
+ {
+  "toptul_id": "73485073",
+  "toptul_name": "Стяжки пружин гидравлические",
+  "goods": 2,
+  "first_id": 4642032,
+  "first_name": "Преси",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73478988",
+  "toptul_name": "Специнструмент",
+  "goods": 2,
+  "first_id": 4675139,
+  "first_name": "Ущільнювальні кільця",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "73478077",
+  "toptul_name": "Вакуумметры",
+  "goods": 2,
+  "first_id": 4654167,
+  "first_name": "Манометри автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "84587415",
+  "toptul_name": "Тахометры",
+  "goods": 2,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "88692936",
+  "toptul_name": "Твердомеры",
+  "goods": 2,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "147770996",
+  "toptul_name": "Приборы для нарезки протектора (регруверы)",
+  "goods": 2,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "150578552",
+  "toptul_name": "Разжиматели фланцев",
+  "goods": 2,
+  "first_id": 4670466,
+  "first_name": "Гідравлічні насоси та комплектуючі",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "123270475",
+  "toptul_name": "Плазморезы",
+  "goods": 2,
+  "first_id": 4670641,
+  "first_name": "Зварювальні апарати",
+  "second_id": 4670641,
+  "second_name": "Зварювальні апарати",
+  "agree": true
+ },
+ {
+  "toptul_id": "145800517",
+  "toptul_name": "Лестницы, стремянки",
+  "goods": 2,
+  "first_id": 157092,
+  "first_name": "Драбини, підмостки",
+  "second_id": 1742727,
+  "second_name": "Вантажопідіймальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "150638517",
+  "toptul_name": "Инструмент для снятия стопорных гаек",
+  "goods": 2,
+  "first_id": 4668931,
+  "first_name": "Торцеві головки",
+  "second_id": 4668931,
+  "second_name": "Торцеві головки",
+  "agree": true
+ },
+ {
+  "toptul_id": "73541177",
+  "toptul_name": "Шуруповерт пневматический",
+  "goods": 1,
+  "first_id": 4674531,
+  "first_name": "Пневмошуруповерти",
+  "second_id": 4674531,
+  "second_name": "Пневмошуруповерти",
+  "agree": true
+ },
+ {
+  "toptul_id": "73545214",
+  "toptul_name": "Пеногенератор",
+  "goods": 1,
+  "first_id": 4674549,
+  "first_name": "Пневматичні багатофункціональні інструменти",
+  "second_id": 162118,
+  "second_name": "Повітряні компресори",
+  "agree": false
+ },
+ {
+  "toptul_id": "85473984",
+  "toptul_name": "Стенд для покраски",
+  "goods": 1,
+  "first_id": 4644024,
+  "first_name": "Стенди для чищення форсунок",
+  "second_id": 4654188,
+  "second_name": "Рихтувальне обладнання",
+  "agree": false
+ },
+ {
+  "toptul_id": "73555577",
+  "toptul_name": "Ходовая группа",
+  "goods": 1,
+  "first_id": 4668961,
+  "first_name": "Інструмент для змащувальних матеріалів",
+  "second_id": 4668961,
+  "second_name": "Інструмент для змащувальних матеріалів",
+  "agree": true
+ },
+ {
+  "toptul_id": "113516334",
+  "toptul_name": "Сварочные столы",
+  "goods": 1,
+  "first_id": 4670626,
+  "first_name": "Аксесуари та супутні товари для зварювального устаткування",
+  "second_id": 4670626,
+  "second_name": "Аксесуари та супутні товари для зварювального устаткування",
+  "agree": true
+ },
+ {
+  "toptul_id": "120207889",
+  "toptul_name": "Apeoмeтpы для AKБ",
+  "goods": 1,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": 4643992,
+  "second_name": "Підіймачі",
+  "agree": false
+ },
+ {
+  "toptul_id": "122728005",
+  "toptul_name": "Измepитeли тoлщины тopмoзoв",
+  "goods": 1,
+  "first_id": 4658102,
+  "first_name": "Товщиноміри фарби",
+  "second_id": 4643992,
+  "second_name": "Підіймачі",
+  "agree": false
+ },
+ {
+  "toptul_id": "122725239",
+  "toptul_name": "Kлючи для cepвиcныx шкaфoв",
+  "goods": 1,
+  "first_id": 4668943,
+  "first_name": "Ключі розрізні",
+  "second_id": 3803596,
+  "second_name": "Шафи, корпуси, щитки",
+  "agree": false
+ },
+ {
+  "toptul_id": "122725075",
+  "toptul_name": "Cъeмники пoпepeчнoгo pычaгa пoдвecки",
+  "goods": 1,
+  "first_id": 4668955,
+  "first_name": "Знімачі",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "129473546",
+  "toptul_name": "Чертилки",
+  "goods": 1,
+  "first_id": 4672243,
+  "first_name": "Розмічувальний інструмент",
+  "second_id": 4672273,
+  "second_name": "Рівні будівельні",
+  "agree": false
+ },
+ {
+  "toptul_id": "131264087",
+  "toptul_name": "Haпoльнoe пoкpытиe",
+  "goods": 1,
+  "first_id": 4646656,
+  "first_name": "Гумові покриття",
+  "second_id": 4645872,
+  "second_name": "Чохли для автомобіля",
+  "agree": false
+ },
+ {
+  "toptul_id": "150578359",
+  "toptul_name": "Регулировка фаз",
+  "goods": 1,
+  "first_id": 298224,
+  "first_name": "Набори інструментів",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "150579407",
+  "toptul_name": "Съёмники рулевого колеса",
+  "goods": 1,
+  "first_id": 4668955,
+  "first_name": "Знімачі",
+  "second_id": 4668955,
+  "second_name": "Знімачі",
+  "agree": true
+ },
+ {
+  "toptul_id": "122112526",
+  "toptul_name": "Tecтepы гepмeтичнocти AKБ",
+  "goods": 1,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ },
+ {
+  "toptul_id": "153427780",
+  "toptul_name": "Люфт детекторы подвески",
+  "goods": 1,
+  "first_id": 4644008,
+  "first_name": "Тестери і вимірники автомобільні",
+  "second_id": null,
+  "second_name": null,
+  "agree": false
+ }
+]

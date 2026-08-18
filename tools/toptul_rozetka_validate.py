@@ -86,12 +86,15 @@ def samples_by_category(limit: int = 4) -> dict:
 
 
 def _one_call(name: str, samples: list, cats: str, key: str, tokens: int):
+    # Таймаут навмисно короткий. Успішна відповідь займає 18–90 с; спроба, що
+    # висить довше, майже завжди висить назавжди — краще обірвати її і піти на
+    # повтор, ніж чекати. Довгий таймаут коштував 476 с і втраченої категорії.
     body = {'model': MODEL, 'temperature': 0, 'max_tokens': tokens,
             'messages': [{'role': 'user', 'content': PROMPT.format(
                 name=name, cats=cats,
                 samples='\n'.join(f'- {s}' for s in samples) or '(немає)')}]}
     r = requests.post(API, headers={'Authorization': f'Bearer {key}'},
-                      json=body, timeout=300)
+                      json=body, timeout=150)
     msg = r.json()['choices'][0]['message']
     # Модель із міркуванням: за короткого ліміту відповідь лишається в
     # reasoning_content, а content порожній — читаємо обидва.
@@ -107,11 +110,16 @@ def ask(name: str, samples: list, cats: str, valid: set, key: str):
     Тому ліміт із запасом, і одна повторна спроба з подвоєним бюджетом.
     """
     t0 = time.time()
-    for tokens in (3000, 6000):
+    last = 'без JSON'
+    # Мережева помилка — не відповідь «не знаю», а невдала спроба її отримати.
+    # Доти будь-який таймаут відразу списував категорію в «модель мовчала».
+    for tokens in (3000, 6000, 6000):
         try:
             txt = _one_call(name, samples, cats, key, tokens)
         except Exception as e:
-            return None, type(e).__name__, time.time() - t0
+            last = type(e).__name__
+            time.sleep(3)
+            continue
         hits = re.findall(r'\{[^{}]*"rz_id"\s*:\s*(\d+)[^{}]*\}', txt)
         if hits:
             conf = ('high' if '"confidence": "high"' in txt.replace("'", '"')
@@ -119,7 +127,7 @@ def ask(name: str, samples: list, cats: str, valid: set, key: str):
             rid = int(hits[-1])
             # Єдиний, але достатній захист: id мусить бути зі списку.
             return (rid if rid in valid else None), conf, time.time() - t0
-    return None, 'без JSON', time.time() - t0
+    return None, last, time.time() - t0
 
 
 def main():
@@ -177,6 +185,17 @@ def main():
                     f"→ {(by_id[rid]['rz_name'] if rid else '—')[:24]:26} "
                     f"{verdict:10} {conf:4} {sec:.0f}с")
         json.dump(rows, open(OUT, 'w'), ensure_ascii=False, indent=1)
+        # Записуємо ОДРАЗУ, а не наприкінці. Прогін триває години; збереження
+        # лише в кінці означало б, що обрив на 200-й категорії не лишає в базі
+        # нічого. Заразом це робить запуск відновлюваним: зараховані пари
+        # переходять у tier='validated' і наступного разу не переобробляються.
+        if a.save and verdict == 'agree':
+            cur.execute("""UPDATE toptul_rozetka_category_map
+                           SET rz_id=%s, rz_name=%s, tier='validated',
+                               score=NULL, updated_at=NOW()
+                           WHERE toptul_id=%s AND NOT verified""",
+                        (rid, by_id[rid]['rz_name'], t['toptul_id']))
+            conn.commit()
 
     print(f'\nзгода з матчером : {agree}')
     print(f'лише модель      : {solo}')
@@ -184,18 +203,7 @@ def main():
     logger.success(f'Збережено: {OUT}')
 
     if a.save:
-        n = 0
-        for r in rows:
-            if r['verdict'] != 'agree':
-                continue
-            cur.execute("""UPDATE toptul_rozetka_category_map
-                           SET rz_id=%s, rz_name=%s, tier='validated',
-                               score=NULL, updated_at=NOW()
-                           WHERE toptul_id=%s AND NOT verified""",
-                        (r['model_id'], r['model_name'], r['toptul_id']))
-            n += cur.rowcount
-        conn.commit()
-        logger.success(f'Записано узгоджених: {n}')
+        logger.success(f'Записано узгоджених: {agree} (по ходу прогону)')
     cur.close()
     conn.close()
 
