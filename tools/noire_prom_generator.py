@@ -603,9 +603,19 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
     """
     _sku_ctx[0] = sku
     spec = attrs.get(pid, {})
-    if not spec:
-        return {}
     out, features, effects, unplaced = {}, [], [], []
+    if not spec:
+        # Категорія без довідника атрибутів — у Prom такі є, наприклад
+        # «Секс-машини» (перевірено в кабінеті вручну 21.08.2026).
+        # Доти повертали порожньо, і 8-14 характеристик зникали на 33
+        # картках: у фіді вони мали НУЛЬ характеристик. Портальних полів
+        # тут не існує, але КОРИСТУВАЦЬКІ існують — вони видно на картці
+        # й саме їх радить заповнювати підтримка Prom.
+        for name, value in list(raw.items()) + list((boost or {}).items()):
+            v = str(value).strip()
+            if v and name not in CUSTOM_SKIP:
+                out.setdefault(name, v[:500])
+        return out
 
     for name, value in raw.items():
         v = str(value).strip()
