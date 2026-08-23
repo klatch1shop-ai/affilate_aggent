@@ -1,0 +1,296 @@
+[
+ {
+  "sexopt_category_id": "4814",
+  "sexopt_category": "Вакуумні",
+  "cards": 254,
+  "agreement": 0.996,
+  "ours": {
+   "code": "9476",
+   "name": "Екстендери та помпи"
+  },
+  "manager": {
+   "code": "9466",
+   "name": "Вібратори"
+  }
+ },
+ {
+  "sexopt_category_id": "4902",
+  "sexopt_category": "Прикраси на тіло",
+  "cards": 57,
+  "agreement": 0.807,
+  "ours": {
+   "code": "9458",
+   "name": "Фетиш та BDSM"
+  },
+  "manager": {
+   "code": "9464",
+   "name": "Еротичні костюми"
+  }
+ },
+ {
+  "sexopt_category_id": "4905",
+  "sexopt_category": "Пестис, наклейки",
+  "cards": 32,
+  "agreement": 0.844,
+  "ours": {
+   "code": "9460",
+   "name": "Еротичні приколи та сувеніри"
+  },
+  "manager": {
+   "code": "7216",
+   "name": "Еротична білизна"
+  }
+ },
+ {
+  "sexopt_category_id": "4832",
+  "sexopt_category": "Менструальні чаші",
+  "cards": 31,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9526",
+   "name": "Аксесуари до інтимних іграшок"
+  },
+  "manager": {
+   "code": "5116",
+   "name": "Менструальні чаші"
+  }
+ },
+ {
+  "sexopt_category_id": "4806",
+  "sexopt_category": "Ланцюжки, намиста з вібрацією",
+  "cards": 25,
+  "agreement": 0.6,
+  "ours": {
+   "code": "9486",
+   "name": "Анальні кульки та намисто"
+  },
+  "manager": {
+   "code": "9466",
+   "name": "Вібратори"
+  }
+ },
+ {
+  "sexopt_category_id": "4848",
+  "sexopt_category": "Аксесуари для помп та гідропомп, лінійки",
+  "cards": 23,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9476",
+   "name": "Екстендери та помпи"
+  },
+  "manager": {
+   "code": "9526",
+   "name": "Аксесуари до інтимних іграшок"
+  }
+ },
+ {
+  "sexopt_category_id": "5297",
+  "sexopt_category": "Для фістингу",
+  "cards": 22,
+  "agreement": 0.773,
+  "ours": {
+   "code": "9548",
+   "name": "Анальні розширювачі"
+  },
+  "manager": {
+   "code": "9484",
+   "name": "Анальні пробки"
+  }
+ },
+ {
+  "sexopt_category_id": "5026",
+  "sexopt_category": "Свічки для BDSM",
+  "cards": 17,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9630",
+   "name": "Свічки для інтимного масажу"
+  },
+  "manager": {
+   "code": "9458",
+   "name": "Фетиш та BDSM"
+  }
+ },
+ {
+  "sexopt_category_id": "4793",
+  "sexopt_category": "Меблі для сексу, бдсм меблі, фіксатори в просторі",
+  "cards": 16,
+  "agreement": 0.688,
+  "ours": {
+   "code": "9578",
+   "name": "Меблі для сексу"
+  },
+  "manager": {
+   "code": "9458",
+   "name": "Фетиш та BDSM"
+  }
+ },
+ {
+  "sexopt_category_id": "4871",
+  "sexopt_category": "Масажні пінки",
+  "cards": 16,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9452",
+   "name": "Збуджуючі засоби"
+  },
+  "manager": {
+   "code": "9632",
+   "name": "Засоби для еротичного масажу"
+  }
+ },
+ {
+  "sexopt_category_id": "5407",
+  "sexopt_category": "Іграшки для електростимуляції",
+  "cards": 16,
+  "agreement": 0.625,
+  "ours": {
+   "code": "9458",
+   "name": "Фетиш та BDSM"
+  },
+  "manager": {
+   "code": "9484",
+   "name": "Анальні пробки"
+  }
+ },
+ {
+  "sexopt_category_id": "4856",
+  "sexopt_category": "Мініляльки",
+  "cards": 15,
+  "agreement": 0.733,
+  "ours": {
+   "code": "9472",
+   "name": "Мастурбатори"
+  },
+  "manager": {
+   "code": "9468",
+   "name": "Секс-ляльки"
+  }
+ },
+ {
+  "sexopt_category_id": "4888",
+  "sexopt_category": "Подарункові набори косметики",
+  "cards": 13,
+  "agreement": 0.692,
+  "ours": {
+   "code": "9460",
+   "name": "Еротичні приколи та сувеніри"
+  },
+  "manager": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  }
+ },
+ {
+  "sexopt_category_id": "5441",
+  "sexopt_category": "Вібратори з електростимуляцією",
+  "cards": 12,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9458",
+   "name": "Фетиш та BDSM"
+  },
+  "manager": {
+   "code": "9466",
+   "name": "Вібратори"
+  }
+ },
+ {
+  "sexopt_category_id": "4887",
+  "sexopt_category": "Фарба, пудра та карамель для тіла",
+  "cards": 8,
+  "agreement": 0.625,
+  "ours": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  },
+  "manager": {
+   "code": "9628",
+   "name": "Засоби для орального сексу"
+  }
+ },
+ {
+  "sexopt_category_id": "5465",
+  "sexopt_category": "З сім'явипорскуванням",
+  "cards": 8,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9482",
+   "name": "Страпони"
+  },
+  "manager": {
+   "code": "9480",
+   "name": "Фалоімітатори"
+  }
+ },
+ {
+  "sexopt_category_id": "4886",
+  "sexopt_category": "Сіль та піна для ванни",
+  "cards": 7,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  },
+  "manager": {
+   "code": "3141",
+   "name": "Сіль для ванни"
+  }
+ },
+ {
+  "sexopt_category_id": "3563",
+  "sexopt_category": "Подарункові набори",
+  "cards": 7,
+  "agreement": 0.714,
+  "ours": {
+   "code": "9452",
+   "name": "Збуджуючі засоби"
+  },
+  "manager": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  }
+ },
+ {
+  "sexopt_category_id": "5467",
+  "sexopt_category": "Аксесуари Male Edge",
+  "cards": 6,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9476",
+   "name": "Екстендери та помпи"
+  },
+  "manager": {
+   "code": "9526",
+   "name": "Аксесуари до інтимних іграшок"
+  }
+ },
+ {
+  "sexopt_category_id": "4866",
+  "sexopt_category": "Силіконові лосьйони",
+  "cards": 6,
+  "agreement": 1.0,
+  "ours": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  },
+  "manager": {
+   "code": "9632",
+   "name": "Засоби для еротичного масажу"
+  }
+ },
+ {
+  "sexopt_category_id": "4894",
+  "sexopt_category": "Для гоління та догляд після",
+  "cards": 5,
+  "agreement": 0.6,
+  "ours": {
+   "code": "9450",
+   "name": "Еротичні масажні олії та косметика"
+  },
+  "manager": {
+   "code": "6726",
+   "name": "Крем для гоління"
+  }
+ }
+]
