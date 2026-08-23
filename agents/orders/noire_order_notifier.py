@@ -28,6 +28,7 @@ sys.path.append(BASE_DIR)
 from dotenv import load_dotenv  # noqa: E402
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 from shared.utils.db import get_connection  # noqa: E402
+from agents.orders import supplier_stock  # noqa: E402
 
 EPICENTR_BASE = 'https://merchant-api.epicentrm.com.ua'
 HEADERS = {'Authorization': f"Bearer {os.getenv('EPICENTR_TOKEN')}",
@@ -44,6 +45,15 @@ TG_CHAT = os.getenv('TG_CHAT_ID') or os.getenv('TELEGRAM_ADMIN_ID')
 NOIRE_TABLE = 'noire_processed_orders'
 
 POLL_INTERVAL = int(os.getenv('NOIRE_POLL_INTERVAL', '300'))
+
+# Автопідтвердження вимкнене доки не ввімкнуть явно: підтвердження — це запис
+# у живий маркетплейс. Вмикається прапорцем --confirm або NOIRE_AUTOCONFIRM=1.
+AUTOCONFIRM = os.getenv('NOIRE_AUTOCONFIRM', '') == '1'
+
+# Наявність Carvol доведено ненадійною (артикул був у фіді, а в постачальника
+# його не було, 08.2026). Тому позиція Carvol сама по собі НЕ дає підстави
+# підтвердити замовлення. Змінити лише свідомим рішенням власника.
+TRUST_CARVOL = os.getenv('NOIRE_TRUST_CARVOL', '') == '1'
 
 
 def tg(text: str) -> bool:
@@ -102,12 +112,24 @@ def remember(order_id, ext_id, total, skus, items, notified):
 
 
 def get_orders(status='new') -> list:
+    """
+    Замовлення потрібного статусу.
+
+    ВАЖЛИВО: параметр statusCode Єпіцентр НЕ застосовує — повертає замовлення
+    будь-яких статусів (перевірено 17.08.2026, підтверджено повторно 23.08.2026:
+    на запит 'new' прийшло 5 замовлень, усі 'canceled'). Тому фільтруємо самі.
+    Без цього фільтра автопідтвердження намагалося б підтвердити скасоване.
+    """
     r = requests.get(f'{EPICENTR_BASE}/v3/oms/orders', headers=HEADERS,
                      params={'statusCode': status, 'limit': 50}, timeout=30)
     if r.status_code != 200:
         logger.error(f'OMS {r.status_code}: {r.text[:200]}')
         return []
-    return r.json().get('items', [])
+    items = r.json().get('items', [])
+    fresh = [o for o in items if (o.get('statusCode') or '').lower() == status]
+    if len(fresh) != len(items):
+        logger.info(f'OMS повернув {len(items)}, зі статусом {status}: {len(fresh)}')
+    return fresh
 
 
 def get_details(order_id: str) -> dict:
@@ -124,7 +146,63 @@ def item_sku(item: dict) -> str:
     return ''
 
 
-def build_message(ext_id, details, mine, foreign_cnt) -> str:
+def decide(items, stock) -> tuple:
+    """
+    Чи можна підтвердити замовлення. Повертає (можна, причина).
+
+    Підтверджуємо ТІЛЬКИ якщо кожна позиція замовлення є в постачальника.
+    Замовлення підтверджується цілком, а не по позиціях, тому перевіряти треба
+    ВСІ позиції — включно з чужими (Toptul/Carvol), а не лише NOIRE.
+    """
+    if not stock:
+        return False, 'наявність не перевірено'
+    bad, unk, weak = [], [], []
+    for it in items:
+        sku = item_sku(it)
+        r = stock.get(sku)
+        if not r or r['state'] == supplier_stock.UNKNOWN:
+            unk.append(sku)
+        elif r['state'] == supplier_stock.OUT:
+            bad.append(sku)
+        elif r.get('supplier') == 'carvol' and not TRUST_CARVOL:
+            weak.append(sku)
+    if bad:
+        return False, f"немає в постачальника: {', '.join(bad)}"
+    if unk:
+        return False, f"наявність невідома: {', '.join(unk)}"
+    if weak:
+        return False, f"позиції Carvol потребують ручної звірки: {', '.join(weak)}"
+    return True, 'усі позиції є в постачальника'
+
+
+def accept_order(order_id: str) -> bool:
+    """
+    new → confirmed_by_merchant. Механізм той самий, що в
+    agents/orders/epicentr_order_agent.py: спершу allowed-statuses, потім зміна.
+    """
+    try:
+        r = requests.get(f'{EPICENTR_BASE}/v2/oms/orders/{order_id}/allowed-statuses',
+                         headers=HEADERS, timeout=15)
+        if r.status_code == 200:
+            allowed = [x.get('code') for x in r.json().get('items', [])]
+            if 'confirmed_by_merchant' not in allowed:
+                logger.warning(f'{order_id}: confirmed_by_merchant недоступний, '
+                               f'дозволено: {allowed}')
+                return False
+        r2 = requests.post(
+            f'{EPICENTR_BASE}/v2/oms/orders/{order_id}/change-status/to/confirmed_by_merchant',
+            headers=HEADERS, json={'comment': 'Наявність підтверджено за фідом постачальника'},
+            timeout=20)
+        if r2.status_code not in (200, 202, 204):
+            logger.error(f'{order_id}: підтвердження {r2.status_code} {r2.text[:200]}')
+            return False
+        return True
+    except Exception as e:
+        logger.error(f'accept_order {order_id}: {e}')
+        return False
+
+
+def build_message(ext_id, details, mine, foreign_cnt, stock=None, verdict=None) -> str:
     d = details.get('deliveryAddress') or details.get('delivery') or {}
     c = details.get('customer') or details.get('recipient') or {}
     name = ' '.join(filter(None, [c.get('lastName'), c.get('firstName'),
@@ -139,8 +217,17 @@ def build_message(ext_id, details, mine, foreign_cnt) -> str:
         qty = it.get('quantity', 1)
         price = float(it.get('price') or it.get('subtotal') or 0)
         total += price * (qty if not it.get('subtotal') else 1)
-        lines.append(f"• {it.get('name', '')[:70]}\n  <code>{item_sku(it)}</code>"
-                     f" × {qty} — {price:.2f} грн")
+        sku = item_sku(it)
+        av = (stock or {}).get(sku)
+        mark = f"  {supplier_stock.ICON[av['state']]}" if av else ''
+        if av and av.get('qty') is not None:
+            mark += f" {av['qty']:g} шт у постачальника"
+        elif av:
+            mark += {'in_stock': ' є в постачальника',
+                     'out_of_stock': ' НЕМАЄ в постачальника',
+                     'unknown': ' наявність невідома'}[av['state']]
+        lines.append(f"• {it.get('name', '')[:70]}\n  <code>{sku}</code>"
+                     f" × {qty} — {price:.2f} грн{mark}")
     lines += ['', f'💰 Сума NOIRE: <b>{total:.2f} грн</b>']
     if foreign_cnt:
         lines.append(f'⚠️ У замовленні ще {foreign_cnt} поз. інших напрямків '
@@ -148,7 +235,27 @@ def build_message(ext_id, details, mine, foreign_cnt) -> str:
     lines += ['', f'👤 {name}', f'📞 {phone}']
     if city or addr:
         lines.append(f'📍 {city} {addr}'.strip())
-    lines += ['', '⚠️ Статус НЕ змінено автоматично — підтвердь у кабінеті']
+    if stock:
+        bad = [k for k, v in stock.items() if v['state'] == supplier_stock.OUT]
+        unk = [k for k, v in stock.items() if v['state'] == supplier_stock.UNKNOWN]
+        if bad:
+            lines += ['', f"⛔️ НЕМАЄ в постачальника: {', '.join(bad)}",
+                      'Підтверджувати не можна — спершу звір із постачальником']
+        if unk:
+            lines += ['', f"❓ Наявність невідома: {', '.join(unk)}",
+                      'Невідомо ≠ немає. Перевір вручну, не скасовуй наосліп']
+    if verdict:
+        ok, why, acted = verdict
+        if acted:
+            lines += ['', f'✅ <b>ПІДТВЕРДЖЕНО автоматично</b> — {why}']
+        elif ok:
+            lines += ['', f'✅ Можна підтверджувати — {why}',
+                      'Автопідтвердження вимкнене — підтвердь у кабінеті']
+        else:
+            lines += ['', f'✋ <b>НЕ підтверджено</b> — {why}']
+    lines += ['', '⏱ На підтвердження 2 год, далі блокування компанії']
+    if not (verdict and verdict[2]):
+        lines.append('⚠️ Статус НЕ змінено — дія за тобою')
     return '\n'.join(lines)
 
 
@@ -168,7 +275,19 @@ def cycle(dry=False) -> int:
         if not mine:
             logger.debug(f'#{ext}: немає позицій NOIRE — пропускаю')
             continue
-        msg = build_message(ext, det, mine, len(items) - len(mine))
+        try:
+            stock = supplier_stock.check([item_sku(i) for i in items])
+        except Exception as e:
+            logger.error(f'перевірка наявності: {e}')
+            stock = None          # сповіщення важливіше за перевірку — не падаємо
+        ok, why = decide(items, stock)
+        acted = False
+        if ok and AUTOCONFIRM and not dry:
+            acted = accept_order(oid)
+            if not acted:
+                why += ' (підтвердити не вдалось — дивись лог)'
+            logger.info(f'#{ext}: автопідтвердження={acted}')
+        msg = build_message(ext, det, mine, len(items) - len(mine), stock, (ok, why, acted))
         ok = True if dry else tg(msg)
         if dry:
             print(msg)
@@ -196,7 +315,12 @@ def main():
     ap.add_argument('--once', action='store_true')
     ap.add_argument('--dry', action='store_true', help='не слати в TG, друкувати')
     ap.add_argument('--selftest', action='store_true')
+    ap.add_argument('--confirm', action='store_true',
+                    help='увімкнути автопідтвердження (запис у маркетплейс)')
     a = ap.parse_args()
+    global AUTOCONFIRM
+    if a.confirm:
+        AUTOCONFIRM = True
     logger.add(os.path.join(BASE_DIR, 'logs', 'noire_orders.log'),
                rotation='10 MB', retention='30 days')
     if a.selftest:
