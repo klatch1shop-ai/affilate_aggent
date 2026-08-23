@@ -417,6 +417,13 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         if not raw_name:
             stats['пропущено: без назви'] += 1
             continue
+        # Переклад накладається на СИРУ назву, до `build_name()`. Інакше
+        # словник довелось би вести для похідного рядка, який змінюється від
+        # кожної правки правил побудови (зняття бренду, артикула, пунктуації).
+        tr_name = tr.get('title', {}).get(raw_name)
+        if tr_name and tr_name != raw_name:
+            raw_name = tr_name
+            stats['назву перекладено зі словника'] += 1
         name = build_name(raw_name, vendor, article, rzname)
         if len(name) < 5:
             stats['пропущено: назва коротша 5 символів'] += 1
