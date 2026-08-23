@@ -160,20 +160,36 @@ def update_xml(live: dict) -> dict:
 
 
 def git_reset_to_origin() -> bool:
-    """Скидає локальний репо до стану origin/main перед оновленням XML."""
+    """
+    Готує ТІЛЬКИ свій XML до стану origin/main. Решту репозиторію не чіпає.
+
+    Раніше тут стояв `git reset --hard origin/main`, і він щодня о 07:30
+    знищував усю роботу, зроблену з часу останнього успішного push: сервер
+    не пушить нічого, крім цього XML, а watchdog комітить лише локально —
+    тож локальні коміти не мали відповідника в origin і викидались разом
+    із новими файлами. Виявлено 23.08.2026 через `git reflog`
+    (`HEAD@{3}: reset: moving to origin/main`); за ніч зникли три інструменти.
+
+    Скидання потрібне лише для того, щоб push цього файлу не конфліктував.
+    Тому скидаємо адресно: один файл, а не все дерево.
+    """
     try:
-        for cmd in [
-            ['git', 'fetch', 'origin'],
-            ['git', 'reset', '--hard', 'origin/main'],
-        ]:
-            r = subprocess.run(cmd, cwd=REPO_PATH, capture_output=True, text=True)
-            if r.returncode != 0:
-                logger.error(f'{" ".join(cmd)}: {r.stderr[:200]}')
-                return False
-        logger.info('Git: reset to origin/main OK')
+        r = subprocess.run(['git', 'fetch', 'origin'],
+                           cwd=REPO_PATH, capture_output=True, text=True)
+        if r.returncode != 0:
+            logger.error(f'git fetch: {r.stderr[:200]}')
+            return False
+        rel = os.path.relpath(XML_PATH, REPO_PATH)
+        # checkout одного шляху: інші файли й локальні коміти лишаються цілі
+        r = subprocess.run(['git', 'checkout', 'origin/main', '--', rel],
+                           cwd=REPO_PATH, capture_output=True, text=True)
+        if r.returncode != 0:
+            # файлу може не бути в origin — це не помилка, працюємо з наявним
+            logger.warning(f'checkout {rel}: {r.stderr[:160]}')
+        logger.info(f'Git: підготовлено {rel} (дерево не скидалось)')
         return True
     except Exception as e:
-        logger.error(f'Git reset: {e}')
+        logger.error(f'Git prepare: {e}')
         return False
 
 
