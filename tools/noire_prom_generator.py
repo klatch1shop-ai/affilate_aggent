@@ -715,6 +715,15 @@ def fit_params(raw: dict, pid: str, attrs: dict, sku: str = '',
 
 
 def load_products(cur):
+    # Категорія Prom виводиться з коду Єпіцентру, але через ВЛАСНУ таблицю
+    # prom_source_category_mapping — знімок, зроблений 23.08.2026.
+    #
+    # Чому не спільна epicentr_category_mapping: її правлять під Єпіцентр, а
+    # `noire_stock_sync.py --publish-prom` (cron 40 7,11,15,19) не оновлює
+    # готовий файл, а ПЕРЕЗБИРАЄ фід із БД і пушить. Тому виправлення «для
+    # Єпіцентру» само пішло б у живий фід Prom: заміряно 536 змін категорії
+    # й 39 зниклих товарів. Prom — окрема робота, міняється лише за
+    # відповідями підтримки Prom (рішення власника 23.08.2026).
     cur.execute("""
         SELECT p.sku, p.name, p.description_html, p.price_retail, p.vendor,
                p.pictures, p.country, p.quantity, p.available,
@@ -722,7 +731,7 @@ def load_products(cur):
                sc.name AS cat_name
         FROM sexopt_products p
         LEFT JOIN sexopt_categories sc ON sc.id = p.category_id
-        JOIN epicentr_category_mapping m
+        JOIN prom_source_category_mapping m
           ON m.sexopt_category_id = p.category_id
          AND COALESCE(m.confidence, 1) > 0
         WHERE p.available IS TRUE AND p.quantity > 1
