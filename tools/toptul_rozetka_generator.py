@@ -81,6 +81,10 @@ MAX_PICTURES = 15
 MAX_PARAM_LEN = 500
 CYRILLIC = re.compile(r'[а-яА-ЯіІєЄїЇґҐёЁ]')
 
+# Характеристики, значення яких — власні назви. Їх не перекладають, тож і в
+# замір «скільки лишилось російського» вони не входять (див. нижче).
+BRAND_PARAMS = ('Бренд', 'Виробник', 'Країна-виробник', 'Модель')
+
 
 def esc(t) -> str:
     return html.escape(str(t) if t is not None else '', quote=True)
@@ -474,7 +478,13 @@ def generate(out_file=OUT, limit=None, use_commission=False):
             if RU.search(k):
                 ru_param_names[k] += 1
             for v in vals:
-                if RU.search(v):
+                # Власна назва — не мова, і перекладати її не можна: у
+                # прикладі «Бренд: Молния» (3 вживання) українізація зіпсувала
+                # б бренд, за яким товар шукають. Перекладач це знає («бренди,
+                # моделі, артикули НЕ перекладай»), тож і замір мусить рахувати
+                # так само — інакше він вимагає виправити те, що виправляти
+                # заборонено, і нуля не буде ніколи.
+                if k not in BRAND_PARAMS and RU.search(v):
                     ru_param_values[v] += 1
             if len(vals) > 1:
                 joined = ' <br> '.join(str(v)[:240] for v in vals)

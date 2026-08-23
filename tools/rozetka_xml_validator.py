@@ -240,6 +240,28 @@ class RozetkaXMLValidator:
             self._err(oid, "vendor", f"vendor виглядає як URL: '{vendor[:60]}'")
             result["errors"] += 1
 
+        # description / description_ua
+        #
+        # Перевірки тут не було зовсім, і це виявив позитивний контроль
+        # 23.08.2026: із зіпсованої копії фіду вирізали ОБИДВА теги опису, а
+        # валідатор відзвітував «0 помилок, 0 попереджень». Тобто «фід
+        # валідний» нічого не казало про обов'язкове поле, і критерій черги
+        # («0 помилок і 0 попереджень») у цій частині був порожнім.
+        #
+        # Опис обов'язковий: вимога Rozetka p185 у редакції 29.06.2026, через
+        # неї ж у фіді NOIRE довелось заповнювати `description_ua` окремо.
+        # Тому відсутність обох — ПОМИЛКА, а не попередження.
+        desc    = _txt(offer, "description")
+        desc_ua = _txt(offer, "description_ua")
+        if not desc and not desc_ua:
+            self._err(oid, "description", "Відсутні <description> і <description_ua> (p185)")
+            result["errors"] += 1
+        elif not desc_ua:
+            # Українська версія окремо: майданчик українськомовний, і
+            # картка без `description_ua` показує російський опис.
+            self._warn(oid, "description", "Немає <description_ua> — покаже неукраїнський опис")
+            result["warns"] += 1
+
         # article
         article = _txt(offer, "article")
         if not article:

@@ -164,15 +164,43 @@ def ensure(cur):
         PRIMARY KEY (kind, src))""")
 
 
+def _parse(txt: str, wanted: set) -> dict:
+    """Пари з відповіді. Зіставлення за рядком, не за позицією.
+
+    Позиційна прив'язка ламалась 21.08.2026: модель розбивала багатослівне
+    значення на кілька рядків, і зсув давав характеристиці ЧУЖИЙ переклад —
+    гірше, ніж не перекласти. Тут кожен рядок несе свій оригінал, тож зсув
+    неможливий за побудовою.
+    """
+    pairs = {}
+    for line in txt.split('\n'):
+        if '|||' not in line:
+            continue
+        src, _, dst = line.partition('|||')
+        src = re.sub(r'^\s*\d+[\.\)]\s*', '', src.strip())
+        dst = dst.strip()
+        if src in wanted and dst:
+            pairs[src] = dst
+    return pairs
+
+
 def translate(items: list, key: str) -> dict:
     """{оригінал: переклад}. Зіставлення за рядком, не за позицією."""
     wanted = set(items)
     # Читаємо ТІЛЬКИ content. Резервне читання reasoning_content, доречне в
     # класифікації, тут отруйне: у міркуванні сотні рядків, і партія на 40
-    # позицій відхилялась як «198 рядків замість 40». Порожній content
-    # означає лише брак токенів — повторюємо з більшим бюджетом.
-    txt = ''
-    for tokens in (1500, 3000):
+    # позицій відхилялась як «198 рядків замість 40».
+    #
+    # Умова повтору — НЕ «content порожній», а «жодної пари не розібрано».
+    # 23.08.2026 на назвах товарів (вони втричі довші за назви характеристик)
+    # `nemotron-3-super` витрачав увесь бюджет 1500 токенів на міркування й
+    # віддавав його ж у полі `content`: `finish_reason=length`, 4101 символ
+    # роздумів англійською, жодного `|||`. Стара умова бачила непорожній
+    # рядок, вважала відповідь одержаною й не підвищувала бюджет — 15 партій
+    # поспіль, 353 рядки, 0 записів у БД. Замір на тій самій партії з 15
+    # назв: 1500 токенів — 0/15 пар, 6000 — 15/15.
+    for tokens in (3000, 8000):
+        txt = ''
         while _active[0] < len(MODELS):
             model = MODELS[_active[0]]
             body = {'model': model, 'temperature': 0, 'max_tokens': tokens,
@@ -191,29 +219,24 @@ def translate(items: list, key: str) -> dict:
             try:
                 txt = (r.json()['choices'][0]['message'].get('content') or '').strip()
             except Exception:
-                logger.warning(f'нечитана відповідь HTTP {r.status_code}')
-                return {}
+                # Не лише 404: 23.08.2026 `deepseek-v4-flash` віддав 200 без
+                # ключа `choices`. Відповідь без вибору — та сама недоступність
+                # моделі, тож і поводитись треба так само, інакше партія
+                # мовчки гине на робочому ключі.
+                logger.warning(f'модель {model}: нечитана відповідь HTTP '
+                               f'{r.status_code} — переходжу далі')
+                _active[0] += 1
+                continue
             break
         if _active[0] >= len(MODELS):
             logger.error('усі моделі недоступні')
             return {}
-        if txt:
-            break
-    if not txt:
-        logger.warning('порожній content навіть на 12000 токенів')
-        return {}
-    pairs = {}
-    for line in txt.split('\n'):
-        if '|||' not in line:
-            continue
-        src, _, dst = line.partition('|||')
-        src = re.sub(r'^\s*\d+[\.\)]\s*', '', src.strip())
-        dst = dst.strip()
-        if src in wanted and dst:
-            pairs[src] = dst
-    if not pairs:
-        logger.warning('жодної пари з роздільником у відповіді')
-    return pairs
+        pairs = _parse(txt, wanted)
+        if pairs:
+            return pairs
+    logger.warning(f'жодної пари навіть на 8000 токенів (партія {len(items)}, '
+                   f'модель {MODELS[_active[0]]}) — партія втрачена')
+    return {}
 
 
 # Третій вид рядків — НАЗВА ТОВАРУ. Вона не лежить у `<param>`, тому
@@ -294,11 +317,16 @@ def main():
             for s in todo[:10]:
                 print(f'   {src[s]:5}  {s}')
             continue
-        ok = 0
+        ok = lost = 0
         for i in range(0, len(todo), BATCH):
             part = todo[i:i + BATCH]
             out = translate(part, key)
             if not out:
+                # Партія, що не дала жодної пари, ЗНИКАЄ. Раніше тут був німий
+                # `continue`, і 22.08.2026 прогін із 41 відповіддю HTTP 401
+                # завершився без єдиного `ERROR` у логу: «прогін пройшов» і
+                # «переклад зроблено» — різні події, а лог їх не розрізняв.
+                lost += len(part)
                 continue
             for s, d in out.items():
                 cur.execute("""INSERT INTO toptul_translation (kind, src, dst, uses)
@@ -309,6 +337,11 @@ def main():
             ok += len(out)
             logger.info(f'  {kind}: {ok}/{len(todo)}')
             time.sleep(0.3)
+        # Підсумок друкується ЗАВЖДИ, і нуль записів — це помилка, а не тиша.
+        if lost or not ok:
+            logger.error(f'{kind}: записано {ok}, ВТРАЧЕНО {lost} із {len(todo)}')
+        else:
+            logger.success(f'{kind}: записано {ok} із {len(todo)}, втрат немає')
     cur.close()
     conn.close()
 
