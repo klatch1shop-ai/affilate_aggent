@@ -51,7 +51,11 @@ from shared.utils.db import get_connection  # noqa: E402
 # Ознака російської береться з перекладача, а не пишеться тут удруге. Два
 # власні визначення «російського» неминуче розійшлись би, і тоді перевірка
 # «скільки лишилось російського» міряла б не те, що виправляв перекладач.
-from toptul_translate import RU  # noqa: E402
+# `unknown_words` — кошик слів поза обома словниками. Він друкується поруч із
+# нулем свідомо: 25.08.2026 самоперевірка звітувала «російською: 0», тоді як у
+# фіді лежало 1189 вживань російських назв характеристик, і саме відсутність
+# третього числа не дала цього побачити.
+from toptul_translate import RU, unknown_words, lexicon_sizes  # noqa: E402
 
 FEED = os.getenv('TOPTUL_FEED_FILE', '/tmp/toptul.xml')
 OUT = os.path.join(BASE_DIR, 'output', 'toptul_rozetka.xml')
@@ -208,6 +212,60 @@ _TAGS = re.compile(r'<[^>]+>')
 def plain(desc: str) -> str:
     return _MULTISPACE.sub(' ', _TAGS.sub(' ', desc or '')).strip()
 
+
+
+# ── Заборонений вміст опису (зауваження Rozetka #7253098 від 24.08.2026) ──
+# «Опис не повинен містити посилання, рекламу, пропозиції інших товарів, ціни,
+#  інформацію про компанію, точки видачі, адреси, імена, номери телефонів,
+#  умови оформлення замовлення, про доставку/оплату, стоп-слова, емодзі.»
+#
+# Речення з таким вмістом ВИДАЛЯЄМО цілком: вирізати лише посилання означало б
+# лишити «дивіться відео за посиланням:» без посилання.
+_EMOJI = re.compile(r'[\U0001F300-\U0001FAFF\u2190-\u21FF\u2300-\u27BF\uFE0F]')
+_BANNED_SENT = re.compile(
+    r'https?://|www\.|youtu\.?be|\.com\b|\.ua\b'                 # посилання
+    r'|наш(?:ому|ій|ого|а|ий)\s+(?:інтернет-)?(?:магазин|компані)'   # про компанію
+    r'|\b\d[\d\s]{2,}\s*(?:грн|₴|uah)\b'                          # ціни
+    r'|\+?38\s*\(?0\d{2}\)?[\s-]?\d{3}'                          # телефони
+    r'|нова\s+пошта|укрпошт|накладен\w+\s+платіж'                   # доставка
+    r'|\bдостав(?:ка|ки|ку|кою)\b|\bоплат(?:а|и|у|ою)\b',          # оплата
+    re.I)
+
+
+def clean_description(text: str) -> tuple:
+    """Прибирає заборонений вміст. Повертає (чистий текст, що саме прибрано)."""
+    removed = []
+    if _EMOJI.search(text):
+        text = _EMOJI.sub('', text)
+        removed.append('емодзі')
+    # ділимо на речення й відкидаємо ті, де є заборонене
+    parts = re.split(r'(?<=[.!?])\s+', text)
+    keep = []
+    for sent in parts:
+        if _BANNED_SENT.search(sent):
+            removed.append('речення')
+            continue
+        keep.append(sent)
+    out = ' '.join(keep)
+    return re.sub(r'\s{2,}', ' ', out).strip(), removed
+
+
+# ── Країна-виробник ────────────────────────────────────────────────────────
+# Зауваження менеджера Rozetka (#7253098): «Країна-виробник товару» — фільтр
+# категорії, а бракувало його в 4766 товарах із 5512. У фіді постачальника
+# країни немає взагалі, тому виводимо з бренду.
+#
+# TOPTUL — Тайвань, не Китай: Rotar Machinery Industrial Co., Тайчжун,
+# власне виробництво з 1981 р. (перевірено 24.08.2026). Це 3274 товари, і
+# помилка тут була б помітною — країна виробника легко перевіряється.
+BRAND_COUNTRY = {
+    'toptul': 'Тайвань',
+}
+DEFAULT_COUNTRY = 'Китай'   # рішення власника 24.08.2026 для решти брендів
+
+
+def country_for(vendor: str) -> str:
+    return BRAND_COUNTRY.get((vendor or '').strip().lower(), DEFAULT_COUNTRY)
 
 def synth_description(name: str, prm: dict, vendor: str, article: str) -> str:
     """Резервний опис із того, що вже підтверджено характеристиками.
@@ -374,6 +432,7 @@ def generate(out_file=OUT, limit=None, use_commission=False):
 
     stats = collections.Counter()
     ru_names, ru_param_names, ru_param_values = [], collections.Counter(), collections.Counter()
+    unk_words = collections.Counter()
     seen_ids, seen_names = set(), collections.Counter()
 
     for o in offers:
@@ -451,6 +510,9 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         desc = _DELIVERY.sub('', desc).strip()
         if desc != plain(_txt(o, fields['desc'])):
             stats['опис: прибрано згадку доставки/оплати'] += 1
+        desc, removed = clean_description(desc)
+        for what in set(removed):
+            stats[f'опис: прибрано {what}'] += 1
         if not desc:
             desc = synth_description(name, {k: ' / '.join(v)
                                             for k, v in prm.items()},
@@ -477,6 +539,8 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         for k, vals in prm.items():
             if RU.search(k):
                 ru_param_names[k] += 1
+            for w in unknown_words(k):
+                unk_words[w] += 1
             for v in vals:
                 # Власна назва — не мова, і перекладати її не можна: у
                 # прикладі «Бренд: Молния» (3 вживання) українізація зіпсувала
@@ -486,6 +550,9 @@ def generate(out_file=OUT, limit=None, use_commission=False):
                 # заборонено, і нуля не буде ніколи.
                 if k not in BRAND_PARAMS and RU.search(v):
                     ru_param_values[v] += 1
+                if k not in BRAND_PARAMS:
+                    for w in unknown_words(v):
+                        unk_words[w] += 1
             if len(vals) > 1:
                 joined = ' <br> '.join(str(v)[:240] for v in vals)
                 body.append(f'        <param name="{esc(k)}">{cdata(joined)}'
@@ -494,6 +561,10 @@ def generate(out_file=OUT, limit=None, use_commission=False):
             else:
                 body.append(f'        <param name="{esc(k)}">'
                             f'{esc(str(vals[0])[:MAX_PARAM_LEN])}</param>')
+        if not any('краї' in k.lower() for k in prm):
+            body.append(f'        <param name="Країна-виробник товару">'
+                        f'{esc(country_for(vendor))}</param>')
+            stats['країна: додано'] += 1
         body.append('      </offer>')
         lines += body
         stats['офферів у фіді'] += 1
@@ -524,6 +595,14 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         logger.info(f'      {c:5}  {n}')
     logger.info(f'   значень характеристик російською: {len(ru_param_values)} '
                 f'різних, {sum(ru_param_values.values())} вживань')
+    for n, c in ru_param_values.most_common(10):
+        logger.info(f'      {c:5}  {n[:70]}')
+    uk_n, ru_n = lexicon_sizes()
+    logger.info(f'   словники ознаки: {uk_n} укр. словоформ, {ru_n} рос. слів')
+    logger.info(f'   НЕПІЗНАНИХ слів (поза обома словниками): {len(unk_words)} '
+                f'різних, {sum(unk_words.values())} вживань')
+    for w, c in unk_words.most_common(15):
+        logger.info(f'      {c:5}  {w}')
     logger.info(f'   дублікатів назв: {len(dups)}')
     for n in dups[:10]:
         logger.info(f'      {n[:70]}')
