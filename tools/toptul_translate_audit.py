@@ -26,8 +26,24 @@ load_dotenv(os.path.join(BASE_DIR, '.env'), override=True)
 import psycopg2.extras  # noqa: E402
 from loguru import logger  # noqa: E402
 from shared.utils.db import get_connection  # noqa: E402
-from toptul_translate import RU  # noqa: E402
 from toptul_translate_export import esc  # noqa: E402
+# Та сама пара функцій, що й у завантажувачі: ознака мови й виняток на
+# перенесений артикул. Друге власне визначення «російського» розійшлось би з
+# першим, і аудит показував би не те, що приймає `toptul_translate_load.py`.
+from toptul_translate_load import carried_codes  # noqa: E402
+from uk_lexicon import ru_words  # noqa: E402
+
+
+def bad_words(src: str, dst: str) -> list:
+    """Російські слова перекладу, крім артикулів, перенесених незмінними.
+
+    Без цього виправлення аудит вимагав неможливого: «Набір екстракторів для
+    зламаних болтів (4 шт.) (Харків) ЭКСТРХ» — правильний переклад, але
+    артикул `ЭКСТРХ` перекладати заборонено, тож пара лишалась би «поганою»
+    назавжди. Той самий випадок, що «Бренд: Молния» 23.08.
+    """
+    carried = carried_codes(src or '', dst or '')
+    return [w for w in ru_words(dst or '') if w not in carried]
 
 
 def main():
@@ -40,7 +56,7 @@ def main():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT kind, src, dst, uses FROM toptul_translation')
     rows = cur.fetchall()
-    bad = [r for r in rows if RU.search(r['dst'] or '')]
+    bad = [r for r in rows if bad_words(r['src'], r['dst'])]
     if a.tsv:
         for r in sorted(bad, key=lambda x: -(x['uses'] or 0)):
             print(f"{r['kind']}\t{esc(r['src'])}\t{esc(r['dst'])}")
@@ -49,7 +65,7 @@ def main():
         logger.info(f'переклад лишився російським: {len(bad)} '
                     f'({sum(r["uses"] or 0 for r in bad)} вживань)')
         for r in sorted(bad, key=lambda x: -(x['uses'] or 0)):
-            hit = RU.search(r['dst']).group(0)
+            hit = ' '.join(bad_words(r['src'], r['dst']))
             logger.info(f"   {r['uses']:5} {r['kind']:5} {r['src'][:45]!r} → "
                         f"{r['dst'][:45]!r}  ({hit!r})")
     cur.close()

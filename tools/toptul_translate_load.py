@@ -29,6 +29,7 @@ NVIDIA, але ключа `NVIDIA_API_KEY` на сервері немає — 22
 import argparse
 import collections
 import os
+import re
 import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,8 +42,8 @@ from loguru import logger  # noqa: E402
 from shared.utils.db import get_connection  # noqa: E402
 # Ознака мови ІМПОРТУЄТЬСЯ, а не пишеться вдруге: два власні визначення
 # «російського» розійшлись би, і перевірка міряла б не те, що виправляють.
-from toptul_translate import KINDS, RU, collect  # noqa: E402
-from uk_lexicon import unknown_words  # noqa: E402
+from toptul_translate import KINDS, collect  # noqa: E402
+from uk_lexicon import ru_words, unknown_words  # noqa: E402
 
 
 def unesc(s: str) -> str:
@@ -62,6 +63,28 @@ def unesc(s: str) -> str:
         out.append(c)
         i += 1
     return ''.join(out)
+
+
+_CODE = re.compile(r'[A-ZА-ЯІЇЄҐЫЭЪЁ][A-ZА-ЯІЇЄҐЫЭЪЁ0-9./-]{2,}')
+
+
+def carried_codes(src: str, dst: str) -> set:
+    """Слова, які НЕ можна вважати доказом неперекладеного тексту.
+
+    Артикули й моделі перекладати заборонено («бренди, моделі, артикули НЕ
+    перекладай»), а серед артикулів TOPTUL трапляються кириличні: `ЭКСТРХ`,
+    `РАЗВ9.00`, `КС53-Б`. Літера `Э` в артикулі робила ПРАВИЛЬНИЙ переклад
+    «Набір екстракторів для зламаних болтів (4 шт.) (Харків) ЭКСТРХ»
+    відхиленим як «російський» — тобто перевірка вимагала зробити те, що
+    робити не дозволено, і пара не записувалась узагалі, лишаючи російським
+    ВЕСЬ рядок.
+
+    Умова навмисно вузька: слово мусить бути ВЕЛИКИМИ літерами і стояти
+    незмінним в оригіналі. Звичайне російське слово в перекладі під неї не
+    підпадає — воно або перекладене, або написане не капслоком.
+    """
+    return {w.lower() for w in _CODE.findall(dst)} & \
+           {w.lower() for w in _CODE.findall(src)}
 
 
 def read_tsv(path: str) -> list:
@@ -108,9 +131,11 @@ def main():
         if src not in feed[kind]:
             unknown.append((kind, src))
             continue
-        m = RU.search(dst)
-        if m:
-            still_ru.append((kind, src, dst, m.group(0)))
+        # Артикул, перенесений з оригіналу незмінним, доказом російського
+        # тексту не є — див. `carried_codes()`.
+        hits = [w for w in ru_words(dst) if w not in carried_codes(src, dst)]
+        if hits:
+            still_ru.append((kind, src, dst, ' '.join(hits)))
             continue
         # Перевірка 2 ловить лише СТРОГО російське — те, що є в лексиконі або
         # має чужу літеру. Слово поза обома словниками вона пропускає мовчки:

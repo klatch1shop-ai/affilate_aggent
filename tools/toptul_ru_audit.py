@@ -59,6 +59,44 @@ BRAND_PARAMS = ('Бренд', 'Виробник', 'Країна-виробник
                 'Країна-виробник товару')
 
 
+def strip_article(title: str, article: str) -> str:
+    """Артикул із назви геть — з тієї самої причини, що й BRAND_PARAMS.
+
+    `build_name()` дописує артикул у дужках наприкінці, і береться він з тега
+    `<article>`, а не з тексту назви, тобто перекладом його не змінити взагалі.
+    Серед артикулів TOPTUL є написані кирилицею («ЭКСТРХ», «РАЗВ9.00»), і
+    `Э` — чужа для української літера, тож замір рахував такий товар
+    російським НАЗАВЖДИ. Це той самий випадок, що «Бренд: Молния» 23.08: мета,
+    якої не можна досягти, бо досягати її заборонено правилом «бренди, моделі,
+    артикули НЕ перекладай».
+
+    Береться саме тег, а не «останні дужки»: у назвах є й змістовні дужки
+    («(з фіксацією)», «(12-гр.)»), і вирізати їх означало б заплющити очі на
+    справжні російські слова всередині.
+    """
+    return title.replace(f'({article})', ' ') if article else title
+
+
+def strip_vendor(title: str, vendor: str) -> str:
+    """Бренд, дописаний `build_name()` у хвіст назви, — теж не привід.
+
+    Той самий випадок, що `strip_article()` і «Бренд: Молния» 23.08:
+    `build_name()` бере бренд із тега `<vendor>` і додає його наприкінці, тож
+    перекладом його не змінити, а перекладати бренди заборонено. Через це
+    товари брендів «Молния» (3) і «Дальнобойщик» (1) рахувались російськими
+    НАЗАВЖДИ, хоч самі назви давно українські.
+
+    Знімається ЛИШЕ хвостове входження, а не всі: бренд буває звичайним
+    словом, і вирізати його всюди означало б осліпнути на справжнє російське
+    слово в тілі назви. Викликати після `strip_article()` — артикул стоїть
+    ще правіше.
+    """
+    if not vendor:
+        return title
+    t = title.rstrip()
+    return t[:-len(vendor)] if t.endswith(vendor) else title
+
+
 def scan(path: str):
     root = ET.parse(path).getroot()
     res = {k: collections.Counter() for k in
@@ -68,6 +106,8 @@ def scan(path: str):
     for off in root.iter('offer'):
         offers += 1
         title = off.findtext('name_ua') or off.findtext('name') or ''
+        title = strip_article(title, (off.findtext('article') or '').strip())
+        title = strip_vendor(title, (off.findtext('vendor') or '').strip())
         if PATTERNS.search(title):
             res['pat_title'][title] += 1
         if LEX.is_ru(title):
