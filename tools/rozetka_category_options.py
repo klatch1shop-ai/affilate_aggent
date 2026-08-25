@@ -47,7 +47,14 @@ def main():
     a = ap.parse_args()
 
     root = ET.parse(a.feed).getroot()
-    # категорія товару + які param ми вже даємо
+    # У фіді <offer><categoryId> несе НАШ внутрішній номер, а справжній
+    # ідентифікатор Rozetka лежить у <category id="N" rz_id="...">.
+    # Перший прогін пішов із внутрішніми номерами й дав «не отримано» на всіх.
+    rz = {}
+    for c in root.findall('.//categories/category'):
+        if c.get('id') and c.get('rz_id'):
+            rz[c.get('id')] = (c.get('rz_id'), (c.text or '').strip())
+    print(f'категорій з rz_id: {len(rz)}')
     cats = collections.Counter()
     ours = collections.defaultdict(collections.Counter)
     for o in root.findall('.//offer'):
@@ -67,17 +74,20 @@ def main():
     cache = json.load(open(CACHE, encoding='utf-8')) if os.path.exists(CACHE) else {}
     gaps = []
     for i, (cid, n) in enumerate(cats.most_common(), 1):
-        if cid not in cache:
-            d = fetch(s, cid)
+        rz_id, rz_name = rz.get(cid, (None, ''))
+        if not rz_id:
+            continue
+        if rz_id not in cache:
+            d = fetch(s, rz_id)
             if d is None:
-                print(f'  {cid}: не отримано', file=sys.stderr)
+                print(f'  {rz_id} {rz_name}: не отримано', file=sys.stderr)
                 continue
-            cache[cid] = d
+            cache[rz_id] = d
             time.sleep(0.4)
             if i % 20 == 0:
                 json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False)
                 print(f'  {i}/{len(cats)}', file=sys.stderr)
-        items = cache[cid]
+        items = cache[rz_id]
         if isinstance(items, dict):
             items = items.get('options') or items.get('items') or []
         names = {str(x.get('name') or x.get('title') or '').strip()
@@ -85,7 +95,7 @@ def main():
         names.discard('')
         have = set(ours[cid])
         miss = sorted(names - have)
-        gaps.append({'category_id': cid, 'offers': n, 'rozetka_options': len(names),
+        gaps.append({'category_id': rz_id, 'name': rz_name, 'offers': n, 'rozetka_options': len(names),
                      'ours': len(have), 'missing': miss})
     json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False)
     out = os.path.join(BASE, 'docs', 'rozetka_option_gaps.json')
@@ -95,7 +105,7 @@ def main():
     print(f'\nрозібрано категорій: {len(gaps)} ({tot_off} офферів)')
     print(f"{'офферів':>8} {'у Rozetka':>10} {'у нас':>6}  категорія")
     for g in sorted(gaps, key=lambda x: -x['offers'])[:15]:
-        print(f"{g['offers']:8} {g['rozetka_options']:10} {g['ours']:6}  {g['category_id']}")
+        print(f"{g['offers']:8} {g['rozetka_options']:10} {g['ours']:6}  {g.get('name','')[:34]}")
     freq = collections.Counter()
     for g in gaps:
         for m in g['missing']:
