@@ -101,10 +101,31 @@ def scan(path: str):
     root = ET.parse(path).getroot()
     res = {k: collections.Counter() for k in
            ('pat_name', 'pat_value', 'lex_name', 'lex_value',
-            'unk_name', 'unk_value', 'pat_title', 'lex_title')}
+            'unk_name', 'unk_value', 'pat_title', 'lex_title',
+            'pat_desc', 'lex_desc', 'unk_desc', 'lex_desc_off')}
     offers = 0
     for off in root.iter('offer'):
         offers += 1
+        # ОПИС. Його тут не було, і саме тому весь замір був неповним: 25.08
+        # обидві перевірки друкували суцільні нулі, тоді як прямий `grep` по
+        # тому самому файлу знаходив «Трещоточ» 12, «Отвертка» 20, «Набор» 92,
+        # «монтировку» 50. Нуль був фактом про перелік полів, які читає
+        # аудитор, а не про фід, — той самий клас, що й «0 розбіжностей» на
+        # тезі `description`, якого у фіді Rozetka немає (15.08).
+        #
+        # Міряється ЛИШЕ `description_ua`. Тег `description` — російська
+        # версія картки, і російський текст у ньому доречний; вимагати від
+        # нього української означало б поставити мету, якої не треба досягати.
+        desc = off.findtext('description_ua') or ''
+        if PATTERNS.search(desc):
+            res['pat_desc'][off.get('id')] += 1
+        dru = LEX.ru_words(desc)
+        if dru:
+            res['lex_desc_off'][off.get('id')] += 1
+        for w in dru:
+            res['lex_desc'][w] += 1
+        for w in LEX.unknown_words(desc):
+            res['unk_desc'][w] += 1
         title = off.findtext('name_ua') or off.findtext('name') or ''
         title = strip_article(title, (off.findtext('article') or '').strip())
         title = strip_vendor(title, (off.findtext('vendor') or '').strip())
@@ -212,11 +233,17 @@ def main() -> int:
     _show('  назви характеристик', r['pat_name'], a.top)
     _show('  значення характеристик', r['pat_value'], a.top)
     _show('  назви товарів', r['pat_title'], 5)
+    print(f'  описи (description_ua): {len(r["pat_desc"])} оферів')
 
     print('\n── перевірка 2: словникова ознака ──')
     _show('  назви характеристик', r['lex_name'], a.top)
     _show('  значення характеристик', r['lex_value'], a.top)
     _show('  назви товарів', r['lex_title'], 5)
+    print(f'  описи (description_ua): {len(r["lex_desc_off"])} оферів, '
+          f'{len(r["lex_desc"])} різних російських слів, '
+          f'{sum(r["lex_desc"].values())} вживань')
+    for w, n in r['lex_desc'].most_common(a.top):
+        print(f'   {n:5}  {w}')
 
     if a.unknown:
         print('\n── непізнані слова (суржик, одруківки, нові терміни) ──')
@@ -226,6 +253,15 @@ def main() -> int:
     # Головне твердження цього скрипта. Словникова ознака мусить бути
     # НАДмножиною грубого переліку; інакше вона знову недобирає.
     rc = 0
+    # Опис звіряється по ОФЕРАХ, а не по рядках: грубий перелік працює на
+    # цілому тексті, словникова ознака — на словах, і зіставляти їх можна
+    # лише через спільний ключ.
+    dgap = {i for i in r['pat_desc'] if i not in r['lex_desc_off']}
+    if dgap:
+        rc = 1
+        print(f'\nДЕФЕКТ ОЗНАКИ: перелік знайшов російське в описах {len(dgap)} '
+              f'оферів, яких словникова ознака НЕ бачить: '
+              f'{sorted(dgap)[:20]}')
     for kind in ('name', 'value', 'title'):
         gap = {s: n for s, n in r[f'pat_{kind}'].items()
                if s not in r[f'lex_{kind}']}
