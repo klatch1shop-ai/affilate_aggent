@@ -10,13 +10,15 @@ tools/watchdog.py — моніторинг здоров'я системи.
   2. Crontab — правильні шляхи (cd /home/tek/agent-system)
   3. Сервіси systemd — перезапускає якщо впали
   4. rozetka_sync_cron.log — FAILED alert
-  5. Telegram звіт кожні 6 годин
+  5. Фіди (три NOIRE + Carvol→Rozetka) — свіжість, розмір, доступність
+  6. Telegram звіт кожні 6 годин
 """
 
 import os
 import subprocess
 import sys
 import time
+import calendar
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -72,6 +74,22 @@ NOIRE_PROM_RAW_URL  = ("https://raw.githubusercontent.com/klatch1shop-ai/"
 NOIRE_PROM_MAX_AGE_H = 14
 NOIRE_PROM_MIN_BYTES = 20_000_000    # фід ~44 МБ; менше — обрізаний файл
 NOIRE_PROM_FLAG      = "/tmp/watchdog_noire_prom_last.txt"
+
+# Carvol → Rozetka. Прайс збирає rozetka_github_sync.py щодня о 07:15 і пушить
+# у репозиторій affilate_aggent — саме звідти Rozetka забирає файл. Це єдиний
+# наш фід, який публікується не в noire-feed, тому й URL інший.
+CARVOL_RZ_FEED      = "/home/tek/agent-system/data/carvol_rozetka.xml"
+CARVOL_RZ_RAW_URL   = ("https://raw.githubusercontent.com/klatch1shop-ai/"
+                       "affilate_aggent/main/data/carvol_rozetka.xml")
+# Комміти, що торкались саме цього файлу: дата останнього = вік ОПУБЛІКОВАНОЇ
+# версії. Потрібен окремо від raw-URL, бо raw віддає старий файл із HTTP 200
+# і повним розміром — недоставлена публікація звідти не видно.
+CARVOL_RZ_API_URL   = ("https://api.github.com/repos/klatch1shop-ai/"
+                       "affilate_aggent/commits"
+                       "?path=data/carvol_rozetka.xml&per_page=1")
+CARVOL_RZ_MAX_AGE_H = 26          # добовий цикл о 07:15 + запас на один збій
+CARVOL_RZ_MIN_BYTES = 20_000_000  # фід ~40 МБ; менше — ознака обрізаного файлу
+CARVOL_RZ_FLAG      = "/tmp/watchdog_carvol_rz_last.txt"
 
 CRON_CHECKS = [
     ("rozetka_github_sync.py", "cd /home/tek/agent-system"),
@@ -154,6 +172,45 @@ def probe_raw(url: str, min_bytes: int, label: str = "",
     # дедуплікації, і чергування 429 → 503 → 502 щоразу вважалось новою
     # проблемою. Одна несправність давала вісім тривог замість однієї.
     return f"{what} недоступний {attempts} спроби поспіль (останнє: {last})"
+
+
+def published_age_h(api_url: str) -> float:
+    """Вік ОПУБЛІКОВАНОЇ версії файлу в годинах. -1.0 = дізнатись не вдалось.
+
+    Свіжість локального файлу і свіжість публікації — різні події, і саме на
+    цьому розрив: 23-25.08.2026 rozetka_github_sync щодня збирав новий прайс
+    Carvol і щодня НЕ міг його віддати (двічі 'Authentication failed', раз
+    'cannot pull with rebase'). Локальний файл при цьому був свіжий, raw-URL
+    відповідав HTTP 200 повного розміру — обидві перевірки NOIRE-зразка
+    сказали б «усе гаразд» про день, коли Rozetka отримала вчорашні ціни.
+    За 23.08 у репозиторії коміту немає взагалі.
+
+    Береться дата коміту, а не час пушу: вона показує, коли зібрано ВМІСТ, що
+    зараз лежить за посиланням. Прайс, запушений із запізненням на добу, і є
+    добової давнини, хоч би коли він доїхав.
+
+    Невідомий результат навмисно НЕ є проблемою: watchdog ходить сюди 144 рази
+    на добу, ліміт GitHub без токена — 60 запитів на годину з IP, і
+    перетворювати кожен 403 на тривогу означало б навчити власника
+    прогортати сповіщення не читаючи.
+    """
+    try:
+        r = requests.get(api_url, timeout=30,
+                         headers={"Accept": "application/vnd.github+json"})
+        if r.status_code != 200:
+            log(f"[pub] GitHub API HTTP {r.status_code} — вік публікації невідомий")
+            return -1.0
+        commits = r.json()
+        if not commits:
+            log("[pub] GitHub API: жодного коміту по цьому шляху")
+            return -1.0
+        iso = commits[0]["commit"]["committer"]["date"]      # 2026-08-25T04:15:42Z
+        made = calendar.timegm(
+            datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ").timetuple())
+        return (time.time() - made) / 3600
+    except Exception as e:
+        log(f"[pub] вік публікації невідомий: {type(e).__name__}: {e}")
+        return -1.0
 
 
 # ── check 1: git ──────────────────────────────────────────────────────────────
@@ -396,6 +453,59 @@ def check_noire_rozetka_feed() -> dict:
     return {"ok": True, "msg": "feed ok"}
 
 
+def check_carvol_rozetka_feed() -> dict:
+    """Фід Carvol для Rozetka: свіжість, розмір і те, чи публікація доїхала.
+
+    Постачальник Carvol — читання й тільки читання: перевірка нічого не
+    перезбирає й не публікує, лише дивиться на готовий файл і на GitHub.
+
+    Три різні відмови, які не заміняють одна одну:
+      * файл не оновився (не відпрацював cron о 07:15 або впав збір);
+      * файл оновився, але обрізаний (обрив запису — Rozetka зніме з продажу
+        все, чого раптом не стало у прайсі);
+      * файл цілий, а на GitHub лежить учорашній — саме це й ставалось.
+    """
+    problems = []
+    if os.path.exists(CARVOL_RZ_FEED):
+        age_h = (time.time() - os.path.getmtime(CARVOL_RZ_FEED)) / 3600
+        if age_h > CARVOL_RZ_MAX_AGE_H:
+            problems.append(f"фід Carvol не оновлювався {age_h:.0f} год")
+        size = os.path.getsize(CARVOL_RZ_FEED)
+        if size < CARVOL_RZ_MIN_BYTES:
+            problems.append(f"фід Carvol обрізаний: {size} Б")
+    else:
+        problems.append("локального фіду Carvol немає")
+
+    bad = probe_raw(CARVOL_RZ_RAW_URL, CARVOL_RZ_MIN_BYTES, "Carvol")
+    if bad:
+        problems.append(bad)
+
+    pub_h = published_age_h(CARVOL_RZ_API_URL)
+    if pub_h > CARVOL_RZ_MAX_AGE_H:
+        problems.append(f"опублікована версія Carvol старша за "
+                        f"{CARVOL_RZ_MAX_AGE_H} год ({pub_h:.0f}) — push не доїхав")
+
+    if problems:
+        key = "; ".join(problems)[:200]
+        last = ""
+        if os.path.exists(CARVOL_RZ_FLAG):
+            try:
+                last = Path(CARVOL_RZ_FLAG).read_text().strip()
+            except Exception:
+                pass
+        if key != last:
+            tg(f"🚨 <b>Watchdog Carvol Rozetka</b>: {key}")
+            Path(CARVOL_RZ_FLAG).write_text(key)
+        log(f"[carvol-rz] ПРОБЛЕМА: {key}")
+        return {"ok": False, "msg": key[:80]}
+
+    if os.path.exists(CARVOL_RZ_FLAG):
+        os.remove(CARVOL_RZ_FLAG)
+    pub = "невідомо" if pub_h < 0 else f"{pub_h:.0f} год тому"
+    log(f"[carvol-rz] фід свіжий, raw-URL доступний, опубліковано {pub}")
+    return {"ok": True, "msg": "feed ok"}
+
+
 # ── report every 6h ───────────────────────────────────────────────────────────
 
 def should_report() -> bool:
@@ -454,6 +564,7 @@ def main():
     noire_r = check_noire_feed()
     noire_rz = check_noire_rozetka_feed()
     noire_prom = check_noire_prom_feed()
+    carvol_rz = check_carvol_rozetka_feed()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
@@ -462,6 +573,7 @@ def main():
     log(f"[noire] ok={noire_r['ok']} {noire_r['msg']}")
     log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
     log(f"[noire-prom] ok={noire_prom['ok']} {noire_prom['msg']}")
+    log(f"[carvol-rz] ok={carvol_rz['ok']} {carvol_rz['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)
