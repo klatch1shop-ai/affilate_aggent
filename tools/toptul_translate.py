@@ -72,14 +72,26 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'tools'))
 from uk_lexicon import (is_ru, needs_translation, ru_words,   # noqa: E402
                         unknown_words, sizes as lexicon_sizes)
 
-# Сумісність: генератор і сторонні скрипти імпортували `RU` як об'єкт із
-# `.search()`. Лишаємо саме таку форму, щоб виклики не мовчали, — але за нею
-# тепер словник, а не регекс.
+# Сумісність: генератор, `toptul_translate_audit.py` і `toptul_translate_load.py`
+# імпортували `RU` як об'єкт із `.search()`, а результат ще й розпаковували
+# через `.group(0)`. Лишаємо обидва методи — інакше зміна ознаки повалила б
+# три робочі інструменти, — але за ними тепер словник, а не регекс.
+class _Hit:
+    def __init__(self, words):
+        self.words = words
+
+    def group(self, _n=0):
+        return ' '.join(self.words)
+
+    def __str__(self):
+        return self.group()
+
+
 class _RuSignal:
     @staticmethod
     def search(s):
         w = ru_words(s or '')
-        return w[0] if w else None
+        return _Hit(w) if w else None
 
 
 RU = _RuSignal()
