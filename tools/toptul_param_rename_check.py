@@ -104,9 +104,46 @@ def feed_usage(feed):
     return total, where, rz
 
 
+def suggest(total, where, cache, limit=40):
+    """Наші назви, яких Rozetka не знає, поруч із її ПОХОЖОЮ назвою.
+
+    Це той самий нечіткий підбір, що дав хибні пари, тому нічого не
+    застосовує й нічим не є, крім матеріалу на перевірку людиною. Різниця з
+    тим прогоном одна, але суттєва: кандидат береться лише з тих категорій,
+    де реально лежать наші оффери, і лише якщо нашої назви Rozetka не знає.
+    """
+    import difflib
+    rows = []
+    for nm, n in total.most_common():
+        cand = collections.Counter()
+        known = 0
+        for rz_id, cnt in where[nm].items():
+            names = cat_names(cache, rz_id)
+            if names is None:
+                continue
+            if nm in names:
+                known += cnt
+                continue
+            for m in difflib.get_close_matches(nm, list(names), n=1, cutoff=0.82):
+                if m != nm and names[m][0]:
+                    cand[m] += cnt
+        if known or not cand:
+            continue
+        top, w = cand.most_common(1)[0]
+        rows.append((w, nm, top, n))
+    rows.sort(reverse=True)
+    print('\n=== кандидати на перевірку (НЕ застосовувати без звірки) ===')
+    print(f'{"офф.":>6}  наша назва → похожа назва-ФІЛЬТР Rozetka')
+    for w, nm, top, n in rows[:limit]:
+        print(f'{w:6}  {nm!r} → {top!r}   (усього у фіді {n})')
+    print(f'усього кандидатів: {len(rows)}')
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--feed', default=os.path.join(BASE, 'output', 'toptul_rozetka.xml'))
+    ap.add_argument('--suggest', action='store_true',
+                    help='додатково: пошук інших схожих назв (лише перелік)')
     a = ap.parse_args()
 
     cache = load_cache()
@@ -164,6 +201,8 @@ def main():
         print('УВАГА: перевірка підтвердила завідомо хибні пари: ' + '; '.join(bad_conf))
         return 1
     print('негативний контроль: жодна хибна пара не підтверджена')
+    if a.suggest:
+        suggest(total, where, cache)
     return 0 if conf == len(PAIRS) else 1
 
 
