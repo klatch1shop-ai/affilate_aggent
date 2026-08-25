@@ -57,6 +57,12 @@ from shared.utils.db import get_connection  # noqa: E402
 # третього числа не дала цього побачити.
 from toptul_translate import RU, unknown_words, lexicon_sizes  # noqa: E402
 from toptul_ru_audit import strip_article, strip_vendor  # noqa: E402
+# Дві фільтрові характеристики, яких постачальник не дає окремим полем
+# («Розмір посадкового квадрата», «Кількість граней») — зауваження Rozetka
+# #7253098 п.3. Модуль окремий, бо його правила треба перевіряти без БД,
+# мережі й фіду: `toptul_filter_extract.py --selftest`.
+from toptul_filter_extract import extract as extract_filters  # noqa: E402
+from toptul_filter_extract import load_reference  # noqa: E402
 
 FEED = os.getenv('TOPTUL_FEED_FILE', '/tmp/toptul.xml')
 OUT = os.path.join(BASE_DIR, 'output', 'toptul_rozetka.xml')
@@ -396,6 +402,14 @@ def generate(out_file=OUT, limit=None, use_commission=False):
     logger.info(f'Офферів у фіді постачальника: {len(offers)}')
     fields = resolve_fields(offers)
 
+    # Довідник значень Rozetka з `paramid`/`valueid`. Модуль свідомо падає, а
+    # не міряє впівсили: без довідника фільтрові характеристики просто не
+    # додались би, а звіт показав би нуль, який читається як «нема чого
+    # додавати». Того самого класу нуль 25.08 приховував 478 російських описів.
+    ref = load_reference()
+    logger.info(f'Довідник фільтрів Rozetka: {len(ref)} категорій, '
+                + ', '.join(sorted({n for v in ref.values() for n in v})))
+
     conn = get_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cats = load_categories(cur)
@@ -493,6 +507,21 @@ def generate(out_file=OUT, limit=None, use_commission=False):
             stats['пропущено: назва коротша 5 символів'] += 1
             continue
         seen_names[name] += 1
+
+        # ── фільтрові характеристики з характеристик і назви ───────────────
+        # Робиться ПІСЛЯ `build_name()`, бо запасне джерело — саме побудована
+        # назва, і саме на ній зроблено замір покриття. `param_ids` тримає
+        # `paramid`/`valueid` окремо: у `prm` лежить лише текст, щоб решта
+        # перевірок (російська, непізнані слова, MIN_PARAMS) бачила ці
+        # характеристики так само, як усі інші.
+        param_ids = {}
+        for pname, d in extract_filters(rz, prm, name, ref).items():
+            prm[pname] = list(d['values'])
+            param_ids[pname] = (d['paramid'], d['valueids'])
+            stats[f'фільтр додано: {pname} (з {d["source"]})'] += 1
+            for v in d['dropped']:
+                stats[f'фільтр: значення поза довідником — {v}'] += 1
+
         # Заміряється лише те, що МОЖНА виправити перекладом. Бренд і артикул
         # `build_name()` дописує сам, узявши з тегів, а перекладати їх
         # заборонено («бренди, моделі, артикули НЕ перекладай»), тож товари
@@ -564,7 +593,23 @@ def generate(out_file=OUT, limit=None, use_commission=False):
                 if k not in BRAND_PARAMS:
                     for w in unknown_words(v):
                         unk_words[w] += 1
-            if len(vals) > 1:
+            pid, vids = param_ids.get(k, (None, None))
+            if pid and vids and all(v is not None for v in vids):
+                # p210 (ред. 12.06.2026): «Ми гарантуємо зіставлення вказаних
+                # вами характеристик, які ТОЧНО збігаються з параметрами в
+                # категорії»; з `paramid`/`valueid` здогадки немає взагалі.
+                # Кілька значень тут пишуться ЧЕРЕЗ КОМУ, а не через `<br>`, —
+                # так у прикладі самої довідки (`valueid="2296922, 2645254"`),
+                # і порядок тексту мусить відповідати порядку id. `<br>` нижче
+                # лишається для характеристик БЕЗ id: там формат довідкою не
+                # описаний, а два теги з тим самим іменем дали 1403
+                # попередження 15.08.2026.
+                body.append(
+                    f'        <param name="{esc(k)}" paramid="{pid}" '
+                    f'valueid="{", ".join(str(i) for i in vids)}">'
+                    f'{esc(", ".join(str(v) for v in vals))}</param>')
+                stats[f'фільтр із paramid/valueid: {k}'] += 1
+            elif len(vals) > 1:
                 joined = ' <br> '.join(str(v)[:240] for v in vals)
                 body.append(f'        <param name="{esc(k)}">{cdata(joined)}'
                             f'</param>')
