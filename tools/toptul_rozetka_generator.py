@@ -293,17 +293,35 @@ def synth_description(name: str, prm: dict, vendor: str, article: str) -> str:
 
 # ── Довідники з бази ───────────────────────────────────────────────────────
 
-def load_categories(cur) -> dict:
-    """toptul_id → (rz_id, rz_name) лише для довірених рівнів."""
-    cur.execute("""SELECT toptul_id, rz_id, rz_name, tier
-                   FROM toptul_rozetka_category_map
-                   WHERE rz_id IS NOT NULL AND tier = ANY(%s)""",
-                (list(ALLOWED_TIERS),))
+def load_categories(cur) -> tuple:
+    """(довірені, відхилені).
+
+    Довірені — `toptul_id → (rz_id, rz_name)` з рівнів `ALLOWED_TIERS`.
+    Відхилені — `toptul_id → (tier, rz_id, toptul_name)` для решти рядків
+    таблиці. Другий словник потрібен не генератору, а ЗВІТУ: без нього обидві
+    причини вибуття зливаються в одне число, і воно бреше. Так і було до
+    25.08.2026 — лічильник «категорія без rz_id: 205» рахував разом 128
+    офферів, де `rz_id` справді NULL, і 77, де `rz_id` є, але це відхилена
+    здогадка рівня `review` («Інструмент для пайки → Набори інструментів»,
+    журнал 23.08). Перші — рішення власника «не тримати у фіді», другі —
+    наслідок SKILL-04 (хибна категорія гірша за відсутню).
+    """
+    cur.execute("""SELECT toptul_id, toptul_name, rz_id, rz_name, tier
+                   FROM toptul_rozetka_category_map""")
     rows = cur.fetchall()
-    by_tier = collections.Counter(r['tier'] for r in rows)
+    good = {r['toptul_id']: (str(r['rz_id']), r['rz_name']) for r in rows
+            if r['rz_id'] is not None and r['tier'] in ALLOWED_TIERS}
+    bad = {r['toptul_id']: (r['tier'], r['rz_id'], r['toptul_name'])
+           for r in rows if r['toptul_id'] not in good}
+    by_tier = collections.Counter(r['tier'] for r in rows
+                                  if r['toptul_id'] in good)
     logger.info('Категорій з rz_id: ' + ', '.join(
         f'{t} — {n}' for t, n in sorted(by_tier.items())))
-    return {r['toptul_id']: (str(r['rz_id']), r['rz_name']) for r in rows}
+    if bad:
+        by_bad = collections.Counter(t for t, _, _ in bad.values())
+        logger.info('Категорій поза фідом: ' + ', '.join(
+            f'{t} — {n}' for t, n in sorted(by_bad.items())))
+    return good, bad
 
 
 def load_translations(cur) -> dict:
@@ -412,7 +430,7 @@ def generate(out_file=OUT, limit=None, use_commission=False):
 
     conn = get_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cats = load_categories(cur)
+    cats, blocked = load_categories(cur)
     tr = load_translations(cur)
     rates = load_commission(cur) if use_commission else {}
     cur.close()
@@ -460,7 +478,14 @@ def generate(out_file=OUT, limit=None, use_commission=False):
             stats['пропущено: дубль id'] += 1
             continue
         if cid not in cats:
-            stats['пропущено: категорія без rz_id'] += 1
+            # Причини різні, тому й лічильники різні — див. load_categories().
+            tier = blocked.get(cid, (None, None, None))[0]
+            if cid not in blocked:
+                stats['пропущено: категорія відсутня в мапінгу'] += 1
+            elif blocked[cid][1] is None:
+                stats['пропущено: категорія без rz_id'] += 1
+            else:
+                stats[f'пропущено: категорія недовіреного рівня ({tier})'] += 1
             continue
         rz, rzname = cats[cid]
 
