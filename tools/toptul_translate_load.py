@@ -42,6 +42,7 @@ from shared.utils.db import get_connection  # noqa: E402
 # Ознака мови ІМПОРТУЄТЬСЯ, а не пишеться вдруге: два власні визначення
 # «російського» розійшлись би, і перевірка міряла б не те, що виправляють.
 from toptul_translate import KINDS, RU, collect  # noqa: E402
+from uk_lexicon import unknown_words  # noqa: E402
 
 
 def unesc(s: str) -> str:
@@ -102,7 +103,7 @@ def main():
     for k, c in feed.items():
         logger.info(f'у фіді {k}: різних {len(c)}, вживань {sum(c.values())}')
 
-    good, unknown, still_ru = [], [], []
+    good, unknown, still_ru, unk_dst = [], [], [], []
     for kind, src, dst in rows:
         if src not in feed[kind]:
             unknown.append((kind, src))
@@ -111,6 +112,17 @@ def main():
         if m:
             still_ru.append((kind, src, dst, m.group(0)))
             continue
+        # Перевірка 2 ловить лише СТРОГО російське — те, що є в лексиконі або
+        # має чужу літеру. Слово поза обома словниками вона пропускає мовчки:
+        # негативний контроль 25.08.2026 показав, що пара «Медь → Медь»
+        # проходить без єдиного слова в лозі, бо `медь` лежить у кошику
+        # «непізнане», а не в «ru». Відхиляти такі пари не можна — там же
+        # живуть законні «оснастка», «шуруповерт», «штабелер», — але й
+        # мовчати не можна: мовчазний прохід і є та хвороба, від якої лікує
+        # правило позитивного контролю. Тому попередження, не відмова.
+        u = unknown_words(dst)
+        if u:
+            unk_dst.append((kind, src, dst, u))
         good.append((kind, src, dst, feed[kind][src]))
 
     if unknown:
@@ -121,6 +133,11 @@ def main():
         logger.error(f'ПЕРЕКЛАД ЛИШИВСЯ РОСІЙСЬКИМ — не записано: {len(still_ru)}')
         for kind, src, dst, hit in still_ru[:20]:
             logger.error(f'   {kind}: {src[:40]!r} → {dst[:40]!r} ({hit!r})')
+    if unk_dst:
+        logger.warning(f'У ПЕРЕКЛАДІ СЛОВА ПОЗА ОБОМА СЛОВНИКАМИ — записано, '
+                       f'але перегляньте: {len(unk_dst)}')
+        for kind, src, dst, u in unk_dst[:20]:
+            logger.warning(f'   {kind}: {src[:40]!r} → {dst[:40]!r} {u}')
 
     covered = sum(u for _, _, _, u in good)
     logger.info(f'до запису: {len(good)} пар, {covered} вживань')
