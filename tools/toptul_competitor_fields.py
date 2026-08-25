@@ -20,7 +20,7 @@
    назви характеристик по категоріях) і `data/rozetka_category_options.json`
    (офіційний довідник Rozetka) → JSON.
    Сервер для другого кроку не годиться: Cloudflare віддає йому 403 на
-   сторінку продавця (перевірено 26.08.2026), тоді як `product-api` відповідає.
+   сторінку продавця (перевірено 25.08.2026), тоді як `product-api` відповідає.
 2. `--scrape` — **на ноутбуці**: сторінка продавця з фільтром `section_id`
    (= наш `rz_id`) → id товарів → `product-api/v4/goods/get-characteristic`
    → перелік назв → звіт `docs/toptul_competitor_fields.md`.
@@ -51,7 +51,7 @@ OPTIONS = os.path.join(BASE_DIR, 'data', 'rozetka_category_options.json')
 REPORT = os.path.join(BASE_DIR, 'docs', 'toptul_competitor_fields.md')
 
 SELLER = 'ttul'
-# seller_id підтверджено 26.08.2026 на трьох товарах сторінки продавця; він же
+# seller_id підтверджено 25.08.2026 на трьох товарах сторінки продавця; він же
 # слугує перевіркою, що section_id не приніс чужі картки.
 SELLER_ID = 13624
 
@@ -96,6 +96,7 @@ def dump_ours(feed: str, options: str, out: str) -> dict:
 
     offers = collections.Counter()
     params = collections.defaultdict(collections.Counter)
+    glob = collections.Counter()
     total = 0
     for o in root.iter('offer'):
         total += 1
@@ -104,6 +105,7 @@ def dump_ours(feed: str, options: str, out: str) -> dict:
         offers[lid] += 1
         for p in o.findall('param'):
             params[lid][p.get('name')] += 1
+            glob[p.get('name')] += 1
 
     rz_opts = {}
     if os.path.exists(options):
@@ -141,7 +143,11 @@ def dump_ours(feed: str, options: str, out: str) -> dict:
         print(f'УВАГА: категорій фіду без rz_id у блоці <category>: {no_rz}')
 
     data = {'generated': datetime.now().isoformat(timespec='seconds'),
-            'feed': feed, 'feed_offers': total, 'categories': cats}
+            'feed': feed, 'feed_offers': total, 'categories': cats,
+            # назва, яку ми вже вживаємо в ІНШИХ категоріях, — дешева
+            # прогалина: словник і генератор її знають, бракує лише джерела
+            # значень саме тут
+            'global_params': dict(glob.most_common())}
     with open(out, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False)
     print(f'офферів у фіді: {total}, категорій: {len(cats)}, '
@@ -153,22 +159,42 @@ def dump_ours(feed: str, options: str, out: str) -> dict:
 
 # ────────────────────── крок 2: бік конкурента (ноутбук) ────────────────────
 
+def fetch(session, url: str, params=None, tries: int = 4):
+    """GET із повтором. Rozetka рве зʼєднання (ConnectionReset) приблизно раз
+    на сотню запитів; без повтору прогін падає посеред категорії, а гірше —
+    міг би віддати неповний перелік карток як повний."""
+    delay = 2.0
+    for attempt in range(1, tries + 1):
+        try:
+            r = session.get(url, headers=HEADERS, timeout=40, params=params)
+            if r.status_code == 200:
+                return r
+            if r.status_code in (403, 429, 500, 502, 503):
+                print(f'  ! HTTP {r.status_code}, спроба {attempt}/{tries}')
+            else:
+                return r
+        except Exception as e:
+            print(f'  ! {type(e).__name__}, спроба {attempt}/{tries}')
+        time.sleep(delay)
+        delay *= 2
+    return None
+
+
 def seller_products(sid: str, session, pause: float = 1.2) -> list:
     """id товарів продавця у ЦІЙ категорії (перша сторінка видачі)."""
-    r = session.get(SELLER_URL.format(seller=SELLER, sid=sid),
-                    headers=HEADERS, timeout=40)
-    if r.status_code != 200:
-        print(f'  ! сторінка продавця: HTTP {r.status_code}')
+    r = fetch(session, SELLER_URL.format(seller=SELLER, sid=sid))
+    if r is None or r.status_code != 200:
+        print(f'  ! сторінка продавця недоступна '
+              f'({r.status_code if r is not None else "немає відповіді"})')
         return []
     time.sleep(pause)
     return list(dict.fromkeys(PID_RE.findall(r.text)))
 
 
 def api(method: str, gid: str, session):
-    url = API.format(method=method)
-    r = session.get(url, headers=HEADERS, timeout=30, params={
+    r = fetch(session, API.format(method=method), params={
         'front-type': 'xl', 'country': 'UA', 'lang': 'ua', 'goodsId': gid})
-    if r.status_code != 200:
+    if r is None or r.status_code != 200:
         return None
     try:
         return r.json().get('data')
@@ -176,9 +202,16 @@ def api(method: str, gid: str, session):
         return None
 
 
-def char_titles(gid: str, session) -> list:
-    """Перелік НАЗВ характеристик картки. Значення не читаються (SKILL-14.8)."""
+def char_titles(gid: str, session):
+    """Перелік НАЗВ характеристик картки. Значення не читаються (SKILL-14.8).
+
+    `None` — відповіді не отримано (дефект інструмента), `[]` — картка справді
+    без характеристик. Змішувати ці два випадки не можна: перший зробив би
+    «конкурент нічого не заповнює» твердженням про мережу.
+    """
     data = api('get-characteristic', gid, session)
+    if data is None:
+        return None
     if not data:
         return []
     out = []
@@ -218,6 +251,9 @@ def scrape(ours: dict, top: int, sample: int, pause: float) -> dict:
                 continue
             titles = char_titles(gid, session)
             time.sleep(pause)
+            if titles is None:
+                skipped['характеристики не відповіли'] += 1
+                continue
             if not titles:
                 empty += 1
             cards.append({'id': gid, 'title': main.get('title', ''),
@@ -231,7 +267,8 @@ def scrape(ours: dict, top: int, sample: int, pause: float) -> dict:
                        'listing': len(pids), 'empty': empty,
                        'skipped': dict(skipped), 'cards': cards})
     return {'generated': datetime.now().isoformat(timespec='seconds'),
-            'ours_generated': ours['generated'], 'categories': result}
+            'ours_generated': ours['generated'], 'categories': result,
+            'global_params': ours.get('global_params', {})}
 
 
 # ──────────────────────────── розбір і звіт ─────────────────────────────────
@@ -272,10 +309,24 @@ def analyse(cat: dict) -> dict:
             missing.append(rec)
         else:
             rare.append(rec)
-    return {'n': n, 'common': common, 'missing': missing, 'rare': rare}
+    return {'n': n, 'common': common, 'missing': missing, 'rare': rare,
+            'fields_seen': len(freq)}
 
 
-def write_report(scraped: dict, path: str) -> int:
+def load_gaps(path: str) -> dict:
+    """`docs/rozetka_option_gaps.json` — скільки назв бракує ЗА ОФІЦІЙНИМ
+    довідником категорії. Потрібен для чесної рамки: довідник перелічує все,
+    що майданчик уміє, разом із «EAN», «Код УКТ ЗЕД» і «Кнопкою
+    передзамовлення», яких не заповнює ніхто. Скільки з того переліку
+    заповнює живий продавець — і є відповідь цього звіту."""
+    if not path or not os.path.exists(path):
+        return {}
+    with open(path, encoding='utf-8') as f:
+        return {str(c['category_id']): c for c in json.load(f)}
+
+
+def write_report(scraped: dict, path: str, gaps: dict = None) -> int:
+    gaps = gaps or {}
     lines = [
         '# Структура характеристик у конкурента `ttul`',
         '',
@@ -298,7 +349,16 @@ def write_report(scraped: dict, path: str) -> int:
         'характеристики з переліком значень, тож числові поля туди не '
         'потрапляють).',
         '',
+        'Колонка «У нас деінде» — скільки разів ця сама назва вже стоїть у '
+        'нашому фіді в ІНШИХ категоріях. Ненуль означає, що назву наш',
+        'словник і генератор уже знають, і бракує лише джерела значень саме '
+        'тут; нуль — що поля в нас немає взагалі.',
+        '',
     ]
+    gp = collections.Counter()
+    for k, v in (scraped.get('global_params') or {}).items():
+        gp[norm(k)] += v
+
     total_missing = 0
     summary = []
     details = []
@@ -308,9 +368,14 @@ def write_report(scraped: dict, path: str) -> int:
         a = analyse(cat)
         n = a['n']
         total_missing += len(a['missing'])
+        gap = gaps.get(str(cat['rz_id']), {})
         summary.append((cat['name'], cat['rz_id'], cat['our_offers'], n,
-                        len(a['common']), len(a['missing'])))
-        if n and not a['common']:
+                        len(a['common']), len(a['missing']),
+                        len(gap.get('missing', [])) if gap else None))
+        # Порожній перетин сам собою нічого не означає: він буває і тому, що
+        # конкурент у цій категорії не заповнює НІЧОГО. Ознакою зламаної
+        # нормалізації назв він є лише тоді, коли поля в нього Є.
+        if n and a['fields_seen'] and not a['common']:
             broken.append(cat['name'])
 
         details.append('')
@@ -329,15 +394,23 @@ def write_report(scraped: dict, path: str) -> int:
             details.append('_Карток конкурента у цій категорії не знайдено._')
             continue
 
+        if not a['fields_seen']:
+            details.append('_Конкурент у цій категорії не заповнює **жодної** '
+                           'характеристики — порівнювати нема з чим. Порожній '
+                           'перетин тут пояснений, а не підозрілий._')
+            continue
+
         if a['missing']:
             details.append('**Бракує нам:**')
             details.append('')
-            details.append('| Характеристика | У нього карток | Rozetka | Схоже на нашу |')
-            details.append('|---|---:|---|---|')
+            details.append('| Характеристика | У нього карток | Rozetka | '
+                           'У нас деінде | Схоже на нашу |')
+            details.append('|---|---:|---|---:|---|')
             for m in a['missing']:
                 rz = ('**фільтр**' if m['rz_filter'] else
                       ('так' if m['rz_known'] else '—'))
                 details.append(f'| {m["name"]} | {m["cards"]}/{n} | {rz} | '
+                               f'{gp.get(norm(m["name"]), 0)} | '
                                f'{m.get("near") or ""} |')
         else:
             details.append('**Бракує нам:** нічого — усі його консенсусні поля '
@@ -345,8 +418,10 @@ def write_report(scraped: dict, path: str) -> int:
         details.append('')
         details.append('**Заповнюємо обидва** (позитивний контроль порівняння, '
                        f'{len(a["common"])}): ' +
-                       ', '.join(c['name'] for c in a['common'][:20]) +
-                       ('…' if len(a['common']) > 20 else '') or '—')
+                       (', '.join(c['name'] for c in a['common'][:20]) +
+                        ('…' if len(a['common']) > 20 else '')
+                        if a['common'] else '**жодного — підозра на зламану '
+                                            'нормалізацію назв**'))
         if a['rare']:
             details.append('')
             details.append(f'**Поодинокі поля** (<{int(CONSENSUS * 100)}% його '
@@ -355,13 +430,47 @@ def write_report(scraped: dict, path: str) -> int:
                                      for r in a['rare'][:15]) +
                            ('…' if len(a['rare']) > 15 else ''))
 
-    lines.append('| Категорія | `rz_id` | наших офферів | його карток | спільних полів | бракує |')
-    lines.append('|---|---:|---:|---:|---:|---:|')
-    for name, rz, ours_n, n, com, mis in summary:
-        lines.append(f'| {name} | {rz} | {ours_n} | {n} | {com} | **{mis}** |')
+    has_gaps = any(s[6] is not None for s in summary)
+    head = ('| Категорія | `rz_id` | наших офферів | його карток | '
+            'спільних полів | бракує проти нього |')
+    sep = '|---|---:|---:|---:|---:|---:|'
+    if has_gaps:
+        head += ' бракує за довідником |'
+        sep += '---:|'
+    lines.append(head)
+    lines.append(sep)
+    total_gap = 0
+    for name, rz, ours_n, n, com, mis, gp_n in summary:
+        row = f'| {name} | {rz} | {ours_n} | {n} | {com} | **{mis}** |'
+        if has_gaps:
+            row += f' {gp_n if gp_n is not None else "—"} |'
+            total_gap += gp_n or 0
+        lines.append(row)
     lines.append('')
     lines.append(f'Разом бракує назв (з повторами по категоріях): '
                  f'**{total_missing}**.')
+    if has_gaps:
+        lines.append('')
+        lines.append(f'Для порівняння: **офіційний довідник Rozetka** каже, що '
+                     f'в цих самих 10 категоріях нам бракує **{total_gap}** '
+                     f'назв (`docs/rozetka_option_gaps.json`).')
+        lines.append('Різниця не в тому, що довідник помиляється, а в тому, що '
+                     'він перелічує все, що майданчик уміє, — разом із «EAN», '
+                     '«Код УКТ ЗЕД»,')
+        lines.append('«Кнопка передзамовлення» й габаритами пакування, яких не '
+                     'заповнює ніхто. Живий продавець того самого товару '
+                     f'заповнює з них **{total_missing}**.')
+        lines.append('Тобто цей звіт — не ще один перелік прогалин, а '
+                     'відсіювання вже наявного переліку до здійсненного.')
+    lines.append('')
+    lines.append('**Межі цього заміру — щоб «0» не читалось ширше, ніж воно '
+                 'є.** Вибірка — перша сторінка видачі продавця в кожній')
+    lines.append('категорії (до 60 позицій), з неї беруться перші картки до '
+                 'заданого ліміту. «Бракує 0» означає «серед цих карток нічого')
+    lines.append('нового не знайшлось», а не «конкурент нічого більше не '
+                 'заповнює». Категорії — найбільші НАШІ, решта не міряна.')
+    lines.append('Порівнюються назви, не заповненість: якщо назва в нас є хоч '
+                 'в одному офері категорії, поле вважається наявним.')
     lines += details
     lines.append('')
 
@@ -448,6 +557,8 @@ def main():
     ap.add_argument('--sample', type=int, default=10)
     ap.add_argument('--pause', type=float, default=1.0)
     ap.add_argument('--out', default=REPORT)
+    ap.add_argument('--gaps', default=os.path.join(BASE_DIR, 'docs',
+                                                   'rozetka_option_gaps.json'))
     ap.add_argument('--selftest', action='store_true')
     a = ap.parse_args()
 
@@ -458,7 +569,11 @@ def main():
         return 0
     if a.from_raw:
         with open(a.raw, encoding='utf-8') as f:
-            return write_report(json.load(f), a.out)
+            scraped = json.load(f)
+        if not scraped.get('global_params') and os.path.exists(a.ours):
+            with open(a.ours, encoding='utf-8') as f:
+                scraped['global_params'] = json.load(f).get('global_params', {})
+        return write_report(scraped, a.out, load_gaps(a.gaps))
     if a.scrape:
         with open(a.ours, encoding='utf-8') as f:
             ours = json.load(f)
@@ -466,7 +581,7 @@ def main():
         with open(a.raw, 'w', encoding='utf-8') as f:
             json.dump(scraped, f, ensure_ascii=False)
         print(f'сире зібране → {a.raw}')
-        return write_report(scraped, a.out)
+        return write_report(scraped, a.out, load_gaps(a.gaps))
     ap.print_help()
     return 2
 
