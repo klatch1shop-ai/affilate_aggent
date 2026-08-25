@@ -22,7 +22,8 @@ from dotenv import load_dotenv
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE, '.env'))
-API = 'https://api.seller.rozetka.com.ua'
+# ДЕФІС, не крапка: хоста api.seller.rozetka.com.ua не існує взагалі
+API = 'https://api-seller.rozetka.com.ua'
 CACHE = os.path.join(BASE, 'data', 'rozetka_category_options.json')
 
 

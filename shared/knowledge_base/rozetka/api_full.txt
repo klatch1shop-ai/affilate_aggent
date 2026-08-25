@@ -9,17 +9,17 @@ POST /sites — отримати Bearer токен (діє 24 години)
 ## КАТЕГОРІЇ
 
 ### Список категорій
-GET https://api.seller.rozetka.com.ua/market-categories/search
+GET https://api-seller.rozetka.com.ua/market-categories/search
 Параметри: parent_id (фільтр), page (пагінація, 100 на сторінці)
 Відповідь: масив marketCategorys з id, name, parent_id
 
 ### Дерево категорій
-GET https://api.seller.rozetka.com.ua/market-categories/get-categories-by-parent
+GET https://api-seller.rozetka.com.ua/market-categories/get-categories-by-parent
 Параметри: id, expand=parents,children
 Заголовок: Content-Language: uk
 
 ### Характеристики категорії
-GET https://api.seller.rozetka.com.ua/market-categories/category-options?category_id={id}
+GET https://api-seller.rozetka.com.ua/market-categories/category-options?category_id={id}
 Повертає: всі параметри (назва, тип, значення) для категорії
 
 Примітки:
@@ -30,20 +30,20 @@ GET https://api.seller.rozetka.com.ua/market-categories/category-options?categor
 ## ТОВАРИ
 
 ### Пошук товару за артикулом (отримати owox_id)
-GET https://api.seller.rozetka.com.ua/items/search?article={артикул}
+GET https://api-seller.rozetka.com.ua/items/search?article={артикул}
 Параметри: article, find_by_text, item_active, sort, page
 Відповідь: масив items, поле id = owox_id
 
 ### Деталі товару
-GET https://api.seller.rozetka.com.ua/items/{id}
+GET https://api-seller.rozetka.com.ua/items/{id}
 Поле: moderation_status (0-5)
 
 ### Лічильники товарів
-GET https://api.seller.rozetka.com.ua/items/counts
+GET https://api-seller.rozetka.com.ua/items/counts
 Поле: moderation — кількість товарів на модерації
 
 ### Статуси модерації
-GET https://api.seller.rozetka.com.ua/items/statuses-moderation
+GET https://api-seller.rozetka.com.ua/items/statuses-moderation
 Значення moderation_status:
   0 — Новий
   1 — Очікує модерації
@@ -55,7 +55,7 @@ GET https://api.seller.rozetka.com.ua/items/statuses-moderation
 ## ОНОВЛЕННЯ НАЯВНОСТІ ТА ЦІН
 
 ### Оновлення одного товару (реальний час)
-PUT https://api.seller.rozetka.com.ua/items/update-price-stock/{id}
+PUT https://api-seller.rozetka.com.ua/items/update-price-stock/{id}
 Headers: Authorization: Bearer {token}, Content-Type: application/json
 Body: {stock_quantity: 15} або {stock_quantity: 0} або {stock_quantity: 10, price: 999}
 Права: goods_active
@@ -63,20 +63,20 @@ Body: {stock_quantity: 15} або {stock_quantity: 0} або {stock_quantity: 10
 ВАЖЛИВО: 1 товар на запит, batch не підтримується
 
 ### Масове оновлення через XML фід
-POST https://api.seller.rozetka.com.ua/item-price-updates/create
+POST https://api-seller.rozetka.com.ua/item-price-updates/create
 Body: {url: посилання на XML фід}
 Асинхронно — система сама зчитує файл
 
 ### Статус завантаження фіду
-GET https://api.seller.rozetka.com.ua/item-price-updates/search
+GET https://api-seller.rozetka.com.ua/item-price-updates/search
 
 ## ЕКСПОРТ ТОВАРІВ
-GET https://api.seller.rozetka.com.ua/items/create-export-file?marketId={id}
-GET https://api.seller.rozetka.com.ua/items/download-export-file?marketId={id}
+GET https://api-seller.rozetka.com.ua/items/create-export-file?marketId={id}
+GET https://api-seller.rozetka.com.ua/items/download-export-file?marketId={id}
 Формат: .xls
 
 ## МАППІНГ КАТЕГОРІЙ
-POST https://api.seller.rozetka.com.ua/price-markets/create-bindings-categories
+POST https://api-seller.rozetka.com.ua/price-markets/create-bindings-categories
 
 ## RATE LIMITS
 - Динамічні — нема фіксованих значень
