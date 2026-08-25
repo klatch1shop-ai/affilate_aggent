@@ -35,7 +35,11 @@ def fetch(s, cid):
             if r.status_code != 200:
                 return None
             d = r.json()
-            return d.get('content') or d.get('data') or d
+            if not d.get('success'):
+                return None
+            c = d.get('content')
+            # content приходить РЯДКОМ із JSON усередині, а не масивом
+            return json.loads(c) if isinstance(c, str) else c
         except Exception:
             if attempt == 2:
                 return None
@@ -91,27 +95,39 @@ def main():
         items = cache[rz_id]
         if isinstance(items, dict):
             items = items.get('options') or items.get('items') or []
-        names = {str(x.get('name') or x.get('title') or '').strip()
-                 for x in items if isinstance(x, dict)}
-        names.discard('')
+        # одна характеристика повторюється рядком на кожне своє значення —
+        # групуємо за назвою й окремо тримаємо ті, що є ФІЛЬТРАМИ категорії
+        allnames, filters = set(), set()
+        for x in items:
+            if not isinstance(x, dict):
+                continue
+            nm = str(x.get('name') or '').strip()
+            if not nm:
+                continue
+            allnames.add(nm)
+            if str(x.get('filter_type') or '').lower() not in ('disable', 'none', ''):
+                filters.add(nm)
         have = set(ours[cid])
-        miss = sorted(names - have)
-        gaps.append({'category_id': rz_id, 'name': rz_name, 'offers': n, 'rozetka_options': len(names),
-                     'ours': len(have), 'missing': miss})
+        gaps.append({'category_id': rz_id, 'name': rz_name, 'offers': n,
+                     'rozetka_options': len(allnames), 'rozetka_filters': len(filters),
+                     'ours': len(have),
+                     'missing': sorted(allnames - have),
+                     'missing_filters': sorted(filters - have)})
     json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False)
     out = os.path.join(BASE, 'docs', 'rozetka_option_gaps.json')
     json.dump(gaps, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
     tot_off = sum(g['offers'] for g in gaps)
     print(f'\nрозібрано категорій: {len(gaps)} ({tot_off} офферів)')
-    print(f"{'офферів':>8} {'у Rozetka':>10} {'у нас':>6}  категорія")
+    print(f"{'офферів':>8} {'усього':>7} {'фільтрів':>9} {'у нас':>6} {'бракує фільтрів':>16}  категорія")
     for g in sorted(gaps, key=lambda x: -x['offers'])[:15]:
-        print(f"{g['offers']:8} {g['rozetka_options']:10} {g['ours']:6}  {g.get('name','')[:34]}")
+        print(f"{g['offers']:8} {g['rozetka_options']:7} {g['rozetka_filters']:9} "
+              f"{g['ours']:6} {len(g['missing_filters']):16}  {g.get('name','')[:30]}")
     freq = collections.Counter()
     for g in gaps:
-        for m in g['missing']:
+        for m in g['missing_filters']:
             freq[m] += g['offers']
-    print('\nнайчастіші відсутні характеристики (зважено за офферами):')
+    print('\nвідсутні ФІЛЬТРИ (зважено за офферами):')
     for k, v in freq.most_common(20):
         print(f'   {v:6}  {k}')
     print(f'\n→ {out}')
