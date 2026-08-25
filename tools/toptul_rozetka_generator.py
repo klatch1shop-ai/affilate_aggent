@@ -56,6 +56,7 @@ from shared.utils.db import get_connection  # noqa: E402
 # фіді лежало 1189 вживань російських назв характеристик, і саме відсутність
 # третього числа не дала цього побачити.
 from toptul_translate import RU, unknown_words, lexicon_sizes  # noqa: E402
+from toptul_ru_audit import strip_article, strip_vendor  # noqa: E402
 
 FEED = os.getenv('TOPTUL_FEED_FILE', '/tmp/toptul.xml')
 OUT = os.path.join(BASE_DIR, 'output', 'toptul_rozetka.xml')
@@ -492,7 +493,17 @@ def generate(out_file=OUT, limit=None, use_commission=False):
             stats['пропущено: назва коротша 5 символів'] += 1
             continue
         seen_names[name] += 1
-        if RU.search(name):
+        # Заміряється лише те, що МОЖНА виправити перекладом. Бренд і артикул
+        # `build_name()` дописує сам, узявши з тегів, а перекладати їх
+        # заборонено («бренди, моделі, артикули НЕ перекладай»), тож товари
+        # брендів «Молния» і «Дальнобойщик» та артикулів на кшталт `ЭКСТРХ`
+        # рахувались російськими НАЗАВЖДИ — мета, якої не досягти. Той самий
+        # випадок, що «Бренд: Молния» 23.08. Виняток той самий, що в
+        # `toptul_ru_audit.py`, і саме звідти імпортований: два власні
+        # визначення розійшлись би, і числа генератора з незалежним аудитом
+        # перестали б збігатись — а їхній збіг і є доказ, що замір не бреше.
+        measured = strip_vendor(strip_article(name, article), vendor)
+        if RU.search(measured):
             ru_names.append((sku, name))
 
         avail = (o.get('available') or 'true').strip().lower() != 'false'
