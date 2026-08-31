@@ -16,7 +16,6 @@ tools/watchdog.py — моніторинг здоров'я системи.
 
 import calendar
 import html
-import re
 import os
 import subprocess
 import sys
@@ -509,58 +508,6 @@ def check_noire_rozetka_feed() -> dict:
     return {"ok": True, "msg": "feed ok"}
 
 
-
-# ── Повідомлення Rozetka продавцеві ────────────────────────────────────────
-RZ_FEEDBACK_URL  = "https://api-seller.rozetka.com.ua/feedbacks/search"
-RZ_FEEDBACK_SEEN = "/tmp/watchdog_rz_feedback_seen.txt"
-
-
-def check_rozetka_messages() -> dict:
-    """
-    Нові повідомлення від Rozetka продавцеві (`/feedbacks/search`).
-
-    Навіщо: 01.09.2026 знайдено ВИПАДКОВО, шукаючи інше, чотири звернення —
-    зокрема «ваш номер телефону для покупців недоступний, це призводить до
-    скарг і скасувань» та прохання обробити конкретне замовлення. Розетка
-    пише нам у канал, який ніхто не читав.
-
-    Тривожимо лише на НОВІ id: перелік уже побачених лежить у файлі, інакше
-    кожен цикл повторював би те саме й ми перестали б читати сповіщення.
-    """
-    tok = os.getenv("ROZETKA_API_TOKEN", "")
-    if not tok:
-        return {"ok": True, "msg": "ROZETKA_API_TOKEN не задано — пропускаю"}
-    try:
-        r = requests.get(RZ_FEEDBACK_URL, timeout=30,
-                         headers={"Authorization": f"Bearer {tok}",
-                                  "Content-Language": "uk"},
-                         params={"page": 1})
-        d = r.json()
-        if not d.get("success"):
-            err = (d.get("errors") or {}).get("message", "")
-            return {"ok": False, "msg": f"Rozetka feedbacks: {err or r.status_code}"}
-        items = (d.get("content") or {}).get("feedbacks") or []
-    except Exception as e:
-        return {"ok": False, "msg": f"Rozetka feedbacks: {e}"}
-
-    seen = set()
-    if os.path.exists(RZ_FEEDBACK_SEEN):
-        seen = set(open(RZ_FEEDBACK_SEEN, encoding="utf-8").read().split())
-    fresh = [f for f in items if str(f.get("id")) not in seen]
-
-    if fresh:
-        with open(RZ_FEEDBACK_SEEN, "a", encoding="utf-8") as fh:
-            for f in fresh:
-                fh.write(f"{f.get('id')}\n")
-        lines = []
-        for f in fresh[:3]:
-            txt = re.sub(r"<[^>]+>", " ", f.get("text") or "")
-            txt = " ".join(html.unescape(txt).split())[:180]
-            lines.append(f"• {txt}")
-        tg("💬 <b>Нові повідомлення Rozetka</b>\n\n" + "\n\n".join(lines))
-        return {"ok": False, "msg": f"нових повідомлень: {len(fresh)}"}
-    return {"ok": True, "msg": f"нових немає (всього {len(items)})"}
-
 def check_carvol_rozetka_feed() -> dict:
     """Фід Carvol для Rozetka: свіжість, розмір і те, чи публікація доїхала.
 
@@ -673,7 +620,6 @@ def main():
     noire_rz = check_noire_rozetka_feed()
     noire_prom = check_noire_prom_feed()
     carvol_rz = check_carvol_rozetka_feed()
-    rz_msg    = check_rozetka_messages()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
@@ -683,7 +629,6 @@ def main():
     log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
     log(f"[noire-prom] ok={noire_prom['ok']} {noire_prom['msg']}")
     log(f"[carvol-rz] ok={carvol_rz['ok']} {carvol_rz['msg']}")
-    log(f"[rz-msg] ok={rz_msg['ok']} {rz_msg['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)
