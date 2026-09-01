@@ -1,0 +1,40 @@
+# https://sellerhelp.rozetka.com.ua/p369-add-items-pricecreator.html
+# оновлено: 
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Pricecreator 
+ ›
+ Додавання товару в Pricecreator 
+ Додавання товару в Pricecreator
+
+ Покрокова інструкція додавання товару в Pricecreator 
+ Створення картки товару в Pricecreator 
+ Імпорт Excel у Pricecreator 
+ Імпорт XML в Pricecreator 
+ Декілька джерел XML у Pricecreator 
+ Налаштування категорій ROZETKA в Pricecreator 
+ Порівняння параметрів у Pricecreator 
+
+ Оновлення зв'язків з категорією в Pricecreator 
+ Вивантаження товарів у XML Pricecreator 
+
+ В цьому розділі
+ Покрокова інструкція додавання товару в Pricecreator 
+ Створення картки товару в Pricecreator 
+ Імпорт Excel у Pricecreator 
+ Імпорт XML в Pricecreator 
+ Декілька джерел XML у Pricecreator 
+ Налаштування категорій ROZETKA в Pricecreator 
+ Порівняння параметрів у Pricecreator 
+ Оновлення зв'язків з категорією в Pricecreator 
+ Вивантаження товарів у XML Pricecreator 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

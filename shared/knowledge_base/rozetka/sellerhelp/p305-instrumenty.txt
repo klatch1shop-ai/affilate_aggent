@@ -1,0 +1,29 @@
+# https://sellerhelp.rozetka.com.ua/p305-instrumenty.html
+# оновлено: 
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Особистий кабінет 
+ ›
+ Інструменти 
+ Інструменти
+
+ API 
+ Застосунок продавця для iOS та Android 
+ Плагін RZ.MarketPlace для Google Chrome 
+ Green API 
+
+ В цьому розділі
+ API 
+ Застосунок продавця для iOS та Android 
+ Плагін RZ.MarketPlace для Google Chrome 
+ Green API 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

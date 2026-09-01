@@ -1,0 +1,55 @@
+# https://sellerhelp.rozetka.com.ua/p832-about-rozetka-marketplace.html
+# оновлено: 12.06.2026
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Продавати на ROZETKA 
+ ›
+ Sell on ROZETKA Marketplace (for non-resident companies) 
+ ›
+ How to sell on ROZETKA 
+ How to sell on ROZETKA
+ Останнє оновлення: 12.06.2026
+
+ Register as new seller
+
+ To register as a new seller on ROZETKA Marketplace, please, visit our landing page and complete the registration form. We'll reach out to you. To complete the registration, you'll need to:
+
+ Create a seller name.
+
+ Sign a contract.
+
+ After configuring your Seller account, you can use it to list and price products, manage your inventory, and fulfill customer orders. Do it on a web version, mobile app for Android or iOS. Also, you can configure data exchange with your system using API tools ↓ .
+
+ Listing items in ROZETKA store
+
+ Prepare information about your product, maintain an up-to-date assortment and competitive prices.
+
+ Fulfill orders to the customers.
+
+ You must fulfill orders yourself directly to customers in Ukraine and be able to receive payments. Payments are transferred directly to the seller using the method you have specified.
+
+ Handle orders, contact customers, and track order statuses yourself. Do it quickly and efficiently to get positive feedback and build trust to your store.
+
+ Pay referral fee
+
+ ROZETKA offers a single seller plan: €8.33 per month plus a per-item referral fee that varies by category. Per-item referral fee charged for successfully completed orders only.
+
+ Other costs may apply also if you decide to use optional tools and programs on ROZETKA Marketplace.
+
+ < Sell on ROZETKA Marketplace (for non-resident companies) Чи була інформація корисною? Так - 0 Ні - 0 
+
+ В цьому розділі
+ How to sell on ROZETKA 
+ Listing products 
+ Order processing 
+ Content requirements 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

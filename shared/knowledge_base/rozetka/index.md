@@ -21,6 +21,11 @@
 - Характеристики в XML: https://sellerhelp.rozetka.com.ua/p210-product-characteristics.html
 - Pricecreator: https://sellerhelp.rozetka.com.ua/p362-rozetka-pricecreator.html
 
+### Seller API
+- **[api_auth.md](api_auth.md) — авторизація: пароль ОБОВʼЯЗКОВО в Base64.**
+  Без кодування сервер відповідає `incorrect_username_password` (код 1004),
+  хоча логін і пароль правильні. Саме через це API вважалося непрацездатним.
+
 ### Реклама та продажі
 - Реклама: https://sellerhelp.rozetka.com.ua/p324-advertising-and-promotion.html
 

@@ -1,0 +1,821 @@
+{
+ "https://supportm.epicentrk.ua/": {
+  "file": "index.md",
+  "title": "Центр підтримки продавців Маркетплейсу Епіцентр",
+  "sha256": "18ad913c26f595637c295054a52a5b7cd2aa2a44fc1a0fdc454832f1a94b6610",
+  "fetched": "2026-08-23 06:36",
+  "chars": 1491
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42.md",
+  "title": "розділ Початок співпраці",
+  "sha256": "c91881d5cace43379f01483607a6a3b801ec63aebe7988b002954815b5c15d70",
+  "fetched": "2026-08-23 06:36",
+  "chars": 866
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423.md",
+  "title": "розділ Робота з товарами",
+  "sha256": "8c4dc2691c01a5936eb99526c51708a2cc42a27e3ab9fe809f64105c2f2dd31e",
+  "fetched": "2026-08-23 06:36",
+  "chars": 466
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423223/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423223.md",
+  "title": "розділ Опрацювання замовлень",
+  "sha256": "24c8642698b4995ac054fed7aea223f28e22e1a7acd5143adaeabbd2fc085451",
+  "fetched": "2026-08-23 06:36",
+  "chars": 695
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4232233/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4232233.md",
+  "title": "розділ Юридичний блок",
+  "sha256": "80becbdc54e586cbc746c3f79988b7465b438fed4cb5e292ab708c57c66234a7",
+  "fetched": "2026-08-23 06:36",
+  "chars": 254
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322332/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322332.md",
+  "title": "розділ Білінг",
+  "sha256": "457ffd21e5bff5da11a363647be2a7967f78ce0100dc72109c29c09b12c12a01",
+  "fetched": "2026-08-23 06:36",
+  "chars": 841
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423223322/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423223322.md",
+  "title": "розділ F.A.Q.",
+  "sha256": "4dcfe9fa924a15f2e052d7d5351db9ee69fd86ef616f0f859ae0dc1cb19456e0",
+  "fetched": "2026-08-23 06:36",
+  "chars": 342
+ },
+ "https://supportm.epicentrk.ua/znayomstvozmarketplaysom/": {
+  "file": "znayomstvozmarketplaysom.md",
+  "title": "Знайомство з маркетплейсом",
+  "sha256": "1041bc811476c2e9870d93c5a947686b8254c7edc372b60fbca527a5d5d5720b",
+  "fetched": "2026-08-23 06:36",
+  "chars": 2179
+ },
+ "https://supportm.epicentrk.ua/statusyzamovlen/": {
+  "file": "statusyzamovlen.md",
+  "title": "Що означають статуси замовлень в кабінеті продавця",
+  "sha256": "cd55cdbe27295a2359c591cc1afdf584989fe4cd68041e44366f2b2ccded29f6",
+  "fetched": "2026-08-23 06:36",
+  "chars": 6832
+ },
+ "https://supportm.epicentrk.ua/yaksamostiynopidtverdytytaopratsyuvatyzamovlennyavosobystomukabineti/": {
+  "file": "yaksamostiynopidtverdytytaopratsyuvatyzamovlennyavosobystomukabineti.md",
+  "title": "Підтвердження та обробка замовлень",
+  "sha256": "303f9014f9057692e1166aae7e525ec95714fa76bd5aeddd822ce13f152d4175",
+  "fetched": "2026-08-23 06:36",
+  "chars": 7281
+ },
+ "https://supportm.epicentrk.ua/vyrishennya-yurydychnykh-pytan/": {
+  "file": "vyrishennya-yurydychnykh-pytan.md",
+  "title": "Повернення та обмін товарів",
+  "sha256": "d3c6f69bc944b9c6d9b8214c5efc10f508e51ee4e1677b032f88fd40f43b3251",
+  "fetched": "2026-08-23 06:36",
+  "chars": 4400
+ },
+ "https://supportm.epicentrk.ua/umovyvykorystannya/": {
+  "file": "umovyvykorystannya.md",
+  "title": "Умови використання",
+  "sha256": "7103636416f7237205a6ed58d15ceffee87633c177365e1d4cd5750d09020cd0",
+  "fetched": "2026-08-23 06:36",
+  "chars": 22751
+ },
+ "https://supportm.epicentrk.ua/bonusnyyrakhunok/": {
+  "file": "bonusnyyrakhunok.md",
+  "title": "Бонусний рахунок",
+  "sha256": "c031083fec1a02f862d1c6ffda3638dcb6148539d4214f20559890cb4bb928cc",
+  "fetched": "2026-08-23 06:36",
+  "chars": 2648
+ },
+ "https://supportm.epicentrk.ua/yakpopovnytybalansosobovogorakhunkunamarketpleysi": {
+  "file": "yakpopovnytybalansosobovogorakhunkunamarketpleysi.md",
+  "title": "Поповнення балансу особового рахунку",
+  "sha256": "e76f6d2f2432539e0ccc5a930f67c693eac213820ac6421cf965ee60999a3e17",
+  "fetched": "2026-08-23 06:36",
+  "chars": 3935
+ },
+ "https://supportm.epicentrk.ua/vidpovidinazapytannya/": {
+  "file": "vidpovidinazapytannya.md",
+  "title": "Відповіді на запитання",
+  "sha256": "83a2c14e6a9050d99aa81071c471b92897d149e7cb92a138ba619373563fb9bf",
+  "fetched": "2026-08-23 06:36",
+  "chars": 19454
+ },
+ "https://supportm.epicentrk.ua/app_merchant/": {
+  "file": "app_merchant.md",
+  "title": "Мобільний додаток для продавців",
+  "sha256": "2b9ad2233f265a064cff8da822c28b8363d335eafb5fddc748fd7fa92318919f",
+  "fetched": "2026-08-23 06:36",
+  "chars": 3296
+ },
+ "https://supportm.epicentrk.ua/yak-importuvaty-tovary/": {
+  "file": "yak-importuvaty-tovary.md",
+  "title": "Як самостійно імпортувати товари до особистого кабінету: покрокова інструкція",
+  "sha256": "3d61302e79f26ad8a4ae762d84bedd1d95b825d365ce36caba7557e1f5a86031",
+  "fetched": "2026-08-23 06:36",
+  "chars": 31001
+ },
+ "https://supportm.epicentrk.ua/zagalnivymogydokontentu/": {
+  "file": "zagalnivymogydokontentu.md",
+  "title": "Загальні вимоги до контенту",
+  "sha256": "86e83ed2de08987a797768097c7e691c6ed5db0515515c872d3a32182ad668fb",
+  "fetched": "2026-08-23 06:37",
+  "chars": 13553
+ },
+ "https://supportm.epicentrk.ua/pravylarobotymarketpleysu/": {
+  "file": "pravylarobotymarketpleysu.md",
+  "title": "Правила роботи маркетплейсу",
+  "sha256": "d5f8cdfe79becfc867d16e0045e2880867cbf189f3d26b625574473eb69d532d",
+  "fetched": "2026-08-23 06:37",
+  "chars": 4610
+ },
+ "https://supportm.epicentrk.ua/protsedurapovernennyatovaru/": {
+  "file": "protsedurapovernennyatovaru.md",
+  "title": "Процедура повернення товару",
+  "sha256": "a9c63e04fb4f161a6729c927cfd126207f55fcdc7b01c16954add59100bd604c",
+  "fetched": "2026-08-23 06:37",
+  "chars": 5919
+ },
+ "https://supportm.epicentrk.ua/order_cancel2/": {
+  "file": "order_cancel2.md",
+  "title": "Як правильно скасувати замовлення, від якого відмовився покупець, щоб з вас не списалась комісія?",
+  "sha256": "00191c66d5b99fdc9af757a013779b44e10c9dc21292fb1014d6348dd1b06ba9",
+  "fetched": "2026-08-23 06:37",
+  "chars": 6193
+ },
+ "https://supportm.epicentrk.ua/spov_po_balansu/": {
+  "file": "spov_po_balansu.md",
+  "title": "Як працює система сповіщень щодо стану балансу?",
+  "sha256": "6ec95b9825abcd3d42a71e3afcb4b2026e31dedb446eee12f19225e09972fc28",
+  "fetched": "2026-08-23 06:37",
+  "chars": 2640
+ },
+ "https://supportm.epicentrk.ua/prepaymentsetup/": {
+  "file": "prepaymentsetup.md",
+  "title": "Підключення та налаштування передоплати за товари",
+  "sha256": "b9beb0546a5f562794c9654ff53d0aca883d86183b8a8a04dfc58d1e8d0c16a7",
+  "fetched": "2026-08-23 06:37",
+  "chars": 6056
+ },
+ "https://supportm.epicentrk.ua/publichna-oferta-pro-nadannia-posluh/": {
+  "file": "publichna-oferta-pro-nadannia-posluh.md",
+  "title": "Договір публічної оферти",
+  "sha256": "5b5e03a62f2f7cfdbfd1b0d0e9c8c8ffaf32e7d3f1fb47d99ec77ca40f1ce56a",
+  "fetched": "2026-08-23 06:37",
+  "chars": 1384
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4.md",
+  "title": "підрозділ Підготовка документів",
+  "sha256": "e4b62e65612daf78fe65a0066175aab3a42fa45c401c869e97ea27d1772b4cc9",
+  "fetched": "2026-08-23 06:37",
+  "chars": 257
+ },
+ "https://supportm.epicentrk.ua/categoriitabrendytovariv/": {
+  "file": "categoriitabrendytovariv.md",
+  "title": "Категорії та бренди товарів, умови публікації",
+  "sha256": "09e957c3b24d16f7d4de0b189c2f15c3e1c937711796141778a8a83d9dc6c0b0",
+  "fetched": "2026-08-23 06:37",
+  "chars": 5360
+ },
+ "https://supportm.epicentrk.ua/nazvatalogotypmagazynu/": {
+  "file": "nazvatalogotypmagazynu.md",
+  "title": "Назва та логотип магазину",
+  "sha256": "f95be7b4b48a41de716b606a1ad2ba7fa44ea6eb23ce73b83341b1cd73b5540b",
+  "fetched": "2026-08-23 06:37",
+  "chars": 1777
+ },
+ "https://supportm.epicentrk.ua/dodaty-korystuvacha-kompanii/": {
+  "file": "dodaty-korystuvacha-kompanii.md",
+  "title": "Керування користувачами компанії: додавання нових та активація/блокування раніше створених",
+  "sha256": "f25da55f818a2e3192999ba75bc8da3a9f93a283e994d0482ebbac1278c400cf",
+  "fetched": "2026-08-23 06:37",
+  "chars": 5581
+ },
+ "https://supportm.epicentrk.ua/terminus/": {
+  "file": "terminus.md",
+  "title": "Терміни та визначення",
+  "sha256": "5638db055b24bee643f8c1dc29e6c8b9bd800fbbbd243857b3dddb1854b59cea",
+  "fetched": "2026-08-23 06:37",
+  "chars": 518
+ },
+ "https://supportm.epicentrk.ua/robotazchatpomichnykom/": {
+  "file": "robotazchatpomichnykom.md",
+  "title": "Робота з Чат-помічником",
+  "sha256": "84bee9c01412c0aeac5ba8d459a834030f9e9ba390ae596255ff1500abb9b3b1",
+  "fetched": "2026-08-23 06:37",
+  "chars": 1735
+ },
+ "https://supportm.epicentrk.ua/vymogydovizualnogokontentuyakpravylnoobratyzobrazhennyavashogotovaru/": {
+  "file": "vymogydovizualnogokontentuyakpravylnoobratyzobrazhennyavashogotovaru.md",
+  "title": "Вимоги до візуального контенту: як правильно обрати зображення вашого товару",
+  "sha256": "5671b7be2be1282b7e62ace93663ccadaa9f76bb69a170759e21a6a48728bc51",
+  "fetched": "2026-08-23 06:37",
+  "chars": 9466
+ },
+ "https://supportm.epicentrk.ua/yakdodatytovarvruchnunovaforma/": {
+  "file": "yakdodatytovarvruchnunovaforma.md",
+  "title": "Як додати товар вручну: нова форма",
+  "sha256": "1972cc86d4b3613fcbe3309bd23ee0ab63949e9fd413e760152987a429e2053d",
+  "fetched": "2026-08-23 06:37",
+  "chars": 10039
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322.md",
+  "title": "підрозділ Імпорт товарів",
+  "sha256": "975d9bb2d11640abb3bcce2b55a25ba76cc002c64d3bcc056a8abac8faf35ed6",
+  "fetched": "2026-08-23 06:37",
+  "chars": 395
+ },
+ "https://supportm.epicentrk.ua/eksporttovariv/": {
+  "file": "eksporttovariv.md",
+  "title": "Експорт товарів",
+  "sha256": "742da4623196f7ff7e477aae093c64b1133e3c29623066feb37f4fddc366ab0f",
+  "fetched": "2026-08-23 06:37",
+  "chars": 6080
+ },
+ "https://supportm.epicentrk.ua/tovar-pid-zamovlennya/": {
+  "file": "tovar-pid-zamovlennya.md",
+  "title": "Товар під замовлення",
+  "sha256": "3c4010ba666475438e4277ffb03ffd154bdbf1b379e9650bea4cb00c70497cae",
+  "fetched": "2026-08-23 06:37",
+  "chars": 7621
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423222/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr423222.md",
+  "title": "підрозділ Загальні питання по роботі з товарами",
+  "sha256": "aa0f5c9b393e209ac986dc48bca860f4fa9a4071a10ba2697fa03964259d6f84",
+  "fetched": "2026-08-23 06:37",
+  "chars": 564
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4232232322/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr4232232322.md",
+  "title": "підрозділ ПРРО",
+  "sha256": "c20a789428c4eeffd8ce6bc5aa8c6bca967b1d6d02081d8558001f203b2368af",
+  "fetched": "2026-08-23 06:37",
+  "chars": 261
+ },
+ "https://supportm.epicentrk.ua/obrobkazamovlenzinshumotrymyvachem/": {
+  "file": "obrobkazamovlenzinshumotrymyvachem.md",
+  "title": "Обробка замовлень з додаванням іншого отримувача",
+  "sha256": "14b69dc35a4b554e476fa06eafc7f073533c68bfc2ba6984ea61570d0ec0fe3f",
+  "fetched": "2026-08-23 06:37",
+  "chars": 2568
+ },
+ "https://supportm.epicentrk.ua/reitynh-mahazynu": {
+  "file": "reitynh-mahazynu.md",
+  "title": "Рейтинг продавця",
+  "sha256": "84630941a56babde07b76669933e373513b6a5cb69f629fdb1c677df6d023a30",
+  "fetched": "2026-08-23 06:37",
+  "chars": 11686
+ },
+ "https://supportm.epicentrk.ua/zapytannyavidhukytakomentari/": {
+  "file": "zapytannyavidhukytakomentari.md",
+  "title": "Відгуки, коментарі та запитання",
+  "sha256": "23d5bc6cc4d598751842584bd9ef6467e8d474566526f88f225def54530e795d",
+  "fetched": "2026-08-23 06:37",
+  "chars": 7073
+ },
+ "https://supportm.epicentrk.ua/anketa-po-zamovlenniu/": {
+  "file": "anketa-po-zamovlenniu.md",
+  "title": "Зворотний зв'язок по замовленням",
+  "sha256": "3d856331b11efa82cb971fa18091e0d65fa4044c4f3512f9b4f0ea4229fecfc9",
+  "fetched": "2026-08-23 06:37",
+  "chars": 2558
+ },
+ "https://supportm.epicentrk.ua/skarhy-ta-reklamatsii/": {
+  "file": "skarhy-ta-reklamatsii.md",
+  "title": "Скарги та рекламації",
+  "sha256": "d256b95ef735132ae63238f6084111ee0ff86b8900202fab4044497016d3444c",
+  "fetched": "2026-08-23 06:37",
+  "chars": 6237
+ },
+ "https://supportm.epicentrk.ua/payment_delivery/": {
+  "file": "payment_delivery.md",
+  "title": "Як налаштувати способи оплати та доставки?",
+  "sha256": "c73df4c697d7cdb8404f345016718facccebc597aa2ecac2ea7314f6fa1d6214",
+  "fetched": "2026-08-23 06:37",
+  "chars": 18211
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322322/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322322.md",
+  "title": "підрозділ Способи оплати",
+  "sha256": "d0606605b40ebb460ebfa10d1f97797223c38b60521194a30d130d47dd58d334",
+  "fetched": "2026-08-23 06:37",
+  "chars": 691
+ },
+ "https://supportm.epicentrk.ua/sposobu-dostavku/": {
+  "file": "sposobu-dostavku.md",
+  "title": "підрозділ Способи доставки",
+  "sha256": "8803131dc89bec6e6b0dd71591fa118933b8651081ddc8c0e0d83ae9606ae5b0",
+  "fetched": "2026-08-23 06:37",
+  "chars": 487
+ },
+ "https://supportm.epicentrk.ua/skasuvaniazamovlenniapokupthem": {
+  "file": "skasuvaniazamovlenniapokupthem.md",
+  "title": "Самостійне скасування замовлень покупцем",
+  "sha256": "41e398733b3e3666276da9f701fda44ffe80495f4e4ccc4df6a53f7b66922c27",
+  "fetched": "2026-08-23 06:37",
+  "chars": 2241
+ },
+ "https://supportm.epicentrk.ua/order_cancel2": {
+  "file": "order_cancel2.md",
+  "title": "Як правильно скасувати замовлення, від якого відмовився покупець, щоб з вас не списалась комісія?",
+  "sha256": "00191c66d5b99fdc9af757a013779b44e10c9dc21292fb1014d6348dd1b06ba9",
+  "fetched": "2026-08-23 06:37",
+  "chars": 6193
+ },
+ "https://supportm.epicentrk.ua/yakitovarynepidlyagayutobminutapovernennyu/": {
+  "file": "yakitovarynepidlyagayutobminutapovernennyu.md",
+  "title": "Які товари не підлягають обміну та поверненню?",
+  "sha256": "212e9fdb1e16675b0f4b8e71256bbfebbd47d8d707d06b4958e128502cef1f50",
+  "fetched": "2026-08-23 06:37",
+  "chars": 925
+ },
+ "https://supportm.epicentrk.ua/politykakonfidentsiynosti/": {
+  "file": "politykakonfidentsiynosti.md",
+  "title": "Політика конфіденційності",
+  "sha256": "a34395fed598cfc794ca55b518d0fec08241efd3b9ad999e3758509d191851c2",
+  "fetched": "2026-08-23 06:37",
+  "chars": 5909
+ },
+ "https://supportm.epicentrk.ua/bonusnaprograma/": {
+  "file": "bonusnaprograma.md",
+  "title": "Правила участі у Бонусній програмі",
+  "sha256": "5835a3ae4c7e627003b2476f28ea024cd94735b9d39dd3e5d22658adf4d662d0",
+  "fetched": "2026-08-23 06:37",
+  "chars": 4946
+ },
+ "https://supportm.epicentrk.ua/prolongacia-dogovoru/": {
+  "file": "prolongacia-dogovoru.md",
+  "title": "Пролонгація договору",
+  "sha256": "ab1b6fb4f4f99da521759289968bf5daf9544459234079d4befceada5529ca28",
+  "fetched": "2026-08-23 06:38",
+  "chars": 3000
+ },
+ "https://supportm.epicentrk.ua/yakpopovnytybalansosobovogorakhunkunamarketpleysi/": {
+  "file": "yakpopovnytybalansosobovogorakhunkunamarketpleysi.md",
+  "title": "Поповнення балансу особового рахунку",
+  "sha256": "e76f6d2f2432539e0ccc5a930f67c693eac213820ac6421cf965ee60999a3e17",
+  "fetched": "2026-08-23 06:38",
+  "chars": 3935
+ },
+ "https://supportm.epicentrk.ua/pomisiachna-oplata2/": {
+  "file": "pomisiachna-oplata2.md",
+  "title": "Як сплачувати за рахунком Послуги?",
+  "sha256": "02a5f04ae62079a7f7ecd246634fb3e403f918ccab14f8fb27e8f6ab5d758f3e",
+  "fetched": "2026-08-23 06:38",
+  "chars": 3209
+ },
+ "https://supportm.epicentrk.ua/yakpratsyuyesystemabilingunamarketpleysiepitsentr/": {
+  "file": "yakpratsyuyesystemabilingunamarketpleysiepitsentr.md",
+  "title": "Як працює система білінгу на маркетплейсі Епіцентр",
+  "sha256": "059fcacb97ca34eaa9b7caca9d12bdcfe10dbbf75fcffeae90e94f80b02f1d97",
+  "fetched": "2026-08-23 06:38",
+  "chars": 4498
+ },
+ "https://supportm.epicentrk.ua/dokumentoobigprodavtsyayakotrymatytapidpysatyzvitnidokumentyuvchasno/": {
+  "file": "dokumentoobigprodavtsyayakotrymatytapidpysatyzvitnidokumentyuvchasno.md",
+  "title": "Документообіг продавця: як отримати та підписати звітні документи у \"Вчасно\"",
+  "sha256": "f7ce4798377d35f61250ab8de3ca3457b784f28b25202dfcf4337569df5ea903",
+  "fetched": "2026-08-23 06:38",
+  "chars": 3134
+ },
+ "https://supportm.epicentrk.ua/bonuszadostavky/": {
+  "file": "bonuszadostavky.md",
+  "title": "Бонус за доставку \"Самовивіз Meest-Епіцентр\" та \"Meest-Епіцентр Поштомати\"",
+  "sha256": "5087f935981463a5f7ebcc9af0656aa277ec33da39c887d6eeb9268e07e897db",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1436
+ },
+ "https://supportm.epicentrk.ua/referalnaprograma/": {
+  "file": "referalnaprograma.md",
+  "title": "Реферальна програма",
+  "sha256": "671dc58dd5814d8be75c7038d0dc8d4c24fe76108109a21dc6c699cc1b17df6c",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1447
+ },
+ "https://supportm.epicentrk.ua/referalnaprograma_mobile/": {
+  "file": "referalnaprograma_mobile.md",
+  "title": "Реферальна програма у мобільному застосунку",
+  "sha256": "ac1d0e15bafa02809141693abd19e9472699fb0a02d9bb8939e9621e8d796549",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1350
+ },
+ "https://supportm.epicentrk.ua/najposhirenishi_pitannia/": {
+  "file": "najposhirenishi_pitannia.md",
+  "title": "Найпоширеніші питання",
+  "sha256": "e9e187155a4b0760b9925327a1213f9d8a4c1b27ff7cc126a3c9157d8fd67b93",
+  "fetched": "2026-08-23 06:38",
+  "chars": 6611
+ },
+ "https://supportm.epicentrk.ua/tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322323/": {
+  "file": "tsentrpidtrymkyprodavtsivmarketpleysuepitsentr42322323.md",
+  "title": "підрозділ Новини",
+  "sha256": "39f528f45acd628fb057e41106dc237a1b2d26116432ed7a694889deebc30a5c",
+  "fetched": "2026-08-23 06:38",
+  "chars": 248
+ },
+ "https://supportm.epicentrk.ua/yakopratsyuvatyzamovlennyazsamovyvozom/": {
+  "file": "yakopratsyuvatyzamovlennyazsamovyvozom.md",
+  "title": "Як опрацювати замовлення з самовивозом",
+  "sha256": "24356dc25b14ce4a6afb6cc39d7f360f2f9968257046dbc813cc2bcba67c4da9",
+  "fetched": "2026-08-23 06:38",
+  "chars": 2988
+ },
+ "https://supportm.epicentrk.ua/sposobyoplatytovarivoplatakartkoyunasayti/": {
+  "file": "sposobyoplatytovarivoplatakartkoyunasayti.md",
+  "title": "Опрацювання замовлень зі способом оплати EasyPay",
+  "sha256": "20266fb34293e5024b20763f4c98cf57fead44061ffc0fc7625453e73d8c55bd",
+  "fetched": "2026-08-23 06:38",
+  "chars": 10078
+ },
+ "https://supportm.epicentrk.ua/shchooznachayutstatusytovaruvkabinetiprodavtsya/": {
+  "file": "shchooznachayutstatusytovaruvkabinetiprodavtsya.md",
+  "title": "Що означають статуси товару в кабінеті продавця",
+  "sha256": "f44b13724f8c83be9c49873766729f1d1acf802062d9c9f5fd1e3d0dc0efa6be",
+  "fetched": "2026-08-23 06:38",
+  "chars": 4989
+ },
+ "https://supportm.epicentrk.ua/vidobrazhennya-zobrazhen-u-kabineti/": {
+  "file": "vidobrazhennya-zobrazhen-u-kabineti.md",
+  "title": "Що робити, якщо зображення не відображаються у вашому кабінеті продавця?Порожня сторінка",
+  "sha256": "08bc1ab3846b9117f13aedd8261384e4d66e8848c7508d66e2e53ee6981eb27e",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1037
+ },
+ "https://supportm.epicentrk.ua/yak-ochystyty-kesh-ta-vydalyty-kuki/": {
+  "file": "yak-ochystyty-kesh-ta-vydalyty-kuki.md",
+  "title": "Що робити, якщо імпорт та експорт не відображаються у кабінеті?",
+  "sha256": "8c912f9eba83f533f5ef3edcf51ade8eb3cc3722f35c282e2ec8d0d9a237694d",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1520
+ },
+ "https://supportm.epicentrk.ua/yakpravylnooformytyzvernennyadosluzhbypidtrymky/": {
+  "file": "yakpravylnooformytyzvernennyadosluzhbypidtrymky.md",
+  "title": "Як правильно оформити звернення до служби підтримки?",
+  "sha256": "e94f900f6316658bfd9d23ce00d370a5644e08fa025969cdfedf482be3c11282",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1437
+ },
+ "https://supportm.epicentrk.ua/techsupport/": {
+  "file": "techsupport.md",
+  "title": "Підтримка продавця",
+  "sha256": "02291b80f3ead903bc74518249b1c94f29d928154ce24edf1c52730dc332681d",
+  "fetched": "2026-08-23 06:38",
+  "chars": 4354
+ },
+ "https://supportm.epicentrk.ua/xmlfayl/": {
+  "file": "xmlfayl.md",
+  "title": "Як імпортувати товари з характеристиками за допомогою XML-файлу",
+  "sha256": "7509a000e9dac4a81af342a0faf61412c44b3db4b7a924d3da1ef27cd33789d5",
+  "fetched": "2026-08-23 06:38",
+  "chars": 12690
+ },
+ "https://supportm.epicentrk.ua/avtoonovlennya/": {
+  "file": "avtoonovlennya.md",
+  "title": "Як налаштувати автооновлення товарів",
+  "sha256": "45151de837bdc67935810c2b3ef22ea8519d3edac9e6f96b21f40a69e71e6d4c",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1531
+ },
+ "https://supportm.epicentrk.ua/importprom/": {
+  "file": "importprom.md",
+  "title": "Як перенести товари з Prom.ua на Маркетплейс Епіцентр за допомогою файлу у форматі xml",
+  "sha256": "608ed781f861e96e82d182862a10b2451c8ae1390123a7a7edfba0ad8dba6473",
+  "fetched": "2026-08-23 06:38",
+  "chars": 7121
+ },
+ "https://supportm.epicentrk.ua/yakproytyreyestratsiyuvosobystomukabineti/": {
+  "file": "yakproytyreyestratsiyuvosobystomukabineti.md",
+  "title": "Як пройти реєстрацію в особистому кабінеті?",
+  "sha256": "0bc0267f2dc602ace5f424d9ad6962d9cf9f542e1e12340557fb44191db94c25",
+  "fetched": "2026-08-23 06:38",
+  "chars": 9870
+ },
+ "https://supportm.epicentrk.ua/pidkliuchenniaekvairinhumonobank": {
+  "file": "pidkliuchenniaekvairinhumonobank.md",
+  "title": "Підключення до Монобанк: оплата карткою на сайті",
+  "sha256": "6ff3a6ca88cfb631a68fa39d997ef84b21876d716969872cb6ba45891846c807",
+  "fetched": "2026-08-23 06:38",
+  "chars": 8263
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-do-platizhnoi-systemy-easypay-dlia-tov/": {
+  "file": "pidkliuchennia-do-platizhnoi-systemy-easypay-dlia-tov.md",
+  "title": "Підключення до платіжної системи EasyPay для ТОВ",
+  "sha256": "e6991d70e619da4c282726d957399c887f10ede839eb7c501d5530141032c364",
+  "fetched": "2026-08-23 06:38",
+  "chars": 9146
+ },
+ "https://supportm.epicentrk.ua/yakpidklyuchytysyadoplatizhnoyisystemyeasypay/": {
+  "file": "yakpidklyuchytysyadoplatizhnoyisystemyeasypay.md",
+  "title": "Підключення до платіжної системи EasyPay для ФОП",
+  "sha256": "d69d1ff68962048b190baad35db153a17441619bcaa8cd71093813aa0c8658d1",
+  "fetched": "2026-08-23 06:38",
+  "chars": 11699
+ },
+ "https://supportm.epicentrk.ua/documentydlyafop/": {
+  "file": "documentydlyafop.md",
+  "title": "Документи ФОП для співпраці з нами",
+  "sha256": "d436174f7cbd79c2f5ff0fc56f3aff302d1552cd10653118b40dabf063f8a0d2",
+  "fetched": "2026-08-23 06:38",
+  "chars": 2059
+ },
+ "https://supportm.epicentrk.ua/documentyyurydychnoiosoby/": {
+  "file": "documentyyurydychnoiosoby.md",
+  "title": "Документи юридичної особи для співпраці з нами",
+  "sha256": "975340e1c947447cc8117fc84bc3668301a8229cbfd63c7d94e12ee710e9cf24",
+  "fetched": "2026-08-23 06:38",
+  "chars": 1481
+ },
+ "https://supportm.epicentrk.ua/perelikdocumentivdlyaprodazhuokremyhkategoriy/": {
+  "file": "perelikdocumentivdlyaprodazhuokremyhkategoriy.md",
+  "title": "Перелік документів для продажу на маркетплейсі ЕПІЦЕНТР окремих категорій товарів",
+  "sha256": "0b8fc8fbc5aa7c9d6afda7674a745dd028cc10416258bf0cbe4f88622664cdb1",
+  "fetched": "2026-08-23 06:38",
+  "chars": 2542
+ },
+ "https://supportm.epicentrk.ua/onovlennyatsinytanayavnosti/": {
+  "file": "onovlennyatsinytanayavnosti.md",
+  "title": "Як оновити ціну та наявність товарів за допомогою шаблону у форматі Excel",
+  "sha256": "7c03adaa45263c82b90cfe17c924dc21157990bcfc4269feca61f68acbc8b4ff",
+  "fetched": "2026-08-23 06:38",
+  "chars": 3267
+ },
+ "https://supportm.epicentrk.ua/editproduct2/": {
+  "file": "editproduct2.md",
+  "title": "Редагування товару в статусі \"Опублікований\"",
+  "sha256": "9ab0f74b419e2ba1bc116e34da38a29c364fe95243bf7beea875a4790d275fd2",
+  "fetched": "2026-08-23 06:38",
+  "chars": 4298
+ },
+ "https://supportm.epicentrk.ua/reitynh-mahazynu/": {
+  "file": "reitynh-mahazynu.md",
+  "title": "Рейтинг продавця",
+  "sha256": "84630941a56babde07b76669933e373513b6a5cb69f629fdb1c677df6d023a30",
+  "fetched": "2026-08-23 06:38",
+  "chars": 11686
+ },
+ "https://supportm.epicentrk.ua/chastkovi_od_vum/": {
+  "file": "chastkovi_od_vum.md",
+  "title": "Як продавати товари з частковими одиницями виміру?",
+  "sha256": "aee66b707a9f656040b5727daaa9a374077905681c302e50eb7e24739b7325c8",
+  "fetched": "2026-08-23 06:38",
+  "chars": 2941
+ },
+ "https://supportm.epicentrk.ua/stvorennyariznovydivtovaru/": {
+  "file": "stvorennyariznovydivtovaru.md",
+  "title": "Створення різновидів товару",
+  "sha256": "c31a5ef148e8b068137ebd1d71b35046b8f232bc3579b0d11273a1abcbe83aac",
+  "fetched": "2026-08-23 06:38",
+  "chars": 5653
+ },
+ "https://supportm.epicentrk.ua/actions/": {
+  "file": "actions.md",
+  "title": "Що потрібно для того, щоб товари приймали участь в акціях?",
+  "sha256": "3343a6a1d16936842a91ed829bbac413d968dc5245fee83a4c9f04eeb810fffb",
+  "fetched": "2026-08-23 06:38",
+  "chars": 4457
+ },
+ "https://supportm.epicentrk.ua/vazhlyvainformatsiyashchodoprodazhutovarivreplik/": {
+  "file": "vazhlyvainformatsiyashchodoprodazhutovarivreplik.md",
+  "title": "Важлива інформація щодо продажу товарів-реплік",
+  "sha256": "a7c72881d769dcde12ae43f41e19706bc3092e56f8118b55d4ab6990eb5088e0",
+  "fetched": "2026-08-23 06:38",
+  "chars": 2323
+ },
+ "https://supportm.epicentrk.ua/setting_the_exchange_rate/": {
+  "file": "setting_the_exchange_rate.md",
+  "title": "Встановлення курсу валюти для перерахунку цін товарів",
+  "sha256": "60988373d1b30b5b1e43febe3157b9a1f8e6a2fcb9f8888a32c021bf927255ae",
+  "fetched": "2026-08-23 06:39",
+  "chars": 2676
+ },
+ "https://supportm.epicentrk.ua/prrovchasno/": {
+  "file": "prrovchasno.md",
+  "title": "PRRO Vchasno",
+  "sha256": "b8413055b3f8264eb8e3df1f146a886449aeb4a7f1fb176a23d52f3666811f59",
+  "fetched": "2026-08-23 06:39",
+  "chars": 3771
+ },
+ "https://supportm.epicentrk.ua/formuvannyatokenadlyaprro/": {
+  "file": "formuvannyatokenadlyaprro.md",
+  "title": "Формування токена для PRRO",
+  "sha256": "84a58090949bd95131f6495ed2f96208d8ae380e6391b07b3429915845420a31",
+  "fetched": "2026-08-23 06:39",
+  "chars": 1471
+ },
+ "https://supportm.epicentrk.ua/prrocheckbox/": {
+  "file": "prrocheckbox.md",
+  "title": "PRRO CHECKBOX",
+  "sha256": "27ea6deba9bafc8f55b6dbc836573f6060158230c9bb2ea1fc5bf3e994cc1e3e",
+  "fetched": "2026-08-23 06:39",
+  "chars": 5096
+ },
+ "https://supportm.epicentrk.ua/dodavannyaklyuchalitsenziyikasytapinkodukasyracheckbox/": {
+  "file": "dodavannyaklyuchalitsenziyikasytapinkodukasyracheckbox.md",
+  "title": "Додавання ключа (ліцензії) каси та ПІН-коду касира Checkbox",
+  "sha256": "fc8aa3df4c023137e7fe59c399cfc951200eb532b4f2e622ba89749a18bb6f45",
+  "fetched": "2026-08-23 06:39",
+  "chars": 955
+ },
+ "https://supportm.epicentrk.ua/opratsiuvannia-zamovlen-zi-sposobom-oplaty-Monobank/": {
+  "file": "opratsiuvannia-zamovlen-zi-sposobom-oplaty-monobank.md",
+  "title": "Опрацювання замовлень зі способом оплати Monobank",
+  "sha256": "59f1698978c7a5b449bda27bc8d7ff6ca2280884be8d28972976463a341a5803",
+  "fetched": "2026-08-23 06:39",
+  "chars": 7629
+ },
+ "https://supportm.epicentrk.ua/punktyvydachi/": {
+  "file": "punktyvydachi.md",
+  "title": "Самовивіз товарів: як додати пункти видачі в особистому Кабінеті продавця",
+  "sha256": "8161055bd5433b04f8cf30b93b02388f6dd2eedd3ab9467720e881c46afdaf1a",
+  "fetched": "2026-08-23 06:39",
+  "chars": 4583
+ },
+ "https://supportm.epicentrk.ua/activecvz_parcel/": {
+  "file": "activecvz_parcel.md",
+  "title": "Активація доставки замовлень у центри видачі Епіцентр",
+  "sha256": "bd95ce02015bb31971d186688c611db9bc5609862dc46931e6d03ac99b3ca989",
+  "fetched": "2026-08-23 06:39",
+  "chars": 10438
+ },
+ "https://supportm.epicentrk.ua/oplata-po-rahunku/": {
+  "file": "oplata-po-rahunku.md",
+  "title": "Спосіб оплати \"Оплата по рахунку\"",
+  "sha256": "a2417d0c8c6fcba8b912834e602a04ca05133a612478d7cb64b64017c809f361",
+  "fetched": "2026-08-23 06:39",
+  "chars": 4054
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-oplaty-chastynamy-abank/": {
+  "file": "pidkliuchennia-oplaty-chastynamy-abank.md",
+  "title": "Підключення та налаштування Оплати частинами від А-Банк",
+  "sha256": "e280fd4aef7721912ddaf6b9073a8c2c316e80b7b03eeaf3e370d4ea5834c0ce",
+  "fetched": "2026-08-23 06:39",
+  "chars": 6089
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-oplaty-chastynamy-privatbank/": {
+  "file": "pidkliuchennia-oplaty-chastynamy-privatbank.md",
+  "title": "Підключення та налаштування Оплати частинами від ПриватБанк Порожня сторінка",
+  "sha256": "d09294361df489c3c0c89d1e8a5e1687ea03089ea2ad99130b6811e28770fe90",
+  "fetched": "2026-08-23 06:39",
+  "chars": 8924
+ },
+ "https://supportm.epicentrk.ua/robota-z-poshtomatamu-meest-epicentr/": {
+  "file": "robota-z-poshtomatamu-meest-epicentr.md",
+  "title": "Активація та умови використання способу доставки \"Meest-Епіцентр Поштомати\"",
+  "sha256": "17681725bba07b5bb98aa7199b95df52c2d713e9722e25121a941e7e6b6c7e1d",
+  "fetched": "2026-08-23 06:39",
+  "chars": 8985
+ },
+ "https://supportm.epicentrk.ua/pidkluchennia-pereviznyka-meest-poshta/": {
+  "file": "pidkluchennia-pereviznyka-meest-poshta.md",
+  "title": "Підключення та активація поштового оператора Meest ПОШТА",
+  "sha256": "e262c8cf88d6b419a82b3fb605000d623c155ff6afd44a31bc44f6d73d298298",
+  "fetched": "2026-08-23 06:39",
+  "chars": 13158
+ },
+ "https://supportm.epicentrk.ua/robota-z-poshtomatamu-meest-epicentr": {
+  "file": "robota-z-poshtomatamu-meest-epicentr.md",
+  "title": "Активація та умови використання способу доставки \"Meest-Епіцентр Поштомати\"",
+  "sha256": "17681725bba07b5bb98aa7199b95df52c2d713e9722e25121a941e7e6b6c7e1d",
+  "fetched": "2026-08-23 06:39",
+  "chars": 8985
+ },
+ "https://supportm.epicentrk.ua/pidklyuchennyadoeasypayvidpovidinazapytannya/": {
+  "file": "pidklyuchennyadoeasypayvidpovidinazapytannya.md",
+  "title": "Підключення до EasyPay: відповіді на запитання",
+  "sha256": "8761953995f89eb3bd566cb5e3b461104e61c69bd5c03f88a3ec7b6dc5c4febd",
+  "fetched": "2026-08-23 06:39",
+  "chars": 2688
+ },
+ "https://supportm.epicentrk.ua/opracyvannia-zamovlen-z-oplatoju-chastunami-abank/": {
+  "file": "opracyvannia-zamovlen-z-oplatoju-chastunami-abank.md",
+  "title": "Опрацювання замовлень з Оплатою частинами від А-Банк",
+  "sha256": "58f6c861a0bc4b63f84ad78e2361c3f72cfe9cd37cf05e4e31a5d46264283a00",
+  "fetched": "2026-08-23 06:39",
+  "chars": 11793
+ },
+ "https://supportm.epicentrk.ua/opracyvannia-zamovlen-z-oplatoju-chastunami-privatbank/": {
+  "file": "opracyvannia-zamovlen-z-oplatoju-chastunami-privatbank.md",
+  "title": "Опрацювання замовлень з Оплатою частинами від ПриватБанк",
+  "sha256": "00ff80efa75d3cdb142f8cdf1806e1195470c5f51ef683a042fed161985f67b0",
+  "fetched": "2026-08-23 06:39",
+  "chars": 11164
+ },
+ "https://supportm.epicentrk.ua/creatingaditting_ttn/": {
+  "file": "creatingaditting_ttn.md",
+  "title": "Створення та редагування ТТН",
+  "sha256": "df40bf0c272efeefb6a81fb16f71f3444b9a746e26ca895af4efc644a80a2055",
+  "fetched": "2026-08-23 06:39",
+  "chars": 6265
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-kurierskoi-dostavky/": {
+  "file": "pidkliuchennia-kurierskoi-dostavky.md",
+  "title": "Налаштування способу доставки \"Кур'єрська доставка\"",
+  "sha256": "b6792a472e4ad5d15bb0efe63104369d31b5a58daef55d238a7f48752ec7bf04",
+  "fetched": "2026-08-23 06:39",
+  "chars": 4375
+ },
+ "https://supportm.epicentrk.ua/zamovlennia-kurierska-dostavka/": {
+  "file": "zamovlennia-kurierska-dostavka.md",
+  "title": "Обробка замовлень зі способом доставки \"Кур'єрська доставка\"",
+  "sha256": "f2f9257c34750e0a19e1ae885e8e173d97e5753d554a6b1ce1c3dc31b23aa974",
+  "fetched": "2026-08-23 06:39",
+  "chars": 3554
+ },
+ "https://supportm.epicentrk.ua/pidkliuchenniaekvairinhumonobank/": {
+  "file": "pidkliuchenniaekvairinhumonobank.md",
+  "title": "Підключення до Монобанк: оплата карткою на сайті",
+  "sha256": "6ff3a6ca88cfb631a68fa39d997ef84b21876d716969872cb6ba45891846c807",
+  "fetched": "2026-08-23 06:39",
+  "chars": 8263
+ },
+ "https://supportm.epicentrk.ua/zmina_dogovoru/": {
+  "file": "zmina_dogovoru.md",
+  "title": "Зміна договору",
+  "sha256": "f8e23c1994069b7dff73b1c4abaff0c4d3a95a60f00903b29dbe15fe5c139862",
+  "fetched": "2026-08-23 06:39",
+  "chars": 2484
+ },
+ "https://supportm.epicentrk.ua/informatsiyashchodoprodazhutovarivmilitari/": {
+  "file": "informatsiyashchodoprodazhutovarivmilitari.md",
+  "title": "Інформація щодо продажу товарів мілітарі",
+  "sha256": "193bc7a9c06f59b08d41fc9c40eae63d6fc55620feb5db61bbd8ac331aa686a9",
+  "fetched": "2026-08-23 06:39",
+  "chars": 1334
+ },
+ "https://supportm.epicentrk.ua/stvorennyanovogokontragenta/": {
+  "file": "stvorennyanovogokontragenta.md",
+  "title": "Створення нового контрагента",
+  "sha256": "48f639e3f83d0f137aaaba7119ca835f0a1e18b4703308aceaa1f48e9dcd0de7",
+  "fetched": "2026-08-23 06:39",
+  "chars": 2382
+ },
+ "https://supportm.epicentrk.ua/robotazapi/": {
+  "file": "robotazapi.md",
+  "title": "Робота з АРІ",
+  "sha256": "0dddf2c9c1bb2bfcb2bd286feec2767be4b57f866200a361be59fc9f1faf8727",
+  "fetched": "2026-08-23 06:39",
+  "chars": 5755
+ },
+ "https://supportm.epicentrk.ua/politykakonfidentsiynosti": {
+  "file": "politykakonfidentsiynosti.md",
+  "title": "Політика конфіденційності",
+  "sha256": "a34395fed598cfc794ca55b518d0fec08241efd3b9ad999e3758509d191851c2",
+  "fetched": "2026-08-23 06:39",
+  "chars": 5909
+ },
+ "https://supportm.epicentrk.ua/yakpochatyprodavaty/": {
+  "file": "yakpochatyprodavaty.md",
+  "title": "Як почати продавати на маркетплейсі",
+  "sha256": "54c2474e6f247c223b732f185d5617d740dd746d0c5deb8664a7d62ed8309eab",
+  "fetched": "2026-08-23 06:39",
+  "chars": 2098
+ },
+ "https://supportm.epicentrk.ua/bonuszadostavky": {
+  "file": "bonuszadostavky.md",
+  "title": "Бонус за доставку \"Самовивіз Meest-Епіцентр\" та \"Meest-Епіцентр Поштомати\"",
+  "sha256": "5087f935981463a5f7ebcc9af0656aa277ec33da39c887d6eeb9268e07e897db",
+  "fetched": "2026-08-23 06:39",
+  "chars": 1436
+ },
+ "https://supportm.epicentrk.ua/opracyvannia-zamovlen-z-oplatoju-chastunami-abank": {
+  "file": "opracyvannia-zamovlen-z-oplatoju-chastunami-abank.md",
+  "title": "Опрацювання замовлень з Оплатою частинами від А-Банк",
+  "sha256": "58f6c861a0bc4b63f84ad78e2361c3f72cfe9cd37cf05e4e31a5d46264283a00",
+  "fetched": "2026-08-23 06:39",
+  "chars": 11793
+ },
+ "https://supportm.epicentrk.ua/opracyvannia-zamovlen-z-oplatoju-chastunami-privatbank": {
+  "file": "opracyvannia-zamovlen-z-oplatoju-chastunami-privatbank.md",
+  "title": "Опрацювання замовлень з Оплатою частинами від ПриватБанк",
+  "sha256": "00ff80efa75d3cdb142f8cdf1806e1195470c5f51ef683a042fed161985f67b0",
+  "fetched": "2026-08-23 06:39",
+  "chars": 11164
+ },
+ "https://supportm.epicentrk.ua/creatingaditting_ttn": {
+  "file": "creatingaditting_ttn.md",
+  "title": "Створення та редагування ТТН",
+  "sha256": "df40bf0c272efeefb6a81fb16f71f3444b9a746e26ca895af4efc644a80a2055",
+  "fetched": "2026-08-23 06:39",
+  "chars": 6265
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-oplaty-chastynamy-abank": {
+  "file": "pidkliuchennia-oplaty-chastynamy-abank.md",
+  "title": "Підключення та налаштування Оплати частинами від А-Банк",
+  "sha256": "e280fd4aef7721912ddaf6b9073a8c2c316e80b7b03eeaf3e370d4ea5834c0ce",
+  "fetched": "2026-08-23 06:39",
+  "chars": 6089
+ },
+ "https://supportm.epicentrk.ua/pidkliuchennia-oplaty-chastynamy-privatbank": {
+  "file": "pidkliuchennia-oplaty-chastynamy-privatbank.md",
+  "title": "Підключення та налаштування Оплати частинами від ПриватБанк Порожня сторінка",
+  "sha256": "d09294361df489c3c0c89d1e8a5e1687ea03089ea2ad99130b6811e28770fe90",
+  "fetched": "2026-08-23 06:39",
+  "chars": 8924
+ }
+}

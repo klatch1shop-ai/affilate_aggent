@@ -24,12 +24,12 @@ DB_DSN = 'host=localhost port=5432 dbname=agentdb user=agentadmin password=1'
 # Our target categories
 OUR_CATS = {
     '8743': 'Перехідні рамки для автомагнітол',
-    '4907': 'Магнітоли',
+    '2866': 'Автомагнітоли',
     '3729': 'Камери заднього огляду',
     '2821': 'Кабелі та перехідники',
     '2848': 'Аксесуари для автосигналізацій',
-    '2883': 'LED-світло для автомобіля',
-    '2866': 'Автомагнітоли',
+    # 4907 (Магнітоли) — deleted=False в API але замінено на 2866 в pipeline
+    # 2883 (LED-світло) — deleted=True в API, замінено на 2848 через postprocess
 }
 
 OUR_BRANDS = ['QIV', 'Carav', 'Teyes', 'Pioneer', 'Alpine', 'Sony', 'Toyota']

@@ -1,0 +1,165 @@
+# https://sellerhelp.rozetka.com.ua/p831-content-requirements.html
+# оновлено: 12.06.2026
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Продавати на ROZETKA 
+ ›
+ Sell on ROZETKA Marketplace (for non-resident companies) 
+ ›
+ Content requirements 
+ Content requirements
+ Останнє оновлення: 12.06.2026
+
+ As a Marketplace seller, you’re required to provide accurate details about the products you sell. Your product’s title, images, description and additional attributes help determine how your items appear in search and browse results on ROZETKA. Noncompliance may result in products being unpublished.
+
+ Product title
+
+ The product title should be formed using keywords that buyers use when searching. We expect your product title to follow this structure: Product type Brand Model Key features (color, size, etc.) .
+
+ Requirements: 
+
+ Writing brief titles not exceeding 255 characters.
+
+ Creating clear, descriptive titles without repetitive keywords, multiple brands or multiple product types.
+
+ Using Ukrainian or Russian languages.
+
+ Using proper capitalization.
+
+ Prohibited: 
+
+ Writing in all caps or using special characters/elements or any other symbols to attract attention and are not related to the product model name.
+
+ Making any promotional claims (e.g., free shipping, hot sale, top-rated, premium quality, best-selling, clearance, Black Friday, low price).
+
+ Incorporating any URLs in any format.
+
+ Including the country of manufacture.
+
+ Product images
+
+ A product image is a main attribute for a product listing, which must clearly show the buyer what they are purchasing and what is included in the parcel.
+
+ File type requirements: 
+
+ Pixel Dimensions: minimum — 400x400px, maximum — 4000x4000px, optimal  — 1000х1000 px.
+
+ File Format: JPEG, JPG, PNG, WebP, GIF.
+
+ Color Format: RGB, sRGB.
+
+ File Size: 10MB or less.
+
+ Main requirements and recommendations for product images: 
+
+ Minimum — 1 photo, maximum — 15.
+
+ All images must be in focus and professionally lit. Main images should feature items on a seamless white background. The image must be clear, sharp, without blurring or graininess;
+
+ All images should correspond with the product title, features, and description;
+
+ Images of larger items may feature the item in an expected environment. Example (гаражні ворота)
+
+ Diagrams and infographics are allowed in product images, but not as the main photo.
+
+ The main image can't show accessories that aren't included with the item. The customer must clearly understand what is included in the product being sold.
+
+ Photos of products with a QR-code or web-link are allowed in the following cases: it is part of the product package design;
+
+ it is indicated production address;
+
+ it is a component of the label or product.
+
+ if a person is shown in the photo of the product, their pose must not be erotic or have erotic connotations, and must not draw the buyer's attention to parts of the body or the model's figure.
+
+ Selfies and lifestyle images are not allowed to be placed in the main product image.
+
+ Background: recommended: white (light, plain) or transparent background. A plain background is acceptable in a pastel shade. Intense (bright) background colors are not permitted.
+
+ Item in the picture: 
+
+ The product in the main (first) photo must be unpackaged and not be cropped.
+
+ The product must be in the correct shape, not stretched or compressed.
+
+ The product must be in the leading position and not be covered by other objects.
+
+ The images following the main one should be placed in a natural order, as if the product were rotating around its axis (if it is an object photo). Photos showing lifestyle scenarios for using the product should be placed last.
+
+ Prohibited: 
+
+ Use any promotional claims a.g., sale, top seller, gift, free shipping, etc.
+
+ Use web links, graphics, or other labels that lead the client to third-party resources.
+
+ Use images that violate intellectual property copyrights (without the permission of the copyright holder).
+
+ Include warranty information, any contact information, including names, phone numbers, addresses, etc.
+
+ Use a black and white filter (may confuse the customer to understand the color of the product).
+
+ Use images of coins, cash, etc., if it is not a product offered.
+
+ Display explicit nudity or vulgar language, contains obscene, sexually suggestive or pornographic material.
+
+ Display of people smoking.
+
+ Product features
+
+ Product features (attributes) are basic information about the product and its properties. Attributes are displayed in a special block on the product detail page. The ROZETKA store provides a list of available attributes and their values for each product category. You can find this information for the required category in the seller's account.
+
+ Requirements: 
+
+ Set at least 3 parameters.
+
+ The information in the features must correspond to the product image, title, and description.
+
+ Listing the most important features (depends on product category, e.g., size, color, composition, power, etc.).
+
+ Parameters value must not exceeding 500 characters.
+
+ Product description
+
+ A product description is a text block where buyers can find detailed information about an item listed on the marketplace. The information in the description must correspond to the name, photo, and characteristics of the product.
+
+ The description should contain information related to the product or brand. The text should be free of grammatical, spelling, and stylistic errors. The maximum number of characters allowed is 50,000. It is recommended to describe the product's features, useful functions, compatibility, configuration, and other information not included in the characteristics.
+
+ Prohibited: 
+
+ Making any promotional claims (e.g., free shipping, sale, top-rated, premium quality, best-selling, Black Friday, low price, etc.).
+
+ Including links to third-party resources.
+
+ Including information about prices, bonuses, discounts, promotions, etc.
+
+ Using external URLs, images, videos, emojis, special characters, etc.
+
+ Describing information about shipping and payment methods.
+
+ contact details and information about the store;
+
+ Including irrelevant information (additional services;
+
+ information that is not related to this product or manufacturer;
+
+ colored text;
+
+ information about the importer/company that accepts consumer complaints and questions.
+
+ < Sell on ROZETKA Marketplace (for non-resident companies) Чи була інформація корисною? Так - 0 Ні - 0 
+
+ В цьому розділі
+ How to sell on ROZETKA 
+ Listing products 
+ Order processing 
+ Content requirements 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

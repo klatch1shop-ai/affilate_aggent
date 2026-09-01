@@ -168,40 +168,39 @@ class EpicentrPublicScraper(BaseHttpScraper):
 
     def search(self, query: str, max_results: int = 20) -> list[dict]:
         """
-        Шукає товари на epicentrk.ua і повертає список з назвою, URL, фото.
+        Шукає товари на epicentrk.ua і повертає список URL з apteka.epicentrk.ua.
+        Фільтр: лише /ua/shop/mplc — тільки intimate (apteka) товари.
         Ціна в пошуку відсутня — потрібен parse_card() для її отримання.
         """
-        encoded_query = quote_plus(query)
-        url = f"{self.SEARCH_URL}?q={encoded_query}"
-        logger.info(f"Searching: {url}")
+        url = f"{self.SEARCH_URL}?q={quote_plus(query)}"
+        logger.info(f"Searching apteka: {url}")
         soup = self._get(url)
         if not soup:
             return []
 
-        results = []
-        buttons = soup.find_all(attrs={"data-product-card-action": "favorite"})
-        logger.info(f"Found {len(buttons)} product cards on search page")
-
-        for btn in buttons[:max_results]:
-            title = btn.get("aria-label", "").replace("Додати в обране товар: ", "").strip()
-            card_div = btn.parent.parent.parent
-
-            link_el = card_div.find("a", attrs={"data-product-picture": True})
-            if not link_el:
-                link_el = card_div.find("a", href=lambda h: h and "/ua/shop/mplc-" in h)
-            product_url = urljoin(BASE_URL, link_el["href"]) if link_el else None
-
-            img = card_div.find("img", src=lambda s: s and "cdn.27.ua" in s)
-            photo = img["src"] if img else None
-
+        seen: set[str] = set()
+        results: list[dict] = []
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "apteka.epicentrk.ua/ua/shop/mplc" not in href:
+                continue
+            if href in seen:
+                continue
+            seen.add(href)
+            title = a.get("aria-label", "").replace("Додати в обране товар: ", "").strip()
+            if not title:
+                title = a.get_text(strip=True)[:120]
             results.append({
                 "title": title,
-                "url": product_url,
-                "photo_preview": photo,
+                "url": href,
+                "photo_preview": None,
                 "marketplace": self.MARKETPLACE,
                 "search_query": query,
             })
+            if len(results) >= max_results:
+                break
 
+        logger.info(f"Apteka results for '{query}': {len(results)}")
         return results
 
     def parse_card(self, url: str) -> dict | None:
@@ -224,23 +223,23 @@ class EpicentrPublicScraper(BaseHttpScraper):
         result["title"] = h1.get_text(strip=True) if h1 else ""
 
         # Ціна, бренд, категорія, доступність — з dataLayer (найнадійніше)
-        datalayer_match = re.search(
-            r'window\.dataLayer\.push\((\{[^)]+\})\)',
-            soup.decode() if hasattr(soup, 'decode') else str(soup)
-        )
-        if datalayer_match:
+        # re.DOTALL обов'язковий: dataLayer.push містить вкладений JSON з переносами рядків
+        html_str = soup.decode() if hasattr(soup, 'decode') else str(soup)
+        for dl_raw in re.findall(r'dataLayer\.push\((\{.*?\})\)', html_str, re.DOTALL):
             try:
-                dl = json.loads(datalayer_match.group(1))
-                result["price"] = float(dl.get("productPrice") or 0) or None
-                result["vendor"] = dl.get("vendorName")
-                result["category_id"] = dl.get("categoryId")
-                result["category_name"] = dl.get("categoryName")
-                result["in_stock"] = bool(dl.get("productAvailable", True))
-                result["external_id"] = dl.get("productId")
-                if not result["title"] and dl.get("productName"):
-                    result["title"] = dl["productName"]
+                dl = json.loads(dl_raw)
+                if dl.get("productPrice") or dl.get("categoryId"):
+                    result["price"] = float(dl.get("productPrice") or 0) or None
+                    result["vendor"] = dl.get("vendorName")
+                    result["category_id"] = dl.get("categoryId")
+                    result["category_name"] = dl.get("categoryName")
+                    result["in_stock"] = bool(dl.get("productAvailable", True))
+                    result["external_id"] = dl.get("productId")
+                    if not result["title"] and dl.get("productName"):
+                        result["title"] = dl["productName"]
+                    break
             except (json.JSONDecodeError, ValueError):
-                pass
+                continue
 
         # Характеристики з dl > div > dt + dd
         specs = {}

@@ -14,11 +14,13 @@ tools/watchdog.py — моніторинг здоров'я системи.
   6. Telegram звіт кожні 6 годин
 """
 
+import calendar
+import html
+import re
 import os
 import subprocess
 import sys
 import time
-import calendar
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -41,6 +43,10 @@ SERVICES        = ["rozetka-order-agent", "tg-dispatcher", "noire-notifier"]
 REPORT_INTERVAL = timedelta(hours=6)
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
 SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
+# Початок прогону в логу. Лог дописується, тож без цієї межі перевірка або
+# бачить лише хвіст останнього прогону, або тривожить на давно виправлених
+# відмовах — див. last_sync_run().
+SYNC_RUN_MARKER = "=== Rozetka GitHub Sync ==="
 CRON_FLAG       = "/tmp/watchdog_cron_warned.flag"
 SYNC_ERROR_FLAG = "/tmp/watchdog_sync_error_last.txt"
 
@@ -298,21 +304,66 @@ def check_services() -> dict:
 
 # ── check 4: sync log ─────────────────────────────────────────────────────────
 
+def last_sync_run(text: str) -> list:
+    """Рядки ОСТАННЬОГО прогону rozetka_github_sync.py.
+
+    Лог дописується, а не перезаписується: у ньому лежать усі прогони від
+    18.08.2026. Тому обидві очевидні межі неправильні — читати файл цілком не
+    можна (три відмови 23-25.08 тривожили б вічно), читати самий останній
+    рядок теж не можна: саме через це вони не тривожили жодного разу.
+    """
+    lines = [l.rstrip() for l in text.splitlines()]
+    starts = [i for i, l in enumerate(lines) if SYNC_RUN_MARKER in l]
+    if starts:
+        return lines[starts[-1]:]
+    # Маркера немає — лог обрізали або формат змінився. Беремо хвіст, довший
+    # за один прогін (~23 рядки): краще подивитись зайве, ніж оголосити
+    # успішним прогін, якого не бачили.
+    return lines[-40:]
+
+
 def check_sync_log() -> dict:
+    """Чи доїхала щоденна публікація прайсу Carvol у GitHub.
+
+    Читається ОСТАННІЙ прогін цілком, а не останній його рядок. Стара версія
+    брала `lines[-1]`, а `rozetka_github_sync.py` друкує останнім рядок
+    «URL: …» — тому «Git push: ❌ FAILED» 23, 24 і 25.08.2026 не дав жодної
+    тривоги, і добу, коли Rozetka читала позавчорашні ціни, помітили лише
+    через два дні й лише руками.
+
+    У тривогу йде рядок ERROR, а не «FAILED»: наслідок однаковий для
+    протухлого токена і для незакоміченого файлу, а робити з ними треба різне.
+
+    Ключ дедуплікації містить дату прогону. Без неї друга така сама відмова
+    наступного дня мовчала б (текст той самий), з нею виходить рівно одна
+    тривога на кожен провалений прогін — а не 144 на добу від
+    десятихвилинного cron.
+
+    Чого ця перевірка НЕ ловить: мовчазного зависання, коли прогін почався й
+    не закінчився. Це видно з іншого боку — `check_carvol_rozetka_feed()`
+    міряє вік локального файлу й вік публікації.
+    """
     if not os.path.exists(SYNC_LOG):
         return {"ok": True, "msg": "no log yet"}
 
     try:
-        lines = Path(SYNC_LOG).read_text(errors="replace").splitlines()
-        lines = [l.strip() for l in lines if l.strip()]
-        if not lines:
+        block = [l.strip() for l in
+                 last_sync_run(Path(SYNC_LOG).read_text(errors="replace"))
+                 if l.strip()]
+        if not block:
             return {"ok": True, "msg": "empty"}
 
-        last = lines[-1]
-        if "FAILED" in last.upper() or ("ERROR" in last.upper() and "WARNING" not in last.upper()):
-            log(f"[sync] FAILED виявлено: {last}")
+        stamp = block[0][:16]          # «2026-08-25 07:15» із рядка-маркера
+        bad = [
+            l for l in block
+            if "FAILED" in l.upper()
+            or "TRACEBACK" in l.upper()
+            or ("| ERROR" in l.upper() and "WARNING" not in l.upper())
+        ]
+        if bad:
+            reason = next((l for l in bad if "| ERROR" in l.upper()), bad[0])
+            log(f"[sync] прогін {stamp} провалився: {reason[:160]}")
 
-            # Dedup: не відправляємо той самий алерт поки помилка не зміниться
             last_sent = ""
             if os.path.exists(SYNC_ERROR_FLAG):
                 try:
@@ -320,21 +371,26 @@ def check_sync_log() -> dict:
                 except Exception:
                     pass
 
-            err_key = last[:200]
+            err_key = f"{stamp} {reason}"[:200]
             if err_key != last_sent:
-                tg(f"🚨 <b>Watchdog</b>: rozetka_sync_cron FAILED!\n<code>{last[:200]}</code>")
+                # Причина йде з виводу git і може містити '<'. Telegram із
+                # parse_mode=HTML відповідає на таке HTTP 400, а tg() помилку
+                # ковтає — тобто тривоги просто не було б. Саме той різновид
+                # мовчання, який ця перевірка й лікує.
+                tg("🚨 <b>Watchdog</b>: прайс Carvol не опубліковано "
+                   f"({stamp})\n<code>{html.escape(reason[:300])}</code>")
                 Path(SYNC_ERROR_FLAG).write_text(err_key)
                 log(f"[sync] алерт відправлено в Telegram")
             else:
                 log(f"[sync] та сама помилка — алерт вже надсилали, пропускаємо дублікат")
 
-            return {"ok": False, "msg": last[:80]}
+            return {"ok": False, "msg": reason[:80]}
 
         # Успішний run — скидаємо прапор щоб наступна помилка знову тригернула алерт
         if os.path.exists(SYNC_ERROR_FLAG):
             os.remove(SYNC_ERROR_FLAG)
             log(f"[sync] прапор помилки скинуто (успішний run)")
-        return {"ok": True, "msg": last[:80]}
+        return {"ok": True, "msg": f"{stamp} ok"}
     except Exception as e:
         return {"ok": True, "msg": f"read error: {e}"}
 
@@ -453,6 +509,58 @@ def check_noire_rozetka_feed() -> dict:
     return {"ok": True, "msg": "feed ok"}
 
 
+
+# ── Повідомлення Rozetka продавцеві ────────────────────────────────────────
+RZ_FEEDBACK_URL  = "https://api-seller.rozetka.com.ua/feedbacks/search"
+RZ_FEEDBACK_SEEN = "/tmp/watchdog_rz_feedback_seen.txt"
+
+
+def check_rozetka_messages() -> dict:
+    """
+    Нові повідомлення від Rozetka продавцеві (`/feedbacks/search`).
+
+    Навіщо: 01.09.2026 знайдено ВИПАДКОВО, шукаючи інше, чотири звернення —
+    зокрема «ваш номер телефону для покупців недоступний, це призводить до
+    скарг і скасувань» та прохання обробити конкретне замовлення. Розетка
+    пише нам у канал, який ніхто не читав.
+
+    Тривожимо лише на НОВІ id: перелік уже побачених лежить у файлі, інакше
+    кожен цикл повторював би те саме й ми перестали б читати сповіщення.
+    """
+    tok = os.getenv("ROZETKA_API_TOKEN", "")
+    if not tok:
+        return {"ok": True, "msg": "ROZETKA_API_TOKEN не задано — пропускаю"}
+    try:
+        r = requests.get(RZ_FEEDBACK_URL, timeout=30,
+                         headers={"Authorization": f"Bearer {tok}",
+                                  "Content-Language": "uk"},
+                         params={"page": 1})
+        d = r.json()
+        if not d.get("success"):
+            err = (d.get("errors") or {}).get("message", "")
+            return {"ok": False, "msg": f"Rozetka feedbacks: {err or r.status_code}"}
+        items = (d.get("content") or {}).get("feedbacks") or []
+    except Exception as e:
+        return {"ok": False, "msg": f"Rozetka feedbacks: {e}"}
+
+    seen = set()
+    if os.path.exists(RZ_FEEDBACK_SEEN):
+        seen = set(open(RZ_FEEDBACK_SEEN, encoding="utf-8").read().split())
+    fresh = [f for f in items if str(f.get("id")) not in seen]
+
+    if fresh:
+        with open(RZ_FEEDBACK_SEEN, "a", encoding="utf-8") as fh:
+            for f in fresh:
+                fh.write(f"{f.get('id')}\n")
+        lines = []
+        for f in fresh[:3]:
+            txt = re.sub(r"<[^>]+>", " ", f.get("text") or "")
+            txt = " ".join(html.unescape(txt).split())[:180]
+            lines.append(f"• {txt}")
+        tg("💬 <b>Нові повідомлення Rozetka</b>\n\n" + "\n\n".join(lines))
+        return {"ok": False, "msg": f"нових повідомлень: {len(fresh)}"}
+    return {"ok": True, "msg": f"нових немає (всього {len(items)})"}
+
 def check_carvol_rozetka_feed() -> dict:
     """Фід Carvol для Rozetka: свіжість, розмір і те, чи публікація доїхала.
 
@@ -565,6 +673,7 @@ def main():
     noire_rz = check_noire_rozetka_feed()
     noire_prom = check_noire_prom_feed()
     carvol_rz = check_carvol_rozetka_feed()
+    rz_msg    = check_rozetka_messages()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
     log(f"[cron] ok={cron_r['ok']} {cron_r['msg']}")
@@ -574,6 +683,7 @@ def main():
     log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
     log(f"[noire-prom] ok={noire_prom['ok']} {noire_prom['msg']}")
     log(f"[carvol-rz] ok={carvol_rz['ok']} {carvol_rz['msg']}")
+    log(f"[rz-msg] ok={rz_msg['ok']} {rz_msg['msg']}")
 
     if should_report():
         send_report(git_r, svc_r, cron_r, sync_r)

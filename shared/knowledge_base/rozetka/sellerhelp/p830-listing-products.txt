@@ -1,0 +1,55 @@
+# https://sellerhelp.rozetka.com.ua/p830-listing-products.html
+# оновлено: 12.06.2026
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Продавати на ROZETKA 
+ ›
+ Sell on ROZETKA Marketplace (for non-resident companies) 
+ ›
+ Listing products 
+ Listing products
+ Останнє оновлення: 12.06.2026
+
+ Products offered for sale on ROZETKA Marketplace must comply with all laws and regulations, as well as ROZETKA policies. Also, your ability to list a product can depend on its category and brand. In some cases, you’ll need to apply to sell a product, category, or brand, in some cases, a category/brand may not be able to list.
+
+ When multiple sellers offer the same product, ROZETKA combines their offers on one product detail page to make it easier for customers to find, compare, and purchase items.
+
+ Sellers have the 2 options to list items:
+
+ Integration: You create XML data feed (requires technical expertise) and this feed connect to your seller account by URL link. XML feed requirements ↓
+
+ Manual Listings Items: Allows to create and edit listings (SKUs) including product details and sales terms (such as price, cost, and inventory) in a seller account.
+
+ Item’s content must comply to requirements . Items, that are not aligned with requirements, will not be allowed to be published on the ROZETKA store.
+
+ Price product
+
+ ROZETKA aims to provide the best shopping experience by offering the lowest price with the largest selection, so we ask you to set competitive prices for your products. You set your own pricing policy, but setting the right price for your products can be a key part of sales success.
+
+ Avoid these pricing tactics:
+
+ Setting a misleading price
+
+ Setting a price that’s significantly higher than recent prices for the same product
+
+ Charging excessive shipping fees
+
+ If we see pricing practices that could damage customer trust, we may remove this item from listing, or restrict your ability to sell in certain categories.
+
+ < Sell on ROZETKA Marketplace (for non-resident companies) Чи була інформація корисною? Так - 0 Ні - 0 
+
+ В цьому розділі
+ How to sell on ROZETKA 
+ Listing products 
+ Order processing 
+ Content requirements 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

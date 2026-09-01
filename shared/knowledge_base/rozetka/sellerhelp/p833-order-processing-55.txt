@@ -1,0 +1,60 @@
+# https://sellerhelp.rozetka.com.ua/p833-order-processing-55.html
+# оновлено: 12.06.2026
+
+Головна 
+ ›
+ Довідка 
+ ›
+ Продавати на ROZETKA 
+ ›
+ Sell on ROZETKA Marketplace (for non-resident companies) 
+ ›
+ Order processing 
+ Order processing
+ Останнє оновлення: 12.06.2026
+
+ When you receive a customer order, you can review it and provide tracking information using Orders page . You can contact a buyer directly from your seller account. In general, you can contact buyers only to complete orders or to respond to customer service questions. Be courteous and patient with customers when they request information, returns, or refunds.
+
+ You cannot contact buyers for marketing or promotional purposes (including via email, physical mail, telephone, or otherwise), or bribing customers for positive feedback.
+ Step-by-Step Order Processing Guide:
+
+ Order Notification: You will receive a notification about a new order in your seller account, and likely also via email or the mobile seller app (available for iOS and Android).
+
+ View and Confirm the Order: Log in to your Seller Account.
+
+ Navigate to the “Orders” section.
+
+ Review the details of the New order (items, quantity, buyer information, shipping method, and payment method).
+
+ Confirm the order by changing its status to “Processed by the manager”. This informs the buyer that you have started working on the order. At this stage, you can edit the order.
+
+ After agreeing on the payment and delivery terms with the buyer, set the order status to “Completed. Data confirmed”. If the buyer canceled the order, set the corresponding cancellation status.
+
+ Shipping the Order: Hand over the parcel to the logistics partner (delivery service).
+
+ Update the order status in the seller account to “Referred to a delivery service” and enter the tracking number (TTN), if it hasn't synced automatically. This allows the buyer to track the parcel.
+
+ Tracking and Completion: Inform the buyer of the order shipment date and the tracking number to track the parcel on the carrier's website. If the order is being delivered by your store's courier, contact the buyer on the day of delivery and agree on a time.
+
+ For fulfilled orders, set the status to “Order completed”.
+
+ Returns, refunds, and customer service
+
+ Your return and refunds policy must comply with generally accepted requirements under law. For goods that require a warranty, it must be provided by the seller (if this brand has no official service in Ukraine). Return information and the warranty period (if provided) is indicated on each product detail page.
+
+ If a customer is not fully satisfied with an order, it's in everyone’s best interest if you're able to resolve the issue directly with the customer using Buyer-Seller Messages and response to a return request. Use Returns page to handle your return and service requests. 
+
+ < Sell on ROZETKA Marketplace (for non-resident companies) Чи була інформація корисною? Так - 0 Ні - 0 
+
+ В цьому розділі
+ How to sell on ROZETKA 
+ Listing products 
+ Order processing 
+ Content requirements 
+
+ Популярні статті
+ Підключення доставки в магазини ROZETKA 
+ Управління замовленнями 
+ Оновлення статусу, ціни і кількості з XML в Pricecreator 
+ Наявність та залишки в Pricecreator 
+ Початок роботи з фулфілментом від ROZETKA

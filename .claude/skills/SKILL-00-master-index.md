@@ -21,6 +21,11 @@
 | `.claude/skills/SKILL-17-marketplace-pipeline.md` | **Єдиний конвеєр майданчика: гейти, матриця відмінностей, реєстр зауважень** |
 | `.claude/skills/SKILL-18-competitors-and-uniqueness.md` | **Прямі конкуренти-дропшипери: замір дублів, унікальність описів, порівняння** |
 | `.claude/skills/SKILL-19-order-agents.md` | **Агенти замовлень: правило доказу, три стани наявності, чекліст перед вмиканням** |
+| `.claude/skills/SKILL-20-epicentr-cabinet-api.md` | **Єпіцентр: справжній API кабінету (core-api), статуси товару, що нам не дозволено міняти, пастки імпорту** |
+| `.claude/skills/SKILL-24-ttn-flow.md` | **ТТН: ланцюжок від PDF постачальника до статусу, верифікація окремим GET, пропущений випадок безготівкової оплати** |
+| `.claude/skills/SKILL-23-attribute-sourcing.md` | **Звідки брати значення характеристик: ієрархія джерел, межі пошуку за моделлю, звірка з Carvol** |
+| `.claude/skills/SKILL-22-boundaries.md` | **Межі самостійних дій: три рівні, перелік незворотного, самоперевірка перед дією** |
+| `.claude/skills/SKILL-21-measurement-discipline.md` | **Дисципліна вимірювання: чому звіт буває хибним — 7 класів, гейти перед доповіддю** |
 | `.claude/skills/{prom,rozetka,epicentr,khoroshop}/SKILL.md` | базові скіли майданчиків |
 | `shared/knowledge_base/rozetka/api_auth.md` | Rozetka API (замість неіснуючого SKILL-12) |
 

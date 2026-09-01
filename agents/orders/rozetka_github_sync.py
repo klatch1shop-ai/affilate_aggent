@@ -217,22 +217,81 @@ def update_prices_only(live: dict) -> dict:
     return stats
 
 
+FEED_IN_REPO = 'data/carvol_rozetka.xml'
+
+
+def _git(*args) -> subprocess.CompletedProcess:
+    return subprocess.run(['git', *args], cwd=REPO_PATH,
+                          capture_output=True, text=True)
+
+
 def git_push() -> bool:
-    """Пушить оновлений файл в GitHub."""
+    """Публікує прайс у GitHub. True означає, що вміст справді доїхав.
+
+    Порядок кроків виведений із трьох реальних відмов 23-25.08.2026, кожна з
+    яких лишила Rozetka з учорашніми цінами.
+
+    1. Спершу `push`, і лише якщо його відкинуто — `pull --rebase`. Раніше
+       pull стояв беззастережно перед push, і 25.08 він відмовився
+       («cannot pull with rebase: You have unstaged changes»), тож push не
+       виконався взагалі. О 07:15 незакомічені файли — це норма, а не збій:
+       watchdog комітить о :10 і :20, генератори пишуть між ними.
+    2. `--autostash` у запасному pull: чужа незакомічена робота не мусить
+       блокувати публікацію цін.
+    3. «nothing to commit» більше не означає «опубліковано». На цьому стояв
+       `return True`, тому непроштовхнутий учорашній коміт лишався лежати
+       локально, а лог друкував «Git push: ✅ OK».
+    4. Успіх підтверджується вмістом, а не кодом виходу останньої команди:
+       blob файлу на диску звіряється з blob'ом у щойно завантаженому
+       origin/main. Це те саме правило «фід зібрано ≠ фід опубліковано», але
+       всередині самої публікації.
+
+    Чого тут НЕ виправлено: протухлий токен (23-24.08). Це не питання
+    порядку команд — про нього тепер сповіщає watchdog.
+    """
     msg = f'sync: prices+availability {datetime.now().strftime("%Y-%m-%d %H:%M")}'
     try:
-        for cmd in [
-            ['git', 'add', 'data/carvol_rozetka.xml'],
-            ['git', 'commit', '-m', msg],
-            ['git', 'pull', '--rebase'], ['git', 'push'],
-        ]:
-            r = subprocess.run(cmd, cwd=REPO_PATH, capture_output=True, text=True)
-            if r.returncode != 0:
-                if 'nothing to commit' in r.stdout + r.stderr:
-                    logger.info('Git: немає змін')
-                    return True
-                logger.error(f'{cmd[1]}: {r.stderr[:200]}')
+        r = _git('add', FEED_IN_REPO)
+        if r.returncode != 0:
+            logger.error(f'add: {(r.stderr or r.stdout)[:200]}')
+            return False
+
+        r = _git('commit', '-m', msg)
+        if r.returncode != 0:
+            if 'nothing to commit' in r.stdout + r.stderr:
+                logger.info('Git: ціни не змінились — перевіряємо, чи все запушено')
+            else:
+                logger.error(f'commit: {(r.stderr or r.stdout)[:200]}')
                 return False
+
+        r = _git('push')
+        if r.returncode != 0:
+            logger.warning(f'push відкинуто, пробуємо pull --rebase --autostash: '
+                           f'{(r.stderr or r.stdout)[:200]}')
+            r = _git('pull', '--rebase', '--autostash')
+            if r.returncode != 0:
+                logger.error(f'pull: {(r.stderr or r.stdout)[:200]}')
+                return False
+            r = _git('push')
+            if r.returncode != 0:
+                logger.error(f'push: {(r.stderr or r.stdout)[:200]}')
+                return False
+
+        local_blob = _git('hash-object', FEED_IN_REPO).stdout.strip()
+        published  = ''
+        if _git('fetch', 'origin', 'main').returncode == 0:
+            published = _git('rev-parse', f'FETCH_HEAD:{FEED_IN_REPO}').stdout.strip()
+        if not published:
+            # Невідомо ≠ погано: сам push повернув нуль, а недоступний fetch —
+            # це збій мережі, не збій публікації. Прогін лишається успішним,
+            # але в логу стоїть WARNING, щоб «OK» не читалось як перевірене.
+            # Тривога на кожен мережевий збій навчила б гортати лог не читаючи.
+            logger.warning('публікацію не перевірено: git fetch не пройшов')
+        elif published != local_blob:
+            logger.error(f'push пройшов, але в origin/main інший файл: '
+                         f'{published[:8]} != {local_blob[:8]}')
+            return False
+
         logger.success('Git push OK')
         return True
     except Exception as e:

@@ -47,8 +47,8 @@ MARKETPLACE_SCHEMAS = {
 <offers>
   <offer id="ART001" available="true">
     <price>1500.00</price>
-    <category code="4907">Магнітоли</category>
-    <attribute_set code="4907">Магнітоли</attribute_set>
+    <category code="2866">Автомагнітоли</category>
+    <attribute_set code="2866">Автомагнітоли</attribute_set>
     <name lang="ua">Назва товару</name>
     <name lang="ru">Назва товару</name>
     <picture>https://example.com/img.jpg</picture>

@@ -1,0 +1,2192 @@
+[
+ {
+  "toptul_id": "73544215",
+  "toptul_name": "Зубила, пробойники, выколотки",
+  "goods": 56,
+  "rz_id": 2798757,
+  "rz_name": "Зубило, керн, пробійник",
+  "score": 0.65,
+  "runner_up": 0.455,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74166861",
+  "toptul_name": "Ключи разводные",
+  "goods": 32,
+  "rz_id": 4668883,
+  "rz_name": "Розвідні ключі",
+  "score": 0.552,
+  "runner_up": 0.529,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "25636739",
+  "toptul_name": "Наборы отверток",
+  "goods": 30,
+  "rz_id": 298224,
+  "rz_name": "Набори інструментів",
+  "score": 0.506,
+  "runner_up": 0.5,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73471890",
+  "toptul_name": "Монтировки, лопатки шиномонтажные",
+  "goods": 28,
+  "rz_id": 4643960,
+  "rz_name": "Шиномонтажні стенди",
+  "score": 0.468,
+  "runner_up": 0.106,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "25636743",
+  "toptul_name": "Плоскогубцы, пассатижи",
+  "goods": 27,
+  "rz_id": 4670017,
+  "rz_name": "Плоскогубці, щипці",
+  "score": 0.519,
+  "runner_up": 0.096,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73406348",
+  "toptul_name": "Ключи балонные",
+  "goods": 27,
+  "rz_id": 4668937,
+  "rz_name": "Балонні ключі",
+  "score": 0.578,
+  "runner_up": 0.506,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73494428",
+  "toptul_name": "Расходные материалы и аксессуары для споттера",
+  "goods": 24,
+  "rz_id": 85432,
+  "rz_name": "Ліхтарі й аксесуари",
+  "score": 0.429,
+  "runner_up": 0.411,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73546714",
+  "toptul_name": "Напильники, надфили",
+  "goods": 24,
+  "rz_id": 4669687,
+  "rz_name": "Напилки та рашпілі",
+  "score": 0.493,
+  "runner_up": 0.092,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73279290",
+  "toptul_name": "Шланги для пневмоинструмента резиновые",
+  "goods": 23,
+  "rz_id": 153657,
+  "rz_name": "Шланги",
+  "score": 0.66,
+  "runner_up": 0.458,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73542447",
+  "toptul_name": "Инструмент обжимной",
+  "goods": 22,
+  "rz_id": 298224,
+  "rz_name": "Набори інструментів",
+  "score": 0.537,
+  "runner_up": 0.527,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73081970",
+  "toptul_name": "Лопатки и подложки рихтовочные",
+  "goods": 22,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.09,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73406345",
+  "toptul_name": "Ключи шарнирные",
+  "goods": 22,
+  "rz_id": 4668877,
+  "rz_name": "Накидні ключі",
+  "score": 0.514,
+  "runner_up": 0.514,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587414",
+  "toptul_name": "Толщиномеры",
+  "goods": 22,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.114,
+  "runner_up": 0.097,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73271869",
+  "toptul_name": "Пневмопистолеты для подкачки колес",
+  "goods": 21,
+  "rz_id": 4673722,
+  "rz_name": "Пневмопістолети будівельні",
+  "score": 0.471,
+  "runner_up": 0.386,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587405",
+  "toptul_name": "Детекторы газа (газоанализаторы)",
+  "goods": 21,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.323,
+  "runner_up": 0.072,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73555732",
+  "toptul_name": "Стойка амортизатора",
+  "goods": 20,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.088,
+  "runner_up": 0.086,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73478924",
+  "toptul_name": "Пайка пластиковых деталей",
+  "goods": 20,
+  "rz_id": 4649526,
+  "rz_name": "Паяльники для пластикових труб",
+  "score": 0.376,
+  "runner_up": 0.093,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "88692933",
+  "toptul_name": "Динамометры",
+  "goods": 20,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.133,
+  "runner_up": 0.129,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040890",
+  "toptul_name": "Верстаки",
+  "goods": 19,
+  "rz_id": 154219,
+  "rz_name": "Точильні верстати",
+  "score": 0.762,
+  "runner_up": 0.75,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73546708",
+  "toptul_name": "Притирка клапанов",
+  "goods": 19,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.09,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73555582",
+  "toptul_name": "Обслуживание тормозных цилиндров",
+  "goods": 19,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.078,
+  "runner_up": 0.077,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73496391",
+  "toptul_name": "Лебедки, тали",
+  "goods": 19,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.112,
+  "runner_up": 0.097,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "95107540",
+  "toptul_name": "Уровни лазерные (нивелиры)",
+  "goods": 19,
+  "rz_id": 4672273,
+  "rz_name": "Рівні будівельні",
+  "score": 0.442,
+  "runner_up": 0.086,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73406363",
+  "toptul_name": "Ключи разрезные",
+  "goods": 18,
+  "rz_id": 4668943,
+  "rz_name": "Ключі розрізні",
+  "score": 0.552,
+  "runner_up": 0.524,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73548290",
+  "toptul_name": "Рассухариватели",
+  "goods": 18,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.091,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041353",
+  "toptul_name": "Оборудование для чистки форсунок",
+  "goods": 18,
+  "rz_id": 4654188,
+  "rz_name": "Рихтувальне обладнання",
+  "score": 0.467,
+  "runner_up": 0.425,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73470117",
+  "toptul_name": "Индукционный нагреватель",
+  "goods": 18,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.078,
+  "runner_up": 0.078,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73913195",
+  "toptul_name": "Съемники для кузовного ремонта",
+  "goods": 18,
+  "rz_id": 4668955,
+  "rz_name": "Знімачі",
+  "score": 0.688,
+  "runner_up": 0.082,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73270350",
+  "toptul_name": "Пневматические зубила, молотки",
+  "goods": 18,
+  "rz_id": 2798752,
+  "rz_name": "Молотки",
+  "score": 0.685,
+  "runner_up": 0.447,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73478915",
+  "toptul_name": "Пусковые и зарядные устройства для АКБ",
+  "goods": 18,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.093,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73848533",
+  "toptul_name": "Фиксаторы распредвала",
+  "goods": 18,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.09,
+  "runner_up": 0.09,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73365657",
+  "toptul_name": "Держатели бит",
+  "goods": 17,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.095,
+  "runner_up": 0.083,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73275671",
+  "toptul_name": "Пневмопистолеты продувочные, обдувочные",
+  "goods": 17,
+  "rz_id": 4673722,
+  "rz_name": "Пневмопістолети будівельні",
+  "score": 0.462,
+  "runner_up": 0.371,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73040275",
+  "toptul_name": "Лежаки автомастера",
+  "goods": 17,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.11,
+  "runner_up": 0.109,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041431",
+  "toptul_name": "Балансировочные станки",
+  "goods": 17,
+  "rz_id": 4643952,
+  "rz_name": "Балансувальні стенди",
+  "score": 0.543,
+  "runner_up": 0.498,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "25636723",
+  "toptul_name": "Головки свечные",
+  "goods": 16,
+  "rz_id": 4668931,
+  "rz_name": "Торцеві головки",
+  "score": 0.52,
+  "runner_up": 0.091,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73269779",
+  "toptul_name": "Комплектующие для шиномонтажного оборудования",
+  "goods": 16,
+  "rz_id": 4643960,
+  "rz_name": "Шиномонтажні стенди",
+  "score": 0.443,
+  "runner_up": 0.091,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73471204",
+  "toptul_name": "Оборудование для обслуживания автокондиционеров",
+  "goods": 16,
+  "rz_id": 1742727,
+  "rz_name": "Вантажопідіймальне обладнання",
+  "score": 0.447,
+  "runner_up": 0.445,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "86800589",
+  "toptul_name": "Дальномеры, рулетки лазерные",
+  "goods": 16,
+  "rz_id": 4672258,
+  "rz_name": "Рулетки",
+  "score": 0.682,
+  "runner_up": 0.083,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73557159",
+  "toptul_name": "Спецодежда",
+  "goods": 15,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.095,
+  "runner_up": 0.092,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73542162",
+  "toptul_name": "Заклепочники ручные",
+  "goods": 15,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.125,
+  "runner_up": 0.102,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73542318",
+  "toptul_name": "Стяжка пружин",
+  "goods": 15,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.093,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "25636724",
+  "toptul_name": "Головки для поврежденных гаек",
+  "goods": 14,
+  "rz_id": 4668931,
+  "rz_name": "Торцеві головки",
+  "score": 0.45,
+  "runner_up": 0.082,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73548256",
+  "toptul_name": "Ножи",
+  "goods": 14,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.145,
+  "runner_up": 0.094,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73271813",
+  "toptul_name": "Пневмотрещотки",
+  "goods": 14,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.133,
+  "runner_up": 0.129,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73555588",
+  "toptul_name": "Рулевая рейка",
+  "goods": 14,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.08,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73544721",
+  "toptul_name": "Инструмент для восстановления резьбы",
+  "goods": 14,
+  "rz_id": 4672243,
+  "rz_name": "Розмічувальний інструмент",
+  "score": 0.462,
+  "runner_up": 0.452,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74166875",
+  "toptul_name": "Дрели пневматические",
+  "goods": 14,
+  "rz_id": 4674549,
+  "rz_name": "Пневматичні багатофункціональні інструменти",
+  "score": 0.437,
+  "runner_up": 0.105,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73546156",
+  "toptul_name": "Ключи прокачки тормозов",
+  "goods": 13,
+  "rz_id": 4668913,
+  "rz_name": "Тріскачні ключі",
+  "score": 0.464,
+  "runner_up": 0.459,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73484361",
+  "toptul_name": "Прессы гидравлические",
+  "goods": 13,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.084,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73544848",
+  "toptul_name": "Развальцовки",
+  "goods": 13,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.114,
+  "runner_up": 0.097,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587404",
+  "toptul_name": "Влагомеры",
+  "goods": 13,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.126,
+  "runner_up": 0.105,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041434",
+  "toptul_name": "Подставки под авто",
+  "goods": 12,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.103,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73038765",
+  "toptul_name": "Пескоструйное оборудование",
+  "goods": 12,
+  "rz_id": 4654188,
+  "rz_name": "Рихтувальне обладнання",
+  "score": 0.504,
+  "runner_up": 0.478,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73406910",
+  "toptul_name": "Ключи свечные",
+  "goods": 12,
+  "rz_id": 4668949,
+  "rz_name": "Свічкові ключі",
+  "score": 0.533,
+  "runner_up": 0.529,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73040861",
+  "toptul_name": "Эндоскопы",
+  "goods": 12,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.09,
+  "runner_up": 0.086,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74017767",
+  "toptul_name": "Держатели для головок",
+  "goods": 12,
+  "rz_id": 4668931,
+  "rz_name": "Торцеві головки",
+  "score": 0.488,
+  "runner_up": 0.104,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587410",
+  "toptul_name": "Измерители уровня влажности и температуры (термогигрометры)",
+  "goods": 12,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.074,
+  "runner_up": 0.073,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "88692935",
+  "toptul_name": "Микрометры",
+  "goods": 12,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.126,
+  "runner_up": 0.122,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "129435852",
+  "toptul_name": "Oбcлуживaниe тopмoзныx cуппopтoв",
+  "goods": 12,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.063,
+  "runner_up": 0.062,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73541364",
+  "toptul_name": "Переносные лампы",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.084,
+  "runner_up": 0.083,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73474258",
+  "toptul_name": "Тестеры АКБ",
+  "goods": 11,
+  "rz_id": 4672208,
+  "rz_name": "Тестери кабельні",
+  "score": 0.533,
+  "runner_up": 0.438,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74008556",
+  "toptul_name": "Съемники сальников и подшипников",
+  "goods": 11,
+  "rz_id": 4668955,
+  "rz_name": "Знімачі",
+  "score": 0.678,
+  "runner_up": 0.094,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73275813",
+  "toptul_name": "Пневмопистолеты распылительные",
+  "goods": 11,
+  "rz_id": 4673722,
+  "rz_name": "Пневмопістолети будівельні",
+  "score": 0.5,
+  "runner_up": 0.462,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "25636741",
+  "toptul_name": "Головки на шуруповерт",
+  "goods": 11,
+  "rz_id": 3510520,
+  "rz_name": "Біти для шуруповерта",
+  "score": 0.541,
+  "runner_up": 0.521,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73040466",
+  "toptul_name": "Захваты рихтовочные",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.098,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73553882",
+  "toptul_name": "Инструменты для кузовного ремонта",
+  "goods": 11,
+  "rz_id": 4672243,
+  "rz_name": "Розмічувальний інструмент",
+  "score": 0.424,
+  "runner_up": 0.345,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73544812",
+  "toptul_name": "Труборезы",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.111,
+  "runner_up": 0.094,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73266309",
+  "toptul_name": "Подъемники для мотоциклов",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.095,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "25636722",
+  "toptul_name": "Болторезы, ножницы арматурные",
+  "goods": 11,
+  "rz_id": 4670041,
+  "rz_name": "Ножиці по металу",
+  "score": 0.44,
+  "runner_up": 0.285,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74060730",
+  "toptul_name": "Пылесос пневматический",
+  "goods": 11,
+  "rz_id": 4674549,
+  "rz_name": "Пневматичні багатофункціональні інструменти",
+  "score": 0.42,
+  "runner_up": 0.106,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587408",
+  "toptul_name": "Измерители уровня шума (шумомеры)",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.083,
+  "runner_up": 0.083,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "88692934",
+  "toptul_name": "Индикаторы",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.16,
+  "runner_up": 0.105,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "88692937",
+  "toptul_name": "Угломеры, линейки, малки",
+  "goods": 11,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.091,
+  "runner_up": 0.09,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73482640",
+  "toptul_name": "Установки для нагнетания масел и смазок",
+  "goods": 10,
+  "rz_id": 4644032,
+  "rz_name": "Установки для АКПП",
+  "score": 0.427,
+  "runner_up": 0.08,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73881136",
+  "toptul_name": "Магнитный инструмент",
+  "goods": 10,
+  "rz_id": 4672243,
+  "rz_name": "Розмічувальний інструмент",
+  "score": 0.542,
+  "runner_up": 0.533,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73040486",
+  "toptul_name": "Тестеры инжектора",
+  "goods": 10,
+  "rz_id": 4672208,
+  "rz_name": "Тестери кабельні",
+  "score": 0.497,
+  "runner_up": 0.435,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73495480",
+  "toptul_name": "Споттеры",
+  "goods": 10,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.105,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73037655",
+  "toptul_name": "Бачки для краскопультов",
+  "goods": 10,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.095,
+  "runner_up": 0.094,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74166869",
+  "toptul_name": "Клапаны, глушители",
+  "goods": 10,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587411",
+  "toptul_name": "Измерители сопротивления высокого напряжения (мегаомметры)",
+  "goods": 10,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.299,
+  "runner_up": 0.076,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73275833",
+  "toptul_name": "Регуляторы давления для пневмоинструмента",
+  "goods": 9,
+  "rz_id": 4673719,
+  "rz_name": "Набори пневмоінструментів",
+  "score": 0.466,
+  "runner_up": 0.096,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73543011",
+  "toptul_name": "Шрус",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.089,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73544871",
+  "toptul_name": "Экстракторы",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.095,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73542500",
+  "toptul_name": "Поршень",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73272022",
+  "toptul_name": "Пескоструйные пистолеты",
+  "goods": 9,
+  "rz_id": 4669033,
+  "rz_name": "Монтажні пістолети",
+  "score": 0.527,
+  "runner_up": 0.108,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73482737",
+  "toptul_name": "Масленки",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.133,
+  "runner_up": 0.111,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73484577",
+  "toptul_name": "Стойки трансмиссионные",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.088,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040482",
+  "toptul_name": "Стробоскопы",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.097,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73493989",
+  "toptul_name": "Полуавтоматы сварочные",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.088,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73541513",
+  "toptul_name": "Удлинители на катушке (переноски гаражные)",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.296,
+  "runner_up": 0.076,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "106013591",
+  "toptul_name": "Кабелерезы",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.16,
+  "runner_up": 0.126,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "91428413",
+  "toptul_name": "Нутромеры",
+  "goods": 9,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.118,
+  "runner_up": 0.111,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74017461",
+  "toptul_name": "Шпильковерты",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.109,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73548277",
+  "toptul_name": "Сверла",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.083,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74051458",
+  "toptul_name": "Система охлаждения",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.098,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73784558",
+  "toptul_name": "Съемники подшипников ступицы",
+  "goods": 8,
+  "rz_id": 4668955,
+  "rz_name": "Знімачі",
+  "score": 0.682,
+  "runner_up": 0.098,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73275920",
+  "toptul_name": "Заклепочники пневматические",
+  "goods": 8,
+  "rz_id": 4674549,
+  "rz_name": "Пневматичні багатофункціональні інструменти",
+  "score": 0.453,
+  "runner_up": 0.108,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73556541",
+  "toptul_name": "Индикаторы напряжения",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.116,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587409",
+  "toptul_name": "Измерители уровня освещенности (люксметры)",
+  "goods": 8,
+  "rz_id": 4672228,
+  "rz_name": "Люксметри",
+  "score": 0.648,
+  "runner_up": 0.09,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74166870",
+  "toptul_name": "Инструмент для пайки",
+  "goods": 8,
+  "rz_id": 298224,
+  "rz_name": "Набори інструментів",
+  "score": 0.549,
+  "runner_up": 0.527,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "109568026",
+  "toptul_name": "Измерители кислотности",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.102,
+  "runner_up": 0.092,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "131263208",
+  "toptul_name": "Накладки резиновые для домкратов",
+  "goods": 8,
+  "rz_id": 329355,
+  "rz_name": "Домкрати",
+  "score": 0.689,
+  "runner_up": 0.084,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "133071305",
+  "toptul_name": "Oбжимныe пpeccы для РВД",
+  "goods": 8,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.067,
+  "runner_up": 0.06,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73493596",
+  "toptul_name": "Инфракрасные сушки",
+  "goods": 7,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041415",
+  "toptul_name": "Траверсы, домкраты канавные",
+  "goods": 7,
+  "rz_id": 329355,
+  "rz_name": "Домкрати",
+  "score": 0.694,
+  "runner_up": 0.682,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73553196",
+  "toptul_name": "Уровни строительные",
+  "goods": 7,
+  "rz_id": 4672273,
+  "rz_name": "Рівні будівельні",
+  "score": 0.459,
+  "runner_up": 0.097,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73404642",
+  "toptul_name": "Отвертки-битодержатели",
+  "goods": 7,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.091,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73272019",
+  "toptul_name": "Пневмопистолеты для штукатурки",
+  "goods": 7,
+  "rz_id": 4673722,
+  "rz_name": "Пневмопістолети будівельні",
+  "score": 0.508,
+  "runner_up": 0.471,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73544819",
+  "toptul_name": "Гайкорезы",
+  "goods": 7,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.126,
+  "runner_up": 0.096,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74063064",
+  "toptul_name": "Щетки по металлу",
+  "goods": 7,
+  "rz_id": 4670041,
+  "rz_name": "Ножиці по металу",
+  "score": 0.523,
+  "runner_up": 0.1,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "85470316",
+  "toptul_name": "Линейки строительные",
+  "goods": 7,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.103,
+  "runner_up": 0.097,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "90958594",
+  "toptul_name": "Смазки технические",
+  "goods": 7,
+  "rz_id": 4659561,
+  "rz_name": "Оливи та мастила автомобільні",
+  "score": 0.439,
+  "runner_up": 0.105,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73848555",
+  "toptul_name": "Шкалы доворотные",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.104,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73552687",
+  "toptul_name": "Провода прикуривания",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73557174",
+  "toptul_name": "Редуктор усилитель",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.09,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73407152",
+  "toptul_name": "Ключи роторные (мясорубка)",
+  "goods": 6,
+  "rz_id": 4668895,
+  "rz_name": "Торцеві ключі",
+  "score": 0.458,
+  "runner_up": 0.455,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73899862",
+  "toptul_name": "Резьбомеры, щупы",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.086,
+  "runner_up": 0.086,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73541306",
+  "toptul_name": "Заклепочники электрические",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.103,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73875618",
+  "toptul_name": "Рекламная продукция",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.088,
+  "runner_up": 0.084,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73983995",
+  "toptul_name": "Трубопровод",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "85474600",
+  "toptul_name": "Инструменты для ремонта шин",
+  "goods": 6,
+  "rz_id": 4672243,
+  "rz_name": "Розмічувальний інструмент",
+  "score": 0.433,
+  "runner_up": 0.356,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "115710529",
+  "toptul_name": "Hacaдки для чиcтки cтупицы",
+  "goods": 6,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.078,
+  "runner_up": 0.07,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040283",
+  "toptul_name": "Стенды для ремонта двигателя",
+  "goods": 5,
+  "rz_id": 4643960,
+  "rz_name": "Шиномонтажні стенди",
+  "score": 0.438,
+  "runner_up": 0.43,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73482727",
+  "toptul_name": "Насосы масляные для бочек",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.345,
+  "runner_up": 0.309,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74166862",
+  "toptul_name": "Ключи серповидные",
+  "goods": 5,
+  "rz_id": 4668883,
+  "rz_name": "Розвідні ключі",
+  "score": 0.542,
+  "runner_up": 0.52,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73541262",
+  "toptul_name": "Шуруповерт аккумуляторный",
+  "goods": 5,
+  "rz_id": 3510520,
+  "rz_name": "Біти для шуруповерта",
+  "score": 0.517,
+  "runner_up": 0.114,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73881351",
+  "toptul_name": "Зеркало",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.1,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040281",
+  "toptul_name": "Стулья автомастера",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.133,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041439",
+  "toptul_name": "Дископравильные станки",
+  "goods": 5,
+  "rz_id": 4643952,
+  "rz_name": "Балансувальні стенди",
+  "score": 0.514,
+  "runner_up": 0.48,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74017484",
+  "toptul_name": "Пинцеты",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.075,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73471108",
+  "toptul_name": "Роклы гидравлические",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.086,
+  "runner_up": 0.078,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587403",
+  "toptul_name": "Виброметры",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.126,
+  "runner_up": 0.104,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74166871",
+  "toptul_name": "Тепловизоры",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.086,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73474269",
+  "toptul_name": "Оборудование для обслуживания АКПП",
+  "goods": 5,
+  "rz_id": 4654188,
+  "rz_name": "Рихтувальне обладнання",
+  "score": 0.47,
+  "runner_up": 0.441,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "118409593",
+  "toptul_name": "Измepитeли пpoтeктopa и диcкa",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.064,
+  "runner_up": 0.06,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587401",
+  "toptul_name": "Весы ручные цифровые, кантеры",
+  "goods": 5,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.068,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150575804",
+  "toptul_name": "Подъемники колес",
+  "goods": 5,
+  "rz_id": 4654174,
+  "rz_name": "Пристрої проти ковзання коліс",
+  "score": 0.405,
+  "runner_up": 0.108,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "150577107",
+  "toptul_name": "Аксессуары к стендам развал схождение",
+  "goods": 5,
+  "rz_id": 85432,
+  "rz_name": "Ліхтарі й аксесуари",
+  "score": 0.411,
+  "runner_up": 0.318,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73272026",
+  "toptul_name": "Наборы покрасочные",
+  "goods": 4,
+  "rz_id": 4673719,
+  "rz_name": "Набори пневмоінструментів",
+  "score": 0.502,
+  "runner_up": 0.497,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73469525",
+  "toptul_name": "Приборы для проверки свечей",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.086,
+  "runner_up": 0.084,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74060183",
+  "toptul_name": "Крюки",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.123,
+  "runner_up": 0.12,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73806393",
+  "toptul_name": "Сцепление",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.104,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73041438",
+  "toptul_name": "Борторасширители",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.096,
+  "runner_up": 0.083,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73496319",
+  "toptul_name": "Упоры, башмаки",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.097,
+  "runner_up": 0.093,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "141510175",
+  "toptul_name": "Чехлы и накидки для автомобиля",
+  "goods": 4,
+  "rz_id": 4645872,
+  "rz_name": "Чохли для автомобіля",
+  "score": 0.48,
+  "runner_up": 0.471,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73498290",
+  "toptul_name": "Бустер",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.114,
+  "runner_up": 0.096,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "71512023",
+  "toptul_name": "Пневмоножницы",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.122,
+  "runner_up": 0.11,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73266245",
+  "toptul_name": "Запчасти для автоподъемников",
+  "goods": 4,
+  "rz_id": 4650231,
+  "rz_name": "Запчастини для шліфмашин",
+  "score": 0.473,
+  "runner_up": 0.47,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "85499223",
+  "toptul_name": "Тестеры герметичности",
+  "goods": 4,
+  "rz_id": 4672208,
+  "rz_name": "Тестери кабельні",
+  "score": 0.497,
+  "runner_up": 0.428,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587417",
+  "toptul_name": "Энергометр",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.14,
+  "runner_up": 0.126,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "84587413",
+  "toptul_name": "Тестеры электромагнитного излучения",
+  "goods": 4,
+  "rz_id": 4672208,
+  "rz_name": "Тестери кабельні",
+  "score": 0.428,
+  "runner_up": 0.334,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74166883",
+  "toptul_name": "Ванны и тележки для колес",
+  "goods": 4,
+  "rz_id": 4633073,
+  "rz_name": "Складські візки",
+  "score": 0.462,
+  "runner_up": 0.329,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "103397949",
+  "toptul_name": "Стенды для развала-схождения",
+  "goods": 4,
+  "rz_id": 4644000,
+  "rz_name": "Стенди розвал-сходження",
+  "score": 0.562,
+  "runner_up": 0.5,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "113810223",
+  "toptul_name": "Повербанки",
+  "goods": 4,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.105,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73468940",
+  "toptul_name": "Станки для проточки тормозных дисков",
+  "goods": 3,
+  "rz_id": 4643960,
+  "rz_name": "Шиномонтажні стенди",
+  "score": 0.411,
+  "runner_up": 0.398,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73486361",
+  "toptul_name": "Гидроцилиндры",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.089,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73471701",
+  "toptul_name": "Напильник пневматический",
+  "goods": 3,
+  "rz_id": 4674549,
+  "rz_name": "Пневматичні багатофункціональні інструменти",
+  "score": 0.455,
+  "runner_up": 0.1,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73485275",
+  "toptul_name": "Растяжки гидравлические для правки кузова",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.081,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73485039",
+  "toptul_name": "Насосы гидравлические",
+  "goods": 3,
+  "rz_id": 4670466,
+  "rz_name": "Гідравлічні насоси та комплектуючі",
+  "score": 0.465,
+  "runner_up": 0.392,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73040480",
+  "toptul_name": "Тестеры давления масла",
+  "goods": 3,
+  "rz_id": 4659589,
+  "rz_name": "Гідравлічні оливи",
+  "score": 0.463,
+  "runner_up": 0.455,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73545539",
+  "toptul_name": "Пистолеты для герметика",
+  "goods": 3,
+  "rz_id": 4669033,
+  "rz_name": "Монтажні пістолети",
+  "score": 0.541,
+  "runner_up": 0.104,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74063038",
+  "toptul_name": "Стетоскопы",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.111,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73479021",
+  "toptul_name": "Ломы",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.086,
+  "runner_up": 0.086,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73496328",
+  "toptul_name": "Установки для мойки деталей",
+  "goods": 3,
+  "rz_id": 4644032,
+  "rz_name": "Установки для АКПП",
+  "score": 0.48,
+  "runner_up": 0.097,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73556528",
+  "toptul_name": "Инструмент для электрооборудования",
+  "goods": 3,
+  "rz_id": 4672243,
+  "rz_name": "Розмічувальний інструмент",
+  "score": 0.531,
+  "runner_up": 0.522,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73471009",
+  "toptul_name": "Стапели для рихтовки кузова",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.09,
+  "runner_up": 0.089,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73484585",
+  "toptul_name": "Трубогибы",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.156,
+  "runner_up": 0.111,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74166876",
+  "toptul_name": "Детекторы скрытой проводки",
+  "goods": 3,
+  "rz_id": 4672233,
+  "rz_name": "Детектори напруги та фазометри",
+  "score": 0.372,
+  "runner_up": 0.09,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "150659097",
+  "toptul_name": "Стенды ADAS",
+  "goods": 3,
+  "rz_id": 4643952,
+  "rz_name": "Балансувальні стенди",
+  "score": 0.477,
+  "runner_up": 0.471,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "127805245",
+  "toptul_name": "Инклинометры",
+  "goods": 3,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.109,
+  "runner_up": 0.096,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150636928",
+  "toptul_name": "Стенды для генераторов и стартеров",
+  "goods": 3,
+  "rz_id": 4654139,
+  "rz_name": "Стартові дроти",
+  "score": 0.445,
+  "runner_up": 0.417,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73484565",
+  "toptul_name": "Краны подкатные",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.089,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040473",
+  "toptul_name": "Тележки под колесо",
+  "goods": 2,
+  "rz_id": 4633073,
+  "rz_name": "Складські візки",
+  "score": 0.466,
+  "runner_up": 0.089,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73470128",
+  "toptul_name": "Прибор для регулировки фар",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.092,
+  "runner_up": 0.088,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74161733",
+  "toptul_name": "Ультразвуковые ванны",
+  "goods": 2,
+  "rz_id": 4644088,
+  "rz_name": "Ультразвукові ванни",
+  "score": 0.574,
+  "runner_up": 0.078,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "74017479",
+  "toptul_name": "Присоски для стекол",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.097,
+  "runner_up": 0.096,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150578344",
+  "toptul_name": "Обслуживание посадочных мест",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73040468",
+  "toptul_name": "Молотки обратные для рихтовки",
+  "goods": 2,
+  "rz_id": 2798752,
+  "rz_name": "Молотки",
+  "score": 0.688,
+  "runner_up": 0.418,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73556563",
+  "toptul_name": "Нагрузочные вилки",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.091,
+  "runner_up": 0.082,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73485073",
+  "toptul_name": "Стяжки пружин гидравлические",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.077,
+  "runner_up": 0.074,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73478988",
+  "toptul_name": "Специнструмент",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.133,
+  "runner_up": 0.121,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73478077",
+  "toptul_name": "Вакуумметры",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.114,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "141539963",
+  "toptul_name": "Реноваторы пневматические",
+  "goods": 2,
+  "rz_id": 4674549,
+  "rz_name": "Пневматичні багатофункціональні інструменти",
+  "score": 0.448,
+  "runner_up": 0.091,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587416",
+  "toptul_name": "Тестеры поверхностного сопротивления",
+  "goods": 2,
+  "rz_id": 4672208,
+  "rz_name": "Тестери кабельні",
+  "score": 0.419,
+  "runner_up": 0.339,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "84587415",
+  "toptul_name": "Тахометры",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.126,
+  "runner_up": 0.111,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "88692936",
+  "toptul_name": "Твердомеры",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.105,
+  "runner_up": 0.1,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "74166868",
+  "toptul_name": "Масло компрессорное",
+  "goods": 2,
+  "rz_id": 4659624,
+  "rz_name": "Компресорні оливи",
+  "score": 0.533,
+  "runner_up": 0.113,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "113810715",
+  "toptul_name": "Солнечные панели",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.095,
+  "runner_up": 0.085,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "122111294",
+  "toptul_name": "Измepитeли paдиaции",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.067,
+  "runner_up": 0.065,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "147770996",
+  "toptul_name": "Приборы для нарезки протектора (регруверы)",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.089,
+  "runner_up": 0.076,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150578552",
+  "toptul_name": "Разжиматели фланцев",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.078,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "123270475",
+  "toptul_name": "Плазморезы",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.095,
+  "runner_up": 0.087,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "145800517",
+  "toptul_name": "Лестницы, стремянки",
+  "goods": 2,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.097,
+  "runner_up": 0.095,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150638517",
+  "toptul_name": "Инструмент для снятия стопорных гаек",
+  "goods": 2,
+  "rz_id": 298224,
+  "rz_name": "Набори інструментів",
+  "score": 0.443,
+  "runner_up": 0.433,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73541177",
+  "toptul_name": "Шуруповерт пневматический",
+  "goods": 1,
+  "rz_id": 3510520,
+  "rz_name": "Біти для шуруповерта",
+  "score": 0.533,
+  "runner_up": 0.441,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73545214",
+  "toptul_name": "Пеногенератор",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.097,
+  "runner_up": 0.092,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "73471712",
+  "toptul_name": "Пневмопистолеты для смазки и силикона",
+  "goods": 1,
+  "rz_id": 4673722,
+  "rz_name": "Пневмопістолети будівельні",
+  "score": 0.46,
+  "runner_up": 0.395,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73498285",
+  "toptul_name": "Стол гидравлический",
+  "goods": 1,
+  "rz_id": 4644568,
+  "rz_name": "Підіймальні столи",
+  "score": 0.489,
+  "runner_up": 0.415,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "85473984",
+  "toptul_name": "Стенд для покраски",
+  "goods": 1,
+  "rz_id": 4644000,
+  "rz_name": "Стенди розвал-сходження",
+  "score": 0.497,
+  "runner_up": 0.494,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "73555577",
+  "toptul_name": "Ходовая группа",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.08,
+  "runner_up": 0.077,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "113516334",
+  "toptul_name": "Сварочные столы",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.088,
+  "runner_up": 0.085,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "120207889",
+  "toptul_name": "Apeoмeтpы для AKБ",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.055,
+  "runner_up": 0.053,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "120208832",
+  "toptul_name": "Пoвepoчныe линeйки",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.08,
+  "runner_up": 0.078,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "122728005",
+  "toptul_name": "Измepитeли тoлщины тopмoзoв",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.067,
+  "runner_up": 0.061,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "122725239",
+  "toptul_name": "Kлючи для cepвиcныx шкaфoв",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.069,
+  "runner_up": 0.067,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "122725075",
+  "toptul_name": "Cъeмники пoпepeчнoгo pычaгa пoдвecки",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.064,
+  "runner_up": 0.062,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "129473546",
+  "toptul_name": "Чертилки",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.107,
+  "runner_up": 0.107,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "131264087",
+  "toptul_name": "Haпoльнoe пoкpытиe",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.08,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150578359",
+  "toptul_name": "Регулировка фаз",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.08,
+  "runner_up": 0.08,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "150579407",
+  "toptul_name": "Съёмники рулевого колеса",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.082,
+  "runner_up": 0.082,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "141137789",
+  "toptul_name": "Круглогубцы для снятия стопорных колец (разжим загнутые)",
+  "goods": 1,
+  "rz_id": 4660209,
+  "rz_name": "Круглогубці",
+  "score": 0.621,
+  "runner_up": 0.075,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "141137782",
+  "toptul_name": "Круглогубцы для снятия стопорных колец (сжим прямые)",
+  "goods": 1,
+  "rz_id": 4660209,
+  "rz_name": "Круглогубці",
+  "score": 0.626,
+  "runner_up": 0.071,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "141137780",
+  "toptul_name": "Круглогубцы для снятия стопорных колец (разжим прямые)",
+  "goods": 1,
+  "rz_id": 4660209,
+  "rz_name": "Круглогубці",
+  "score": 0.623,
+  "runner_up": 0.074,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "144965856",
+  "toptul_name": "Эндоскопы технические, видеобороскопы",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.083,
+  "runner_up": 0.07,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "147142712",
+  "toptul_name": "Съемники катушек зажигания",
+  "goods": 1,
+  "rz_id": 4668955,
+  "rz_name": "Знімачі",
+  "score": 0.688,
+  "runner_up": 0.096,
+  "tier": "review"
+ },
+ {
+  "toptul_id": "122117496",
+  "toptul_name": "Бaлaнcиpы (эквaлaйзepы) AKБ",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.059,
+  "runner_up": 0.052,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "122112526",
+  "toptul_name": "Tecтepы гepмeтичнocти AKБ",
+  "goods": 1,
+  "rz_id": null,
+  "rz_name": null,
+  "score": 0.059,
+  "runner_up": 0.056,
+  "tier": "none"
+ },
+ {
+  "toptul_id": "153427780",
+  "toptul_name": "Люфт детекторы подвески",
+  "goods": 1,
+  "rz_id": 4672233,
+  "rz_name": "Детектори напруги та фазометри",
+  "score": 0.363,
+  "runner_up": 0.095,
+  "tier": "review"
+ }
+]
