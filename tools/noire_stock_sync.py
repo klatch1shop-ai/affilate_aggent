@@ -459,6 +459,25 @@ def regenerate_prom_feed() -> dict:
                          f'{(r.stderr or "")[-300:]}')
             return res
 
+        # Постобробка: одиниці виміру, характеристики, назви, описи, ключі.
+        # Стоїть саме тут — після генерації, але ДО перевірок нижче. Тому якщо
+        # вона зіпсує фід (назви понад 110, порожні поля), це зловить чинна
+        # валідація і публікація не відбудеться.
+        # Помилка самої постобробки не блокує випуск: краще опублікувати
+        # коректний фід без покращень, ніж не опублікувати нічого.
+        try:
+            pp = subprocess.run(
+                [py, os.path.join(BASE_DIR, 'tools', 'prom_postprocess.py'),
+                 '--src', tmp, '--out', tmp],
+                capture_output=True, text=True, timeout=1800)
+            if pp.returncode == 0:
+                logger.info('Постобробка Prom виконана')
+            else:
+                logger.error('Постобробка Prom не вдалась, публікуємо як є: '
+                             f'{(pp.stderr or "")[-300:]}')
+        except Exception as e:
+            logger.error(f'Постобробка Prom впала ({e}), публікуємо як є')
+
         root = ET.parse(tmp).getroot()
         offers = root.findall('.//offer')
         res['offers'] = len(offers)

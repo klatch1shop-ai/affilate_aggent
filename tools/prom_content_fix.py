@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+"""
+tools/prom_content_fix.py
+==========================
+Кроки 3–4: назви, описи, пошукові ключі. Працює на копії фіду.
+
+НАЗВА
+  * тип товару виносимо на початок — він має бути раніше за бренд і модель;
+  * ключову характеристику (діаметр, матеріал) вставляємо в перші 70 символів,
+    але **лише якщо загальна довжина лишається ≤110**. Назва понад ліміт гірша
+    за назву без характеристики.
+
+ОПИС
+  * кириличний бренд додаємо в перший абзац. Prom **не склеює** `rocks off` і
+    `рокс оф` — це різні запити, а кирилицею шукають 30–40 % користувачів.
+    Місце саме тут, а не в назві: перші 70 символів назви працюють на CTR, і
+    транслітерація там зрізала б корисні слова;
+  * блок <ul><li> з параметрами — Prom краще індексує структурований HTML;
+  * **не ріжемо** довгі описи. Верхня межа 2000 у чек-лістах є застереженням
+    проти SEO-спаму, а не проти змістовного тексту: жорсткий ліміт поля Prom
+    50 000 символів, а текст на 2100–3400 цілком безпечний і підвищує конверсію.
+
+    python3 tools/prom_content_fix.py --plan
+    python3 tools/prom_content_fix.py --write output/noire_prom_step4.xml
+"""
+import os, re, sys, argparse, collections
+import xml.etree.ElementTree as ET
+
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, BASE); sys.path.insert(0, os.path.join(BASE, 'tools'))
+os.environ.setdefault('PROM_FEED', os.path.join(BASE, 'output', 'noire_prom_step2.xml'))
+import prom_kw_matrix as M
+
+SRC = os.environ.get('STEP_SRC') or os.path.join(BASE, 'output', 'noire_prom_step2.xml')
+CATEGORY = 'Анальні пробки'
+NAME_MAX, NAME_VISIBLE = 110, 70
+UNIT_LABEL = {'мм': 'мм', 'г': 'г', 'мл': 'мл'}
+
+
+def txt(o, tag):
+    e = o.find(tag)
+    return (e.text or '').strip() if e is not None else ''
+
+
+def type_first(name, type_stem):
+    """Тип товару має відкривати назву. «Силіконова анальна пробка Nexus» уже
+    коректна; «Nexus ACE анальна пробка» — ні."""
+    words = name.split()
+    idx = next((i for i, w in enumerate(words) if type_stem in w.lower()), -1)
+    if idx <= 0 or idx > 4:
+        return name, False
+    # тип уже в перших словах, але перед ним стоїть бренд/модель латиницею
+    if not re.match(r'^[A-Za-z]', words[0]):
+        return name, False
+    head = words[idx - 1:] if idx and not re.match(r'^[A-Za-z]', words[idx - 1]) else words[idx:]
+    tail = [w for w in words if w not in head]
+    return ' '.join(head + tail), True
+
+
+def pull_key_clause(name):
+    """Переставляє клаузу з діаметром одразу після головної частини назви.
+
+    Назви тут змістовні: за 70-м символом стоїть корисна деталь, а не
+    маркетинг, тому різати їх не можна — обрізана назва втрачає інформацію,
+    а хвіст усе одно індексується. Але покупець бачить лише перші 70
+    символів, тож найважливіше — діаметр — має потрапити туди. Довжина при
+    перестановці не змінюється.
+    """
+    # Кома в «діаметр 2,6 см» — десятковий роздільник, а не межа клаузи.
+    # Наївний split(',') розривав саме ту клаузу, яку ми переставляємо.
+    parts = [x.strip() for x in re.split(r',(?!\s*\d)', name)]
+    if len(parts) < 3:
+        return name, False
+    idx = next((i for i, x in enumerate(parts)
+                if i and re.search(r'діаметр', x, re.I)), -1)
+    if idx <= 1:
+        return name, False
+    parts.insert(1, parts.pop(idx))
+    out = ', '.join(parts)
+    return (out, True) if out != name else (name, False)
+
+
+def key_attr_phrase(prm):
+    d = prm.get('Діаметр')
+    if d and d.isdigit():
+        v = int(d) / 10
+        return f'діаметр {v:g} см'.replace('.', ',')  # укр. десятковий роздільник
+    mat = (prm.get('Матеріал') or '').split('|')[0].strip().lower()
+    return mat or ''
+
+
+def add_cyr_brand(html, vendor, cyr):
+    """Кирилицю ставимо поруч із першою згадкою бренду латиницею."""
+    if not cyr or cyr.lower() in html.lower():
+        return html, False
+    mo = re.search(re.escape(vendor), html, re.I)
+    if mo:
+        return html[:mo.end()] + f' ({cyr})' + html[mo.end():], True
+    return f'<p>Бренд {vendor} ({cyr}).</p>' + html, True
+
+
+def add_list(html, prm):
+    if '<li' in html or '<ul' in html:
+        return html, False
+    order = ['Тип товару', 'Форма', 'Матеріал', 'Діаметр', 'Довжина', 'Вага',
+             'Колір', 'Водонепроникний', 'Країна-виробник']
+    items = []
+    for k in order:
+        v = (prm.get(k) or '').strip()
+        if not v:
+            continue
+        if k in ('Діаметр', 'Довжина') and v.isdigit():
+            v = f'{int(v)/10:g} см'.replace('.', ',')
+        elif k == 'Вага' and v.isdigit():
+            v = f'{v} г'
+        items.append(f'<li><b>{k}:</b> {v}</li>')
+    if len(items) < 3:
+        return html, False
+    return html + '<ul>' + ''.join(items) + '</ul>', True
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--plan', action='store_true')
+    ap.add_argument('--write')
+    a = ap.parse_args()
+
+    tree = ET.parse(SRC); root = tree.getroot()
+    cats = {c.get('id'): (c.text or '') for c in root.findall('.//category')}
+    rows = [o for o in root.findall('.//offer')
+            if cats.get(txt(o, 'categoryId'), '').strip() == CATEGORY]
+    cw = re.findall(r'[а-яіїєґ]{4,}', CATEGORY.lower())
+    type_stem = cw[-1][:5] if cw else ''
+
+    did = collections.Counter(); skip = collections.Counter(); shown = []
+    for o in rows:
+        name = txt(o, 'name_ua'); vendor = M.real_vendor(txt(o, 'vendor'))
+        cyr = M.brand_cyr(vendor, 'ua')
+        prm = {p.get('name'): (p.text or '').strip() for p in o.findall('param')}
+        before = name
+
+        new, moved = type_first(name, type_stem)
+        if moved:
+            name = new; did['тип товару винесено на початок'] += 1
+        if len(name) > NAME_VISIBLE:
+            new, pulled = pull_key_clause(name)
+            if pulled:
+                name = new; did['діаметр переставлено в перші 70 символів'] += 1
+
+        # Характеристику ДОПИСУЄМО В КІНЕЦЬ, а не вставляємо всередину: спроба
+        # втиснути її в перші 70 символів рвала фрази — «з ерекційним,
+        # діаметр 5,5 см кільцем». І перевіряємо всю назву, а не перші 70:
+        # якщо діаметр уже є після 70-го символу, дописувати його вдруге
+        # означає зіпсувати назву, а не покращити.
+        ph = key_attr_phrase(prm)
+        low = name.lower()
+        has = bool(ph) and (ph.split()[0][:6] in low or ph.split()[-2:][0] in low)
+        if ph and not has and len(name) + len(ph) + 2 <= NAME_MAX:
+            name = f'{name}, {ph}'
+            did['ключову характеристику дописано в назву'] += 1
+        elif ph and not has:
+            skip['назва вже задовга для характеристики'] += 1
+        elif ph and ph.split()[0][:6] not in name[:NAME_VISIBLE].lower():
+            skip['характеристика є, але після 70-го символу — треба скорочувати'] += 1
+
+        if name != before:
+            if a.write:
+                o.find('name_ua').text = name
+            if len(shown) < 6:
+                shown.append(f'  БУЛО : {before[:96]}\n  СТАЛО: {name[:96]}')
+
+        de = o.find('description_ua')
+        if de is not None:
+            html = de.text or ''
+            plain = re.sub(r'<[^>]+>', ' ', html)
+            if vendor and vendor.lower() not in plain[:300].lower():
+                # бренд стоїть десь глибоко в тексті — виносимо на початок
+                html = (f'<p><b>{name.split(",")[0]}</b> від бренду {vendor}'
+                        + (f' ({cyr})' if cyr else '') + '.</p>' + html)
+                did['бренд винесено в перший абзац опису'] += 1
+            html, c1 = add_cyr_brand(html, vendor, cyr)
+            if c1:
+                did['кириличний бренд додано в опис'] += 1
+            html, c2 = add_list(html, prm)
+            if c2:
+                did['список <ul><li> додано'] += 1
+            if a.write and (c1 or c2):
+                de.text = html
+
+        kw = M.build(name, txt(o, 'vendor'), CATEGORY, prm,
+                     re.sub(r'<[^>]+>', ' ', txt(o, 'description_ua')))
+        did[f'ключів: {len(kw)}'] += 0
+        if len(kw) < 6:
+            skip[f'ключів усе ще мало ({len(kw)})'] += 1
+        if a.write:
+            ke = o.find('keywords_ua')
+            if ke is None:
+                ke = ET.SubElement(o, 'keywords_ua')
+            ke.text = ', '.join(kw)
+
+    print(f'категорія «{CATEGORY}»: {len(rows)} товарів\n')
+    for k, v in did.most_common():
+        if v:
+            print(f'  {v:5}  {k}')
+    if skip:
+        print('\nне вдалось:')
+        for k, v in skip.most_common(6):
+            print(f'  {v:5}  {k}')
+    if shown:
+        print('\nПРИКЛАДИ НАЗВ:')
+        for x in shown:
+            print(x)
+    if a.write:
+        tree.write(a.write, encoding='utf-8', xml_declaration=True)
+        print(f'\nкопію збережено: {a.write}')
+
+
+if __name__ == '__main__':
+    main()
