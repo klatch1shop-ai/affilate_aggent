@@ -32,7 +32,18 @@ os.environ.setdefault('PROM_FEED', os.path.join(BASE, 'output', 'noire_prom_step
 import prom_kw_matrix as M
 
 SRC = os.environ.get('STEP_SRC') or os.path.join(BASE, 'output', 'noire_prom_step2.xml')
-CATEGORY = 'Анальні пробки'
+# Категорії, які проходять постобробку. Розширюється в міру того, як кожна
+# наступна проходить аудит і перевірку очима: додавати всі одразу означало б
+# застосувати неперевірені правила до всього каталогу.
+CATEGORIES = [c.strip() for c in os.environ.get(
+    'PROM_CATEGORIES', 'ALL').split(',') if c.strip()]
+
+# Правки НАЗВ вмикаються окремо і лише для категорій, які вже переглянуті.
+# Причина в ціні помилки: опис і ключі можна перегенерувати наступного разу,
+# а назва — це те, що покупець бачить у видачі, і масова зміна 3000 назв
+# одним рухом без перевірки кожної категорії надто ризикована.
+NAME_CATEGORIES = [c.strip() for c in os.environ.get(
+    'PROM_NAME_CATEGORIES', 'Анальні пробки, Вібратори').split(',') if c.strip()]
 NAME_MAX, NAME_VISIBLE = 110, 70
 UNIT_LABEL = {'мм': 'мм', 'г': 'г', 'мл': 'мл'}
 
@@ -114,8 +125,15 @@ def add_list(html, prm):
         elif k == 'Вага' and v.isdigit():
             v = f'{v} г'
         items.append(f'<li><b>{k}:</b> {v}</li>')
-    if len(items) < 3:
+    # Менше трьох пунктів — списку не робимо: два рядки виглядають бідніше за
+    # текст і створюють відчуття недописаної картки. Але й у суцільному абзаці
+    # технічні деталі погано зчитуються і роботом, і оком. Тому для 1–2 фактів
+    # використовуємо абзаци з жирним початком (inline-bolding).
+    if not items:
         return html, False
+    if len(items) < 3:
+        plain = ''.join(f'<p>{re.sub(r"</?li>", "", it)}</p>' for it in items)
+        return html + plain, True
     return html + '<ul>' + ''.join(items) + '</ul>', True
 
 
@@ -128,21 +146,24 @@ def main():
     tree = ET.parse(SRC); root = tree.getroot()
     cats = {c.get('id'): (c.text or '') for c in root.findall('.//category')}
     rows = [o for o in root.findall('.//offer')
-            if cats.get(txt(o, 'categoryId'), '').strip() == CATEGORY]
-    cw = re.findall(r'[а-яіїєґ]{4,}', CATEGORY.lower())
+            if 'ALL' in CATEGORIES
+            or cats.get(txt(o, 'categoryId'), '').strip() in {c.strip() for c in CATEGORIES}]
+    cw = re.findall(r'[а-яіїєґ]{4,}', ' '.join(CATEGORIES).lower())
     type_stem = cw[-1][:5] if cw else ''
 
     did = collections.Counter(); skip = collections.Counter(); shown = []
     for o in rows:
         name = txt(o, 'name_ua'); vendor = M.real_vendor(txt(o, 'vendor'))
+        cat_now = cats.get(txt(o, 'categoryId'), '').strip()
+        may_rename = cat_now in {c.strip() for c in NAME_CATEGORIES}
         cyr = M.brand_cyr(vendor, 'ua')
         prm = {p.get('name'): (p.text or '').strip() for p in o.findall('param')}
         before = name
 
-        new, moved = type_first(name, type_stem)
+        new, moved = (type_first(name, type_stem) if may_rename else (name, False))
         if moved:
             name = new; did['тип товару винесено на початок'] += 1
-        if len(name) > NAME_VISIBLE:
+        if may_rename and len(name) > NAME_VISIBLE:
             new, pulled = pull_key_clause(name)
             if pulled:
                 name = new; did['діаметр переставлено в перші 70 символів'] += 1
@@ -152,7 +173,7 @@ def main():
         # діаметр 5,5 см кільцем». І перевіряємо всю назву, а не перші 70:
         # якщо діаметр уже є після 70-го символу, дописувати його вдруге
         # означає зіпсувати назву, а не покращити.
-        ph = key_attr_phrase(prm)
+        ph = key_attr_phrase(prm) if may_rename else ''
         low = name.lower()
         has = bool(ph) and (ph.split()[0][:6] in low or ph.split()[-2:][0] in low)
         if ph and not has and len(name) + len(ph) + 2 <= NAME_MAX:
@@ -187,7 +208,7 @@ def main():
             if a.write and (c1 or c2):
                 de.text = html
 
-        kw = M.build(name, txt(o, 'vendor'), CATEGORY, prm,
+        kw = M.build(name, txt(o, 'vendor'), cats.get(txt(o, 'categoryId'), ''), prm,
                      re.sub(r'<[^>]+>', ' ', txt(o, 'description_ua')))
         did[f'ключів: {len(kw)}'] += 0
         if len(kw) < 6:
@@ -198,7 +219,7 @@ def main():
                 ke = ET.SubElement(o, 'keywords_ua')
             ke.text = ', '.join(kw)
 
-    print(f'категорія «{CATEGORY}»: {len(rows)} товарів\n')
+    print(f'категорії {CATEGORIES}: {len(rows)} товарів\n')
     for k, v in did.most_common():
         if v:
             print(f'  {v:5}  {k}')

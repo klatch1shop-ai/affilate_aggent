@@ -64,7 +64,14 @@ def check_name(name, vendor, names_seen, key_attrs, type_stem='', extra_types=()
     head = name[:NAME_VISIBLE].lower()
     if vendor and vendor.lower().split()[0] not in head:
         bad.append('бренду немає в перших 70 символах')
-    if key_attrs and not any(a in head for a in key_attrs):
+    # Виняток для довгих брендових позицій: якщо «Тип + Бренд + Модель» самі
+    # займають понад 55 символів, вимагати ще й характеристику в перших 70 —
+    # означає жертвувати назвою моделі або ключовим словом типу. Обидва
+    # важливіші: модель дає точний клік, тип має найвищу вагу в пошуку.
+    # Робот Prom однаково читає всі 110 символів, тож характеристика в хвості
+    # індексується; 70 — це межа лише візуального зрізання в інтерфейсі.
+    head_part = name.split(',')[0]
+    if key_attrs and not any(a in head for a in key_attrs) and len(head_part) <= 55:
         bad.append('ключової характеристики немає в перших 70 символах')
     # Вимога «перше слово — іменник» хибна для складених типів: «Анальна
     # пробка» починається з прикметника, який є частиною самого типу. Тому
@@ -240,8 +247,14 @@ def main():
             vals += [cm, cm.replace('.', ',')]
         issues = ([f'НАЗВА: {x}' for x in check_name(
                       name, vendor, names_seen, vals, type_stem,
-                      [w[:5] for w in re.findall(r'[а-яіїєґ]{4,}',
-                       (prm.get('Тип товару') or '').lower())])]
+                      [w[:5] for w in re.findall(r'[а-яіїєґ]{4,}', ' '.join(
+                          # Поле з типом зветься по-різному: у БДСМ це «Тип
+                          # інтимної іграшки», у вібраторах «Тип приладу»,
+                          # деінде «Тип товару». Перевірка лише по одному
+                          # імені дала 726 хибних зауважень у БДСМ.
+                          (prm.get(k) or '') for k in
+                          ('Тип товару', 'Тип інтимної іграшки',
+                           'Тип приладу', 'Вид', 'Тип')).lower())])]
                   + [f'ХАРАКТ: {x}' for x in check_params(prm, name, common)]
                   + [f'ОДИНИЦІ: {x}' for x in check_units(
                       prm, {p.get('name'): p.get('unit') for p in o.findall('param')})]

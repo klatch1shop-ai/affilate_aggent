@@ -92,12 +92,22 @@ def from_name(name, canon_name):
     return v * TO_MM.get(u, 0) or None
 
 
-def convert(field, raw, name):
-    """→ (значення в канонічній одиниці, чим доведено) або (None, причина)."""
+def convert(field, raw, name, unit_attr=None):
+    """→ (значення в канонічній одиниці, чим доведено) або (None, причина).
+
+    ІДЕМПОТЕНТНІСТЬ. Якщо параметр уже має атрибут `unit` із канонічною
+    одиницею, значення вже зведене — чіпати його не можна. Без цієї перевірки
+    повторний прогін по вже обробленому фіду множив довжину ще раз: медіана
+    165 мм ставала 1320. У бойовому конвеєрі це не спрацьовувало, бо генератор
+    щоразу збирає фід із джерела, — але будь-який повторний запуск по готовому
+    файлу тихо псував дані.
+    """
     c = canon(field)
     if not c:
         return None, 'не числове поле'
     cname, cunit = c
+    if unit_attr and unit_attr.strip().lower() == cunit:
+        return None, 'уже зведено (unit=)'
     mo = NUM.match(raw or '')
     if not mo:
         return None, f'значення не число: «{raw}»'
@@ -155,7 +165,7 @@ def main():
             if not canon(f):
                 continue
             before = f'{f}="{(p.text or "").strip()}"'
-            val, why = convert(f, (p.text or '').strip(), name)
+            val, why = convert(f, (p.text or '').strip(), name, p.get('unit'))
             if val is None:
                 how[f'НЕ ЗМІНЕНО — {why.split("(")[0].split(":")[0].strip()}'] += 1
                 unresolved.append((name, before, why))

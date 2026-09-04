@@ -37,7 +37,11 @@ import xml.etree.ElementTree as ET
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.environ.get('STEP_SRC') or os.path.join(BASE, 'output', 'noire_prom.xml')
-CATEGORY = 'Анальні пробки'
+# Категорії, які проходять постобробку. Розширюється в міру того, як кожна
+# наступна проходить аудит і перевірку очима: додавати всі одразу означало б
+# застосувати неперевірені правила до всього каталогу.
+CATEGORIES = [c.strip() for c in os.environ.get(
+    'PROM_CATEGORIES', 'Анальні пробки, Вібратори').split(',') if c.strip()]
 
 FORM_ALIAS = {'конусна': 'класична конусна',
               'анальна пробка-ялинка': 'класична конусна'}
@@ -47,6 +51,32 @@ FORM_RULES = [
                 r'у\s+формі\s+(?:зірк|метелик|тварин)|дизайнерськ|пухнаст|ялинк'),
 ]
 DOUCHE = re.compile(r'душ|спринцівк|клізм|douche|enema', re.I)
+
+# --- Вібратори -------------------------------------------------------------
+# «Вібрація» у цій категорії має в фіді рівно одне значення — «Так» (841 з 841
+# заповнених). Усі 196 карток без неї — віброяйця й вібромасажери, тобто
+# прилади, що вібрують за визначенням. Це не здогадка, а факт про категорію.
+DEVICE_RULES = [
+    ('набір приладів', r'набір\s+(?:з\s+)?\d|набір\s+приладів'),
+    ('насадки до вібратора', r'насадк\w*\s+(?:на|до|для)\s+вібр'),
+    ('вібратор для сосків', r'для\s+соск|на\s+соск|nipple'),
+    ('вібратор-насадка на палець', r'на\s+палець|на\s+пальц|напальчник'),
+    ('вібротрусики', r'вібротрусик|трусик\w*\s+з\s+вібр'),
+    ('ороімітатор', r'ороімітатор|язичк|лижуч'),
+    ('звуковий стимулятор', r'\bsonic\b|звуков\w+\s+хвил|акустичн'),
+    ('вакуумний стимулятор', r'вакуум|air[-\s]?pulse|безконтактн|розтруб'),
+    ('вібратор-пульсатор', r'пульсатор|фрикці|поступальн\w+\s+рух|штовхач'),
+    ('вібратор-мікрофон', r'мікрофон|\bwand\b|вібромасажер'),
+    ('вібратор-кролик', r'кролик|rabbit'),
+    ('вібратор для пар', r'для\s+пар\b|u-подібн'),
+    ('віброяйця', r'віброяйц|виброяйц|яйцеподібн'),
+    ('віброкулі', r'віброкул|\bкул[яі]\b|bullet'),
+    ('віброчлен', r'віброчлен|з\s+мошонк'),
+    ('міні-вібратор', r'\bміні|мінівібр'),
+]
+BEND = re.compile(r'вигин|загнут|зігнут|точк\w*\s+g|g-spot', re.I)
+CLIT_ARM = re.compile(r'відросток|вушк|кролик|подвійн\w+\s+стимуляц', re.I)
+NO_PENETR = re.compile(r'вакуум|безконтактн|мікрофон|\bwand\b|кліторальн|пласк', re.I)
 MIN_BRAND_CARDS, MIN_SHARE = 5, 0.7
 
 
@@ -82,14 +112,19 @@ def main():
         elif total >= MIN_BRAND_CARDS:
             unsure[v] = cnt.most_common(3)
 
-    rows = [o for o in offers if cats.get(txt(o, 'categoryId'), '').strip() == CATEGORY]
+    rows = [o for o in offers if cats.get(txt(o, 'categoryId'), '').strip() in {c.strip() for c in CATEGORIES}]
     did = collections.Counter(); left = collections.Counter(); shown = []
     for o in rows:
         name = txt(o, 'name_ua'); vendor = txt(o, 'vendor')
         params = {p.get('name'): p for p in o.findall('param')}
+        catname = cats.get(txt(o, 'categoryId'), '').strip()
         full = name + ' ' + re.sub(r'<[^>]+>', ' ', txt(o, 'description_ua'))
 
-        # 1. форма
+        # 1. форма — ЛИШЕ для анальних пробок. Правило писалося під їхній
+        # довідник із трьох значень; застосоване до вібраторів, воно приписало
+        # «класичну конусну» всім 1037 карткам категорії.
+
+
         fp = params.get('Форма')
         if fp is not None:
             cur = (fp.text or '').strip().lower()
@@ -97,7 +132,7 @@ def main():
                 if a.write:
                     fp.text = FORM_ALIAS[cur]
                 did[f'форма уніфікована: {cur} → {FORM_ALIAS[cur]}'] += 1
-        else:
+        elif 'пробк' in catname.lower():
             val = next((v for v, pat in FORM_RULES if re.search(pat, full, re.I)),
                        'класична конусна')
             if a.write:
@@ -118,7 +153,35 @@ def main():
             else:
                 left[f'країна невідома: {vendor or "без бренду"}'] += 1
 
-        # 3. хибний «Тип»
+        # 3. вібратори: властивості, які випливають із самої категорії
+        if 'вібратор' in catname.lower():
+            if 'Вібрація' not in params:
+                if a.write:
+                    e = ET.SubElement(o, 'param'); e.set('name', 'Вібрація'); e.text = 'Так'
+                did['вібрація = Так'] += 1
+            if 'Тип приладу' not in params:
+                v = next((val for val, pat in DEVICE_RULES
+                          if re.search(pat, name, re.I)), None)
+                if v:
+                    if a.write:
+                        e = ET.SubElement(o, 'param'); e.set('name', 'Тип приладу'); e.text = v
+                    did[f'тип приладу = {v}'] += 1
+                else:
+                    left['тип приладу не визначити з назви'] += 1
+            if 'Призначення' not in params:
+                v = ('кліторні' if NO_PENETR.search(full) else
+                     'вагінально-кліторні' if CLIT_ARM.search(full) else
+                     'для точки G' if BEND.search(full) else 'вагінальні')
+                if a.write:
+                    e = ET.SubElement(o, 'param'); e.set('name', 'Призначення'); e.text = v
+                did[f'призначення = {v}'] += 1
+            if 'Конструкція' not in params:
+                v = 'подвійні' if CLIT_ARM.search(full) else 'односторонні'
+                if a.write:
+                    e = ET.SubElement(o, 'param'); e.set('name', 'Конструкція'); e.text = v
+                did[f'конструкція = {v}'] += 1
+
+        # 4. хибний «Тип»
         tp = params.get('Тип')
         if tp is not None and (tp.text or '').strip().lower() == 'анальний душ' \
            and not DOUCHE.search(name):
@@ -126,7 +189,7 @@ def main():
                 o.remove(tp)
             did['прибрано хибний «Тип = Анальний душ»'] += 1
 
-    print(f'категорія «{CATEGORY}»: {len(rows)} товарів\n')
+    print(f'категорії {CATEGORIES}: {len(rows)} товарів\n')
     for k, v in did.most_common():
         print(f'  {v:5}  {k}')
     if left:
