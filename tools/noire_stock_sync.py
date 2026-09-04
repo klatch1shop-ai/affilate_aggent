@@ -250,6 +250,16 @@ FEED = os.path.join(BASE_DIR, 'output', 'noire_epicentr_phase1.xml')
 # не чіпаючи робочий код.
 GH_REPO_DIR = os.getenv('NOIRE_GH_DIR', '/home/tek/noire-feed')
 GH_FILE = 'noire_epicentr.xml'
+
+# Окремий фід ТІЛЬКИ з ціною й наявністю — для поля «Імпорт → Автооновлення».
+# Повний фід туди ставити не можна: він містить категорії, назви й
+# характеристики, тож будь-яке його застосування може перезаписати роботу
+# з дозаповнення карток. Тут за побудовою немає чого перезаписувати.
+# Та сама схема вже реалізована для TOPTUL (agents/orders/feed_sync.py).
+STOCK_FEED = os.path.join(BASE_DIR, 'output', 'noire_epicentr_stock.xml')
+STOCK_GH_FILE = 'noire_epicentr_stock.xml'
+STOCK_RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
+                 'main/' + STOCK_GH_FILE)
 RAW_URL = ('https://raw.githubusercontent.com/klatch1shop-ai/noire-feed/'
            'main/' + GH_FILE)
 
@@ -329,6 +339,40 @@ def publish_github(feed=None, gh_file=None, raw_url=None) -> dict:
     return res
 
 
+def refresh_stock_feed() -> dict:
+    """Перезібрати й опублікувати фід наявності Єпіцентру.
+
+    НЕ під запобіжником `epicentr_publish`, на відміну від повного фіду:
+    запобіжник існує тому, що повний імпорт може стерти характеристики
+    карток у роботі. Тут у файлі лише id, ціна й наявність — стирати нічого,
+    і саме цей файл має оновлюватись часто, бо застаріла наявність означає
+    замовлення на товар, якого немає.
+    """
+    import subprocess
+    res = {'ok': False, 'offers': 0}
+    try:
+        r = subprocess.run([sys.executable,
+                            os.path.join(BASE_DIR, 'tools',
+                                         'noire_epicentr_stock_feed.py'),
+                            '-o', STOCK_FEED],
+                           capture_output=True, text=True, timeout=600)
+        if r.returncode != 0:
+            logger.error(f'Фід наявності не зібрався: {(r.stderr or "")[-250:]}')
+            return res
+        import re as _re
+        m = _re.search(r'офферів:\s*(\d+)', r.stdout or '')
+        res['offers'] = int(m.group(1)) if m else 0
+        gh = publish_github(feed=STOCK_FEED, gh_file=STOCK_GH_FILE,
+                            raw_url=STOCK_RAW_URL)
+        res['ok'] = bool(gh.get('ok'))
+        if res['ok']:
+            logger.success(f'Фід наявності Єпіцентру опубліковано: '
+                           f'{res["offers"]} офферів')
+    except Exception as e:
+        logger.error(f'refresh_stock_feed: {e}')
+    return res
+
+
 def regenerate_feed() -> dict:
     """Перезібрати XML і перевірити валідатором.
 
@@ -347,12 +391,38 @@ def regenerate_feed() -> dict:
     try:
         r = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
                                              'noire_epicentr_generator.py'),
-                            '-x', '7216,9464', '-o', tmp],
+                            # Заборону знято 04.09.2026 за рішенням власника.
+                            # Виключення `-x 7216,9464` (еротична білизна й
+                            # костюми, ~7261 товар) стояло без пояснення й
+                            # виявилось технічною випадковістю: генератор для
+                            # цих категорій писав значення поза довідником і
+                            # хибні valuecode, помилки імпорту вимкнули напрямок
+                            # цілком. Помилки виправлені; на Розетці той самий
+                            # сегмент продається (3281 оффер), тож бізнес-причин
+                            # не було. Історія — docs/suppressed_categories.md.
+                            '-o', tmp],
                            capture_output=True, text=True, timeout=900)
         if r.returncode != 0 or not os.path.getsize(tmp):
             logger.error(f'Генератор впав (rc={r.returncode}): '
                          f'{(r.stderr or "")[-300:]}')
             return res
+        # Генератор для 7216/9464 (одяг) писав значення поза довідником —
+        # «поліестер» у Матеріалі, «S/M» у Розмірі — і хибні valuecode.
+        # Виправляємо тут, ДО валідатора: якщо щось піде не так, валідатор
+        # це побачить і фід не пройде, а не поїде зіпсованим у кабінет.
+        try:
+            e = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
+                                                 'epicentr_apparel_enrich.py'),
+                                '--src', tmp, '--out', tmp],
+                               capture_output=True, text=True, timeout=900)
+            if e.returncode == 0:
+                logger.info('Одяг: значення звірено з довідником')
+            else:
+                logger.error('Звірка одягу не вдалась, фід як є: '
+                             f'{(e.stderr or "")[-250:]}')
+        except Exception as exc:
+            logger.error(f'Звірка одягу впала ({exc}), фід як є')
+
         v = subprocess.run([py, os.path.join(BASE_DIR, 'tools',
                                              'noire_epicentr_validator.py'), tmp],
                            capture_output=True, text=True, timeout=900)
@@ -543,6 +613,9 @@ def main():
                     help='перезібрати фід Єпіцентру і запушити (cron 23:00)')
     ap.add_argument('--publish-rozetka', action='store_true',
                     help='перезібрати фід Rozetka і запушити (cron щогодини)')
+    ap.add_argument('--publish-epicentr-stock', action='store_true',
+                    help='перезібрати й опублікувати фід наявності Єпіцентру '
+                         '(тільки id/ціна/наявність — безпечно)')
     ap.add_argument('--publish-prom', action='store_true',
                     help='перезібрати фід Prom і запушити (cron кожні 4 год)')
     ap.add_argument('--dry', action='store_true')
@@ -628,6 +701,11 @@ def main():
                    f"Єпіцентр забере о 00:00–02:00")
             else:
                 tg('❌ <b>NOIRE</b>: push у GitHub не вдався')
+    elif a.publish_epicentr_stock:
+        st = refresh_stock_feed()
+        if not a.no_tg:
+            tg(f"📦 <b>NOIRE: наявність Єпіцентру</b>\n{st['offers']} офферів, "
+               + ('публікація ok' if st['ok'] else '❌ публікація не вдалась'))
     elif a.publish_rozetka:
         # Щогодини: Rozetka забирає прайс раз на годину, тож немає сенсу
         # тримати опублікований файл старішим за цей інтервал.
