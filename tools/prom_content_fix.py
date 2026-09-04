@@ -43,7 +43,7 @@ CATEGORIES = [c.strip() for c in os.environ.get(
 # а назва — це те, що покупець бачить у видачі, і масова зміна 3000 назв
 # одним рухом без перевірки кожної категорії надто ризикована.
 NAME_CATEGORIES = [c.strip() for c in os.environ.get(
-    'PROM_NAME_CATEGORIES', 'Анальні пробки, Вібратори').split(',') if c.strip()]
+    'PROM_NAME_CATEGORIES', 'ALL').split(',') if c.strip()]
 NAME_MAX, NAME_VISIBLE = 110, 70
 UNIT_LABEL = {'мм': 'мм', 'г': 'г', 'мл': 'мл'}
 
@@ -152,10 +152,15 @@ def main():
     type_stem = cw[-1][:5] if cw else ''
 
     did = collections.Counter(); skip = collections.Counter(); shown = []
+    # Дублікат назви Prom або зливає, або песимізує. Дописування характеристики
+    # може випадково зробити дві назви однаковими — тримаємо зайняті назви й
+    # відкочуємо правку, якщо вона створює збіг.
+    taken = collections.Counter(txt(o, 'name_ua').strip().lower() for o in rows)
     for o in rows:
         name = txt(o, 'name_ua'); vendor = M.real_vendor(txt(o, 'vendor'))
         cat_now = cats.get(txt(o, 'categoryId'), '').strip()
-        may_rename = cat_now in {c.strip() for c in NAME_CATEGORIES}
+        may_rename = ('ALL' in NAME_CATEGORIES
+                      or cat_now in {c.strip() for c in NAME_CATEGORIES})
         cyr = M.brand_cyr(vendor, 'ua')
         prm = {p.get('name'): (p.text or '').strip() for p in o.findall('param')}
         before = name
@@ -184,6 +189,13 @@ def main():
         elif ph and ph.split()[0][:6] not in name[:NAME_VISIBLE].lower():
             skip['характеристика є, але після 70-го символу — треба скорочувати'] += 1
 
+        if name != before:
+            if taken.get(name.strip().lower()):
+                skip['правка назви створила б дублікат — відкочено'] += 1
+                name = before
+            else:
+                taken[name.strip().lower()] += 1
+                taken[before.strip().lower()] -= 1
         if name != before:
             if a.write:
                 o.find('name_ua').text = name
