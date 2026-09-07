@@ -56,6 +56,17 @@ from shared.utils.db import get_connection  # noqa: E402
 # фіді лежало 1189 вживань російських назв характеристик, і саме відсутність
 # третього числа не дала цього побачити.
 from toptul_translate import RU, unknown_words, lexicon_sizes  # noqa: E402
+# `ru_words` — та сама ознака, що за `RU`, але переліком слів: для описів
+# потрібне не «є/немає», а скільки й яких, щоб число збігалося з незалежним
+# `toptul_ru_audit.py`. Збіг двох чисел і є доказ, що замір не бреше.
+from uk_lexicon import ru_words  # noqa: E402
+# Словник хибних УКРАЇНСЬКИХ форм — той самий файл і той самий код, що в
+# перекладачі описів (`data/toptul_uk_fixes.tsv`). Імпорт, а не друга копія:
+# два переліки розійшлись би, і аудит перекладача звітував би нуль, доки у
+# фіді лежать ті самі форми. Ознака мови їх не бачить за побудовою —
+# «відвертка» і «слесарний» написані українськими літерами, тож `ru_words`
+# на них мовчить, а замір показує чистий фід.
+from toptul_desc_translate import load_fixes, apply_fixes, bad_forms  # noqa: E402
 from toptul_ru_audit import strip_article, strip_vendor  # noqa: E402
 # Дві фільтрові характеристики, яких постачальник не дає окремим полем
 # («Розмір посадкового квадрата», «Кількість граней») — зауваження Rozetka
@@ -63,6 +74,13 @@ from toptul_ru_audit import strip_article, strip_vendor  # noqa: E402
 # мережі й фіду: `toptul_filter_extract.py --selftest`.
 from toptul_filter_extract import extract as extract_filters  # noqa: E402
 from toptul_filter_extract import load_reference  # noqa: E402
+# Мішане написання: `дoзвoляє` з латинськими `o`, `cили` з латинською `c`.
+# Виправляється ПЕРЕД перекладом і перед будь-яким заміром, бо інакше кожна
+# наступна перевірка міряє не те слово, що бачить око: пошук Rozetka такого
+# тексту не знаходить, а `ru_words` у кириличному залишку `cили` бачить
+# російське `или` — саме звідти останні 6 «російських вживань» 01.09.2026.
+from homoglyph import fix_text as fix_homoglyphs  # noqa: E402
+from homoglyph import leftovers as homoglyph_leftovers  # noqa: E402
 
 FEED = os.getenv('TOPTUL_FEED_FILE', '/tmp/toptul.xml')
 OUT = os.path.join(BASE_DIR, 'output', 'toptul_rozetka.xml')
@@ -188,10 +206,16 @@ def build_name(raw: str, vendor: str, article: str, kind: str) -> str:
     head = clean_name_text(raw)
     # Бренд і артикул можуть уже стояти в назві постачальника; повторювати
     # їх не треба — Rozetka показує дубль як неохайність.
-    if vendor:
-        head = re.sub(rf'\b{re.escape(vendor)}\b', ' ', head, flags=re.I)
-    if article:
-        head = re.sub(rf'\b{re.escape(article)}\b', ' ', head, flags=re.I)
+    # Шукаємо і сиру форму, і форму без мішаного написання. Артикул у тезі
+    # `<article>` лишається дослівно постачальницьким («артикули не
+    # змінились»), а в тексті назви мішане написання вже зняте — тобто
+    # `GIZMATIС3045` з тега й `GIZMATIC3045` у назві більше не рівні рядки.
+    # Порівняння лише за сирою формою давало артикул ДВІЧІ: «…клапана
+    # GIZMATIC3045 ХЗСО (GIZMATIС3045)».
+    for v in {vendor, fix_homoglyphs(vendor)[0]} if vendor else ():
+        head = re.sub(rf'\b{re.escape(v)}\b', ' ', head, flags=re.I)
+    for a in {article, fix_homoglyphs(article)[0]} if article else ():
+        head = re.sub(rf'\b{re.escape(a)}\b', ' ', head, flags=re.I)
     head = _MULTISPACE.sub(' ', head).strip()
     # Назва, що починається з цифри, — попередження валідатора. У фіді TOPTUL
     # так починаються розмірні позиції («10 мм торцева головка»); ставимо
@@ -324,19 +348,83 @@ def load_categories(cur) -> tuple:
     return good, bad
 
 
+# Словники нормалізуються ТИМ САМИМ виправленням мішаного написання, що й
+# текст фіду, і саме тому — обидві половини пари.
+#
+# Чому ключ. Ключі збиралися з СИРОГО тексту постачальника, а він мішаний:
+# `Вороток 1/2" Г-образный большой (Мотор Сiч) В12ГМС` — з латинською `i`.
+# Виправивши текст і не виправивши ключ, ми втратили б цей переклад мовчки:
+# на першому прогоні 01.09.2026 рядок повернувся у фід російським
+# («Г-образный большой» замість «Г-образний великий»), і жоден лічильник про
+# втрату не сказав — назва просто перестала збігатись. Таких ключів 44.
+#
+# Чому значення. У 46 випадках мішане написання лежить у самому ПЕРЕКЛАДІ:
+# модель скопіювала зіпсовану літеру з оригіналу. Виправлення тексту до
+# підстановки їх не зачіпає — переклад підставляється після.
+def _hg(s: str) -> str:
+    return fix_homoglyphs(s or '')[0]
+
+
 def load_translations(cur) -> dict:
     """kind → {оригінал: переклад}. Порожньо, якщо перекладу ще немає."""
     out = collections.defaultdict(dict)
     try:
         cur.execute('SELECT kind, src, dst FROM toptul_translation')
         for r in cur.fetchall():
-            out[r['kind']][r['src']] = r['dst']
+            out[r['kind']][_hg(r['src'])] = _hg(r['dst'])
     except psycopg2.Error:
         cur.connection.rollback()
         logger.warning('toptul_translation недоступна — переклад не застосовано')
     logger.info('Перекладів: ' + (', '.join(
         f'{k} — {len(v)}' for k, v in sorted(out.items())) or 'немає'))
     return out
+
+
+def load_desc_translations(cur) -> dict:
+    """{російське речення: український переклад}.
+
+    Описи перекладаються ПО РЕЧЕННЯХ, а не цілими текстами, і таблиця тут
+    окрема (`toptul_desc_translation`, `tools/toptul_desc_translate.py`).
+    Причина в даних: із 433 описів з російськими словами **287 мають лише
+    1–2 російські слова** серед сотень українських. Віддати такий опис моделі
+    цілком означало б переписати й те, що переписувати не просили.
+
+    Речення, якого немає в словнику, лишається як є — це видно в
+    самоперевірці нижче («описів російською»), а не ховається.
+    """
+    out = {}
+    try:
+        cur.execute('SELECT src, dst FROM toptul_desc_translation')
+        out = {_hg(r['src']): _hg(r['dst']) for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        logger.warning('toptul_desc_translation недоступна — описи без перекладу')
+    logger.info(f'Перекладів описів (речень): {len(out)}')
+    return out
+
+
+# Розбиття на речення мусить бути ЗВОРОТНИМ: склеївши назад через один
+# пробіл, маємо отримати той самий рядок. Це властивість, а не побажання —
+# на ній тримається обіцянка «не чіпаємо речення, які й так українські».
+# Перевірено на всіх 433 описах: розбіжностей 0 (текст уже пройшов `plain()`,
+# тому пробіли зведені). Той самий регекс — у `toptul_desc_translate.py`.
+_SENT = re.compile(r'(?<=[.!?])\s+')
+
+
+def translate_desc(text: str, tr_desc: dict) -> tuple:
+    """(текст, скільки речень замінено)."""
+    if not tr_desc or not text:
+        return text, 0
+    n = 0
+    out = []
+    for s in _SENT.split(text):
+        d = tr_desc.get(s.strip())
+        if d and d != s.strip():
+            out.append(d)
+            n += 1
+        else:
+            out.append(s)
+    return ' '.join(out), n
 
 
 def load_commission(cur) -> dict:
@@ -359,7 +447,7 @@ def calc_price(price: float, rate, use_commission: bool) -> int:
 
 # ── Характеристики ─────────────────────────────────────────────────────────
 
-def collect_params(offer, tr: dict) -> dict:
+def collect_params(offer, tr: dict, hits=None) -> dict:
     """{назва: [значення]} з перекладом і без сміттєвих значень.
 
     Повторювані теги з тим самим іменем зводяться в один список — далі вони
@@ -371,6 +459,15 @@ def collect_params(offer, tr: dict) -> dict:
         value = (p.text or '').strip()
         if not name or not value:
             continue
+        # Мішане написання знімається ДО пошуку в словнику: ключі
+        # `toptul_translation` набрані однією абеткою (перевірено — жодного
+        # мішаного токена в 3010 рядках), тож `Пapaмeтp` із латинськими
+        # літерами не збігся б із жодним і лишився б неперекладеним.
+        name, hg_n = fix_homoglyphs(name)
+        value, hg_v = fix_homoglyphs(value)
+        if hits is not None:
+            hits.extend(['мішане написання виправлено в характеристиці']
+                        * (sum(hg_n.values()) + sum(hg_v.values())))
         name = tr.get('name', {}).get(name, name)
         value = tr.get('value', {}).get(value, value)
         # Нульова гарантія — попередження валідатора й нульова користь для
@@ -408,8 +505,14 @@ def pictures(offer, stats) -> list:
     return kept[:MAX_PICTURES]
 
 
-def generate(out_file=OUT, limit=None, use_commission=False):
+def generate(out_file=OUT, limit=None, use_commission=False, drops_file=None):
     out_file = _safe_output(out_file)
+    # Перелік відсіяних — не звіт «для галочки»: критерій пункту черги вимагає
+    # назвати ПРИЧИНУ по кожному, що не потрапив. Збирається тут, а не окремим
+    # скриптом, свідомо: другий код із власною копією правил розійшовся б із
+    # генератором, і перелік описував би не той фід (та сама причина, з якої
+    # ознака російської імпортується, а не пишеться вдруге).
+    drops = [] if drops_file else None
     if not os.path.exists(FEED):
         sys.exit(f'Фід постачальника не знайдено: {FEED} '
                  f'(змінна TOPTUL_FEED_FILE)')
@@ -432,6 +535,9 @@ def generate(out_file=OUT, limit=None, use_commission=False):
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cats, blocked = load_categories(cur)
     tr = load_translations(cur)
+    tr_desc = load_desc_translations(cur)
+    fixes = load_fixes()
+    logger.info(f'Словник хибних українських форм: {len(fixes)} правил')
     rates = load_commission(cur) if use_commission else {}
     cur.close()
     conn.close()
@@ -466,6 +572,21 @@ def generate(out_file=OUT, limit=None, use_commission=False):
     stats = collections.Counter()
     ru_names, ru_param_names, ru_param_values = [], collections.Counter(), collections.Counter()
     unk_words = collections.Counter()
+    # Описи в самоперевірці не міряли ЗОВСІМ, і саме тому 25.08 генератор
+    # рапортував самі нулі, доки у фіді лежало 478 російських описів. Замір,
+    # якого немає, — це не нуль, це тиша. Тепер описи рахуються тут і мають
+    # збігтись із числом незалежного `toptul_ru_audit.py`.
+    ru_desc_offers, ru_desc_words = 0, collections.Counter()
+    # Замір ПІСЛЯ виправлення, по тих самих рядках, що йдуть у файл. Нуль тут
+    # доводить не «словник спрацював», а «у фіді таких форм немає»: словник
+    # міг би й промахнутись мимо (`бит` проти `бита`), і саме це видно тут.
+    bad_left = collections.Counter()
+    # Мішане написання, яке лишилось у ТОМУ САМОМУ рядку, що йде у файл.
+    # Нуль тут довести не можна й не треба: частина токенів (`тORIN`,
+    # `PROЗ`, `Vрес`) не має однозначної заміни, і правило 5 черги забороняє
+    # її вигадувати. Тому лічильник не «мусить бути нуль», а мусить збігтися
+    # з переліком `homoglyph.py --audit`, який власник бачить поіменно.
+    hg_left = collections.Counter()
     seen_ids, seen_names = set(), collections.Counter()
 
     for o in offers:
@@ -505,33 +626,51 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         vendor = _txt(o, fields['vendor']) or os.getenv(
             'TOPTUL_DEFAULT_VENDOR', 'TOPTUL')
         article = _txt(o, fields['article']) or sku
-        prm = collect_params(o, tr)
+        # `pending` заведено ДО `collect_params()`, бо мітки про виправлене
+        # мішане написання зʼявляються вже там, а оффер ще може відсіятись на
+        # MIN_PARAMS — див. розбір нижче.
+        pending = []
+        prm = collect_params(o, tr, pending)
         # Бренд — факт про товар, а не заповнювач: він є в кожному оффері
         # TOPTUL і водночас це фільтрова характеристика Rozetka. Додаємо
         # тільки якщо постачальник не дав її сам.
         if vendor and not any(k.lower() in ('бренд', 'виробник', 'торгова марка')
                               for k in prm):
             prm['Бренд'] = [vendor]
-        if len(prm) < MIN_PARAMS:
-            stats['пропущено: менше 3 характеристик'] += 1
-            continue
+        n_prm_supplier = len(prm)
 
         raw_name = _txt(o, fields['name'])
         if not raw_name:
             stats['пропущено: без назви'] += 1
             continue
+        # Лічильники, які не можна ставити одразу: усе нижче рахується для
+        # оффера, який ще може відсіятись на MIN_PARAMS. Раніше такого місця
+        # не було — перевірка стояла вище, — і числа «виправлень» описували
+        # рівно те, що пішло у файл. Щоб це лишилось правдою, мітки
+        # накопичуються й переносяться в `stats` після перевірки.
+        #
+        # Мішане написання знімається з СИРОЇ назви, тобто до `build_name()`.
+        # Це не дрібниця порядку, а вимога власника: артикул і бренд
+        # `build_name()` дописує САМ, уже після цього рядка, тож `GIZMATIС3045`
+        # у тезі `<article>` лишається дослівно таким, як у постачальника
+        # («артикули не змінились»), а виправляється лише текст назви.
+        raw_name, hg = fix_homoglyphs(raw_name)
+        pending.extend(['мішане написання виправлено в назві']
+                       * sum(hg.values()))
         # Переклад накладається на СИРУ назву, до `build_name()`. Інакше
         # словник довелось би вести для похідного рядка, який змінюється від
         # кожної правки правил побудови (зняття бренду, артикула, пунктуації).
         tr_name = tr.get('title', {}).get(raw_name)
         if tr_name and tr_name != raw_name:
             raw_name = tr_name
-            stats['назву перекладено зі словника'] += 1
+            pending.append('назву перекладено зі словника')
         name = build_name(raw_name, vendor, article, rzname)
+        name, fx = apply_fixes(name, fixes)
+        for label in fx:
+            pending.append(f'хибна форма виправлена в назві: {label}')
         if len(name) < 5:
             stats['пропущено: назва коротша 5 символів'] += 1
             continue
-        seen_names[name] += 1
 
         # ── фільтрові характеристики з характеристик і назви ───────────────
         # Робиться ПІСЛЯ `build_name()`, бо запасне джерело — саме побудована
@@ -540,12 +679,42 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         # перевірок (російська, непізнані слова, MIN_PARAMS) бачила ці
         # характеристики так само, як усі інші.
         param_ids = {}
-        for pname, d in extract_filters(rz, prm, name, ref).items():
+        for pname, d in extract_filters(rz, prm, name, ref, sku).items():
             prm[pname] = list(d['values'])
             param_ids[pname] = (d['paramid'], d['valueids'])
-            stats[f'фільтр додано: {pname} (з {d["source"]})'] += 1
+            pending.append(f'фільтр додано: {pname} (з {d["source"]})')
             for v in d['dropped']:
-                stats[f'фільтр: значення поза довідником — {v}'] += 1
+                pending.append(f'фільтр: значення поза довідником — {v}')
+            for v in d.get('trimmed', ()):
+                pending.append(
+                    f'фільтр: зрізано другим значенням ComboBox — {v}')
+
+        # MIN_PARAMS міряється ПІСЛЯ видобування фільтрів, і саме тут — не
+        # вище. До 01.09.2026 перевірка стояла одразу за `collect_params()`,
+        # тобто оффер відсіювався ДО того, як міг би отримати «Робочий
+        # розмір», «Вид» чи «Розмір посадкового квадрата», а коментар у блоці
+        # вище стверджував протилежне — що MIN_PARAMS бачить ці
+        # характеристики «так само, як усі інші». Наслідок був не
+        # теоретичний: видобування фільтрів для 1179 відсіяних не
+        # викликалось жодного разу, і робота 25.08 та 01.09 їх не торкнулась.
+        # Порядок кроків тепер такий: характеристики постачальника → назва →
+        # фільтри з назви й характеристик → перевірка мінімуму. Назва
+        # потрібна раніше за перевірку, бо вона ж є запасним джерелом
+        # значень; тому перед перевіркою лишились тільки ті відсіви (без
+        # назви, назва коротша 5), які від кількості характеристик не
+        # залежать.
+        if len(prm) < MIN_PARAMS:
+            stats['пропущено: менше 3 характеристик'] += 1
+            if drops is not None:
+                drops.append((sku, 'менше 3 характеристик', rz, rzname,
+                              n_prm_supplier, len(prm),
+                              ' | '.join(sorted(prm)), name))
+            continue
+        for label in pending:
+            stats[label] += 1
+        stats['фільтри врятували оффер від MIN_PARAMS'] += (
+            n_prm_supplier < MIN_PARAMS)
+        seen_names[name] += 1
 
         # Заміряється лише те, що МОЖНА виправити перекладом. Бренд і артикул
         # `build_name()` дописує сам, узявши з тегів, а перекладати їх
@@ -572,8 +741,29 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         stock = qty if avail and qty > 0 else (1 if avail else 0)
 
         desc = plain(_txt(o, fields['desc']))
+        # Мішане написання — ПЕРШИМ, ще до словника речень. Порядок вимушений
+        # двічі: ключі `toptul_desc_translation` набрані однією абеткою, тож
+        # зіпсоване речення не збіглося б із жодним; і `apply_fixes()` нижче
+        # шукає хибні українські форми буквально, а `відвepткa` з латинськими
+        # літерами повз такий пошук проходить.
+        desc, hg = fix_homoglyphs(desc)
+        if hg:
+            stats['опис: виправлено мішане написання'] += sum(hg.values())
+            stats['опис: з мішаним написанням'] += 1
+        # Переклад накладається ОДРАЗУ після `plain()` — до вирізання речень
+        # про доставку й до `clean_description()`. Причина та сама, що й із
+        # назвою товару: словник ведеться для тексту постачальника, а не для
+        # похідного, який змінюється від кожної правки правил чистки.
+        desc, n_tr = translate_desc(desc, tr_desc)
+        if n_tr:
+            stats['опис: речень перекладено'] += n_tr
+            stats['опис: перекладено'] += 1
+        # Лічильник звіряється з текстом ДО вирізання, а не з сирим описом:
+        # інакше після появи перекладу він рахував би ще й перекладені речення
+        # і показував би роботу, якої не робив.
+        before_delivery = desc
         desc = _DELIVERY.sub('', desc).strip()
-        if desc != plain(_txt(o, fields['desc'])):
+        if desc != before_delivery:
             stats['опис: прибрано згадку доставки/оплати'] += 1
         desc, removed = clean_description(desc)
         for what in set(removed):
@@ -583,6 +773,19 @@ def generate(out_file=OUT, limit=None, use_commission=False):
                                             for k, v in prm.items()},
                                      vendor, article)
             stats['опис: зібрано з характеристик'] += 1
+
+        desc, fx = apply_fixes(desc, fixes)
+        for label in fx:
+            stats[f'хибна форма виправлена в описі: {label}'] += 1
+
+        # Міряється саме той рядок, який піде у фід, і саме `description_ua`:
+        # тег `description` — російська версія картки, російський текст у
+        # ньому доречний.
+        dru = ru_words(desc)
+        if dru:
+            ru_desc_offers += 1
+            for w in dru:
+                ru_desc_words[w] += 1
 
         seen_ids.add(sku)
         body = [f'      <offer id="{esc(sku)}" '
@@ -601,7 +804,53 @@ def generate(out_file=OUT, limit=None, use_commission=False):
         # а порожній обовʼязковий тег гірший за повторений.
         body.append(f'        <description>{esc(desc)}</description>')
         body.append(f'        <description_ua>{esc(desc)}</description_ua>')
+        # Характеристики виправляються ОСТАННІМИ й з двома винятками, кожен
+        # із власною причиною:
+        #   * `BRAND_PARAMS` — власна назва не є мовою (та сама засторога, що
+        #     й «Бренд: Молния» 23.08);
+        #   * характеристики з `paramid`/`valueid` — їхній текст мусить
+        #     дослівно збігатися з довідником Rozetka, інакше p210 перестає
+        #     діяти й фільтр відвалюється. У наших двох фільтрових
+        #     характеристиках значення числові, тож правило нічого не ловить,
+        #     але покладатись на це — те саме, що не мати правила.
+        fixed = {}
         for k, vals in prm.items():
+            if k in BRAND_PARAMS or k in param_ids:
+                fixed[k] = vals
+                continue
+            nk, fx = apply_fixes(k, fixes)
+            nv = []
+            for v in vals:
+                s, f2 = apply_fixes(str(v), fixes)
+                nv.append(s)
+                fx += f2
+            for label in fx:
+                stats[f'хибна форма виправлена в характеристиці: {label}'] += 1
+            # Виправлення може ЗЛИТИ дві назви в одну («Слесарні» і «Слюсарні»
+            # поруч), і мовчазне `fixed[nk] = nv` тоді загубило б значення
+            # однієї з них. Два теги з тим самим іменем дали 1403 попередження
+            # 15.08, тому саме злиття правильне — але воно мусить бути злиттям.
+            if nk in fixed:
+                fixed[nk] += [v for v in nv if v not in fixed[nk]]
+                stats['характеристики злиті після виправлення форми'] += 1
+            else:
+                fixed[nk] = nv
+        prm = fixed
+
+        for label in bad_forms(name, fixes) + bad_forms(desc, fixes):
+            bad_left[label] += 1
+        for tok, why in homoglyph_leftovers(name) + homoglyph_leftovers(desc):
+            hg_left[tok] += 1
+        for k, vals in prm.items():
+            for tok, why in homoglyph_leftovers(k + ' ' + ' '.join(
+                    str(v) for v in vals)):
+                hg_left[tok] += 1
+        for k, vals in prm.items():
+            for label in bad_forms(k, fixes):
+                bad_left[label] += 1
+            for v in vals:
+                for label in bad_forms(str(v), fixes):
+                    bad_left[label] += 1
             if RU.search(k):
                 ru_param_names[k] += 1
             for w in unknown_words(k):
@@ -656,6 +905,16 @@ def generate(out_file=OUT, limit=None, use_commission=False):
     with open(out_file, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines))
 
+    if drops is not None:
+        with open(drops_file, 'w', encoding='utf-8') as f:
+            f.write('sku\tпричина\trz_id\tкатегорія\tхарактеристик '
+                    'постачальника\tхарактеристик після фільтрів\t'
+                    'характеристики\tназва\n')
+            for row in drops:
+                f.write('\t'.join(str(c).replace('\t', ' ').replace('\n', ' ')
+                                  for c in row) + '\n')
+        logger.info(f'Відсіяні: {len(drops)} → {drops_file}')
+
     logger.success(f'Згенеровано: {stats["офферів у фіді"]} → {out_file}')
     for k, v in sorted(stats.items()):
         logger.info(f'   {k}: {v}')
@@ -678,6 +937,19 @@ def generate(out_file=OUT, limit=None, use_commission=False):
                 f'різних, {sum(ru_param_values.values())} вживань')
     for n, c in ru_param_values.most_common(10):
         logger.info(f'      {c:5}  {n[:70]}')
+    logger.info(f'   ОПИСІВ з російськими словами: {ru_desc_offers} оферів, '
+                f'{len(ru_desc_words)} різних слів, '
+                f'{sum(ru_desc_words.values())} вживань')
+    for w, c in ru_desc_words.most_common(10):
+        logger.info(f'      {c:5}  {w}')
+    logger.info(f'   ХИБНИХ УКРАЇНСЬКИХ ФОРМ у фіді: {len(bad_left)} різних, '
+                f'{sum(bad_left.values())} вживань')
+    for w, c in bad_left.most_common(10):
+        logger.info(f'      {c:5}  {w}')
+    logger.info(f'   МІШАНОГО НАПИСАННЯ лишилось: {len(hg_left)} різних, '
+                f'{sum(hg_left.values())} вживань (без однозначної заміни)')
+    for w, c in hg_left.most_common(15):
+        logger.info(f'      {c:5}  {w}')
     uk_n, ru_n = lexicon_sizes()
     logger.info(f'   словники ознаки: {uk_n} укр. словоформ, {ru_n} рос. слів')
     logger.info(f'   НЕПІЗНАНИХ слів (поза обома словниками): {len(unk_words)} '
@@ -700,13 +972,15 @@ def main():
                     help='лише інвентаризація тегів фіду постачальника')
     ap.add_argument('--commission', action='store_true',
                     help='ціна з гросапом на комісію Rozetka замість РРЦ')
+    ap.add_argument('--drops', metavar='FILE',
+                    help='TSV з офферами, відсіяними за MIN_PARAMS, і причиною')
     a = ap.parse_args()
 
     if a.fields:
         offers = ET.parse(FEED).getroot().find('shop').find('offers')
         resolve_fields(offers.findall('offer'))
         return
-    n = generate(a.output, a.limit, a.commission)
+    n = generate(a.output, a.limit, a.commission, a.drops)
     sys.exit(0 if n else 1)
 
 

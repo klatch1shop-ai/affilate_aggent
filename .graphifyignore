@@ -1,0 +1,17 @@
+venv/
+.venv/
+claw-code/
+output/
+exports/
+data/
+logs/
+.cache/
+docs_dump/
+__pycache__/
+*.xml
+*.xlsx
+*.pt
+*.json
+.env
+.env.*
+*.bak*

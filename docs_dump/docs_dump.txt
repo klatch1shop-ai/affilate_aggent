@@ -1,0 +1,29 @@
+ssh tek@100.82.24.112 "
+echo '=== .env (ключі без значень для безпеки, або з значеннями якщо хочеш) ==='
+cat /home/tek/agent-system/.env
+echo ''
+echo '=== Процеси ==='
+ps aux | grep python3 | grep -v grep
+echo ''
+echo '=== Crontab ==='
+crontab -l
+echo ''
+echo '=== Docker ==='
+docker ps
+echo ''
+echo '=== carvol_epicentr_cat_map (повна таблиця) ==='
+docker exec agent_postgres psql -U agentadmin agentdb -c 'SELECT * FROM carvol_epicentr_cat_map;'
+echo ''
+echo '=== epicentr_required_attrs ==='
+docker exec agent_postgres psql -U agentadmin agentdb -c 'SELECT * FROM epicentr_required_attrs;'
+echo ''
+echo '=== rozetka_category_mapping ==='
+docker exec agent_postgres psql -U agentadmin agentdb -c 'SELECT * FROM rozetka_category_mapping;'
+echo ''
+echo '=== Кількість рядків по всіх таблицях ==='
+docker exec agent_postgres psql -U agentadmin agentdb -c \"
+SELECT schemaname, relname, n_live_tup 
+FROM pg_stat_user_tables 
+ORDER BY n_live_tup DESC;
+\"
+"

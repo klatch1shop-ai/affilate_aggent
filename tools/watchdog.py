@@ -11,7 +11,7 @@ tools/watchdog.py — моніторинг здоров'я системи.
   3. Сервіси systemd — перезапускає якщо впали
   4. rozetka_sync_cron.log — FAILED alert
   5. Фіди (три NOIRE + Carvol→Rozetka) — свіжість, розмір, доступність
-  6. Telegram звіт кожні 6 годин
+  6. Telegram звіт кожні 6 годин — сервіси, git, cron, sync і всі чотири фіди
 """
 
 import calendar
@@ -221,27 +221,74 @@ def published_age_h(api_url: str) -> float:
 
 # ── check 1: git ──────────────────────────────────────────────────────────────
 
-def check_git() -> dict:
-    rc, stdout, _ = run("git status --porcelain")
-    if rc != 0:
-        return {"ok": False, "msg": "git status failed"}
+# Файл, змінений щойно, майже напевно зараз редагується — агентом, редактором
+# або скриптом. `git add -A` захоплював його в напівзаписаному стані й комітив
+# під ім'ям власника. Тому свіжі зміни пропускаємо й чекаємо наступного циклу.
+GIT_SETTLE_SEC = 180
 
-    if not stdout:
+
+def _dirty_files() -> list:
+    """[(шлях, вік_змін_у_секундах)] — усе, що git бачить як змінене."""
+    rc, out, _ = run("git status --porcelain")
+    if rc != 0 or not out:
+        return []
+    items = []
+    for line in out.splitlines():
+        # `run()` робить strip() на всьому виводі, тому провідний пробіл
+        # ПЕРШОГО рядка зникає: « M file» стає «M file», і зріз line[3:]
+        # відрізає перший символ імені. Тому знімаємо префікс статусу
+        # регуляркою, а не фіксованою позицією.
+        path = re.sub(r'^\s*[MADRCU?!]{1,2}\s+', '', line).strip().strip('"')
+        if ' -> ' in path:                      # перейменування
+            path = path.split(' -> ')[-1]
+        if not path:
+            continue
+        try:
+            age = time.time() - os.path.getmtime(os.path.join(REPO_DIR, path))
+        except OSError:
+            age = 1e9                           # видалений файл — комітимо
+        items.append((path, age))
+    return items
+
+
+def check_git() -> dict:
+    """Авто-коміт як страхувальна сітка для роботи агентів.
+
+    Історично сюди потрапляв не лише згенерований XML, а й код, який пишуть
+    агенти — `tools/toptul_*.py`, `tools/rozetka_*.py`. Це корисно: робота не
+    губиться між сесіями. Ламало інше — `git add -A` захоплює **все дерево**
+    атомарно, зокрема файл, який агент редагує саме зараз, і комітить його
+    напівзаписаним під ім'ям власника.
+
+    Тому замість `-A` додаємо пофайлово й **пропускаємо все, змінене за
+    останні GIT_SETTLE_SEC секунд**. Файл, який дійсно дописали, потрапить у
+    наступний цикл через 10 хвилин; файл, який ще пишуть, лишиться недоторканим.
+    """
+    items = _dirty_files()
+    if not items:
         log("[git] репо чисте")
         return {"ok": True, "msg": "clean"}
 
-    changed = len(stdout.splitlines())
-    log(f"[git] {changed} змінених файлів — авто-коміт...")
+    ready = [p for p, age in items if age >= GIT_SETTLE_SEC]
+    fresh = [p for p, age in items if age < GIT_SETTLE_SEC]
+    if fresh:
+        log(f"[git] пропускаю {len(fresh)} щойно змінених "
+            f"(можуть редагуватись): {', '.join(fresh[:4])}")
+    if not ready:
+        return {"ok": True, "msg": f"{len(fresh)} files still being edited"}
 
-    ts  = datetime.now().strftime("%Y-%m-%d %H:%M")
-    rc2, _, err2 = run(f'git add -A && git commit -m "auto: watchdog sync {ts}"')
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M")
+    quoted = " ".join(f'"{p}"' for p in ready)
+    rc2, _, err2 = run(f'git add -- {quoted} && '
+                       f'git commit -m "auto: watchdog sync {ts}"')
     if rc2 != 0:
         log(f"[git] commit failed: {err2}")
         return {"ok": False, "msg": f"commit failed: {err2[:80]}"}
 
     # Push виконує тільки розробник вручну — watchdog лише комітить локально
-    log(f"[git] авто-коміт (без push): {changed} файлів")
-    return {"ok": True, "msg": f"auto-committed {changed} files (no push)"}
+    log(f"[git] авто-коміт (без push): {len(ready)} файлів — "
+        f"{', '.join(ready[:5])}{'…' if len(ready) > 5 else ''}")
+    return {"ok": True, "msg": f"auto-committed {len(ready)} files (no push)"}
 
 
 # ── check 2: crontab ──────────────────────────────────────────────────────────
@@ -630,18 +677,52 @@ def save_report_ts():
     Path(STATE_FILE).write_text(str(time.time()))
 
 
-def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
+def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict,
+                noire_r: dict, noire_rz: dict, noire_prom: dict,
+                carvol_rz: dict):
+    """Шестигодинний звіт: сервіси, git, cron, sync і ВСІ ЧОТИРИ фіди.
+
+    Фіди додано 01.09.2026. Доти звіт їх не бачив, і це давало найгіршу з
+    можливих відповідей: «Watchdog OK» о тій самій годині, коли фід Rozetka
+    відстав на дев'ять годин або публікація Carvol не доїхала до GitHub. Про
+    фіди дізнавались лише з негайних тривог, а ті надсилаються ОДИН раз на
+    несправність (дедуплікація по файлу-прапорцю) — пропустив сповіщення о
+    03:00, і наступні шість годин система мовчить.
+
+    Рядок друкується по кожному фіду ЗАВЖДИ, і в доброму звіті теж. Перелік
+    лише проблемних читався б як «решта гаразд», хоча насправді означав би
+    ще й «перевірка не відпрацювала»: зниклий рядок видно, зниклу проблему —
+    ні.
+    """
     ts = datetime.now().strftime("%d.%m %H:%M")
 
     svc_parts  = [f"{'✅' if active else '❌'} {svc}" for svc, active in svc_r.get("services", {}).items()]
     git_ok     = git_r["ok"]
     sync_ok    = sync_r["ok"]
     svc_ok     = svc_r["ok"]
-    all_ok     = svc_ok and git_ok and sync_ok and cron_r["ok"]
+
+    # Порядок той самий, що й у логах main() — щоб звіт і лог читались поруч.
+    feeds = [
+        ("Єпіцентр NOIRE",  noire_r),
+        ("Rozetka NOIRE",   noire_rz),
+        ("Prom NOIRE",      noire_prom),
+        ("Carvol → Rozetka", carvol_rz),
+    ]
+    feed_lines = [
+        f"{'✅' if r['ok'] else '❌'} {label}"
+        + ("" if r["ok"] else f" ({r['msg'][:60]})")
+        for label, r in feeds
+    ]
+    feeds_ok = all(r["ok"] for _, r in feeds)
+
+    # Фіди входять у загальний присуд, а не дописуються збоку: заголовок
+    # «Watchdog OK» над мертвим фідом — саме те, що ця правка прибирає.
+    all_ok = svc_ok and git_ok and sync_ok and cron_r["ok"] and feeds_ok
 
     if all_ok:
         status_line = "  ".join(svc_parts) + ("  ✅ sync" if sync_ok else "  ❌ sync")
-        msg = f"🔔 <b>Watchdog OK</b> [{ts}]\n{status_line}"
+        msg = (f"🔔 <b>Watchdog OK</b> [{ts}]\n{status_line}\n"
+               f"<b>Фіди:</b>\n" + "\n".join(feed_lines))
     else:
         problems = []
         for svc, active in svc_r.get("services", {}).items():
@@ -653,7 +734,9 @@ def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict):
             problems.append(f"❌ rozetka sync ({sync_r['msg'][:40]})")
         if not cron_r["ok"]:
             problems.append(f"⚠️ cron ({cron_r['msg'][:40]})")
-        msg = f"🚨 <b>Watchdog</b> [{ts}]\n" + "\n".join(problems)
+        msg = (f"🚨 <b>Watchdog</b> [{ts}]\n" + "\n".join(problems)
+               + ("\n" if problems else "")
+               + "<b>Фіди:</b>\n" + "\n".join(feed_lines))
 
     save_report_ts()
     tg(msg)
@@ -686,7 +769,8 @@ def main():
     log(f"[rz-msg] ok={rz_msg['ok']} {rz_msg['msg']}")
 
     if should_report():
-        send_report(git_r, svc_r, cron_r, sync_r)
+        send_report(git_r, svc_r, cron_r, sync_r,
+                    noire_r, noire_rz, noire_prom, carvol_rz)
 
     log("=== Watchdog END ===")
 

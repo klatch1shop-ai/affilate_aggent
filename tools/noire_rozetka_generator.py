@@ -147,8 +147,21 @@ def load_overrides(cur) -> dict:
 def load_snapshots(cur) -> dict:
     """sku → заморожена картка (усе, крім ціни та наявності).
 
-    Після модерації Rozetka картку не можна змінювати: правити дозволено
-    лише ціну та залишок. Але наш фід перезбирається з бази щогодини, і
+    ВАЖЛИВО, виправлено 05.09.2026. Раніше тут стояло «після модерації
+    картку не можна змінювати, правити дозволено лише ціну та залишок».
+    Це неправда. Довідка Rozetka p202 (ред. 10.07.2026) каже інше:
+
+        «Ціна, наявність товару (залишки), артикул та значення параметра
+         "Доставка/Оплата" оновлюються на сторінці товару відразу після
+         редагування. Зміна іншої інформації (назви, зображень, опису,
+         додавання або видалення характеристик) потребує модерації.»
+
+    Тобто поділ не «можна / не можна», а «миттєво / через модерацію».
+    Назву, фото, опис і характеристики через XML-прайс змінювати МОЖНА.
+
+    Заморозка потрібна з іншої причини, і вона важливіша: будь-яка зміна
+    вмісту відправляє картку назад у чергу модерації. Наш фід
+    перезбирається з бази щогодини, і
     будь-яка зміна в sexopt_products чи sexopt_extracted_params — оновлення
     від постачальника, допрогін EasyToys-скрейпера, нове правило в
     генераторі — мовчки переписала б назву, опис, фото чи характеристики
@@ -766,6 +779,72 @@ SIZE_LABEL = re.compile(
     r'(?:S|M|L|XL|XXL|2XL|3XL|XXXL|4XL|5XL|6XL|7XL)'
     r'|One ?Size|T[1-4]|[1-4]\s*/\s*[2-4]'
     r'|\b(?:XS|XXL|XXXL|2XL|3XL)\b)', re.I)
+
+
+# ── «Модель для групування» ────────────────────────────────────────────────
+# 62% відхилень (647 карток зі звіту 01.09.2026) — «Відсутній параметр для
+# групування». Rozetka зшиває розмірні й кольорові варіанти однієї моделі в
+# одну картку з випадаючим списком саме за цим полем; без нього кожен розмір
+# виглядає як окремий товар із тими самими фото, і модерація їх ріже.
+#
+# Ключ будуємо з бренду + типу + СИГНАТУРИ моделі, а не з назви цілком:
+# текстова назва в різних розмірах відрізняється комами, регістром і
+# порядком слів, і рядок, що розійшовся на один символ, розсипає групу.
+#
+# Сигнатура — латинські токени назви без бренду, розміру й кольору
+# («PS001 PANTIES», «TIOPEN 009»); якщо латини немає, беремо назву моделі в
+# лапках («Зухвала Стелла»), якою постачальник підписує свої серії.
+# Коли не лишається нічого — групу НЕ вигадуємо, а робимо її з артикула:
+# картка-одиначка нікому не шкодить, а хибне злиття двох різних товарів
+# під одним ключем — це «задвоєння позицій» і бан.
+_GROUP_COLOR = re.compile(
+    r'\b(black|white|red|nero|beige|blue|pink|green|grey|gray|purple|violet|'
+    r'bordo|navy|ivory|nude|gold|silver|wine|cream|ecru|dark|light|den)\b', re.I)
+_GROUP_SIZE = re.compile(
+    r'(xs|s|m|l|xl|xxl|xxxl|[2-7]xl|one\s?size|os|plus\s?size)', re.I)
+_GROUP_QUOTED = re.compile(r'[«"\u201c]([^»"\u201d]{3,40})[»"\u201d]')
+_TRANSLIT = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'h', 'ґ': 'g', 'д': 'd',
+             'е': 'e', 'є': 'ie', 'ж': 'zh', 'з': 'z', 'и': 'y', 'і': 'i',
+             'ї': 'i', 'й': 'i', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+             'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+             'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh',
+             'щ': 'shch', 'ь': '', 'ю': 'iu', 'я': 'ia', "'": '', '\u2019': ''}
+GROUP_PARAM = 'Модель для групування'
+# None — правимо весь каталог; множина артикулів — лише їх (пробний батч)
+FIX_SCOPE = None
+
+
+def _translit(s: str) -> str:
+    return ''.join(_TRANSLIT.get(c, c) for c in (s or '').lower())
+
+
+def _model_signature(vendor: str, name: str) -> str:
+    """Стійка ознака моделі: латинські токени або назва в лапках."""
+    txt = name or ''
+    q = _GROUP_QUOTED.search(txt)
+    body = _GROUP_QUOTED.sub(' ', txt)
+    if vendor:
+        body = re.sub(re.escape(re.sub(r'\s*\(.*?\)', '', vendor)), ' ',
+                      body, flags=re.I)
+    body = _GROUP_COLOR.sub(' ', SIZE_LABEL.sub(' ', body))
+    vend = {t.lower() for t in _LATIN_RUN.findall(vendor or '')}
+    toks, seen = [], set()
+    for t in re.findall(r'[A-Za-z][A-Za-z0-9]*|\d{3,}', body):
+        low = t.lower()
+        if low in vend or low in seen or _GROUP_SIZE.fullmatch(t):
+            continue
+        seen.add(low)
+        toks.append(low)
+    return ' '.join(toks[:6]) or (_translit(q.group(1)) if q else '')
+
+
+def group_key(vendor: str, name: str, kind: str, sku: str) -> str:
+    sig = _model_signature(vendor, name)
+    if not sig:
+        return f'sku-{sku.lower()}'
+    vend = re.sub(r'\s*\(.*?\)', '', vendor or '')
+    key = _translit(f'{vend} {kind or ""} {sig}')
+    return re.sub(r'[^a-z0-9]+', '-', key).strip('-')[:60] or f'sku-{sku.lower()}'
 
 
 def size_label(name: str, fallback: str):
@@ -1391,7 +1470,8 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
     stats = {'total': 0, 'skip_price': 0, 'skip_pic': 0, 'skip_params': 0,
              'no_rz_id': 0, 'avail_true': 0, 'avail_false': 0, 'skip_dup': 0,
              'frozen': 0, 'назву перезібрано': 0,
-             'складених розмірів розбито': 0}
+             'складених розмірів розбито': 0, 'груп проставлено': 0,
+             'розмір з назви': 0}
     _multi_values.clear()
 
     for p in products:
@@ -1495,6 +1575,46 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
                 stats['назву перезібрано'] += 1
             name = rebuilt
 
+        # 32 заморожені картки прийшли на Rozetka зовсім без «Розміру»,
+        # хоч він стоїть у назві («Корсет Passion BES CORSET 4XL/5XL»).
+        # Назва й характеристика мають збігатися — вимога відділу адаптації,
+        # тож добираємо значення з назви, але СУВОРО з довідника категорії.
+        # Пробний батч: виправлення застосовуємо лише до вказаних артикулів.
+        # Порада відділу адаптації і зовнішньої консультації 05.09.2026 —
+        # спершу одна повна розмірна сітка, а не весь каталог: масова зміна
+        # контенту повертає в чергу модерації і ті 3116 карток, які зараз
+        # у порядку.
+        fix_here = FIX_SCOPE is None or sku in FIX_SCOPE
+        spec_size = official.get(rz, {}).get('розмір') if fix_here else None
+        if spec_size and not prm.get('Розмір'):
+            lab = size_label(p['name'] or '', None) or ''
+            allowed = {a.strip().lower(): a for a in (spec_size[1] or [])}
+            found = []
+            for part in re.split(r'\s*/\s*', lab):
+                for form in SIZE_FORMS.get(part.strip().upper(), [part.strip()]):
+                    if hit := allowed.get(form.lower()):
+                        if hit not in found:
+                            found.append(hit)
+                        break
+            if found:
+                prm['Розмір'] = found[0]
+                if len(found) > 1:
+                    _multi_values[(sku, 'Розмір')] = found
+                stats['розмір з назви'] += 1
+
+        # Групування — після заморозки й для замороженої картки теж:
+        # це виправлення на вимогу відділу адаптації (647 відхилень
+        # «Відсутній параметр для групування»), а не самовільна зміна.
+        # Ставимо лише там, де поле є в довіднику саме цієї категорії:
+        # у лубрикантах і презервативах його немає, і зайвий параметр там
+        # був би сміттям.
+        if (fix_here and GROUP_PARAM.lower() in official.get(rz, {})
+                and not prm.get(GROUP_PARAM)):
+            prm[GROUP_PARAM] = group_key(
+                p['vendor'] or '', p['name'] or '',
+                prm.get('Тип') or prm.get('Вид') or '', sku)
+            stats['груп проставлено'] += 1
+
         o = [f'      <offer id="{esc(sku)}" available="{"true" if avail else "false"}">',
              f'        <price>{overrides.get(sku) or calc_price(price, scale, commission)}</price>',
              '        <currencyId>UAH</currencyId>',
@@ -1537,6 +1657,16 @@ def generate(out_file=OUT, limit=None, only_cats=None, include_unmapped=False,
             # "Розмір"» у звіті від 15.08.2026. Вимога Ольги «вказуйте два
             # значення» при цьому виконується — значень справді два.
             multi = _multi_values.get((sku, k), [v])
+            # Заморожена картка зберігає складене значення вже готовим
+            # рядком «L <br> XL» — _multi_values для неї порожній, бо
+            # fit_params не викликається. Без цієї перевірки esc() перетворив
+            # би розділювач на текст «L &lt;br&gt; XL», і Rozetka читала б
+            # це як ОДНЕ значення, якого в довіднику немає. Виміряно на
+            # прогоні 05.09.2026: так виходило 1186 карток.
+            if (len(multi) == 1 and '<br>' in str(multi[0])
+                    and (FIX_SCOPE is None or sku in FIX_SCOPE)):
+                multi = [x.strip() for x in re.split(r'<br\s*/?>', str(multi[0]))
+                         if x.strip()]
             if len(multi) > 1:
                 body = cdata(' <br> '.join(str(x)[:240] for x in multi))
                 o.append(f'        <param name="{esc(k)}">{body}</param>')
@@ -1596,9 +1726,14 @@ def main():
     ap.add_argument('--categories', help='через кому, назви категорій Rozetka')
     ap.add_argument('--no-synth-desc', action='store_true',
                     help='не збирати резервний опис для товарів без опису')
+    ap.add_argument('--fix-scope',
+                    help='артикули через кому: групування й розмір правимо '
+                         'лише для них (пробний батч)')
     ap.add_argument('--include-unmapped', action='store_true',
                     help='включати категорії без rz_id (для тестового прогону)')
     a = ap.parse_args()
+    if a.fix_scope:
+        globals()['FIX_SCOPE'] = {x.strip() for x in a.fix_scope.split(',') if x.strip()}
     cats = [c.strip() for c in a.categories.split(',')] if a.categories else None
     n = generate(a.output, a.limit, cats, a.include_unmapped,
                  synth_desc=not a.no_synth_desc)

@@ -49,6 +49,16 @@ def main():
     sets = json.load(open(os.path.join(BASE, 'data', 'epicentr_attribute_sets.json'),
                           encoding='utf-8'))
     targets = [p for p in prods.values() if p['status'] == 'enrich']
+    # --month YYYY-MM: партія одного завантаження. NOIRE — це «2026-07»;
+    # без фільтра сюди потрапляють ще й картки TOPTUL, і замір по NOIRE
+    # розчиняється в чужих числах.
+    if '--month' in sys.argv:
+        mon = sys.argv[sys.argv.index('--month') + 1]
+        targets = [p for p in targets if (p.get('createdAt') or '')[:7] == mon]
+        print(f'фільтр createdAt = {mon}')
+    if '--out' in sys.argv:
+        global OUT
+        OUT = sys.argv[sys.argv.index('--out') + 1]
     if '--sample' in sys.argv:
         targets = targets[:40]
     print(f'карток у «Наповнення контентом»: {len(targets)}')
