@@ -1,3 +1,8 @@
+---
+name: "rozetka"
+description: "Rozetka: перевірки демонів, публікація фідів, валідація XML, ТТН. Довідковий файл поруч: SKILL-29-moderation-rejections — розбір причин відхилення карток модерацією."
+---
+
 # Rozetka Skills — покрокові інструкції
 
 ## SKILL-01: Перевірка стану daemon-процесів (Rozetka + Telegram)

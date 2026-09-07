@@ -1,3 +1,8 @@
+---
+name: "prom"
+description: "Prom.ua: оновлення цін, price_engine, генерація XML каталогу, CPA-комісії, замовлення. Довідкові файли поруч: SKILL-11-api, SKILL-13-prom-seo (ключові слова й видача), SKILL-14-seo-research."
+---
+
 # Prom Skills — покрокові інструкції
 
 ## SKILL-01: Щоденне оновлення цін (Pipeline D)
