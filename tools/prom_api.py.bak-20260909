@@ -89,42 +89,6 @@ def ensure_table(cur):
             fetched_at         TIMESTAMPTZ DEFAULT NOW()
         )
     """)
-    # Історія станів. Навіщо окрема таблиця: prom_product_state працює через
-    # ON CONFLICT DO UPDATE і зберігає ЛИШЕ поточний стан. Це вже коштувало
-    # двічі: 08.09 дало хибне число 5564 (рахувались рядки, зокрема 37 від
-    # товарів, яких у кабінеті вже немає) і забрало можливість порівняти
-    # кабінет до і після ручного імпорту — ранковий зріз перезаписався денним.
-    #
-    # Один рядок на товар на ДОБУ, а не на прогін: синхронізація ходить кожні
-    # 2 години, і без цього таблиця росла б у 12 разів швидше без користі —
-    # імпорти в Prom трапляються раз на кілька діб, внутрішньодобова
-    # роздільність нам жодного разу не знадобилась.
-    #
-    # date_modified — головна причина існування цієї таблиці. Перевірено
-    # 09.09.2026 на ПОВНОМУ каталозі: поле рухається лише коли вміст товару
-    # справді змінився, а не при кожному імпорті.
-    #   09-08: 3828 з 5540 (69.1 %)   ← звіт про імпорт: оновлено 3862
-    #   09-05:  517 (9.3 %) · 09-07: 20 · 09-06: 1
-    # Збіг 3828 із 3862 практично точний, а 538 карток зберегли старіші дати,
-    # хоча імпорт читав увесь фід. Отже це дата зміни, не дата імпорту.
-    # Окремий урок: вибірка 600 товарів через /products/list дала 34.7 % на
-    # 09-05 замість 9.3 % — метод іде за id, тож перші сторінки зміщені до
-    # давно створених товарів. Вибіркою з цього ендпоінта частки не міряти.
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS prom_state_history (
-            snapshot_at        DATE NOT NULL,
-            external_id        TEXT NOT NULL,
-            price              NUMERIC,
-            quantity_in_stock  INTEGER,
-            presence           TEXT,
-            status             TEXT,
-            portal_category_id TEXT,
-            date_modified      TIMESTAMPTZ,
-            PRIMARY KEY (snapshot_at, external_id)
-        )
-    """)
-    cur.execute("""CREATE INDEX IF NOT EXISTS prom_state_history_sku_idx
-                   ON prom_state_history (external_id, snapshot_at)""")
 
 
 def cmd_health(cur):
@@ -181,7 +145,7 @@ def cmd_sync(cur, conn):
     """Усі товари кабінету → prom_product_state, пагінація через last_id."""
     ensure_table(cur)
     conn.commit()
-    rows, hist, last_id, page = [], [], None, 0
+    rows, last_id, page = [], None, 0
     while True:
         params = {'limit': PAGE}
         if last_id:
@@ -197,11 +161,6 @@ def cmd_sync(cur, conn):
         for p in items:
             g = p.get('group') if isinstance(p.get('group'), dict) else {}
             c = p.get('category') if isinstance(p.get('category'), dict) else {}
-            hist.append((
-                p.get('external_id'), p.get('price'),
-                p.get('quantity_in_stock'), p.get('presence'), p.get('status'),
-                str(c.get('id')) if c.get('id') is not None else None,
-                p.get('date_modified')))
             rows.append((
                 p.get('external_id'), p.get('id'), p.get('name'),
                 g.get('id'), g.get('name'),
@@ -214,7 +173,6 @@ def cmd_sync(cur, conn):
         time.sleep(PAUSE)
 
     rows = [r for r in rows if r[0]]
-    hist = [h for h in hist if h[0]]
     psycopg2.extras.execute_values(cur, """
         INSERT INTO prom_product_state
           (external_id, prom_id, name, group_id, group_name,
@@ -234,35 +192,6 @@ def cmd_sync(cur, conn):
     """, rows, page_size=500)
     conn.commit()
     logger.success(f'Збережено {len(rows)} товарів у prom_product_state')
-
-    # Денний зріз. ON CONFLICT по (snapshot_at, external_id) означає, що
-    # шість прогонів на добу перезаписують один і той самий рядок, а не
-    # плодять шість — тому таблиця росте рівно на 5.4 тис. рядків за добу.
-    psycopg2.extras.execute_values(cur, """
-        INSERT INTO prom_state_history
-          (snapshot_at, external_id, price, quantity_in_stock, presence,
-           status, portal_category_id, date_modified)
-        VALUES %s
-        ON CONFLICT (snapshot_at, external_id) DO UPDATE SET
-          price=EXCLUDED.price,
-          quantity_in_stock=EXCLUDED.quantity_in_stock,
-          presence=EXCLUDED.presence, status=EXCLUDED.status,
-          portal_category_id=EXCLUDED.portal_category_id,
-          date_modified=EXCLUDED.date_modified
-    """, hist, template="(CURRENT_DATE,%s,%s,%s,%s,%s,%s,%s)",
-        page_size=500)
-    cur.execute("DELETE FROM prom_state_history "
-                "WHERE snapshot_at < CURRENT_DATE - INTERVAL '90 days'")
-    purged = cur.rowcount
-    conn.commit()
-    # Псевдоніми обов'язкові: обидві колонки звалися б "count", і словниковий
-    # курсор лишив би від них одну.
-    cur.execute("SELECT count(DISTINCT snapshot_at) AS days, count(*) AS total "
-                "FROM prom_state_history")
-    st = cur.fetchone()
-    days, total = st['days'], st['total']
-    logger.success(f'Історія: діб {days}, рядків {total}'
-                   + (f', вичищено старших за 90 діб: {purged}' if purged else ''))
 
 
 def main():
