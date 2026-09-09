@@ -21,7 +21,6 @@ import xlsxwriter
 sys.path.append('/home/tek/agent-system')
 from dotenv import load_dotenv; load_dotenv('/home/tek/agent-system/.env')
 from shared.utils.db import get_connection
-from agents.orders import supplier_stock
 
 # === КОНСТАНТИ ===
 PROM_TOKEN = os.getenv('PROM_API_TOKEN')
@@ -115,30 +114,6 @@ def check_availability(sku: str) -> dict | None:
 # =============================================
 # 2. PROM API — ЗАМОВЛЕННЯ
 # =============================================
-# === ПОСТАЧАЛЬНИК ПОЗИЦІЇ ===
-#
-# Додано 09.09.2026 після першого замовлення NOIRE з Prom (#426501433, п'ять
-# позицій Art of Sex і Goliate). Доти агент вважав КОЖНЕ замовлення Prom
-# дропшипінгом TOPTUL: перевіряв артикули по фіду TOPTUL, не знаходив і
-# рапортував «немає в наявності» на товар, який насправді є. Лист чужому
-# постачальнику не пішов лише тому, що артикули не збіглися — випадковість,
-# а не логіка.
-#
-# Класифікуємо за прайсом SexOpt, а НЕ за префіксом артикула: 08.2026 поділ
-# за префіксом уже дав помилку — PSA*/BM* належать Carvol, але в NOIRE є свої
-# PS* (Passion) і BM* (Bathmate).
-def item_supplier(sku, toptul_feed, noire_stock):
-    """noire | toptul | unknown. Порожнє джерело дає unknown, не помилку."""
-    sku = (sku or '').strip()
-    if not sku:
-        return 'unknown'
-    if noire_stock and sku in noire_stock:
-        return 'noire'
-    if toptul_feed and sku in toptul_feed:
-        return 'toptul'
-    return 'unknown'
-
-
 def get_new_orders() -> list:
     """Отримуємо нові замовлення зі статусом pending"""
     try:
@@ -468,11 +443,7 @@ def process_orders():
     # Фільтруємо вже оброблені з БД
     conn = get_connection()
     cur = conn.cursor()
-    # Замовлення NOIRE листа не мають ніколи, тож самого
-    # supplier_email_sent замало — інакше вони переоброблялись би
-    # щоцикла (демон ходить кожні 300 с) і слали б повторні сповіщення.
-    cur.execute("SELECT prom_order_id FROM orders "
-                "WHERE supplier_email_sent=TRUE OR status='confirmed'")
+    cur.execute('SELECT prom_order_id FROM orders WHERE supplier_email_sent=TRUE')
     processed = {r['prom_order_id'] for r in cur.fetchall()}
     cur.close(); conn.close()
     orders = [o for o in orders if o['id'] not in processed]
@@ -481,65 +452,35 @@ def process_orders():
         logger.info('Всі замовлення вже оброблені')
         return
     
-    # Джерела наявності готуємо один раз на цикл, не на кожне замовлення.
-    try:
-        noire_stock = supplier_stock.sexopt_map() or {}
-    except Exception as e:
-        logger.error(f'прайс SexOpt недоступний: {e}')
-        noire_stock = {}
-    toptul_feed = load_feed() or {}
-
     for order in orders:
         oid = order['id']
         logger.info(f'--- Замовлення #{oid} ---')
-
+        
         products = order.get('products', [])
         items_info = []
         all_available = True
         
-        suppliers = set()
         for product in products:
             sku = (product.get('sku') or '').strip()
             qty = product.get('quantity', 1)
-            src = item_supplier(sku, toptul_feed, noire_stock)
-            suppliers.add(src)
-
-            if src == 'noire':
-                # Наявність NOIRE — з прайсу SexOpt. Поріг той самий, що в
-                # noire_stock_sync: ≤1 шт вважаємо «немає».
-                stock = noire_stock.get(sku, 0)
-                ok = stock > supplier_stock.SEXOPT_MIN
-                info = {'sku': sku, 'name': product.get('name', ''),
-                        'quantity': qty,
-                        'prom_price': parse_price(product.get('price', 0)),
-                        'supplier': 'noire',
-                        'feed_available': ok, 'feed_stock': stock, 'zakupka': 0}
-            elif src == 'toptul':
-                avail = check_availability(sku)
-                ok = bool(avail and avail['available'])
-                info = {'sku': sku, 'name': product.get('name', ''),
-                        'quantity': qty,
-                        'prom_price': parse_price(product.get('price', 0)),
-                        'supplier': 'toptul',
-                        'feed_available': ok,
-                        'feed_stock': avail['stock'] if avail else '—',
-                        'zakupka': avail['zakupka'] if avail else 0}
-            else:
-                # Постачальник не визначений: підтверджувати не маємо права,
-                # але й «немає в наявності» стверджувати не можемо.
-                ok = False
-                info = {'sku': sku, 'name': product.get('name', ''),
-                        'quantity': qty,
-                        'prom_price': parse_price(product.get('price', 0)),
-                        'supplier': 'unknown',
-                        'feed_available': False, 'feed_stock': '—', 'zakupka': 0}
-
+            avail = check_availability(sku)
+            
+            info = {
+                'sku': sku,
+                'name': product.get('name', ''),
+                'quantity': qty,
+                'prom_price': float(str(product.get('price', 0)).replace(' грн','').replace(',','.').split()[0]),
+                'feed_available': avail['available'] if avail else False,
+                'feed_stock': avail['stock'] if avail else '—',
+                'zakupka': avail['zakupka'] if avail else 0,
+            }
             items_info.append(info)
-            if not ok:
+            
+            if not avail or not avail['available']:
                 all_available = False
-                logger.warning(f'  ❌ {sku} [{src}] — немає або постачальник невідомий')
+                logger.warning(f'  ❌ {sku} — немає в наявності!')
             else:
-                logger.info(f'  ✅ {sku} [{src}] — є ({info["feed_stock"]})')
+                logger.info(f'  ✅ {sku} — є ({avail["stock"]})')
         
         # Тип оплати
         payment = order.get('payment_option') or {}
@@ -551,47 +492,20 @@ def process_orders():
         # Telegram сповіщення
         notify_new_order(order, items_info, payment_type)
         
-        # Розвилка за постачальником. Логіка листа НЕ видалена — вона потрібна
-        # для TOPTUL і знадобиться, коли TOPTUL додасться на Rozetka. Змінилось
-        # тільки те, КОЛИ вона застосовується: лист формується ЛИШЕ для TOPTUL.
-        missing = [i['sku'] for i in items_info if not i['feed_available']]
-
-        if suppliers == {'noire'}:
-            if all_available:
-                if confirm_order(oid):
-                    tg(f'✅ Замовлення #{oid} (NOIRE) підтверджено на Prom\n'
-                       f'Позицій: {len(items_info)} · листа постачальнику НЕ потрібно',
-                       '📦')
-                    logger.success(f'Замовлення #{oid} NOIRE — підтверджено')
-                else:
-                    tg(f'⚠️ Замовлення #{oid} (NOIRE): підтвердження на Prom '
-                       f'НЕ пройшло — потрібна ручна дія', '❗')
-            else:
-                notify_stock_problem(oid, missing)
-                logger.warning(f'Замовлення #{oid} NOIRE — відсутні: {missing}')
-
-        elif suppliers == {'toptul'}:
-            if all_available:
-                if confirm_order(oid):
-                    try:
-                        excel = create_order_excel(order, items_info)
-                        send_to_supplier(order, excel, items_info)
-                        notify_order_sent(oid, excel)
-                        logger.success(f'✅ Замовлення #{oid} — оброблено повністю')
-                    except Exception as e:
-                        logger.error(f'Помилка відправки: {e}')
-            else:
-                notify_stock_problem(oid, missing)
-                logger.warning(f'⚠️ Замовлення #{oid} — відсутні: {missing}')
-
+        if all_available:
+            # Підтверджуємо на Prom
+            if confirm_order(oid):
+                try:
+                    excel = create_order_excel(order, items_info)
+                    send_to_supplier(order, excel, items_info)
+                    notify_order_sent(oid, excel)
+                    logger.success(f'✅ Замовлення #{oid} — оброблено повністю')
+                except Exception as e:
+                    logger.error(f'Помилка відправки: {e}')
         else:
-            # Змішане або невідомий постачальник. Автоматично не робимо нічого:
-            # це нова ситуація, і ціна помилки — лист чужому постачальнику
-            # або підтвердження товару, якого немає.
-            tg(f'🔎 Замовлення #{oid} потребує ручного розгляду\n'
-               f'Постачальники в кошику: {", ".join(sorted(suppliers))}\n'
-               f'Автоматично НЕ підтверджено, лист НЕ надіслано', '❗')
-            logger.warning(f'Замовлення #{oid}: змішане {suppliers} — ручний розгляд')
+            missing = [i['sku'] for i in items_info if not i['feed_available']]
+            notify_stock_problem(oid, missing)
+            logger.warning(f'⚠️ Замовлення #{oid} — відсутні: {missing}')
 
 if __name__ == '__main__':
     process_orders()
