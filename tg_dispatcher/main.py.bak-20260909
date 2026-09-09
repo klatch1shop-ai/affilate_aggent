@@ -58,16 +58,7 @@ async def security_middleware(handler, event, data):
     if CARVOL_TG_CHAT_ID and user_id == CARVOL_TG_CHAT_ID:
         if getattr(event, 'document', None):
             return await handler(event, data)
-        # Було: мовчазне ігнорування. 09.09.2026 виявилось, що ТТН від Carvol
-        # не надходять із 19.08, і розрізнити «не надсилали» від «надсилали, а
-        # ми не прийняли» неможливо — слідів немає взагалі. Обробника фото в
-        # диспетчері немає, тож накладна, надіслана картинкою, зникала тут.
-        kinds = [k for k in ('photo', 'video', 'voice', 'audio', 'text',
-                             'sticker', 'animation')
-                 if getattr(event, k, None)]
-        logger.warning(f'TTN-IN: Carvol надіслав {kinds or ["невідомий тип"]} '
-                       f'замість документа — проігноровано')
-        return
+        return  # всі інші типи від Carvol — мовчки ігноруємо
     logger.warning(f'Відхилено доступ від ID: {user_id} (@{event.from_user.username})')
 
 
@@ -244,11 +235,7 @@ async def handle_document(message: Message):
     target_chat_id = ADMIN_ID if from_carvol else message.chat.id
 
     doc = message.document
-    logger.info(f'TTN-IN: документ від {message.from_user.id} '
-                f'(carvol={bool(from_carvol)}): {doc.file_name!r} '
-                f'{doc.mime_type!r} {doc.file_size} байт')
     if not doc.mime_type or 'pdf' not in doc.mime_type.lower():
-        logger.warning(f'TTN-IN: не PDF ({doc.mime_type!r}) — відхилено')
         if not from_carvol:
             await bot.send_message(target_chat_id, '📎 Підтримуються тільки PDF файли (накладні НП).')
         return
@@ -268,8 +255,6 @@ async def handle_document(message: Message):
         # --- Крок 1: парсинг PDF ---
         parsed = await asyncio.to_thread(parse_ttn_pdf, pdf_path)
         ttn    = parsed.get('ttn')
-        logger.info(f'TTN-IN: розбір PDF → ttn={ttn!r}, '
-                    f'полів={sorted(parsed.keys()) if parsed else None}')
 
         if not ttn:
             info = _fmt_source_info('не знайдено', 'PDF', None, parsed)
@@ -314,8 +299,6 @@ async def handle_document(message: Message):
             match_source = 'PDF'
 
         if not matches:
-            logger.warning(f'TTN-IN: ttn={ttn} — замовлення НЕ знайдено '
-                           f'(джерело матчингу {match_source})')
             await status_msg.edit_text(
                 f'❌ <b>Замовлення не знайдено</b>\n\n{source_info}\n\n'
                 f'Джерело матчингу: {match_source}\n\n'
@@ -354,8 +337,6 @@ async def handle_document(message: Message):
         # --- Крок 4: set_ttn + change_status(3) ---
         ok_ttn    = await asyncio.to_thread(set_ttn, order_id, ttn)
         ok_status = await asyncio.to_thread(change_status, order_id, 3) if ok_ttn else False
-        logger.info(f'TTN-IN: #{order_id} ttn={ttn} → set_ttn={ok_ttn}, '
-                    f'change_status(3)={ok_status}')
 
         if ok_ttn:
             try:
