@@ -15,7 +15,8 @@ TOPTUL: українські назва й опис уже є (`name_ua`, `descr
   * **категорії** — `docs/dropoffice_rozetka_map.tsv`. Кожна категорія
     постачальника звірена з тим, куди ці самі артикули вже поставили
     конкуренти на Rozetka (блок `categories` пошукового API, по 3 артикули).
-    До фіду йдуть рівні `confirmed` і `manual`; `review` — ні: хибна
+    До фіду йдуть рівні `confirmed`, `manual` і `owner` (вибір власника 11.09
+    для 5 спірних груп); `review` — ні: хибна
     категорія гірша за відсутню (SKILL-04, «нижче порогу — не вгадуємо»);
   * **характеристики** — у кожної категорії Rozetka СВОЇ назви й одиниці для
     тих самих розмірів: у «Самоклейних плівках» ширина рулону в см, довжина
@@ -74,7 +75,7 @@ SHOP_COMPANY = '3721108'
 SHOP_URL = 'https://cs4053918.prom.ua/'
 
 MARKUP = float(os.getenv('DROPOFFICE_MARKUP_ROZETKA', '1.0'))
-ALLOWED_TIERS = ('confirmed', 'manual')
+ALLOWED_TIERS = ('confirmed', 'manual', 'owner')
 MIN_PARAMS = 3
 MAX_NAME = 150
 MAX_PICTURES = 15
@@ -308,6 +309,9 @@ def clean_description(raw: str, stats: collections.Counter) -> str:
                'Плиту легко занести в труднодоступные места', s)
     s = s.replace('під час доставки', 'під час перевезення')
     s = s.replace('во время доставки', 'при перевозке')
+    # ДПК (13): «формати 30×30 … спрощують доставку порівняно з довгою дошкою»
+    s = s.replace('спрощує доставку', 'спрощує перевезення')
+    s = s.replace('упрощает доставку', 'упрощает перевозку')
     if _EMOJI.search(s):
         s = _EMOJI.sub('', s)
         stats['опис: прибрано емодзі'] += 1
@@ -456,8 +460,14 @@ KIND = {DP: 'Декоративна панель', PL: 'Плівка самок�
         KOV: 'Ковролін'}
 
 
+# Категорії постачальника, яким у спільній категорії Rozetka потрібне інше
+# значення «Типу», ніж решті: екошкіра — не плівка, вініловий молдинг 10 см —
+# бордюр. Номери з `docs/dropoffice_rozetka_map.tsv`.
+SUP_ECO_LEATHER, SUP_VINYL_MOLDING = '95118338', '95118348'
+
+
 def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
-                 stats: collections.Counter) -> collections.OrderedDict:
+                 stats: collections.Counter, scid: str = '') -> collections.OrderedDict:
     P = Params(opts, stats)
     n = name.lower()
     P.put('Країна-виробник товару', sp.get('Країна виробник'))
@@ -513,7 +523,10 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
     elif cat == PL:
         num('Ширина рулону', W, 0.1); num('Довжина рулону', L, 0.001)
         num('Товщина', T, 1000)
-        P.put('Тип', 'Плівка')
+        if scid == SUP_VINYL_MOLDING:
+            P.put('Тип', 'Бордюр')
+        elif scid != SUP_ECO_LEATHER:
+            P.put('Тип', 'Плівка')
         P.put('Поверхня', first_match(n, [(r'глянц', 'Глянцеві'),
                                           (r'\bмат\b|матов', 'Матові'),
                                           (r'дзеркал', 'Дзеркальні')]))
@@ -535,6 +548,25 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
         P.put('Вид', 'Рулон' if roll else 'Плитка')
         P.put('Тип', 'Ковролін')
         num('Товщина покриття', T); num('Ширина покриття', W, 0.001)
+
+    elif cat == '4646656':          # Гумові покриття — підлога-пазл
+        num('Товщина покриття', T); num('Ширина покриття', W, 0.001)
+        P.put('Форма', 'Рулон' if roll else 'Плитка')
+        # EVA лише там, де його назвав постачальник: плюшеві пазли — не EVA
+        if (sp.get('Матеріал') or '').strip().upper() == 'EVA':
+            P.put_many('Матеріал', ['EVA'])
+
+    elif cat == '4640984':          # Комплектуючі для оздоблення — молдинги
+        # «Вид» тут — профілі для гіпсокартону (CD/CW/UD), молдингу не пасує;
+        # розміри категорія не має, тож лише для покупця
+        for label, val in (('Довжина, мм', L), ('Ширина, мм', W), ('Товщина, мм', T)):
+            if val:
+                P.extra(label, fmt(val))
+
+    elif cat == '4659010':          # Плитка для вулиці — терасна плитка ДПК
+        num('Товщина', T); num('Довжина', L); num('Ширина', W)
+        if W and L:
+            P.put('Форма плитки', 'Квадратна' if abs(W - L) < 1e-6 else 'Прямокутна')
 
     elif cat == '4660237':          # Плитка мозаїка — «Мозаїка з декоративного скла»
         P.put('Матеріал', 'Скло')
@@ -632,7 +664,8 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
     # з назвою: нових чисел тут не з'являється, лише інший запис тих самих.
     size = sp.get('Розмір')
     if not size and W and L:
-        size = 'х'.join(fmt(x) for x in (W, L, T) if x) + ' мм'
+        # довжина першою — так пишуть назви постачальника («3000х12х4мм»)
+        size = 'х'.join(fmt(x) for x in (L, W, T) if x) + ' мм'
     P.extra('Розмір', size)
     area = sp.get('Площа, що покривається панеллю')
     if area:
@@ -755,7 +788,7 @@ def generate(out_file: str, photo_mode: str) -> None:
             desc_ru = desc_ua
             stats['опис ru замінено українським'] += 1
 
-        prm = build_params(rz, opts, sp, name_ua, raw_ua, stats)
+        prm = build_params(rz, opts, sp, name_ua, raw_ua, stats, cid)
         if len(prm) < MIN_PARAMS:
             drop(f'характеристик {len(prm)} < {MIN_PARAMS}')
             continue
