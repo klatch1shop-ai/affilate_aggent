@@ -38,8 +38,8 @@ TOPTUL: українські назва й опис уже є (`name_ua`, `descr
   * **без бренду** — 79 карток без `<vendor>`. Rozetka його вимагає, а бренд
     вигадувати не можна — на рішення власника;
   * **ціна** — `<price>` постачальника є РРЦ: 30 із 30 перевірених артикулів
-    продаються на Prom рівно за нею. Множник за замовчуванням 1.0, як у TOPTUL
-    (рішення власника від 11.08.2026: комісію несе бізнес).
+    продаються на Prom рівно за нею. Множник — з `data/price_rules.json`
+    (`tools/price_rules.py`): ×1.10 типово, ×1.00 там, де комісія 5–11 %.
 
 Запуск:
     python3 tools/dropoffice_rozetka_generator.py --fetch      # свіжий фід
@@ -74,7 +74,26 @@ SHOP_NAME = 'klatch1 shop'
 SHOP_COMPANY = '3721108'
 SHOP_URL = 'https://cs4053918.prom.ua/'
 
-MARKUP = float(os.getenv('DROPOFFICE_MARKUP_ROZETKA', '1.0'))
+# Ціна = РРЦ постачальника × множник із правил `data/price_rules.json`
+# (фід «dropoffice»), які змінює лише `tools/price_rules.py` — з історією й
+# відкатом. Рішення власника 12.09.2026 за заміром конкурентів (SKILL-30 §9):
+#   * типово ×1.10 — 27 % конкурентів стоять РІВНО на РРЦ, тож будь-яка
+#     надбавка ставить нас позаду цього кластера (топ-3 за ціною 82/95 на ×1.00
+#     → 18/95 на ×1.05), а далі позиція падає повільно (×1.10 — 6 дешевших із
+#     14, ×1.05 — 5). Якщо піднімати, то одразу до медіани ринку;
+#   * ×1.00 для категорій із комісією 5–11 % (ПВХ і гумові покриття, плитка,
+#     мозаїка, плінтуси): там надбавка ставить нас позаду 11–13 продавців.
+sys.path.insert(0, os.path.join(BASE_DIR, 'tools'))
+import price_rules  # noqa: E402
+PRICE_FEED = 'dropoffice'
+
+
+def markup_for(rz: str, article: str = '', _cache={}) -> float:
+    if 'rules' not in _cache:
+        _cache['rules'] = price_rules.load_rules()
+    return price_rules.markup_for(PRICE_FEED, rz, article, _cache['rules'])
+
+
 ALLOWED_TIERS = ('confirmed', 'manual', 'owner')
 MIN_PARAMS = 3
 MAX_NAME = 150
@@ -806,7 +825,7 @@ def generate(out_file: str, photo_mode: str) -> None:
         if rz not in used_cats:
             used_cats[rz] = (len(used_cats) + 1, rz_name)
         lines = [f'      <offer id="{esc(o.get("id"))}" available="{"true" if avail else "false"}">',
-                 f'        <price>{max(1, math.ceil(price * MARKUP))}</price>',
+                 f'        <price>{price_rules.price_for(price, markup_for(rz, article))}</price>',
                  '        <currencyId>UAH</currencyId>',
                  f'        <categoryId>{used_cats[rz][0]}</categoryId>']
         lines += [f'        <picture>{esc(u)}</picture>' for u in pics]
