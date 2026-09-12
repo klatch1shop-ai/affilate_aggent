@@ -82,7 +82,7 @@ MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні
 # фрази — чиста втрата: «кріплення для душу» краще за нічого.
 MIN_KEYWORDS = 1
 MAX_TAG_FILL = int(os.getenv('PROM_MAX_TAG_FILL', '2'))
-MIN_PHRASES = 5
+MIN_PHRASES = int(os.getenv('PROM_MIN_PHRASES', '5'))
 KEYWORD_TARGET = 9
 MAX_KEYWORDS = 1000      # офіційний ліміт не задокументований, тримаємось нижче
 
@@ -148,6 +148,41 @@ def fix_brand_spelling(name: str, brand: str) -> str:
     return re.sub(r'[A-Za-z]{3,}', lambda m: brand if sq(m.group(0)) == sq(brand) else m.group(0), name, count=1)
 
 
+_MALE = re.compile(r'мужск|мужчин|чоловіч|чоловік', re.I)
+_FEMALE = re.compile(r'женск|женщин|жіноч|жінок|для неё|для неї', re.I)
+
+
+def gender_conflict(tag: str, name: str) -> bool:
+    """Тег категорії протилежної статі до товару з явною статтю в назві:
+    «збуджувач для жінок» у «Пролонгатор для чоловіків», «жіночі вібратори»
+    у «секс-машина для чоловіків» (~11 фраз на каталог, 12.09.2026).
+    Товари для обох («для двоих») не чіпаємо — у назві немає однієї статі."""
+    m, f = bool(_MALE.search(name)), bool(_FEMALE.search(name))
+    if m == f:
+        return False
+    return bool(_FEMALE.search(tag)) if m else bool(_MALE.search(tag))
+
+
+_STEM_W = re.compile(r"[a-zа-яіїєґё']{4,}", re.I)
+_STEM_STOP = {'для', 'товари', 'товары', 'іграшки', 'игрушки', 'інтимні',
+              'интимные', 'еротичні', 'эротические', 'дорослих', 'взрослых'}
+
+
+def _stems(t: str) -> set:
+    return {w.lower()[:5] for w in _STEM_W.findall(t or '')
+            if w.lower() not in _STEM_STOP}
+
+
+def tag_relevant(tag: str, *texts) -> bool:
+    """Тег категорії доречний, якщо має спільне значуще слово з назвою товару
+    чи назвою категорії. Теги «Секс-машин» зібрано зі сторінки Prom разом із
+    чужими посиланнями («эротические боди больших размеров», «трусики с
+    жемчугом», «возбудитель жвачка», «фаллоимитаторы дилдо») — вони йшли в
+    ключі мастурбатора SX4011 (12.09.2026)."""
+    ts = _stems(tag)
+    return bool(ts and ts & set().union(*(_stems(x) for x in texts)))
+
+
 NO_BRAND = {'без бренда', 'без бренду', 'no brand', 'noname', 'no name'}
 
 _ZW = re.compile('[\u200b\u200c\u200d\u2060\ufeff]')
@@ -155,6 +190,19 @@ _ZW = re.compile('[\u200b\u200c\u200d\u2060\ufeff]')
 
 def nozw(t: str) -> str:
     return _ZW.sub('', t or '')
+
+
+def tidy_name(n: str) -> str:
+    """Пунктуація назви (12.09.2026, ~70 назв): пробіл перед комою, кома без
+    пробілу («ДК,косметичка»), подвійні пробіли, мала літера на початку
+    («система PeniMaster…»). Десятковий дріб «4,3 см» не чіпаємо."""
+    n = nozw(n)
+    n = re.sub(r'\s+,', ',', n)
+    n = re.sub(r',(?=[^\s\d])', ', ', n)
+    n = re.sub(r'\s{2,}', ' ', n).strip()
+    if n[:1].islower():
+        n = n[:1].upper() + n[1:]
+    return n
 
 
 def esc(t) -> str:
@@ -1369,8 +1417,8 @@ def generate(out_file=OUT, limit=None):
             else:
                 st['назва рос. = укр. (немає перекладу)'] += 1
             o = [attr,
-                 f'        <name>{esc(nozw(name_ru or name))}</name>',
-                 f'        <name_ua>{esc(nozw(name))}</name_ua>']
+                 f'        <name>{esc(tidy_name(name_ru or name))}</name>',
+                 f'        <name_ua>{esc(tidy_name(name))}</name_ua>']
             o += [f'        <picture>{esc(u)}</picture>' for u in pics]
             o += [f'        <price>{price}</price>',
                   '        <currencyId>UAH</currencyId>',
@@ -1431,6 +1479,12 @@ def generate(out_file=OUT, limit=None):
                 for t in tags.get((cat_ua, lang), []):
                     if len(cur_ph) >= KEYWORD_TARGET or added >= allow:
                         break
+                    if gender_conflict(t, name + ' ' + (name_ru or '')):
+                        st['тег протилежної статі пропущено'] += 1
+                        continue
+                    if not tag_relevant(t, name, name_ru or '', cat_ua):
+                        st['недоречний тег категорії пропущено'] += 1
+                        continue
                     if t.lower() not in seen:
                         seen.add(t.lower())
                         cur_ph.append(t)
