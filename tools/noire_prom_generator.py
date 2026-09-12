@@ -82,6 +82,7 @@ MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні
 # фрази — чиста втрата: «кріплення для душу» краще за нічого.
 MIN_KEYWORDS = 1
 MAX_TAG_FILL = int(os.getenv('PROM_MAX_TAG_FILL', '2'))
+MIN_PHRASES = 5
 KEYWORD_TARGET = 9
 MAX_KEYWORDS = 1000      # офіційний ліміт не задокументований, тримаємось нижче
 
@@ -93,30 +94,58 @@ MAX_KEYWORDS = 1000      # офіційний ліміт не задокумен
 # Символи нульової ширини (U+200B та інші) — сміття машинного перекладу:
 # «виготовлена \u200b\u200bдосвідченими» (SO5178). Невидимі для людини, але
 # рвуть слово для пошуку й копіювання. 504 описи й 11 назв, 12.09.2026.
-def insert_brand(name_ru: str, brand: str, name_ua: str) -> str:
-    """Вставити бренд у російську назву, де його загубили (12.09.2026).
+def insert_brand(name_ru: str, brand: str, name_ua: str = '') -> str:
+    """Вставити бренд у назву (рос. чи укр.), де його немає (12.09.2026).
 
     Порядок вибору місця — від найприроднішого:
       1. перед першим латинським словом-моделлю поза дужками:
          «Кольцо комфорта Goliath» → «Кольцо комфорта Bathmate Goliath»;
       2. перед першою комою: «Плеть с рукоятью, натуральная кожа» →
          «Плеть с рукоятью Art of Sex, натуральная кожа»;
-      3. на тій самій позиції, що в українській назві.
-    Перша спроба брала лише п.3 і переносила криві українські позиції
-    («Кільце Bathmate комфорту Goliath» → «Кольцо Bathmate комфорта…»).
+      3. після типу товару (після першого слова, або двох, якщо перше —
+         прикметник).
+    Українські назви раніше отримували бренд завжди після першого слова
+    («Кільце Bathmate комфорту Goliath», «Застільна Bombat Game гра») —
+    476 карток; тепер обидві мови йдуть через цю функцію.
     """
     out = re.sub(r'\([^)]*\)', lambda m: '\0' * len(m.group(0)), name_ru)
-    m = re.search(r'(?<![\w-])[A-Za-z][A-Za-z0-9.\-]+', out)
+    # Апостроф — частина слова: «M’Lady» (перша версія вставила бренд у
+    # середину: «M’BMS Lady», SX3145).
+    m = re.search(r"(?<![\w’'ʼ-])[A-Za-z][A-Za-z0-9.’'ʼ\-]+", out)
     if m and m.group(0).upper() != 'UA':
         i = m.start()
         return f'{name_ru[:i]}{brand} {name_ru[i:]}'
     if ',' in name_ru:
         head, sep, tail = name_ru.partition(',')
         return f'{head.rstrip()} {brand}{sep}{tail}'
-    k = len(name_ua[:name_ua.lower().find(brand.lower())].split())
+    # Без моделі й коми — після типу товару: після першого слова, а якщо воно
+    # прикметник («Застільна гра», «Вакуумный стимулятор») — після двох.
     words = name_ru.split()
-    k = max(1, min(k, len(words)))
+    k = 2 if len(words) > 2 and _ADJ_ANY.search(words[0].lower()) else 1
     return ' '.join(words[:k] + [brand] + words[k:])
+
+
+# Закінчення прикметника в укр. і рос. першому слові назви. Іменники на -а
+# («Гра», «Маска») сюди свідомо не входять — лише довші суфікси.
+_ADJ_ANY = re.compile(r'(?:ий|ій|ый|ой|ая|ое|ые|ие|на|не|ні|ова|ове|ові|ська|ське|цька|ча|чий)$')
+
+
+def brand_in(name: str, brand: str) -> bool:
+    """Чи є бренд у назві — стійко до подвоєних літер: у назвах постачальника
+    «KISTOY» при бренді KISSTOY, і без цього бренд дописувався вдруге
+    («Вакуумний стимулятор KISSTOY KISTOY K-King»)."""
+    sq = lambda t: re.sub(r'(.)\1+', r'\1', (t or '').lower())
+    return brand.lower() in (name or '').lower() or sq(brand) in sq(name)
+
+
+def fix_brand_spelling(name: str, brand: str) -> str:
+    """Одноcлівний бренд з одруківкою в назві («KISTOY» при <vendor> KISSTOY)
+    — замінити на написання з тегу: Prom вимагає збігу виробника в назві з
+    <vendor>. Лише коли відрізняються подвоєні літери."""
+    if not brand or ' ' in brand or brand.lower() in (name or '').lower():
+        return name
+    sq = lambda t: re.sub(r'(.)\1+', r'\1', t.lower())
+    return re.sub(r'[A-Za-z]{3,}', lambda m: brand if sq(m.group(0)) == sq(brand) else m.group(0), name, count=1)
 
 
 NO_BRAND = {'без бренда', 'без бренду', 'no brand', 'noname', 'no name'}
@@ -302,6 +331,14 @@ def _load_ru_cat():
     return _RU_CAT
 
 
+_RU_PREP = {'с', 'со', 'из', 'для', 'на', 'в', 'во', 'к', 'ко', 'и', 'по', 'от',
+            'без', 'под', 'над', 'при', 'о', 'об', 'у', 'за'}
+# звороти, після яких у назві обовʼязково йде ще іменник
+_RU_OPEN = re.compile(r'(?:форм|вид|стил|качеств|цвет|размер)\w*$')
+# закінчення прикметника/дієприкметника: -ый -ий -ой -ая -яя -ое -ее -ые -ие
+_RU_ADJ = re.compile(r'(?:ый|ий|ой|ая|яя|ое|ее|ые|ие)$')
+
+
 def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
                 prm: dict = None) -> str:
     """Пошукові запити для РОСІЙСЬКОГО поля — тими самими шаблонами, що й укр.
@@ -339,7 +376,24 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
              if w and not w.isdigit() and not re.fullmatch(r'[A-Za-z0-9\-.]+', w)]
     while words and words[-1].lower() in ('с', 'из', 'для', 'на', 'в', 'к', 'и'):
         words.pop()
-    head = ' '.join(words[:3]).strip()
+    # Голова — до першого прийменника в межах трьох слів: «стимулирующий гель
+    # для», «мыло в форме», «свеча в виде», «чокер из» — обрізки, що закінчу-
+    # ються посеред словосполучення. Раніше їх ховав ліміт у 4 слова разом із
+    # брендом; з брендом-як-одне-слово (12.09.2026) вони вийшли назовні.
+    # Перша версія різала на будь-якому прийменнику й губила повні звороти
+    # («плеть с рукоятью» → «плеть»). Ріжемо лише обрізки: прийменник
+    # останнім словом («гель для») або зворот, що вимагає продовження
+    # («мыло в форме», «свеча в виде» — у назві далі «пениса», «члена»).
+    hw = words[:3]
+    while hw and hw[-1].lower() in _RU_PREP:
+        hw = hw[:-1]
+    if len(hw) >= 2 and hw[-2].lower() in _RU_PREP and _RU_OPEN.match(hw[-1].lower()):
+        hw = hw[:-2]
+    # Голова з самих прикметників («разогревающее съедобное массажное» без
+    # «масло») нічого не називає — таких фраз не будуємо.
+    if hw and _RU_ADJ.search(hw[-1].lower()):
+        hw = []
+    head = ' '.join(hw).strip()
     material = (prm.get('Матеріал') or '').split('|')[0].split(',')[0].strip()
 
     # бренд кирилицею — та сама таблиця, що для української, але російська
@@ -1179,10 +1233,14 @@ def generate(out_file=OUT, limit=None):
             # додаємо його після типу товару, тобто після першого слова:
             # так зберігається і формула назви, і «правило трьох слів»
             # для URL (перші три слова лишаються осмисленими).
-            if (vend_clean and vend_clean.lower() not in name.lower()
+            if vend_clean and brand_in(name, vend_clean):
+                fixed_b = fix_brand_spelling(name, vend_clean)
+                if fixed_b != name:
+                    name = fixed_b
+                    st['одруківку бренду в назві виправлено'] += 1
+            if (vend_clean and not brand_in(name, vend_clean)
                     and vend_clean.lower() not in ('без бренда', 'без бренду')):
-                w = name.split()
-                cand = ' '.join(w[:1] + [vend_clean] + w[1:]) if w else name
+                cand = insert_brand(name, vend_clean) if name else name
                 if len(cand) <= MAX_NAME:
                     name = cand
                     st['бренд додано в назву'] += 1
@@ -1290,6 +1348,7 @@ def generate(out_file=OUT, limit=None):
             # Ліміт 110 символів діє на обидві мови, а російська назва
             # довша за українську на префіксах на кшталт «Мастурбатор-яйцо».
             name_ru = fix_caps(name_ru, (p['vendor'] or '').strip())
+            name_ru = fix_brand_spelling(name_ru, re.sub(r'\s*\(.*?\)', '', p['vendor'] or '').strip())
             # Бренд у російській назві, якщо в українській він є, а в
             # російській загубився: «Плеть с рукоятью, натуральная кожа…»
             # проти «Батіг Art of Sex з рукояттю…» (SO5178, 151 картка,
@@ -1298,8 +1357,8 @@ def generate(out_file=OUT, limit=None):
             _v = re.sub(r'\s*\(.*?\)', '', p['vendor'] or '').strip()
             if (name_ru and _v and _v.lower() not in unknown_vendors
                     and _v.lower() not in NO_BRAND
-                    and _v.lower() in name.lower()
-                    and _v.lower() not in name_ru.lower()):
+                    and brand_in(name, _v)
+                    and not brand_in(name_ru, _v)):
                 name_ru = insert_brand(name_ru, _v, name)
                 st['бренд додано в рос. назву'] += 1
             if len(name_ru) > MAX_NAME:
@@ -1364,9 +1423,13 @@ def generate(out_file=OUT, limit=None):
                 # це «повний сюр» (кабінет SO5178, 12.09.2026); правило Prom
                 # не радить узагальнених слів, а тест 12.09 показав, що
                 # слова з ключів картку у видачі не утримують.
+                # …але не лишаємо картку з 1–3 фразами: до мінімуму MIN_PHRASES
+                # теги категорії добираються без обмеження (604 картки мали б
+                # <5 рос. фраз після чистки обрізків, 12.09.2026).
                 added = 0
+                allow = max(MAX_TAG_FILL, MIN_PHRASES - len(cur_ph))
                 for t in tags.get((cat_ua, lang), []):
-                    if len(cur_ph) >= KEYWORD_TARGET or added >= MAX_TAG_FILL:
+                    if len(cur_ph) >= KEYWORD_TARGET or added >= allow:
                         break
                     if t.lower() not in seen:
                         seen.add(t.lower())
