@@ -162,8 +162,9 @@ def check_desc(desc_html, name, vendor, cyr):
     head = plain[:300].lower()
     if vendor and vendor.lower().split()[0] not in head:
         bad.append('бренду немає в перших 300 символах опису')
-    if cyr and cyr.lower() not in plain.lower():
-        bad.append(f'немає кириличного бренду «{cyr}»')
+    # Вимогу «кириличний бренд в описі» знято 12.09.2026 (рішення власника):
+    # слова опису пошуку не допомагають (SKILL-31), а «(арт оф секс)» у дужках
+    # покупцю виглядає дивно.
     return bad
 
 
