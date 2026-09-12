@@ -241,6 +241,9 @@ PURPOSE_PHRASE = {
     'вагінально-кліторні': 'для клітора', 'вагінально-анальні': 'анальний',
     'cтимуляція 3 в 1': '3 в 1', 'стимуляція 3 в 1': '3 в 1',   # перше — з латинською «c», як у постачальника: навмисно
 }
+# означення з PURPOSE_PHRASE, які узгоджуються з типом у роді
+PURPOSE_ADJ = {'вагінальний': ('вагінальний', 'вагінальна', 'вагінальне', 'вагінальні'),
+               'анальний': ('анальний', 'анальна', 'анальне', 'анальні')}
 WATERPROOF_ADJ = ('водонепроникний', 'водонепроникна', 'водонепроникне', 'водонепроникні')
 
 # Епітети, які нічого не додають до пошукового запиту: покупець не вводить
@@ -294,6 +297,20 @@ def agree(adj_forms, noun):
     return adj_forms[GENDER_IDX[word_gender(noun)]]
 
 
+def _adj_gender(adj):
+    """Рід прикметника за закінченням; None — не схоже на прикметник."""
+    a = (adj or '').lower()
+    if a.endswith(('ий', 'ій')):
+        return 'm'
+    if a.endswith(('на', 'ва', 'ла', 'ка', 'та', 'ра', 'ня', 'я')):
+        return 'f'
+    if a.endswith(('не', 'ве', 'ле', 'ке', 'те', 'ре', 'нє', 'є')):
+        return 'n'
+    if a.endswith(('ні', 'ві', 'лі', 'кі', 'ті', 'рі', 'ї')):
+        return 'p'
+    return None
+
+
 def stem_set(phrase):
     """Множина основ слів. Prom зчитує «вібратор для жінок», «вібратори для
     жінок» і «вібратори жіночі» як один набір — клони не мають займати слоти."""
@@ -312,6 +329,34 @@ def _noun_like(w):
     бо в назві слово стоїть у будь-якому відмінку й числі."""
     w = str(w).lower()
     return any(w.startswith(n[:5]) or n.startswith(w[:5]) for n in DESC_NOUNS)
+
+
+# прикметник або числівник у непрямому відмінку після прийменника:
+# «на водній», «зі страусиним», «з дерев'яною», «з різними», «із двома»
+_OBL_ADJ = re.compile(r"(?:ого|ому|ими|им|их|ій|ої|ною|ьою|вою|ма|ох)$")
+_PREP_RE = re.compile(r'\s(' + '|'.join(sorted(_TAIL_STOP, key=len, reverse=True))
+                      + r')\s')
+
+
+def prep_type(name, noun):
+    """Тип із прийменниковою групою, якщо в назві вона стоїть одразу після
+    типу й після прийменника іменник: «насадка на член», «вібратор для
+    точки g», «кріплення для душу», «затискач для сосків». Раніше тут
+    виходило «насадка член» — прийменник випадав (12.09.2026)."""
+    nm = (name or '').lower()
+    if not noun:
+        return ''
+    m = re.search(rf'(?<![\w-]){re.escape(noun)}\s({_PREP_RE.pattern[3:-3]})\s'
+                  rf"([а-яіїєґ'’\-]{{3,}})(?:\s([a-z])(?![\w-]))?", nm)
+    if not m or _OBL_ADJ.search(m.group(2)) or m.group(2) in NUMERALS:
+        return ''
+    # група продовжується далі — фраза вийшла б обрізаною: «спрей для
+    # посилення [слиновиділення]», «пінка для очищення [іграшок]»
+    after = re.match(r"\s+([а-яіїєґ'’\-]+)", nm[m.end():])
+    if not m.group(3) and after and len(after.group(1)) >= 3 \
+            and after.group(1) not in _TAIL_STOP | {'або', 'для'}:
+        return ''
+    return f'{noun} {m.group(1)} {m.group(2)}' + (f' {m.group(3)}' if m.group(3) else '')
 
 
 def _trim_tail(t):
@@ -389,7 +434,13 @@ def head_noun(prm, category, name=''):
         if not v or v in NOT_A_NOUN:
             continue
         if _head_confirmed(v, nm):
-            return _verified_type(v, nm, prm, k)
+            vt = _verified_type(v, nm, prm, k)
+            # «вібратори для пар» при назві «Смартвібратор для пар» лишало
+            # тип «для пар» — іменник не підтвердився, прийменник лишився
+            # (2 картки × 9 фраз, 12.09.2026). Такий тип — не тип.
+            if vt.split()[0] not in _TAIL_STOP:
+                return vt
+            continue
         best = best or v
     # Назва починається з означення («Анальна вібропробка», «Потужний
     # мінівібратор»), тому одне перше слово брати не можна — це прикметник.
@@ -413,6 +464,36 @@ def head_noun(prm, category, name=''):
            if w not in NOT_A_NOUN and w not in FLUFF and w not in NUMERALS]
     if pre and any(_noun_like(w) for w in pre):
         words = pre
+    # Назва «Тип Бренд Модель…» з одним словом до бренду, яке не прикметник:
+    # це слово і є тип, навіть якщо його немає в DESC_NOUNS. Інакше бралось
+    # слово з хвоста назви: «Гідропомпа Bathmate Hydro 7 Clear, діаметр…»
+    # → «гідропомпа діаметр», «Віброкуля Adrien Lastic … зі стимулювальними
+    # вушками» → «віброкуля стимулювальними» (12.09.2026).
+    elif (len(pre) == 1 and nm.startswith(pre[0])
+          and not pre[0].endswith(('ий', 'ій', 'ні', 'не', 'на', 'ва'))):
+        return pre[0]
+    # Тип закінчується перед першим прийменником: «Змазка на водній основі»
+    # давало «змазка водній» (34 фрази), «Лоскітка зі страусиним пером» —
+    # «лоскітка страусиним», «Спринцівка зі зворотним клапаном» — «…
+    # зворотним» (93 картки, 12.09.2026). Короткі прийменники регулярний
+    # вираз слів і так пропускав, тож слова по обидва боки склеювались.
+    # Прийменникову групу з іменником («насадка на член») у тип не беремо —
+    # тип стоїть у кожній фразі й узгоджується з кольором/матеріалом, а
+    # довгий тип ламав і те, й інше; вона йде окремою фразою (prep_type).
+    cut = _PREP_RE.search(nm)
+    lat = re.search(r'[a-z]', nm)
+    if cut and (not lat or cut.start() < lat.start()):
+        rw = [w for w in re.findall(r"[а-яіїєґ][а-яіїєґ'’\-]{2,}", nm[:cut.start()])
+              if w not in NOT_A_NOUN and w not in FLUFF and w not in NUMERALS]
+        if len(rw) == 1 and rw == words[:1]:
+            return rw[0]
+        if (len(rw) == 2 and rw == words[:2]
+                and rw[1].endswith(('и', 'і', 'ів', 'ок', 'ей'))):
+            # родовий відмінок — частина типу: «Масажер простати з вібрацією»
+            # → «масажер простати» (а «Лубрикант змазка-крем з…» — ні)
+            return ' '.join(rw)
+        if 2 <= len(rw) <= 3 and rw == words[:len(rw)]:
+            words = rw
     if words:
         # Два слова замало, коли обидва — означення: «Металева анальна пробка»
         # давала «металева анальна» без самого іменника. Заміряно 09.09.2026:
@@ -485,11 +566,18 @@ def build(name, vendor, category, prm, description='', catname=None):
 
     # 1–2  точна категорія / конструктив
     add(1, noun)
+    pt = prep_type(name, noun)
+    if pt:
+        add(1, pt)
     ph = PURPOSE_PHRASE.get(purpose)
+    if ph in PURPOSE_ADJ:
+        ph = agree(PURPOSE_ADJ[ph], noun)
     if ph:
         add(1, f'{noun} {ph}' if ph.startswith(('для', '3')) else f'{ph} {noun}')
     if (prm.get('Конструкція') or '').strip().lower().startswith('подвійн'):
-        add(1, f'подвійний {noun}' if word_gender(noun) == 'm' else f'подвійна {noun}')
+        # чотири роди, а не два: було «подвійна кільце», «подвійна
+        # віброяйця» — 50 фраз у фіді (12.09.2026)
+        add(1, f"{agree(('подвійний', 'подвійна', 'подвійне', 'подвійні'), noun)} {noun}")
 
     # 3–4  бренд
     if ven:
@@ -585,7 +673,9 @@ def build(name, vendor, category, prm, description='', catname=None):
                 if ven:
                     add(5, f'{sy} {ven.lower()}')
                 elif color in COLOR_ADJ:
-                    add(5, f'{sy} {color}')
+                    # узгоджено з синонімом: було «штучна вагіна чорний»,
+                    # «бдсм наручники рожевий» (12.09.2026)
+                    add(5, f'{agree(COLOR_ADJ[color], sy)} {sy}')
                 else:
                     add(5, sy)
             break
@@ -641,7 +731,13 @@ def build(name, vendor, category, prm, description='', catname=None):
     # --- резерв: добираємо до безпечного мінімуму, не далі -------------------
     if len(slots) < MIN_SAFE:
         form = (prm.get('Форма') or '').split('|')[0].strip().lower()
-        if form and form not in NOT_A_NOUN:
+        # Форма — прикметник, тож мусить узгоджуватися з типом у роді, і не
+        # стосується рідин: «класична конусна густа змазка», «конусна
+        # уретральний стимулятор», «класична конусна анальний ланцюжок» —
+        # 24 картки, значення поля «Форма» в них від пробок (12.09.2026).
+        if (form and form not in NOT_A_NOUN
+                and not re.search(LIQUID, noun)
+                and _adj_gender(form.split()[-1]) in (None, word_gender(noun))):
             add(6, f'{form} {noun}' if not form.startswith(noun.split()[0]) else form)
         for key, ph in PURPOSE_PHRASE_CAT.items():
             if key in (catname or '').lower() or key in noun:

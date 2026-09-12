@@ -192,51 +192,6 @@ def nozw(t: str) -> str:
     return _ZW.sub('', t or '')
 
 
-try:
-    from homoglyph import fix_text as _fix_homoglyphs
-except Exception:  # модуль лежить поруч; без нього — текст як є
-    _fix_homoglyphs = None
-
-
-def dehomo(t: str, st=None, what: str = '') -> str:
-    """Латинські літери всередині кириличних слів у тексті постачальника
-    («свечa», «Гуcтая смазка», «Сlassic», «10cм»; 58 слів у назвах і ключах,
-    12.09.2026). Для пошуку це інше слово: «свечa» не збігається з «свеча».
-    Правила напрямку — у tools/homoglyph.py (там же для фіду TOPTUL)."""
-    if not t or _fix_homoglyphs is None:
-        return t
-    new, hits = _fix_homoglyphs(t)
-    # Злиплі слова на межі абеток: «пробкаWooomy», «членаArt», «Honeyпросто»
-    # (3 на фід). Пошук бачить одне невідоме слово замість двох.
-    new2 = _GLUE_CL.sub(r'\1 \2', _GLUE_LC.sub(r'\1 \2', new))
-    if (hits or new2 != new) and st is not None:
-        st[f'мішане написання виправлено ({what})'] += 1
-    return new2
-
-
-_GLUE_CL = re.compile(r'([а-яіїєґ]{3,})([A-Z][a-z]{2,})')
-_GLUE_LC = re.compile(r'([a-z]{3,})([а-яіїєґ]{3,})')
-# латинська літера → кириличний двійник (однакові на вигляд)
-_TWIN = dict(zip('aceiopxyACEHIKMOPTXB', 'асеіорхуАСЕНІКМОРТХВ'))
-_UNTWIN = {c: l for l, c in _TWIN.items()}
-
-
-def brand_twins(t: str, brand: str) -> str:
-    """Бренд картки, набраний кириличними двійниками: «Кііrоо» замість
-    Kiiroo (7 описів, 12.09.2026). homoglyph.py такий токен не рухає —
-    три кириличні літери поспіль спрацьовують як запобіжник проти «Vрес».
-    Тут напрямок відомий напевно: це назва бренду з <vendor>."""
-    if not t or not brand or not re.fullmatch(r'[A-Za-z][A-Za-z0-9 .&\'-]*', brand):
-        return t
-    pat = ''.join(f'[{c}{_TWIN[c]}{_TWIN.get(c.swapcase(), "")}{c.swapcase()}]'
-                  if c in _TWIN else re.escape(c) for c in brand)
-
-    def sub(m):
-        s = m.group(0)
-        return ''.join(_UNTWIN.get(ch, ch) for ch in s)
-    return re.sub(rf'(?<!\w){pat}(?!\w)', sub, t, flags=re.I)
-
-
 def tidy_name(n: str) -> str:
     """Пунктуація назви (12.09.2026, ~70 назв): пробіл перед комою, кома без
     пробілу («ДК,косметичка»), подвійні пробіли, мала літера на початку
@@ -447,7 +402,7 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
     # кількох слів за одне слово її стало ще більше (12.09.2026).
     if (vendor or '').strip().lower() in NO_BRAND:
         vendor = ''
-    name_ru = dehomo((ru_row or {}).get('name_ru') or '')
+    name_ru = (ru_row or {}).get('name_ru') or ''
     if not name_ru or not (ru_row or {}).get('is_ru'):
         return ''
     # Дефолт ('', 'm', '') виглядає як тихий відмов, але ним НЕ є — перевірено
@@ -1315,13 +1270,12 @@ def generate(out_file=OUT, limit=None):
 
         for p in items:
             sku = p['sku']
-            name = dehomo((p['name'] or '').strip(), st, 'назва укр.')
+            name = (p['name'] or '').strip()
             # У назві не повинно бути посилань і контактів. Єдиний випадок —
             # серія Doc Johnson «Girls of Social Media», де модель названа
             # нікнеймом (@viking.barbie). Знімаємо лише «@»: сам токен — це
             # ідентифікатор моделі, без нього товар не відрізнити від сусіднього.
             vend_clean = re.sub(r'\s*\(.*?\)', '', p['vendor'] or '').strip()
-            name = brand_twins(name, vend_clean)
             # Prom вимагає, щоб виробник у назві збігався зі значенням
             # <vendor>. У 476 позицій бренд є в теґу, але не в назві —
             # додаємо його після типу товару, тобто після першого слова:
@@ -1383,7 +1337,6 @@ def generate(out_file=OUT, limit=None):
             if rw.get('rewritten'):
                 desc = rw['rewritten']
                 st['опис унікальний (переписаний)'] += 1
-            desc = brand_twins(dehomo(desc, st, 'опис укр.'), vend_clean)
 
             raw = dict(params.get(sku, {}))
             if p['country']:
@@ -1440,7 +1393,6 @@ def generate(out_file=OUT, limit=None):
             # <name>/<description> — російські поля Prom, `_ua` — українські
             rr = ru.get(sku) or {}
             name_ru = (rr.get('name_ru') or '').strip() if rr.get('is_ru') else ''
-            name_ru = brand_twins(dehomo(name_ru, st, 'назва рос.'), vend_clean)
             # Ліміт 110 символів діє на обидві мови, а російська назва
             # довша за українську на префіксах на кшталт «Мастурбатор-яйцо».
             name_ru = fix_caps(name_ru, (p['vendor'] or '').strip())
@@ -1488,7 +1440,6 @@ def generate(out_file=OUT, limit=None):
             # дублем для тих, хто дивиться її російською.
             if rw.get('rewritten_ru'):
                 desc_ru = rw['rewritten_ru']
-            desc_ru = brand_twins(dehomo(desc_ru, st, 'опис рос.'), vend_clean)
             if desc_ru:
                 st['опис рос. з окремого фіду'] += 1
             else:
@@ -1501,7 +1452,7 @@ def generate(out_file=OUT, limit=None):
             # українське. Обидва задокументовані в специфікації YML. Доти
             # українські фрази йшли в російське поле, і українська пошукова
             # аудиторія не бачила жодного нашого ключа.
-            kw = dehomo(keywords.get(sku, ''), st, 'ключі укр.')
+            kw = keywords.get(sku, '')
             cat_ua = kw_cats.get(sku, '')
             # добираємо широкими фразами категорії до цілі у 8 (лист
             # підтримки Prom 14.08.2026), не дублюючи вже наявні
