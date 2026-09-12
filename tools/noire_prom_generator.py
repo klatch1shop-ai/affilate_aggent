@@ -81,12 +81,51 @@ MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні
 # широкими фразами з тегових сторінок, тож викидати одну-дві ПРАВДИВІ
 # фрази — чиста втрата: «кріплення для душу» краще за нічого.
 MIN_KEYWORDS = 1
+MAX_TAG_FILL = int(os.getenv('PROM_MAX_TAG_FILL', '2'))
 KEYWORD_TARGET = 9
 MAX_KEYWORDS = 1000      # офіційний ліміт не задокументований, тримаємось нижче
 
 # Порогів «відкритого словника», як у Rozetka, тут немає: найбільший список
 # Prom — 33 значення (Тип інтимної іграшки), тобто всі вони закриті переліки.
 # Значення поза списком у фільтри не потрапить, тому звіряємо суворо.
+
+
+# Символи нульової ширини (U+200B та інші) — сміття машинного перекладу:
+# «виготовлена \u200b\u200bдосвідченими» (SO5178). Невидимі для людини, але
+# рвуть слово для пошуку й копіювання. 504 описи й 11 назв, 12.09.2026.
+def insert_brand(name_ru: str, brand: str, name_ua: str) -> str:
+    """Вставити бренд у російську назву, де його загубили (12.09.2026).
+
+    Порядок вибору місця — від найприроднішого:
+      1. перед першим латинським словом-моделлю поза дужками:
+         «Кольцо комфорта Goliath» → «Кольцо комфорта Bathmate Goliath»;
+      2. перед першою комою: «Плеть с рукоятью, натуральная кожа» →
+         «Плеть с рукоятью Art of Sex, натуральная кожа»;
+      3. на тій самій позиції, що в українській назві.
+    Перша спроба брала лише п.3 і переносила криві українські позиції
+    («Кільце Bathmate комфорту Goliath» → «Кольцо Bathmate комфорта…»).
+    """
+    out = re.sub(r'\([^)]*\)', lambda m: '\0' * len(m.group(0)), name_ru)
+    m = re.search(r'(?<![\w-])[A-Za-z][A-Za-z0-9.\-]+', out)
+    if m and m.group(0).upper() != 'UA':
+        i = m.start()
+        return f'{name_ru[:i]}{brand} {name_ru[i:]}'
+    if ',' in name_ru:
+        head, sep, tail = name_ru.partition(',')
+        return f'{head.rstrip()} {brand}{sep}{tail}'
+    k = len(name_ua[:name_ua.lower().find(brand.lower())].split())
+    words = name_ru.split()
+    k = max(1, min(k, len(words)))
+    return ' '.join(words[:k] + [brand] + words[k:])
+
+
+NO_BRAND = {'без бренда', 'без бренду', 'no brand', 'noname', 'no name'}
+
+_ZW = re.compile('[\u200b\u200c\u200d\u2060\ufeff]')
+
+
+def nozw(t: str) -> str:
+    return _ZW.sub('', t or '')
 
 
 def esc(t) -> str:
@@ -273,6 +312,11 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
     російського типу, а не українського.
     """
     prm = prm or {}
+    # «Без бренда» — заглушка, а не бренд: фраза «вибратор без бренда» нічого
+    # не описує. Раніше вона вже потрапляла в ключі, а з лічбою бренду з
+    # кількох слів за одне слово її стало ще більше (12.09.2026).
+    if (vendor or '').strip().lower() in NO_BRAND:
+        vendor = ''
     name_ru = (ru_row or {}).get('name_ru') or ''
     if not name_ru or not (ru_row or {}).get('is_ru'):
         return ''
@@ -327,10 +371,23 @@ def ru_keywords(kw_ua: str, ru_row: dict, vendor: str, category: str = '',
     if head:
         cand.append(head)
 
+    # Бренд із кількох слів рахується за ОДНЕ слово. Без цього «плеть с
+    # рукоятью art of sex» (5 слів) відсікалась лімітом 4, і в 435 картках
+    # з брендом на кшталт Art of Sex / Bijoux Indiscrets / Fun Factory
+    # російські ключі лишались без бренду взагалі — порожні слоти потім
+    # добивались шаблонними тегами категорії («садо мазо», «фетиш товары»).
+    # Знайдено на SO5178, 12.09.2026.
+    units = [u.lower() for u in (vendor, cyr) if u and ' ' in u]
+
+    def _wc(x):
+        for u in units:
+            x = x.replace(u, 'BRAND')
+        return len(x.split())
+
     seen, res, total = set(), [], 0
     for x in cand:
         x = re.sub(r'\s+', ' ', x).strip().lower()
-        if not (2 <= len(x.split()) <= 4) or x in seen:
+        if not (2 <= _wc(x) <= 4) or x in seen:
             continue
         if total + len(x) + 2 > MAX_KEYWORDS:
             break
@@ -1233,6 +1290,18 @@ def generate(out_file=OUT, limit=None):
             # Ліміт 110 символів діє на обидві мови, а російська назва
             # довша за українську на префіксах на кшталт «Мастурбатор-яйцо».
             name_ru = fix_caps(name_ru, (p['vendor'] or '').strip())
+            # Бренд у російській назві, якщо в українській він є, а в
+            # російській загубився: «Плеть с рукоятью, натуральная кожа…»
+            # проти «Батіг Art of Sex з рукояттю…» (SO5178, 151 картка,
+            # 12.09.2026). Правило Prom: бренд/модель на початку назви.
+            # Ставимо після типу товару — першого сегмента до коми.
+            _v = re.sub(r'\s*\(.*?\)', '', p['vendor'] or '').strip()
+            if (name_ru and _v and _v.lower() not in unknown_vendors
+                    and _v.lower() not in NO_BRAND
+                    and _v.lower() in name.lower()
+                    and _v.lower() not in name_ru.lower()):
+                name_ru = insert_brand(name_ru, _v, name)
+                st['бренд додано в рос. назву'] += 1
             if len(name_ru) > MAX_NAME:
                 name_ru = name_ru[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
                 st['назву рос. вкорочено'] += 1
@@ -1241,8 +1310,8 @@ def generate(out_file=OUT, limit=None):
             else:
                 st['назва рос. = укр. (немає перекладу)'] += 1
             o = [attr,
-                 f'        <name>{esc(name_ru or name)}</name>',
-                 f'        <name_ua>{esc(name)}</name_ua>']
+                 f'        <name>{esc(nozw(name_ru or name))}</name>',
+                 f'        <name_ua>{esc(nozw(name))}</name_ua>']
             o += [f'        <picture>{esc(u)}</picture>' for u in pics]
             o += [f'        <price>{price}</price>',
                   '        <currencyId>UAH</currencyId>',
@@ -1268,8 +1337,10 @@ def generate(out_file=OUT, limit=None):
                 st['опис рос. з окремого фіду'] += 1
             else:
                 st['опис рос. = укр. (немає перекладу)'] += 1
-            o.append(f'        <description>{cdata(desc_ru or desc)}</description>')
-            o.append(f'        <description_ua>{cdata(desc)}</description_ua>')
+            if _ZW.search(desc) or _ZW.search(desc_ru or ''):
+                st['невидимі символи прибрано з опису'] += 1
+            o.append(f'        <description>{cdata(nozw(desc_ru or desc))}</description>')
+            o.append(f'        <description_ua>{cdata(nozw(desc))}</description_ua>')
             # <keywords> — РОСІЙСЬКЕ поле кабінету, <keywords_ua> —
             # українське. Обидва задокументовані в специфікації YML. Доти
             # українські фрази йшли в російське поле, і українська пошукова
@@ -1286,12 +1357,21 @@ def generate(out_file=OUT, limit=None):
                 # постачальника покупець ніде не бачить і в пошук не вводить.
                 # Слот віддаємо ще одній фразі з семантичного ядра, яка має
                 # шанс збігтися з реальним запитом.
+                # Не більше MAX_TAG_FILL тегів категорії на поле. Добивання до
+                # 9 давало шаблонний хвіст: у рос. ключах медіана 5 з 9 фраз —
+                # загальні теги без бренду («садо мазо», «фетиш товары»,
+                # «бдсм девайсы»), однакові для сотень карток. Власник назвав
+                # це «повний сюр» (кабінет SO5178, 12.09.2026); правило Prom
+                # не радить узагальнених слів, а тест 12.09 показав, що
+                # слова з ключів картку у видачі не утримують.
+                added = 0
                 for t in tags.get((cat_ua, lang), []):
-                    if len(cur_ph) >= KEYWORD_TARGET:
+                    if len(cur_ph) >= KEYWORD_TARGET or added >= MAX_TAG_FILL:
                         break
                     if t.lower() not in seen:
                         seen.add(t.lower())
                         cur_ph.append(t)
+                        added += 1
                 return ', '.join(cur_ph)[:MAX_KEYWORDS]
 
             kw = _fill(kw, 'ua')
