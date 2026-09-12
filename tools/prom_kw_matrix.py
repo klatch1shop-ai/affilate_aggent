@@ -44,7 +44,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from prom_keywords import (brand_cyr, word_gender, real_vendor, natural,
-                           GENDER_IDX, NOT_A_NOUN)
+                           GENDER_IDX, NOT_A_NOUN, _ADJ_END, _NOUN_NA)
 
 FEED = os.environ.get('PROM_FEED') or os.path.join(BASE, 'output', 'noire_prom.xml')
 MAX_SLOTS = 9
@@ -297,6 +297,68 @@ def agree(adj_forms, noun):
     return adj_forms[GENDER_IDX[word_gender(noun)]]
 
 
+def fill_tpl(tpl, noun):
+    """Шаблон властивості з прикметником попереду узгоджується з типом:
+    «гіпоалергенний затискачі», «гіпоалергенний кільце», «безшумний
+    вагінальні кульки» — перевірка детектора 12.09.2026 (4 справжні помилки
+    з 30 позначених, усі з цих шаблонів). Прикметники тут тверді: -ий."""
+    m = re.match(r'([а-яіїєґ]+)ий \{n\}', tpl)
+    if m:
+        st = m.group(1)
+        return f"{agree((st + 'ий', st + 'а', st + 'е', st + 'і'), noun)} {noun}" + tpl[m.end():]
+    return tpl.format(n=noun)
+
+
+_MODIFIER = {'бдсм', 'секс', 'міні', 'смарт'}
+_FLUFF_ANY = re.compile(r'^(?:шикарн|розкішн|сексуальн|стильн|елегантн|преміальн|найдешевш|найкращ|'
+                        r'компактн|потужн|ніжн|зручн|якісн|чарівн|спокуслив)')
+
+
+def _adj_strict(w):
+    """Означення в називному — лише за певними закінченнями. «Змазка»,
+    «пробка», «свіча» — іменники; «густа», «м’яка», «золота» — означення."""
+    b = w.rsplit('-', 1)[-1]
+    if b in _NOUN_NA:
+        return False
+    return bool(re.search(r'(?:ий|ій)$', b) or _ADJ_END.search(b)
+                or re.search(r"(?:ста|сте|сті|ота|оте|оті|яка|яке|які|ика|ике|гка)$", b))
+
+
+def _name_type(nm):
+    """Тип із початку назви: до першого латинського слова, цифри, коми, тире,
+    лапок чи прийменника. Іменник + до двох означень перед ним + додаток у
+    родовому («масажер простати», «набір вагінальних кульок»). Маркетингові
+    епітети відкидаються. Порожньо — якщо іменника в цьому відрізку немає
+    («Вакуумний KISSTOY стимулятор»), тоді працює старий розбір.
+
+    Замінило кілька латок одного дня (12.09.2026), кожна з яких лікувала
+    один вид назви й ламала інший: «густа анальна» без іменника, «шикарний
+    вакуумний», «смарт» замість «смарт мастурбатор», «прикраса руку»,
+    «гідропомпа діаметр», «віброкуля стимулювальними»."""
+    m = _REGION_END.search(nm)
+    region = nm[:m.start()] if m else nm
+    ws = [w for w in re.findall(r"[а-яіїєґ][а-яіїєґ'’\-]{2,}", region)
+          if w not in NUMERALS and w not in NOT_A_NOUN]
+    while ws and (ws[0] in FLUFF or _FLUFF_ANY.match(ws[0])):
+        ws = ws[1:]
+    if not ws or not nm.lstrip(' «"').startswith(tuple(ws[:1])) and not region.strip():
+        return ''
+    i = next((k for k, w in enumerate(ws) if not _adj_strict(w) and w not in _MODIFIER), None)
+    if i is None:
+        return ''
+    out = ws[max(0, i - 2):i + 1]
+    rest = ws[i + 1:]
+    k = 0
+    while k < min(len(rest), 2) and re.search(r'(?:их|ого|ої)$', rest[k]):
+        k += 1
+    if 0 < k < len(rest):
+        out += rest[:k + 1]           # «набір (розігрівальних) масажних олій»
+    elif rest and rest[0].endswith(('и', 'і', 'ів', 'ок', 'ей', 'а', 'я')) \
+            and not _adj_strict(rest[0]):
+        out.append(rest[0])                           # «масажер простати»
+    return ' '.join(out)
+
+
 def _adj_gender(adj):
     """Рід прикметника за закінченням; None — не схоже на прикметник."""
     a = (adj or '').lower()
@@ -334,6 +396,8 @@ def _noun_like(w):
 # прикметник або числівник у непрямому відмінку після прийменника:
 # «на водній», «зі страусиним», «з дерев'яною», «з різними», «із двома»
 _OBL_ADJ = re.compile(r"(?:ого|ому|ими|им|их|ій|ої|ною|ьою|вою|ма|ох)$")
+_REGION_END = re.compile(r"[a-z0-9,;:(«\"“]|\s[-–—]\s|\s(?:"
+                         + '|'.join(sorted(_TAIL_STOP, key=len, reverse=True)) + r")\s")
 _PREP_RE = re.compile(r'\s(' + '|'.join(sorted(_TAIL_STOP, key=len, reverse=True))
                       + r')\s')
 
@@ -442,6 +506,9 @@ def head_noun(prm, category, name=''):
                 return vt
             continue
         best = best or v
+    t = _name_type(nm)
+    if t:
+        return t
     # Назва починається з означення («Анальна вібропробка», «Потужний
     # мінівібратор»), тому одне перше слово брати не можна — це прикметник.
     # Беремо перші два змістовні слова, відкинувши маркетингові епітети.
@@ -464,14 +531,6 @@ def head_noun(prm, category, name=''):
            if w not in NOT_A_NOUN and w not in FLUFF and w not in NUMERALS]
     if pre and any(_noun_like(w) for w in pre):
         words = pre
-    # Назва «Тип Бренд Модель…» з одним словом до бренду, яке не прикметник:
-    # це слово і є тип, навіть якщо його немає в DESC_NOUNS. Інакше бралось
-    # слово з хвоста назви: «Гідропомпа Bathmate Hydro 7 Clear, діаметр…»
-    # → «гідропомпа діаметр», «Віброкуля Adrien Lastic … зі стимулювальними
-    # вушками» → «віброкуля стимулювальними» (12.09.2026).
-    elif (len(pre) == 1 and nm.startswith(pre[0])
-          and not pre[0].endswith(('ий', 'ій', 'ні', 'не', 'на', 'ва'))):
-        return pre[0]
     # Тип закінчується перед першим прийменником: «Змазка на водній основі»
     # давало «змазка водній» (34 фрази), «Лоскітка зі страусиним пером» —
     # «лоскітка страусиним», «Спринцівка зі зворотним клапаном» — «…
@@ -518,13 +577,17 @@ def head_noun(prm, category, name=''):
     return best or (category or '').lower().rstrip('и') or 'іграшка'
 
 
-def contradicts(phrase, purpose):
-    """Ключ називає одну зону, а характеристика — іншу."""
+def contradicts(phrase, purpose, name=''):
+    """Ключ називає одну зону, а характеристика — іншу. Зона з самої назви
+    суперечністю не є: «Звуковий стимулятор клітора» з «Призначення: для
+    стимуляції грудей» втрачав усі фрази з типом (SO8101, 12.09.2026) —
+    назва надійніша за параметр."""
     if not purpose:
         return False
     p = purpose.lower()
+    nm = (name or '').lower()
     for token, zone in ZONE.items():
-        if token in phrase.lower() and zone not in p and p not in zone:
+        if token in phrase.lower() and token not in nm and zone not in p and p not in zone:
             # «вагінально-кліторні» містить обидві зони — це не суперечність
             if not any(z.split()[-1] in p for z in (zone,)):
                 return True
@@ -548,7 +611,7 @@ def build(name, vendor, category, prm, description='', catname=None):
             return
         if phrase in BROAD or not natural(phrase):
             return
-        if contradicts(phrase, purpose):
+        if contradicts(phrase, purpose, name):
             return
         if stem_set(phrase) in {stem_set(p) for p in slots}:
             return
@@ -600,7 +663,9 @@ def build(name, vendor, category, prm, description='', catname=None):
         if ven:
             add(3, f'{agree(COLOR_ADJ[color], noun)} {noun} {ven.lower()}')
     for key, forms in MATERIAL_ADJ.items():
-        if key in mat:
+        # «безлатексний» містить «латекс» — було «латексний безлатексні
+        # презервативи» (12.09.2026)
+        if key in mat and f'без{key}' not in mat:
             add(3, f'{agree(forms, noun)} {noun}')
             break
     power = (prm.get('Тип живлення') or '').lower()
@@ -659,10 +724,10 @@ def build(name, vendor, category, prm, description='', catname=None):
         # з опису — лише для рідких засобів, інакше тільки з назви.
         if 'основ' in pat and not re.search(LIQUID, noun):
             if re.search(pat, name, re.I):
-                add(4, tpl.format(n=noun))
+                add(4, fill_tpl(tpl, noun))
             continue
         if re.search(pat, src, re.I):
-            add(4, tpl.format(n=noun))
+            add(4, fill_tpl(tpl, noun))
 
     # 9  синонім / альтернатива — те, як товар називають покупці
     # Голий синонім («штучна вагіна») повторився б на сотнях карток — це той
@@ -726,7 +791,7 @@ def build(name, vendor, category, prm, description='', catname=None):
         src = f'{name} {description[:1200]}'
         for pat, tpl in FUNCTIONAL:
             if re.search(pat, src, re.I):
-                add(5, tpl.format(n=noun))
+                add(5, fill_tpl(tpl, noun))
 
     # --- резерв: добираємо до безпечного мінімуму, не далі -------------------
     if len(slots) < MIN_SAFE:
@@ -757,7 +822,7 @@ def build(name, vendor, category, prm, description='', catname=None):
                     break
         if mat:
             for key, forms in MATERIAL_ADJ.items():
-                if key in mat:
+                if key in mat and f'без{key}' not in mat:
                     add(6, f'{agree(forms, noun)} {noun}')
                     break
         if color in COLOR_ADJ:
