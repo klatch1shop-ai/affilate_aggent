@@ -7,7 +7,9 @@
   * посилка — опція «до 2 кг»; оголошена вартість = сума замовлення;
   * опис вантажу нейтральний;
   * оплачене замовлення — БЕЗ післяплати; оплата при отриманні — З
-    післяплатою на суму замовлення;
+    післяплатою на суму замовлення (на карту власника, NP_COD_CARD). Поки НП
+    блокує переказ на карту через API (20000201794) — ТТН без післяплати, а в
+    Telegram — «додайте післяплату N грн» (власник додає в кабінеті);
   * після створення — зберегти наклейку 100×100 (PDF) і надіслати в Telegram;
   * якщо щось не так — власник видалить ТТН у кабінеті, пробуємо знову.
 
@@ -90,6 +92,12 @@ def tg_document(path, caption):
     return r.json().get('ok'), r.text[:200]
 
 
+def tg_text(text):
+    r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
+                      data={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML'}, timeout=30)
+    return r.json().get('ok'), r.text[:200]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('order_id', type=int)
@@ -159,15 +167,32 @@ def main():
         params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money',
                                            'RedeliveryString': cod, 'PaymentCard': COD_CARD}]
     doc = np('InternetDocument', 'save', params, retries=1)
+    cod_todo = None   # післяплату власник додає вручну в кабінеті НП
+    if not doc.get('success') and cod and '20000201794' in (doc.get('errorCodes') or []):
+        # власник 13.09: поки НП блокує переказ на карту через API — створювати без
+        # післяплати й писати в Telegram, на яку суму її додати
+        params.pop('BackwardDeliveryData')
+        doc = np('InternetDocument', 'save', params, retries=1)
+        cod_todo = cod
     if not doc.get('success'):
-        if '20000201794' in (doc.get('errorCodes') or []):
-            sys.exit('післяплата: НП блокує переказ на карту через API (20000201794) — ТТН не створено, '
-                     'створіть вручну')
         print('ПОМИЛКА створення:', doc.get('errors'), doc.get('warnings'))
         sys.exit(1)
     t = doc['data'][0]
     ttn, ref = t['IntDocNumber'], t['Ref']
     print(f"СТВОРЕНО ТТН {ttn} (Ref {ref}), вартість {t.get('CostOnSite')} грн, доставка {t.get('EstimatedDeliveryDate')}")
+    if cod_todo:
+        cod_line = (f'⚠️ <b>ДОДАЙТЕ ПІСЛЯПЛАТУ {cod_todo} грн</b> у кабінеті НП до відправки '
+                    f'(через API на карту заблоковано), після зміни передрукуйте наклейку')
+    elif cod:
+        cod_line = f'Післяплата: {cod} грн на карту *{COD_CARD[-4:]}'
+    else:
+        cod_line = 'Післяплата: немає (оплачено)'
+    if cod_todo:
+        print(f'УВАГА: ТТН без післяплати — додати {cod_todo} грн вручну')
+    caption = (f'📦 <b>ТТН {ttn}</b> — Rozetka #{a.order_id}\n'
+               f'{w.get("CityDescription", "")}, {w["Description"][:60]}\n'
+               f'{cod_line}\n'
+               f'Оголошена {amount} грн | доставка {t.get("CostOnSite")} грн — платить одержувач')
 
     os.makedirs(OUT_DIR, exist_ok=True)
     pdf = os.path.join(OUT_DIR, f'{ttn}_rozetka_{a.order_id}_100x100.pdf')
@@ -175,14 +200,12 @@ def main():
     body = requests.get(url, timeout=60).content
     if not body.startswith(b'%PDF'):
         print('наклейку не отримано як PDF:', body[:200])
+        ok, info = tg_text(caption + '\n❗ Наклейку не отримано — роздрукуйте з кабінету НП')
+        print('Telegram (текст):', 'надіслано' if ok else f'НЕ надіслано: {info}')
         sys.exit(1)
     open(pdf, 'wb').write(body)
     print('наклейка 100×100 збережена:', pdf, len(body), 'байт')
-    ok, info = tg_document(pdf, f'📦 <b>ТТН {ttn}</b> — Rozetka #{a.order_id}\n'
-                                f'Київ, {w["Description"][:60]}\n'
-                                f'Післяплата: {f"{cod} грн на карту *{COD_CARD[-4:]}" if cod else "немає (оплачено)"}'
-                                f' | оголошена {amount} грн\n'
-                                f'Доставка {t.get("CostOnSite")} грн — платить одержувач')
+    ok, info = tg_document(pdf, caption)
     print('Telegram:', 'надіслано' if ok else f'НЕ надіслано: {info}')
 
 
