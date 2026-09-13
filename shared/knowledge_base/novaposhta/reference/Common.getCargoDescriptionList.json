@@ -1,0 +1,2512 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Ref": "8f469737-33e4-11e3-b441-0050568002cf",
+   "Description": " док-станція",
+   "DescriptionRu": " док-станция"
+  },
+  {
+   "Ref": "8f46973e-33e4-11e3-b441-0050568002cf",
+   "Description": "DVD/HD- медіаплеєр",
+   "DescriptionRu": "DVD/HD- медиаплеер"
+  },
+  {
+   "Ref": "ec9ac10f-8496-11e6-a9f2-005056887b8d",
+   "Description": "OLX",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "1a796922-8a37-11e6-856b-005056887b8d",
+   "Description": "OLX автозапчастини",
+   "DescriptionRu": "OLX автозапчасти"
+  },
+  {
+   "Ref": "ec9ac115-8496-11e6-a9f2-005056887b8d",
+   "Description": "OLX велозапчастини",
+   "DescriptionRu": "OLX велозапчасти"
+  },
+  {
+   "Ref": "7a4eedda-83dd-11e6-a9f2-005056887b8d",
+   "Description": "OLX одяг та взуття",
+   "DescriptionRu": "OLX одежда и обувь"
+  },
+  {
+   "Ref": "ec9ac113-8496-11e6-a9f2-005056887b8d",
+   "Description": "OLX товари для дітей",
+   "DescriptionRu": "OLX товари для дітей"
+  },
+  {
+   "Ref": "f297a497-3cb8-11dd-84e9-001a92567626",
+   "Description": "абажур",
+   "DescriptionRu": "абажур"
+  },
+  {
+   "Ref": "f297a499-3cb8-11dd-84e9-001a92567626",
+   "Description": "абразивна паста",
+   "DescriptionRu": "абразивная паста"
+  },
+  {
+   "Ref": "f297a498-3cb8-11dd-84e9-001a92567626",
+   "Description": "абразивний круг",
+   "DescriptionRu": "абразивный круг"
+  },
+  {
+   "Ref": "2fe893dc-33ee-11e3-b441-0050568002cf",
+   "Description": "Автоаксесуари",
+   "DescriptionRu": "Автоаксессуары"
+  },
+  {
+   "Ref": "61cc707c-5b1b-11e6-a9f2-005056887b8d",
+   "Description": "автозапчастини",
+   "DescriptionRu": "автозапчасти"
+  },
+  {
+   "Ref": "2fe893dd-33ee-11e3-b441-0050568002cf",
+   "Description": "Автокосметика",
+   "DescriptionRu": "Автокосметика"
+  },
+  {
+   "Ref": "2fe893e6-33ee-11e3-b441-0050568002cf",
+   "Description": "Автомати самообслуговування",
+   "DescriptionRu": "Автоматы самообслуживания"
+  },
+  {
+   "Ref": "2fe893bd-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільна фара",
+   "DescriptionRu": "автомобильная фара"
+  },
+  {
+   "Ref": "2fe893bf-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільне крило",
+   "DescriptionRu": "автомобильное крыло"
+  },
+  {
+   "Ref": "2fe893c2-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільний бампер",
+   "DescriptionRu": "автомобильный бампер"
+  },
+  {
+   "Ref": "2fe893be-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільний радіатор",
+   "DescriptionRu": "автомобильный радиатор"
+  },
+  {
+   "Ref": "2fe893ca-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільні витратні матеріали (фільтр, мастило та ін)",
+   "DescriptionRu": "автомобильные расходные материалы (фильтр, масло и тд)"
+  },
+  {
+   "Ref": "2fe893c1-33ee-11e3-b441-0050568002cf",
+   "Description": "автомобільні двері",
+   "DescriptionRu": "автомобильные двери"
+  },
+  {
+   "Ref": "2fe893bc-33ee-11e3-b441-0050568002cf",
+   "Description": "Автомобільні запчастини",
+   "DescriptionRu": "Автомобильные запчасти"
+  },
+  {
+   "Ref": "f297a4a1-3cb8-11dd-84e9-001a92567626",
+   "Description": "автохолодильник",
+   "DescriptionRu": "автохолодильник"
+  },
+  {
+   "Ref": "2fe893d7-33ee-11e3-b441-0050568002cf",
+   "Description": "аератор",
+   "DescriptionRu": "аэратор"
+  },
+  {
+   "Ref": "ad5465c7-33dd-11e3-b441-0050568002cf",
+   "Description": "аерогриль",
+   "DescriptionRu": "аэрогриль"
+  },
+  {
+   "Ref": "bf84f563-6730-11e3-b441-0050568002cf",
+   "Description": "акваріум",
+   "DescriptionRu": "аквариум"
+  },
+  {
+   "Ref": "8f469731-33e4-11e3-b441-0050568002cf",
+   "Description": "аксесуари для ванної кімнати",
+   "DescriptionRu": "аксессуары  для ванной комнаты"
+  },
+  {
+   "Ref": "8f469707-33e4-11e3-b441-0050568002cf",
+   "Description": "аксесуари до ВПТ",
+   "DescriptionRu": "аксессуары к КБТ"
+  },
+  {
+   "Ref": "ad5465f1-33dd-11e3-b441-0050568002cf",
+   "Description": "аксесуари до дрібної побутової техніки",
+   "DescriptionRu": "аксессуары к мелкой бытовой технике"
+  },
+  {
+   "Ref": "5b89dbd7-33e9-11e3-b441-0050568002cf",
+   "Description": "аксесуари до мобільних пристроїв",
+   "DescriptionRu": "аксессуары к мобильным устройствам"
+  },
+  {
+   "Ref": "2fe893e8-33ee-11e3-b441-0050568002cf",
+   "Description": "Аксесуари до одягу",
+   "DescriptionRu": "Аксессуары к одежде"
+  },
+  {
+   "Ref": "5b89dbc7-33e9-11e3-b441-0050568002cf",
+   "Description": "аксесуари до фототехніки",
+   "DescriptionRu": "аксессуары к фототехнике"
+  },
+  {
+   "Ref": "2fe893de-33ee-11e3-b441-0050568002cf",
+   "Description": "Акумулятори",
+   "DescriptionRu": "Аккумуляторы"
+  },
+  {
+   "Ref": "8f46973a-33e4-11e3-b441-0050568002cf",
+   "Description": "акустична система",
+   "DescriptionRu": "акустическая система"
+  },
+  {
+   "Ref": "f297a4b2-3cb8-11dd-84e9-001a92567626",
+   "Description": "амортизатор",
+   "DescriptionRu": "амортизатор"
+  },
+  {
+   "Ref": "f297a4b8-3cb8-11dd-84e9-001a92567626",
+   "Description": "антена",
+   "DescriptionRu": "антенна"
+  },
+  {
+   "Ref": "4e42f648-3d05-11dd-84e9-001a92567626",
+   "Description": "антисептик",
+   "DescriptionRu": "антисептик"
+  },
+  {
+   "Ref": "4e42f64b-3d05-11dd-84e9-001a92567626",
+   "Description": "аптечка",
+   "DescriptionRu": "аптечка"
+  },
+  {
+   "Ref": "4a9fcdb1-3d44-11e3-b441-0050568002cf",
+   "Description": "ароматичні добавки",
+   "DescriptionRu": "ароматические добавки"
+  },
+  {
+   "Ref": "37fba608-3fa0-11e3-b441-0050568002cf",
+   "Description": "Архів ",
+   "DescriptionRu": "Архив"
+  },
+  {
+   "Ref": "4e42f651-3d05-11dd-84e9-001a92567626",
+   "Description": "аскорбінова кислота",
+   "DescriptionRu": "аскорбиновая кислота"
+  },
+  {
+   "Ref": "8f469734-33e4-11e3-b441-0050568002cf",
+   "Description": "Аудиотехника",
+   "DescriptionRu": "Аудиотехника"
+  },
+  {
+   "Ref": "4e42f658-3d05-11dd-84e9-001a92567626",
+   "Description": "багет",
+   "DescriptionRu": "багет"
+  },
+  {
+   "Ref": "bf84f564-6730-11e3-b441-0050568002cf",
+   "Description": "Банер",
+   "DescriptionRu": "Баннер"
+  },
+  {
+   "Ref": "39339c7d-cd8b-11de-9841-000c294065a1",
+   "Description": "батарейки",
+   "DescriptionRu": "батарейки"
+  },
+  {
+   "Ref": "4e42f66d-3d05-11dd-84e9-001a92567626",
+   "Description": "безперебійник",
+   "DescriptionRu": "безперебойник"
+  },
+  {
+   "Ref": "8f469729-33e4-11e3-b441-0050568002cf",
+   "Description": "біде",
+   "DescriptionRu": "биде"
+  },
+  {
+   "Ref": "2fe893ea-33ee-11e3-b441-0050568002cf",
+   "Description": "Біжутерія",
+   "DescriptionRu": "Бижутерия"
+  },
+  {
+   "Ref": "f233274c-f326-11e4-8a92-005056887b8d",
+   "Description": "Білет відділення",
+   "DescriptionRu": "Билет отделение"
+  },
+  {
+   "Ref": "f233274a-f326-11e4-8a92-005056887b8d",
+   "Description": "Білет кур'єром",
+   "DescriptionRu": "Билет курьером"
+  },
+  {
+   "Ref": "4e42f678-3d05-11dd-84e9-001a92567626",
+   "Description": "бінокль",
+   "DescriptionRu": "бинокль"
+  },
+  {
+   "Ref": "4e42f67b-3d05-11dd-84e9-001a92567626",
+   "Description": "біологічні добавки",
+   "DescriptionRu": "биологические добавки"
+  },
+  {
+   "Ref": "2fe893da-33ee-11e3-b441-0050568002cf",
+   "Description": "біологічні матеріали",
+   "DescriptionRu": "биологические материалы"
+  },
+  {
+   "Ref": "ad5465c8-33dd-11e3-b441-0050568002cf",
+   "Description": "блендер",
+   "DescriptionRu": "блендер"
+  },
+  {
+   "Ref": "4e42f687-3d05-11dd-84e9-001a92567626",
+   "Description": "блютус",
+   "DescriptionRu": "блютус"
+  },
+  {
+   "Ref": "4e42f689-3d05-11dd-84e9-001a92567626",
+   "Description": "Бойлер(и)",
+   "DescriptionRu": "Бойлер(ы)"
+  },
+  {
+   "Ref": "5b89dbef-33e9-11e3-b441-0050568002cf",
+   "Description": "бокали",
+   "DescriptionRu": "бокалы"
+  },
+  {
+   "Ref": "041fafa1-8447-11e3-b441-0050568002cf",
+   "Description": "бокс",
+   "DescriptionRu": "бокс"
+  },
+  {
+   "Ref": "4e42f90d-3d05-11dd-84e9-001a92567626",
+   "Description": "борошно",
+   "DescriptionRu": "мука"
+  },
+  {
+   "Ref": "223a10d3-33f5-11e3-b441-0050568002cf",
+   "Description": "Бочки, баки, відра",
+   "DescriptionRu": "Бочки, баки, ведра"
+  },
+  {
+   "Ref": "4e42f68d-3d05-11dd-84e9-001a92567626",
+   "Description": "бра",
+   "DescriptionRu": "бра"
+  },
+  {
+   "Ref": "4e42f694-3d05-11dd-84e9-001a92567626",
+   "Description": "бризковик",
+   "DescriptionRu": "брызговик"
+  },
+  {
+   "Ref": "223a10d7-33f5-11e3-b441-0050568002cf",
+   "Description": "Будівельне обладнання",
+   "DescriptionRu": "Строительное оборудование"
+  },
+  {
+   "Ref": "5b89dbdf-33e9-11e3-b441-0050568002cf",
+   "Description": "будівельні елементи",
+   "DescriptionRu": "стоительные элементы"
+  },
+  {
+   "Ref": "5b89dbd8-33e9-11e3-b441-0050568002cf",
+   "Description": "Будівельні матеріали",
+   "DescriptionRu": "Строительные материалы"
+  },
+  {
+   "Ref": "5b89dbd9-33e9-11e3-b441-0050568002cf",
+   "Description": "будівельні суміші",
+   "DescriptionRu": "строительные смеси"
+  },
+  {
+   "Ref": "ad5465ca-33dd-11e3-b441-0050568002cf",
+   "Description": "бутербродниця",
+   "DescriptionRu": "бутербродница"
+  },
+  {
+   "Ref": "49ad0ea2-237d-11e4-acce-0050568002cf",
+   "Description": "Бухгалтерські документи ",
+   "DescriptionRu": "Бухгалтерские документы"
+  },
+  {
+   "Ref": "ad5465cd-33dd-11e3-b441-0050568002cf",
+   "Description": "ваги кухонні",
+   "DescriptionRu": "весы кухонные"
+  },
+  {
+   "Ref": "ad5465ce-33dd-11e3-b441-0050568002cf",
+   "Description": "ваги підлогові",
+   "DescriptionRu": "весы напольные"
+  },
+  {
+   "Ref": "5b89dbfb-33e9-11e3-b441-0050568002cf",
+   "Description": "ваза",
+   "DescriptionRu": "ваза"
+  },
+  {
+   "Ref": "4e42f6a5-3d05-11dd-84e9-001a92567626",
+   "Description": "вал",
+   "DescriptionRu": "вал"
+  },
+  {
+   "Ref": "223a10d5-33f5-11e3-b441-0050568002cf",
+   "Description": "Валіза",
+   "DescriptionRu": "Чемодан"
+  },
+  {
+   "Ref": "4e42f6a7-3d05-11dd-84e9-001a92567626",
+   "Description": "ванілин",
+   "DescriptionRu": "ванилин"
+  },
+  {
+   "Ref": "8ee32bdc-802d-11df-88aa-000c29f9e806",
+   "Description": "Ванна(и) акрилова",
+   "DescriptionRu": "Ванна(ы) акриловая"
+  },
+  {
+   "Ref": "8ee32bde-802d-11df-88aa-000c29f9e806",
+   "Description": "Ванна(и) сталева",
+   "DescriptionRu": "Ванна(ы) стальная"
+  },
+  {
+   "Ref": "8ee32bdd-802d-11df-88aa-000c29f9e806",
+   "Description": "Ванна(и) чугунна",
+   "DescriptionRu": "Ванна(ы) чугунная"
+  },
+  {
+   "Ref": "ad5465cb-33dd-11e3-b441-0050568002cf",
+   "Description": "ванночка для ніг",
+   "DescriptionRu": "ванночка для ног"
+  },
+  {
+   "Ref": "cff5e39d-b443-11de-b75f-000c291af1b3",
+   "Description": "вапно",
+   "DescriptionRu": "известь"
+  },
+  {
+   "Ref": "4e42f6aa-3d05-11dd-84e9-001a92567626",
+   "Description": "вата",
+   "DescriptionRu": "вата"
+  },
+  {
+   "Ref": "ad5465cc-33dd-11e3-b441-0050568002cf",
+   "Description": "вафельниця",
+   "DescriptionRu": "вафельница"
+  },
+  {
+   "Ref": "ad5465fc-33dd-11e3-b441-0050568002cf",
+   "Description": "Велика побутова техніка (ВПТ)",
+   "DescriptionRu": "Крупнобытовая техника (КБТ)"
+  },
+  {
+   "Ref": "ad5465c0-33dd-11e3-b441-0050568002cf",
+   "Description": "Веломототехніка",
+   "DescriptionRu": "Веломототехника"
+  },
+  {
+   "Ref": "ad5465c4-33dd-11e3-b441-0050568002cf",
+   "Description": "велосипед",
+   "DescriptionRu": "велосипед"
+  },
+  {
+   "Ref": "ad5465c5-33dd-11e3-b441-0050568002cf",
+   "Description": "велосипед дитячий",
+   "DescriptionRu": "велосипед детский"
+  },
+  {
+   "Ref": "4e42f6b4-3d05-11dd-84e9-001a92567626",
+   "Description": "вентилятор",
+   "DescriptionRu": "вентилятор"
+  },
+  {
+   "Ref": "4e42f6b1-3d05-11dd-84e9-001a92567626",
+   "Description": "Вентиляційне обладнання",
+   "DescriptionRu": "Вентеляционное оборудование"
+  },
+  {
+   "Ref": "549f275f-5e4d-11e3-b441-0050568002cf",
+   "Description": "ветеринарні  препарати",
+   "DescriptionRu": "ветеринарные препараты"
+  },
+  {
+   "Ref": "2fe893e9-33ee-11e3-b441-0050568002cf",
+   "Description": "Взуття",
+   "DescriptionRu": "Обувь"
+  },
+  {
+   "Ref": "4e42f6f1-3d05-11dd-84e9-001a92567626",
+   "Description": "вимикач",
+   "DescriptionRu": "выключатель"
+  },
+  {
+   "Ref": "c57bf975-3bb3-11e3-b441-0050568002cf",
+   "Description": "Вимірювальні прилади, лічильники",
+   "DescriptionRu": "Измерительные приборы, счетчики"
+  },
+  {
+   "Ref": "223a10cd-33f5-11e3-b441-0050568002cf",
+   "Description": "Витратні матеріали",
+   "DescriptionRu": "Расходные материалы"
+  },
+  {
+   "Ref": "8ee32bd5-802d-11df-88aa-000c29f9e806",
+   "Description": "Витяжка (и) кутова",
+   "DescriptionRu": "Вытяжка(и) угловая "
+  },
+  {
+   "Ref": "4e42f6d1-3d05-11dd-84e9-001a92567626",
+   "Description": "Витяжка(и)",
+   "DescriptionRu": "Витяжка(и)"
+  },
+  {
+   "Ref": "8f469740-33e4-11e3-b441-0050568002cf",
+   "Description": "відеокамера",
+   "DescriptionRu": "видеокамера"
+  },
+  {
+   "Ref": "4e42f6c6-3d05-11dd-84e9-001a92567626",
+   "Description": "відеокарта",
+   "DescriptionRu": "видеокарта"
+  },
+  {
+   "Ref": "4e42f6c7-3d05-11dd-84e9-001a92567626",
+   "Description": "відеопринтер",
+   "DescriptionRu": "видеопринтер"
+  },
+  {
+   "Ref": "4e2c9df8-08bd-11e3-874c-d4ae527baec3",
+   "Description": "відеорегістратор",
+   "DescriptionRu": "видеорегистратор"
+  },
+  {
+   "Ref": "8f46973b-33e4-11e3-b441-0050568002cf",
+   "Description": "Відеотехніка",
+   "DescriptionRu": "Видеотехника"
+  },
+  {
+   "Ref": "2fe893f7-33ee-11e3-b441-0050568002cf",
+   "Description": "Вікна",
+   "DescriptionRu": "Окна"
+  },
+  {
+   "Ref": "8f46970b-33e4-11e3-b441-0050568002cf",
+   "Description": "вітальня (корпусні меблі)",
+   "DescriptionRu": "гостинная (корпусная мебель)"
+  },
+  {
+   "Ref": "4e42f6ce-3d05-11dd-84e9-001a92567626",
+   "Description": "вітаміни",
+   "DescriptionRu": "витамины"
+  },
+  {
+   "Ref": "8f469722-33e4-11e3-b441-0050568002cf",
+   "Description": "вітражі",
+   "DescriptionRu": "витражи"
+  },
+  {
+   "Ref": "8e150a93-3b09-11e3-b441-0050568002cf",
+   "Description": "вішалка",
+   "DescriptionRu": "вешалка"
+  },
+  {
+   "Ref": "2fe893f6-33ee-11e3-b441-0050568002cf",
+   "Description": "Вогнегасники",
+   "DescriptionRu": "Огнетушители"
+  },
+  {
+   "Ref": "4e42f6d6-3d05-11dd-84e9-001a92567626",
+   "Description": "вода",
+   "DescriptionRu": "вода"
+  },
+  {
+   "Ref": "8e150a92-3b09-11e3-b441-0050568002cf",
+   "Description": "Вторинна сировина",
+   "DescriptionRu": "Вторичное сырье"
+  },
+  {
+   "Ref": "ad5465ff-33dd-11e3-b441-0050568002cf",
+   "Description": "газова плита ",
+   "DescriptionRu": "газовая плита"
+  },
+  {
+   "Ref": "4e42f6f6-3d05-11dd-84e9-001a92567626",
+   "Description": "Газове обладнання",
+   "DescriptionRu": "Газовое оборудование"
+  },
+  {
+   "Ref": "2fe893d3-33ee-11e3-b441-0050568002cf",
+   "Description": "газонокосарка",
+   "DescriptionRu": "газонокосилка"
+  },
+  {
+   "Ref": "c57bf973-3bb3-11e3-b441-0050568002cf",
+   "Description": "Галантерея",
+   "DescriptionRu": "Галантерея"
+  },
+  {
+   "Ref": "b9be407e-742a-11e2-aa4f-d4ae52ab9fa5",
+   "Description": "Гаманець",
+   "DescriptionRu": "Кошелек"
+  },
+  {
+   "Ref": "37fba609-3fa0-11e3-b441-0050568002cf",
+   "Description": "герметик ",
+   "DescriptionRu": "герметик"
+  },
+  {
+   "Ref": "8f46972b-33e4-11e3-b441-0050568002cf",
+   "Description": "гідромасажний бокс",
+   "DescriptionRu": "гидромасажный бокс"
+  },
+  {
+   "Ref": "4e42f70d-3d05-11dd-84e9-001a92567626",
+   "Description": "гідроцикл",
+   "DescriptionRu": "гидроцикл"
+  },
+  {
+   "Ref": "417227fd-6709-11e3-b441-0050568002cf",
+   "Description": "Гірськолижне спорядження",
+   "DescriptionRu": "Горнолыжное снаряжение"
+  },
+  {
+   "Ref": "bf84f562-6730-11e3-b441-0050568002cf",
+   "Description": "глушник",
+   "DescriptionRu": "глушитель"
+  },
+  {
+   "Ref": "546aea39-3d05-11dd-84e9-001a92567626",
+   "Description": "Годинник",
+   "DescriptionRu": "Часы"
+  },
+  {
+   "Ref": "3ef1424d-67f7-11e3-b441-0050568002cf",
+   "Description": "горох",
+   "DescriptionRu": "горох"
+  },
+  {
+   "Ref": "953ad2bd-5831-11e3-b441-0050568002cf",
+   "Description": "Господарські та побутові товари",
+   "DescriptionRu": "Хозяйственные и бытовые товары"
+  },
+  {
+   "Ref": "4e42f724-3d05-11dd-84e9-001a92567626",
+   "Description": "грунтовка",
+   "DescriptionRu": "грунтовка"
+  },
+  {
+   "Ref": "2fe893ec-33ee-11e3-b441-0050568002cf",
+   "Description": "Двері",
+   "DescriptionRu": "Двери"
+  },
+  {
+   "Ref": "2fe893cd-33ee-11e3-b441-0050568002cf",
+   "Description": "двигун",
+   "DescriptionRu": "двигатель"
+  },
+  {
+   "Ref": "2fe893c4-33ee-11e3-b441-0050568002cf",
+   "Description": "двигун автомобільний",
+   "DescriptionRu": "двигатель автомобильный"
+  },
+  {
+   "Ref": "4e42f730-3d05-11dd-84e9-001a92567626",
+   "Description": "двірники автомобыльні",
+   "DescriptionRu": "дворники автомобільные"
+  },
+  {
+   "Ref": "8e150a94-3b09-11e3-b441-0050568002cf",
+   "Description": "дерев'яні матеріали (ДСП,ДВП,МДФ та ін)",
+   "DescriptionRu": "деревянные материалы (ДСП, ДВП, МДФ и т.д)"
+  },
+  {
+   "Ref": "2fe893c7-33ee-11e3-b441-0050568002cf",
+   "Description": "дефлектор (вітровик)",
+   "DescriptionRu": "дефлектор (ветровик)"
+  },
+  {
+   "Ref": "8f469723-33e4-11e3-b441-0050568002cf",
+   "Description": "дзеркало",
+   "DescriptionRu": "зеркало"
+  },
+  {
+   "Ref": "8f46971c-33e4-11e3-b441-0050568002cf",
+   "Description": "диван",
+   "DescriptionRu": "диван"
+  },
+  {
+   "Ref": "5b89dbd5-33e9-11e3-b441-0050568002cf",
+   "Description": "диктофон",
+   "DescriptionRu": "диктофон"
+  },
+  {
+   "Ref": "d718771e-d677-11dd-bb84-001d92f78697",
+   "Description": "Диск нестандартний (Вантаж)",
+   "DescriptionRu": "Диск нестандартный (Груз)"
+  },
+  {
+   "Ref": "2fe893bb-33ee-11e3-b441-0050568002cf",
+   "Description": "Диски",
+   "DescriptionRu": "Диски"
+  },
+  {
+   "Ref": "20f7b631-9add-11e3-b441-0050568002cf",
+   "Description": "Диски вантажні",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "d7c456ce-aa8b-11e3-9fa0-0050568002cf",
+   "Description": "Диски легкові",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "5b89dbe2-33e9-11e3-b441-0050568002cf",
+   "Description": "дитяча коляска",
+   "DescriptionRu": "детская коляска"
+  },
+  {
+   "Ref": "5b89dbe3-33e9-11e3-b441-0050568002cf",
+   "Description": "дитяче автокрісло",
+   "DescriptionRu": "детское автокресло"
+  },
+  {
+   "Ref": "30cc1a6b-687c-11e3-b441-0050568002cf",
+   "Description": "дитячий автомобіль",
+   "DescriptionRu": "детский автомобиль"
+  },
+  {
+   "Ref": "5b89dbe4-33e9-11e3-b441-0050568002cf",
+   "Description": "дитячий електромобіль",
+   "DescriptionRu": " детский электромобиль"
+  },
+  {
+   "Ref": "5b89dbe6-33e9-11e3-b441-0050568002cf",
+   "Description": "дитячі ігрові комплекти (пісочниці, гойдалки та ін)",
+   "DescriptionRu": "детские игровые комплекты (песочница, качели и т.д.)"
+  },
+  {
+   "Ref": "8f46970c-33e4-11e3-b441-0050568002cf",
+   "Description": "дитячі меблі (корпусні меблі)",
+   "DescriptionRu": "детская мебель (корпусная мебель)"
+  },
+  {
+   "Ref": "5b89dbe5-33e9-11e3-b441-0050568002cf",
+   "Description": "дитячі самокати, ковзани, ролики, санки",
+   "DescriptionRu": "детские самокаты, коньки, ролики, санки"
+  },
+  {
+   "Ref": "5b89dbe7-33e9-11e3-b441-0050568002cf",
+   "Description": "дитячі товари (гігієнічні, по догляду за дитиною)",
+   "DescriptionRu": "детские товары (гигиенические, по уходу за ребенком)"
+  },
+  {
+   "Ref": "c0611701-5347-11e3-b441-0050568002cf",
+   "Description": "Доїльний апарат ",
+   "DescriptionRu": "Доильный аппарат"
+  },
+  {
+   "Ref": "b16f50c8-6bb5-11de-8d7a-002219c743f6",
+   "Description": "Документи",
+   "DescriptionRu": "Документы"
+  },
+  {
+   "Ref": "08b94b63-db28-11f0-9dff-8c8474c74d21",
+   "Description": "Документи з пакуванням",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "8f46973f-33e4-11e3-b441-0050568002cf",
+   "Description": "домашній кінотеатр",
+   "DescriptionRu": "домашний кинотеатр"
+  },
+  {
+   "Ref": "5b89dbec-33e9-11e3-b441-0050568002cf",
+   "Description": "домашній планетарій",
+   "DescriptionRu": "домашний планетарий"
+  },
+  {
+   "Ref": "4e42f759-3d05-11dd-84e9-001a92567626",
+   "Description": "домкрат",
+   "DescriptionRu": "домкрат"
+  },
+  {
+   "Ref": "ad5465c6-33dd-11e3-b441-0050568002cf",
+   "Description": "Дрібна побутова техніка",
+   "DescriptionRu": "Мелкая бытовая техника"
+  },
+  {
+   "Ref": "4a9fcdb6-3d44-11e3-b441-0050568002cf",
+   "Description": "дріжджі",
+   "DescriptionRu": "дрожжи"
+  },
+  {
+   "Ref": "4e42f76b-3d05-11dd-84e9-001a92567626",
+   "Description": "Духовка",
+   "DescriptionRu": "Духовка"
+  },
+  {
+   "Ref": "8ee32bdb-802d-11df-88aa-000c29f9e806",
+   "Description": "Душевий бокс(и)",
+   "DescriptionRu": "Душевой бокс(ы)"
+  },
+  {
+   "Ref": "ad5465e7-33dd-11e3-b441-0050568002cf",
+   "Description": "електрична піч",
+   "DescriptionRu": "электрическая печь"
+  },
+  {
+   "Ref": "223a10db-33f5-11e3-b441-0050568002cf",
+   "Description": "Електричне обладнання та матеріали",
+   "DescriptionRu": "Электрическое оборудование и материалы"
+  },
+  {
+   "Ref": "546aea8b-3d05-11dd-84e9-001a92567626",
+   "Description": "електроблок",
+   "DescriptionRu": "электроблок"
+  },
+  {
+   "Ref": "ad5465e8-33dd-11e3-b441-0050568002cf",
+   "Description": "електробритва",
+   "DescriptionRu": "электробритва"
+  },
+  {
+   "Ref": "546aea8e-3d05-11dd-84e9-001a92567626",
+   "Description": "електродвигун",
+   "DescriptionRu": "электродвигатель"
+  },
+  {
+   "Ref": "546aea8d-3d05-11dd-84e9-001a92567626",
+   "Description": "електроди",
+   "DescriptionRu": "электроды"
+  },
+  {
+   "Ref": "9d04669c-e50d-11e1-b22f-d4ae527baec9",
+   "Description": "електромонтажні шафи",
+   "DescriptionRu": "электромонтажные шкафы"
+  },
+  {
+   "Ref": "5b89dbd3-33e9-11e3-b441-0050568002cf",
+   "Description": "електронна книжка",
+   "DescriptionRu": "электронная книга"
+  },
+  {
+   "Ref": "5b89dbd4-33e9-11e3-b441-0050568002cf",
+   "Description": "електронні перекладачі",
+   "DescriptionRu": "электронные переводчики"
+  },
+  {
+   "Ref": "546aea97-3d05-11dd-84e9-001a92567626",
+   "Description": "електропривод",
+   "DescriptionRu": "электропривод"
+  },
+  {
+   "Ref": "546aea98-3d05-11dd-84e9-001a92567626",
+   "Description": "електростанція",
+   "DescriptionRu": "электростанция"
+  },
+  {
+   "Ref": "ce3971fb-4bab-11e3-b441-0050568002cf",
+   "Description": "Електротовари",
+   "DescriptionRu": "Электротовары"
+  },
+  {
+   "Ref": "ad5465e9-33dd-11e3-b441-0050568002cf",
+   "Description": "електрочайник",
+   "DescriptionRu": "элетрочайник"
+  },
+  {
+   "Ref": "546aea90-3d05-11dd-84e9-001a92567626",
+   "Description": "електрочовен",
+   "DescriptionRu": "электролодка"
+  },
+  {
+   "Ref": "546aea9d-3d05-11dd-84e9-001a92567626",
+   "Description": "електрошафа",
+   "DescriptionRu": "электрошкаф"
+  },
+  {
+   "Ref": "546aea88-3d05-11dd-84e9-001a92567626",
+   "Description": "електрощит",
+   "DescriptionRu": "электощит"
+  },
+  {
+   "Ref": "9aef6ae7-1402-11e4-acce-0050568002cf",
+   "Description": "емальований посуд",
+   "DescriptionRu": "эмалированная посуда "
+  },
+  {
+   "Ref": "ad5465ea-33dd-11e3-b441-0050568002cf",
+   "Description": "епілятор",
+   "DescriptionRu": "эпилятор"
+  },
+  {
+   "Ref": "546aeaa2-3d05-11dd-84e9-001a92567626",
+   "Description": "Етикетка",
+   "DescriptionRu": "Этикетка"
+  },
+  {
+   "Ref": "223a10c9-33f5-11e3-b441-0050568002cf",
+   "Description": "Жалюзі",
+   "DescriptionRu": "Жалюзи"
+  },
+  {
+   "Ref": "4e42f777-3d05-11dd-84e9-001a92567626",
+   "Description": "желатин",
+   "DescriptionRu": "желатин"
+  },
+  {
+   "Ref": "4e42f77b-3d05-11dd-84e9-001a92567626",
+   "Description": "жорсткий диск",
+   "DescriptionRu": "жесткий диск"
+  },
+  {
+   "Ref": "ddd8b41d-cd1d-11e8-ad0d-005056b24375",
+   "Description": "Завірені копії+догов",
+   "DescriptionRu": "Заверенные копии+догов"
+  },
+  {
+   "Ref": "4e42f788-3d05-11dd-84e9-001a92567626",
+   "Description": "закваска",
+   "DescriptionRu": "закваска"
+  },
+  {
+   "Ref": "e2c9f497-6312-11e3-b441-0050568002cf",
+   "Description": "замок (накладний,врізний, навісний та ін)",
+   "DescriptionRu": "замок (накладной, врезной, навесной и др.)"
+  },
+  {
+   "Ref": "8e150a89-3b09-11e3-b441-0050568002cf",
+   "Description": "запасні частини до дрібної побутової техніки",
+   "DescriptionRu": "запасные части к мелкой бытовой технике"
+  },
+  {
+   "Ref": "2fe893cb-33ee-11e3-b441-0050568002cf",
+   "Description": "Запчастини",
+   "DescriptionRu": "Запчасти"
+  },
+  {
+   "Ref": "8e150a88-3b09-11e3-b441-0050568002cf",
+   "Description": "запчастини до ВПТ",
+   "DescriptionRu": "запчасти к КБТ"
+  },
+  {
+   "Ref": "9ab3f938-9dc2-11de-822f-000c2965ae0e",
+   "Description": "Засоби індивідуального захисту",
+   "DescriptionRu": "Средства индивидуальной защиты"
+  },
+  {
+   "Ref": "546ae9c5-3d05-11dd-84e9-001a92567626",
+   "Description": "зволожувач повітря",
+   "DescriptionRu": "увлажнитель воздуха"
+  },
+  {
+   "Ref": "8f469732-33e4-11e3-b441-0050568002cf",
+   "Description": "змішувач",
+   "DescriptionRu": "смеситель"
+  },
+  {
+   "Ref": "2fe893ed-33ee-11e3-b441-0050568002cf",
+   "Description": "зоотовари",
+   "DescriptionRu": "зоотовары"
+  },
+  {
+   "Ref": "549f275e-5e4d-11e3-b441-0050568002cf",
+   "Description": "Зоотовари",
+   "DescriptionRu": "Зоотовары"
+  },
+  {
+   "Ref": "2fe893f5-33ee-11e3-b441-0050568002cf",
+   "Description": "Зразки",
+   "DescriptionRu": "Образцы"
+  },
+  {
+   "Ref": "223a10d1-33f5-11e3-b441-0050568002cf",
+   "Description": "Іграшки",
+   "DescriptionRu": "Игрушки"
+  },
+  {
+   "Ref": "5b89dbdb-33e9-11e3-b441-0050568002cf",
+   "Description": "ізоляційні матеріали",
+   "DescriptionRu": "изоляционные материалы"
+  },
+  {
+   "Ref": "8f46972c-33e4-11e3-b441-0050568002cf",
+   "Description": "інсталяційні системи",
+   "DescriptionRu": "инсталяционные системы"
+  },
+  {
+   "Ref": "2fe893ee-33ee-11e3-b441-0050568002cf",
+   "Description": "Інструменти",
+   "DescriptionRu": "Инструменты"
+  },
+  {
+   "Ref": "8f469708-33e4-11e3-b441-0050568002cf",
+   "Description": "інша велика побутова техніка",
+   "DescriptionRu": "другая крупнобытовая техника"
+  },
+  {
+   "Ref": "ad5465f0-33dd-11e3-b441-0050568002cf",
+   "Description": "інша дрібна побутова техніка",
+   "DescriptionRu": "прочая мелкая бытовая техника"
+  },
+  {
+   "Ref": "223a10d9-33f5-11e3-b441-0050568002cf",
+   "Description": "Інше",
+   "DescriptionRu": "Другое"
+  },
+  {
+   "Ref": "2fe893d0-33ee-11e3-b441-0050568002cf",
+   "Description": "інші запчастини",
+   "DescriptionRu": "другие запчасти"
+  },
+  {
+   "Ref": "223a10c8-33f5-11e3-b441-0050568002cf",
+   "Description": "інші освітлювальні прилади",
+   "DescriptionRu": "другие осветительные приборы"
+  },
+  {
+   "Ref": "ad5465cf-33dd-11e3-b441-0050568002cf",
+   "Description": "йогуртниця",
+   "DescriptionRu": "йогуртница"
+  },
+  {
+   "Ref": "2fe893ef-33ee-11e3-b441-0050568002cf",
+   "Description": "Кабель, дріт",
+   "DescriptionRu": "Кабель, провод"
+  },
+  {
+   "Ref": "4e42f849-3d05-11dd-84e9-001a92567626",
+   "Description": "кава",
+   "DescriptionRu": "кофе"
+  },
+  {
+   "Ref": "ad5465d1-33dd-11e3-b441-0050568002cf",
+   "Description": "кавоварка",
+   "DescriptionRu": "кофеварка"
+  },
+  {
+   "Ref": "95095966-5026-11e3-b441-0050568002cf",
+   "Description": "Кавові автомати ",
+   "DescriptionRu": "Кофейные автоматы"
+  },
+  {
+   "Ref": "ad5465d2-33dd-11e3-b441-0050568002cf",
+   "Description": "кавомолка",
+   "DescriptionRu": "кофемолка"
+  },
+  {
+   "Ref": "da4fac99-acfd-11de-af28-000c294065a1",
+   "Description": "какао",
+   "DescriptionRu": "какао"
+  },
+  {
+   "Ref": "2fe893f0-33ee-11e3-b441-0050568002cf",
+   "Description": "канцелярські товари",
+   "DescriptionRu": "канцелярские товары"
+  },
+  {
+   "Ref": "4f501016-63f6-11e3-b441-0050568002cf",
+   "Description": "Канцелярські товари",
+   "DescriptionRu": "Канцелярские товары"
+  },
+  {
+   "Ref": "2fe893c0-33ee-11e3-b441-0050568002cf",
+   "Description": "капот автомобільний",
+   "DescriptionRu": "капот автомобилный"
+  },
+  {
+   "Ref": "30cc1a6c-687c-11e3-b441-0050568002cf",
+   "Description": "карниз",
+   "DescriptionRu": "карниз"
+  },
+  {
+   "Ref": "f1abcb3d-3c73-11e3-b441-0050568002cf",
+   "Description": "Картина",
+   "DescriptionRu": "Картина"
+  },
+  {
+   "Ref": "4e42f7d6-3d05-11dd-84e9-001a92567626",
+   "Description": "картоплечистка",
+   "DescriptionRu": "картофелечистка"
+  },
+  {
+   "Ref": "c57bf97a-3bb3-11e3-b441-0050568002cf",
+   "Description": "картридж",
+   "DescriptionRu": "картридж"
+  },
+  {
+   "Ref": "5b89dbf7-33e9-11e3-b441-0050568002cf",
+   "Description": "каструлі",
+   "DescriptionRu": "кастрюли"
+  },
+  {
+   "Ref": "ad5465c3-33dd-11e3-b441-0050568002cf",
+   "Description": "квадроцикл",
+   "DescriptionRu": "квадроцикл"
+  },
+  {
+   "Ref": "30cc1a6d-687c-11e3-b441-0050568002cf",
+   "Description": "кедрове масло",
+   "DescriptionRu": "кедровое масло"
+  },
+  {
+   "Ref": "ad5465f6-33dd-11e3-b441-0050568002cf",
+   "Description": "килим",
+   "DescriptionRu": "ковер"
+  },
+  {
+   "Ref": "ad5465f4-33dd-11e3-b441-0050568002cf",
+   "Description": "килимова плитка",
+   "DescriptionRu": "ковровая плитка"
+  },
+  {
+   "Ref": "ad5465f2-33dd-11e3-b441-0050568002cf",
+   "Description": "Килимове покриття",
+   "DescriptionRu": "Ковровое покрытие"
+  },
+  {
+   "Ref": "ad5465f5-33dd-11e3-b441-0050568002cf",
+   "Description": "килимові доріжки",
+   "DescriptionRu": "ковровые дорожки"
+  },
+  {
+   "Ref": "c387b88c-5c07-11e3-b441-0050568002cf",
+   "Description": "клапан",
+   "DescriptionRu": "клапан"
+  },
+  {
+   "Ref": "8e150a86-3b09-11e3-b441-0050568002cf",
+   "Description": "клей",
+   "DescriptionRu": "клей"
+  },
+  {
+   "Ref": "2fe893f2-33ee-11e3-b441-0050568002cf",
+   "Description": "Книжки",
+   "DescriptionRu": "Книги"
+  },
+  {
+   "Ref": "4e42f94a-3d05-11dd-84e9-001a92567626",
+   "Description": "ковдра",
+   "DescriptionRu": "одеяла"
+  },
+  {
+   "Ref": "ad5465f3-33dd-11e3-b441-0050568002cf",
+   "Description": "ковролін",
+   "DescriptionRu": "ковролин"
+  },
+  {
+   "Ref": "6d6889c3-6247-11df-9863-000c291598e1",
+   "Description": "Комбайн (и)",
+   "DescriptionRu": "Комбайн (ы)"
+  },
+  {
+   "Ref": "5b89dbc9-33e9-11e3-b441-0050568002cf",
+   "Description": "комп'ютер",
+   "DescriptionRu": "компьютер"
+  },
+  {
+   "Ref": "5b89dbc8-33e9-11e3-b441-0050568002cf",
+   "Description": "Комп'ютерна техніка",
+   "DescriptionRu": "Компьютерная техника"
+  },
+  {
+   "Ref": "5b89dbcd-33e9-11e3-b441-0050568002cf",
+   "Description": "комп'ютерні комплектуючі",
+   "DescriptionRu": "компьютерные комплектующие"
+  },
+  {
+   "Ref": "4f501017-63f6-11e3-b441-0050568002cf",
+   "Description": "конверт",
+   "DescriptionRu": "конверт"
+  },
+  {
+   "Ref": "4e42f827-3d05-11dd-84e9-001a92567626",
+   "Description": "Кондиціонер(и)",
+   "DescriptionRu": "Кондиционер(ы)"
+  },
+  {
+   "Ref": "e2c9f496-6312-11e3-b441-0050568002cf",
+   "Description": "корм для тварин",
+   "DescriptionRu": "корм для животных"
+  },
+  {
+   "Ref": "8f469709-33e4-11e3-b441-0050568002cf",
+   "Description": "Корпусні меблі",
+   "DescriptionRu": "Корпусная мебель"
+  },
+  {
+   "Ref": "2fe893f1-33ee-11e3-b441-0050568002cf",
+   "Description": "Косметика",
+   "DescriptionRu": "Косметика"
+  },
+  {
+   "Ref": "4e42f844-3d05-11dd-84e9-001a92567626",
+   "Description": "Косметологічне обладнання",
+   "DescriptionRu": "Косметологическое оборудование"
+  },
+  {
+   "Ref": "92b1c649-9f9a-11e3-9fa0-0050568002cf",
+   "Description": "Кредитні документи",
+   "DescriptionRu": "Кредитные документы"
+  },
+  {
+   "Ref": "5b89dbdd-33e9-11e3-b441-0050568002cf",
+   "Description": "кріплення",
+   "DescriptionRu": "крепеж"
+  },
+  {
+   "Ref": "8f46971b-33e4-11e3-b441-0050568002cf",
+   "Description": "крісло",
+   "DescriptionRu": "кресло"
+  },
+  {
+   "Ref": "4e42f863-3d05-11dd-84e9-001a92567626",
+   "Description": "ксерокс",
+   "DescriptionRu": "ксерокс"
+  },
+  {
+   "Ref": "2fe893d5-33ee-11e3-b441-0050568002cf",
+   "Description": "культиватор",
+   "DescriptionRu": "культиватор"
+  },
+  {
+   "Ref": "2fe893d6-33ee-11e3-b441-0050568002cf",
+   "Description": "кусторіз",
+   "DescriptionRu": "кусторез"
+  },
+  {
+   "Ref": "8f46970d-33e4-11e3-b441-0050568002cf",
+   "Description": "кухня (корпусні меблі)",
+   "DescriptionRu": "кухня (корпусная мебель)"
+  },
+  {
+   "Ref": "8f46972d-33e4-11e3-b441-0050568002cf",
+   "Description": "кухонна мийка",
+   "DescriptionRu": "кухонная мойка"
+  },
+  {
+   "Ref": "5b89dc00-33e9-11e3-b441-0050568002cf",
+   "Description": "кухонне приладдя",
+   "DescriptionRu": "кухонные принадлежности"
+  },
+  {
+   "Ref": "5b89dc01-33e9-11e3-b441-0050568002cf",
+   "Description": "кухонні аксессуари",
+   "DescriptionRu": "кухонные аксессуары"
+  },
+  {
+   "Ref": "546ae90f-3d05-11dd-84e9-001a92567626",
+   "Description": "лава",
+   "DescriptionRu": "скамейка"
+  },
+  {
+   "Ref": "5b89dbe0-33e9-11e3-b441-0050568002cf",
+   "Description": "лакофарбові матеріали",
+   "DescriptionRu": "лакокрасочные материалы"
+  },
+  {
+   "Ref": "ad5465f8-33dd-11e3-b441-0050568002cf",
+   "Description": "ламінат",
+   "DescriptionRu": "ламинат"
+  },
+  {
+   "Ref": "4e42f874-3d05-11dd-84e9-001a92567626",
+   "Description": "лампа",
+   "DescriptionRu": "лампа"
+  },
+  {
+   "Ref": "4e42f875-3d05-11dd-84e9-001a92567626",
+   "Description": "лампочка",
+   "DescriptionRu": "лампочка"
+  },
+  {
+   "Ref": "2fe893d2-33ee-11e3-b441-0050568002cf",
+   "Description": "ланцюгові пили",
+   "DescriptionRu": "цепные пилы"
+  },
+  {
+   "Ref": "4e42f886-3d05-11dd-84e9-001a92567626",
+   "Description": "лимонна кислота",
+   "DescriptionRu": "лимонная кислота"
+  },
+  {
+   "Ref": "8f469710-33e4-11e3-b441-0050568002cf",
+   "Description": "ліжко (корпусні меблі)",
+   "DescriptionRu": "кровать (корпусная мебель)"
+  },
+  {
+   "Ref": "8e150a8a-3b09-11e3-b441-0050568002cf",
+   "Description": "лінзи",
+   "DescriptionRu": "линзы"
+  },
+  {
+   "Ref": "ad5465f9-33dd-11e3-b441-0050568002cf",
+   "Description": "лінолеум",
+   "DescriptionRu": "линолеум"
+  },
+  {
+   "Ref": "546aea06-3d05-11dd-84e9-001a92567626",
+   "Description": "ліхтар",
+   "DescriptionRu": "фонарь"
+  },
+  {
+   "Ref": "546ae968-3d05-11dd-84e9-001a92567626",
+   "Description": "лічильник",
+   "DescriptionRu": "счетчик"
+  },
+  {
+   "Ref": "4e42f898-3d05-11dd-84e9-001a92567626",
+   "Description": "люстра",
+   "DescriptionRu": "люстра"
+  },
+  {
+   "Ref": "8f46971a-33e4-11e3-b441-0050568002cf",
+   "Description": "М'які меблі",
+   "DescriptionRu": "Мягкая мебель"
+  },
+  {
+   "Ref": "ad5465da-33dd-11e3-b441-0050568002cf",
+   "Description": "м'ясорубка",
+   "DescriptionRu": "мясорубка"
+  },
+  {
+   "Ref": "8e150a8c-3b09-11e3-b441-0050568002cf",
+   "Description": "магніти",
+   "DescriptionRu": "магниты"
+  },
+  {
+   "Ref": "8f469735-33e4-11e3-b441-0050568002cf",
+   "Description": "магнітола",
+   "DescriptionRu": "магнитола"
+  },
+  {
+   "Ref": "ad5465d5-33dd-11e3-b441-0050568002cf",
+   "Description": "маринатор",
+   "DescriptionRu": "маринатор"
+  },
+  {
+   "Ref": "ad5465d6-33dd-11e3-b441-0050568002cf",
+   "Description": "масажер",
+   "DescriptionRu": "массажер"
+  },
+  {
+   "Ref": "8f46971e-33e4-11e3-b441-0050568002cf",
+   "Description": "матрац ",
+   "DescriptionRu": "матрац"
+  },
+  {
+   "Ref": "ad5465db-33dd-11e3-b441-0050568002cf",
+   "Description": "машинка для стрижки",
+   "DescriptionRu": "машинка для стрижки"
+  },
+  {
+   "Ref": "bc7126af-3caf-11e3-b441-0050568002cf",
+   "Description": "меблева крайка",
+   "DescriptionRu": "мебельная кромка"
+  },
+  {
+   "Ref": "4e42f8b7-3d05-11dd-84e9-001a92567626",
+   "Description": "меблева фурнітура",
+   "DescriptionRu": "мебельная фурнитура"
+  },
+  {
+   "Ref": "8f469719-33e4-11e3-b441-0050568002cf",
+   "Description": "меблі для ванної кімнати",
+   "DescriptionRu": "мебель для ванной комнаты"
+  },
+  {
+   "Ref": "30cc1a6e-687c-11e3-b441-0050568002cf",
+   "Description": "мед",
+   "DescriptionRu": "мед"
+  },
+  {
+   "Ref": "8e150a8b-3b09-11e3-b441-0050568002cf",
+   "Description": "медичне обладнання (інструменти)",
+   "DescriptionRu": "медицинское оборудование (инструменты)"
+  },
+  {
+   "Ref": "37fba60b-3fa0-11e3-b441-0050568002cf",
+   "Description": "Мережеве  обладнання ",
+   "DescriptionRu": "Сетевое оборудование "
+  },
+  {
+   "Ref": "2fe893f3-33ee-11e3-b441-0050568002cf",
+   "Description": "Металеві вироби (металоконструкції, метал)",
+   "DescriptionRu": "Металические изделия (металлоконструкции, металл)"
+  },
+  {
+   "Ref": "c57bf976-3bb3-11e3-b441-0050568002cf",
+   "Description": "металошукач",
+   "DescriptionRu": "металоискатель"
+  },
+  {
+   "Ref": "4a9fcdb3-3d44-11e3-b441-0050568002cf",
+   "Description": "метизи ",
+   "DescriptionRu": "метизы"
+  },
+  {
+   "Ref": "4e42f8ea-3d05-11dd-84e9-001a92567626",
+   "Description": "Мийка(и)",
+   "DescriptionRu": "Мойка(и)"
+  },
+  {
+   "Ref": "4e42f906-3d05-11dd-84e9-001a92567626",
+   "Description": "Миюча техніка",
+   "DescriptionRu": "Моющая техника"
+  },
+  {
+   "Ref": "5b89dbeb-33e9-11e3-b441-0050568002cf",
+   "Description": "мікроскоп",
+   "DescriptionRu": "микроском"
+  },
+  {
+   "Ref": "5505b390-e9ba-11e5-899e-005056887b8d",
+   "Description": "мікросхема",
+   "DescriptionRu": "микросхема"
+  },
+  {
+   "Ref": "ad5465d8-33dd-11e3-b441-0050568002cf",
+   "Description": "міксер",
+   "DescriptionRu": "миксер"
+  },
+  {
+   "Ref": "4e42f8db-3d05-11dd-84e9-001a92567626",
+   "Description": "мінеральна вата",
+   "DescriptionRu": "минеральная вата"
+  },
+  {
+   "Ref": "8f46972e-33e4-11e3-b441-0050568002cf",
+   "Description": "мінібасейни",
+   "DescriptionRu": "минибассейны"
+  },
+  {
+   "Ref": "ad5465c9-33dd-11e3-b441-0050568002cf",
+   "Description": "млинниця",
+   "DescriptionRu": "блинница"
+  },
+  {
+   "Ref": "5b89dbcf-33e9-11e3-b441-0050568002cf",
+   "Description": "мобільний телефон",
+   "DescriptionRu": "мобильный телефон"
+  },
+  {
+   "Ref": "5b89dbce-33e9-11e3-b441-0050568002cf",
+   "Description": "Мобільні присторої",
+   "DescriptionRu": "Мобильные устройства"
+  },
+  {
+   "Ref": "f1abcb3c-3c73-11e3-b441-0050568002cf",
+   "Description": "модем ",
+   "DescriptionRu": "модем"
+  },
+  {
+   "Ref": "5b89dbcc-33e9-11e3-b441-0050568002cf",
+   "Description": "монітор",
+   "DescriptionRu": "монитор"
+  },
+  {
+   "Ref": "ad5465c2-33dd-11e3-b441-0050568002cf",
+   "Description": "мопед",
+   "DescriptionRu": "мопед"
+  },
+  {
+   "Ref": "ad5465d0-33dd-11e3-b441-0050568002cf",
+   "Description": "морожениця",
+   "DescriptionRu": "мороженица"
+  },
+  {
+   "Ref": "8f469704-33e4-11e3-b441-0050568002cf",
+   "Description": "морозильна камера",
+   "DescriptionRu": "морозильная камера"
+  },
+  {
+   "Ref": "c57bf974-3bb3-11e3-b441-0050568002cf",
+   "Description": "мотоблок",
+   "DescriptionRu": "мотоблок"
+  },
+  {
+   "Ref": "2fe893d4-33ee-11e3-b441-0050568002cf",
+   "Description": "мотокоса",
+   "DescriptionRu": "мотокоса"
+  },
+  {
+   "Ref": "4e42f901-3d05-11dd-84e9-001a92567626",
+   "Description": "моторолер",
+   "DescriptionRu": "мотороллер"
+  },
+  {
+   "Ref": "ad5465c1-33dd-11e3-b441-0050568002cf",
+   "Description": "мотоцикл",
+   "DescriptionRu": "мотоцикл"
+  },
+  {
+   "Ref": "8f469738-33e4-11e3-b441-0050568002cf",
+   "Description": "МР3 і медіаплеєр",
+   "DescriptionRu": "МР3 и медиаплеер"
+  },
+  {
+   "Ref": "8f469736-33e4-11e3-b441-0050568002cf",
+   "Description": "музичний центр",
+   "DescriptionRu": "музыкальный центр"
+  },
+  {
+   "Ref": "2fe893f4-33ee-11e3-b441-0050568002cf",
+   "Description": "Музичні інструменти (музичні товари)",
+   "DescriptionRu": "Музыкальные инструменты (товары)"
+  },
+  {
+   "Ref": "ad5465d9-33dd-11e3-b441-0050568002cf",
+   "Description": "мультиварка",
+   "DescriptionRu": "мультиварка"
+  },
+  {
+   "Ref": "5b89dbd2-33e9-11e3-b441-0050568002cf",
+   "Description": "навігатор",
+   "DescriptionRu": "навигатор"
+  },
+  {
+   "Ref": "8f469739-33e4-11e3-b441-0050568002cf",
+   "Description": "навушники",
+   "DescriptionRu": "наушники"
+  },
+  {
+   "Ref": "b13132ab-3fc8-11e3-b441-0050568002cf",
+   "Description": "Навчальний посібник",
+   "DescriptionRu": "Учебное пособие "
+  },
+  {
+   "Ref": "2fe893c9-33ee-11e3-b441-0050568002cf",
+   "Description": "накладки автомобільні",
+   "DescriptionRu": "накладки автомобильные"
+  },
+  {
+   "Ref": "8e150a87-3b09-11e3-b441-0050568002cf",
+   "Description": "Наклейки",
+   "DescriptionRu": "Наклейки"
+  },
+  {
+   "Ref": "f5468edd-bac2-11ee-a361-48df37b92096",
+   "Description": "Намордник",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "3878ba43-3bea-11e3-b441-0050568002cf",
+   "Description": "Насіння ",
+   "DescriptionRu": "Семена"
+  },
+  {
+   "Ref": "2fe893ce-33ee-11e3-b441-0050568002cf",
+   "Description": "насос",
+   "DescriptionRu": "насос"
+  },
+  {
+   "Ref": "2fe893c5-33ee-11e3-b441-0050568002cf",
+   "Description": "насос автомобільний",
+   "DescriptionRu": "насос автомобильный"
+  },
+  {
+   "Ref": "1601d495-420c-11e3-b441-0050568002cf",
+   "Description": "Не використовуються",
+   "DescriptionRu": "Не используются"
+  },
+  {
+   "Ref": "2fe893b9-33ee-11e3-b441-0050568002cf",
+   "Description": "Нестандартні палети",
+   "DescriptionRu": "Нестандартные паллеты"
+  },
+  {
+   "Ref": "5b89dbff-33e9-11e3-b441-0050568002cf",
+   "Description": "ножі",
+   "DescriptionRu": " ножи "
+  },
+  {
+   "Ref": "4e42f935-3d05-11dd-84e9-001a92567626",
+   "Description": "Ноутбук(и)",
+   "DescriptionRu": "Ноутбук(и)"
+  },
+  {
+   "Ref": "5b89dbc4-33e9-11e3-b441-0050568002cf",
+   "Description": "об'єктив",
+   "DescriptionRu": "обьектив"
+  },
+  {
+   "Ref": "8e150a84-3b09-11e3-b441-0050568002cf",
+   "Description": "обігрівач",
+   "DescriptionRu": "обогреватель"
+  },
+  {
+   "Ref": "4735e2aa-535e-11e3-b441-0050568002cf",
+   "Description": "обладнання для саду та городу",
+   "DescriptionRu": "оборудование для сада и огорода"
+  },
+  {
+   "Ref": "ddb5d786-68a5-11e3-b441-0050568002cf",
+   "Description": "овочерізка",
+   "DescriptionRu": "овощерезка"
+  },
+  {
+   "Ref": "2fe893e7-33ee-11e3-b441-0050568002cf",
+   "Description": "Одяг",
+   "DescriptionRu": "Одежда"
+  },
+  {
+   "Ref": "5b89dbed-33e9-11e3-b441-0050568002cf",
+   "Description": "окуляри",
+   "DescriptionRu": "очки"
+  },
+  {
+   "Ref": "f151b2b7-515e-11de-9bd4-0021918b679a",
+   "Description": "олія",
+   "DescriptionRu": "масло"
+  },
+  {
+   "Ref": "5b89dbe8-33e9-11e3-b441-0050568002cf",
+   "Description": "Оптика",
+   "DescriptionRu": "Оптика"
+  },
+  {
+   "Ref": "add7ebd4-4b84-11e3-b441-0050568002cf",
+   "Description": "Освітлювальні прилади ",
+   "DescriptionRu": "Осветительные приборы"
+  },
+  {
+   "Ref": "4e42f96c-3d05-11dd-84e9-001a92567626",
+   "Description": "пакет",
+   "DescriptionRu": "пакет"
+  },
+  {
+   "Ref": "546ae9d4-3d05-11dd-84e9-001a92567626",
+   "Description": "пакувальна стрічка",
+   "DescriptionRu": "упаковочная пленка"
+  },
+  {
+   "Ref": "c57bf977-3bb3-11e3-b441-0050568002cf",
+   "Description": "Пакувальні матеріали",
+   "DescriptionRu": "Упаковочные материалы"
+  },
+  {
+   "Ref": "8e150a85-3b09-11e3-b441-0050568002cf",
+   "Description": "пакування",
+   "DescriptionRu": "упаковка"
+  },
+  {
+   "Ref": "5b89dc02-33e9-11e3-b441-0050568002cf",
+   "Description": "Палети",
+   "DescriptionRu": "Паллеты"
+  },
+  {
+   "Ref": "4e42f799-3d05-11dd-84e9-001a92567626",
+   "Description": "Парасолька",
+   "DescriptionRu": "Зонт"
+  },
+  {
+   "Ref": "ad5465fa-33dd-11e3-b441-0050568002cf",
+   "Description": "паркетна дошка",
+   "DescriptionRu": "паркетная доска"
+  },
+  {
+   "Ref": "ad5465dc-33dd-11e3-b441-0050568002cf",
+   "Description": "пароварка",
+   "DescriptionRu": "пароварка"
+  },
+  {
+   "Ref": "8f46972f-33e4-11e3-b441-0050568002cf",
+   "Description": "паровий бокс",
+   "DescriptionRu": "паровой бокс"
+  },
+  {
+   "Ref": "ad5465dd-33dd-11e3-b441-0050568002cf",
+   "Description": "пароочисник (відпарювач)",
+   "DescriptionRu": "пароочиститель (отпариватель)"
+  },
+  {
+   "Ref": "8f469717-33e4-11e3-b441-0050568002cf",
+   "Description": "парта",
+   "DescriptionRu": "парта"
+  },
+  {
+   "Ref": "223a10ca-33f5-11e3-b441-0050568002cf",
+   "Description": "Парфумерія",
+   "DescriptionRu": "Парфюмерия"
+  },
+  {
+   "Ref": "cd92638d-e831-11e4-8a92-005056887b8d",
+   "Description": "Парфумерія без блістеру",
+   "DescriptionRu": "Парфюмерия без блистера"
+  },
+  {
+   "Ref": "cd92638f-e831-11e4-8a92-005056887b8d",
+   "Description": "Парфумерія блістер розкрито",
+   "DescriptionRu": "Парфюмерия блистер раскрыто"
+  },
+  {
+   "Ref": "4e42f97c-3d05-11dd-84e9-001a92567626",
+   "Description": "патока",
+   "DescriptionRu": "патока"
+  },
+  {
+   "Ref": "ddb5d785-68a5-11e3-b441-0050568002cf",
+   "Description": "патрубок",
+   "DescriptionRu": "патрубок"
+  },
+  {
+   "Ref": "8f46970e-33e4-11e3-b441-0050568002cf",
+   "Description": "передпокій (корпусні меблі)",
+   "DescriptionRu": "прихожая  (корпусная мебель)"
+  },
+  {
+   "Ref": "4e42fa3d-3d05-11dd-84e9-001a92567626",
+   "Description": "Пиловсмоктувач(і)",
+   "DescriptionRu": "Пылесос(ы)"
+  },
+  {
+   "Ref": "5b89dbda-33e9-11e3-b441-0050568002cf",
+   "Description": "пиломатеріали",
+   "DescriptionRu": "пиломатериалы"
+  },
+  {
+   "Ref": "30cc1a6f-687c-11e3-b441-0050568002cf",
+   "Description": "підвіконня",
+   "DescriptionRu": "подоконник"
+  },
+  {
+   "Ref": "ce3971f8-4bab-11e3-b441-0050568002cf",
+   "Description": "піддон",
+   "DescriptionRu": "поддон"
+  },
+  {
+   "Ref": "4e42f9cf-3d05-11dd-84e9-001a92567626",
+   "Description": "Піддон(и)",
+   "DescriptionRu": "Поддон(ы)"
+  },
+  {
+   "Ref": "5b89dbe9-33e9-11e3-b441-0050568002cf",
+   "Description": "підзорна труба",
+   "DescriptionRu": "подзорная труба"
+  },
+  {
+   "Ref": "ad5465ec-33dd-11e3-b441-0050568002cf",
+   "Description": "підігрівач",
+   "DescriptionRu": "подогреватель"
+  },
+  {
+   "Ref": "75f709fb-faa2-11e3-8c4a-0050568002cf",
+   "Description": "Підписані документи",
+   "DescriptionRu": "Подписаные документы"
+  },
+  {
+   "Ref": "8e150a8d-3b09-11e3-b441-0050568002cf",
+   "Description": "підшипник",
+   "DescriptionRu": "подшипник "
+  },
+  {
+   "Ref": "8e150a8e-3b09-11e3-b441-0050568002cf",
+   "Description": "підшипник автомобільний",
+   "DescriptionRu": "подшипник автомобильный"
+  },
+  {
+   "Ref": "8f46973d-33e4-11e3-b441-0050568002cf",
+   "Description": "плазмова панель",
+   "DescriptionRu": "плазменная панель"
+  },
+  {
+   "Ref": "5b89dbd1-33e9-11e3-b441-0050568002cf",
+   "Description": "планшет",
+   "DescriptionRu": "планшет"
+  },
+  {
+   "Ref": "bc7126b0-3caf-11e3-b441-0050568002cf",
+   "Description": "пластик",
+   "DescriptionRu": "пластик"
+  },
+  {
+   "Ref": "4e42f9b9-3d05-11dd-84e9-001a92567626",
+   "Description": "плафон",
+   "DescriptionRu": "плафон"
+  },
+  {
+   "Ref": "4e42f9c1-3d05-11dd-84e9-001a92567626",
+   "Description": "Плита(и)",
+   "DescriptionRu": "Плита(ы)"
+  },
+  {
+   "Ref": "5b89dbde-33e9-11e3-b441-0050568002cf",
+   "Description": "плитка (керамічна, гранітна, мозаїка)",
+   "DescriptionRu": "плитка (керамическая, гранитная, мозаика)"
+  },
+  {
+   "Ref": "8e150a90-3b09-11e3-b441-0050568002cf",
+   "Description": "плівка",
+   "DescriptionRu": "пленка"
+  },
+  {
+   "Ref": "4e42f9c0-3d05-11dd-84e9-001a92567626",
+   "Description": "плінтус",
+   "DescriptionRu": "плинтус"
+  },
+  {
+   "Ref": "6fbf20fb-62fc-11e3-b441-0050568002cf",
+   "Description": "Пневмообладнання",
+   "DescriptionRu": "Пневмооборудование "
+  },
+  {
+   "Ref": "223a10da-33f5-11e3-b441-0050568002cf",
+   "Description": "Побутова хімія",
+   "DescriptionRu": "Бытовая химия"
+  },
+  {
+   "Ref": "c57bf972-3bb3-11e3-b441-0050568002cf",
+   "Description": "Побутові речі",
+   "DescriptionRu": "Бытовые вещи"
+  },
+  {
+   "Ref": "4e42f9c8-3d05-11dd-84e9-001a92567626",
+   "Description": "Поверхня(і) для смаження",
+   "DescriptionRu": "Поверхность(и) для жарки"
+  },
+  {
+   "Ref": "ee28fb93-f565-11e9-9c59-005056b24375",
+   "Description": "Подарунки",
+   "DescriptionRu": "Подарок"
+  },
+  {
+   "Ref": "546ae9c9-3d05-11dd-84e9-001a92567626",
+   "Description": "подовжувач",
+   "DescriptionRu": "удлинитель"
+  },
+  {
+   "Ref": "4e42f9d5-3d05-11dd-84e9-001a92567626",
+   "Description": "подушка",
+   "DescriptionRu": "подушка"
+  },
+  {
+   "Ref": "4e42f9dd-3d05-11dd-84e9-001a92567626",
+   "Description": "покривало",
+   "DescriptionRu": "покрывало"
+  },
+  {
+   "Ref": "ad5465f7-33dd-11e3-b441-0050568002cf",
+   "Description": "Покриття для підлоги",
+   "DescriptionRu": "Напольное покрытие"
+  },
+  {
+   "Ref": "5b89dbdc-33e9-11e3-b441-0050568002cf",
+   "Description": "покрівельні матеріали (черепиця, шифер та ін)",
+   "DescriptionRu": "кровельные материалы (черепица, шифер и т.д)"
+  },
+  {
+   "Ref": "223a10cb-33f5-11e3-b441-0050568002cf",
+   "Description": "Поліграфічна продукція",
+   "DescriptionRu": "Полиграфическая продукция"
+  },
+  {
+   "Ref": "8cf84c27-df96-11de-b435-000c2965ae0e",
+   "Description": "постільна білизна",
+   "DescriptionRu": "постельное белье"
+  },
+  {
+   "Ref": "5b89dbee-33e9-11e3-b441-0050568002cf",
+   "Description": "Посуд",
+   "DescriptionRu": "Посуда "
+  },
+  {
+   "Ref": "5b89dbfe-33e9-11e3-b441-0050568002cf",
+   "Description": "посуд для духових шаф і мікрохвильових печей",
+   "DescriptionRu": "посуда для духовых шкафов и микроволновых печей"
+  },
+  {
+   "Ref": "4e42f9fd-3d05-11dd-84e9-001a92567626",
+   "Description": "посуд одноразовий",
+   "DescriptionRu": "посуда одноразовая"
+  },
+  {
+   "Ref": "8f469706-33e4-11e3-b441-0050568002cf",
+   "Description": "посудомийна машина",
+   "DescriptionRu": "посудомоечная машина"
+  },
+  {
+   "Ref": "eb207da3-ecbf-11e3-8c4a-0050568002cf",
+   "Description": "Пошкоджене відправлення",
+   "DescriptionRu": "Повредженная отправка"
+  },
+  {
+   "Ref": "546ae94d-3d05-11dd-84e9-001a92567626",
+   "Description": "Пральна машина(и)",
+   "DescriptionRu": "Стиральная машина(ы)"
+  },
+  {
+   "Ref": "ad5465e2-33dd-11e3-b441-0050568002cf",
+   "Description": "праска",
+   "DescriptionRu": "утюг"
+  },
+  {
+   "Ref": "c57bf978-3bb3-11e3-b441-0050568002cf",
+   "Description": "Премікси ",
+   "DescriptionRu": "Премиксы"
+  },
+  {
+   "Ref": "1b5c2c03-5c1a-11e3-b441-0050568002cf",
+   "Description": "Прикраси",
+   "DescriptionRu": "Украшения"
+  },
+  {
+   "Ref": "5b89dbcb-33e9-11e3-b441-0050568002cf",
+   "Description": "принтер",
+   "DescriptionRu": "принтер"
+  },
+  {
+   "Ref": "ad5465fb-33dd-11e3-b441-0050568002cf",
+   "Description": "пробкова підлога",
+   "DescriptionRu": "пробковый пол"
+  },
+  {
+   "Ref": "4e42fa1c-3d05-11dd-84e9-001a92567626",
+   "Description": "програмне забезпечення",
+   "DescriptionRu": "програмное обеспечение"
+  },
+  {
+   "Ref": "223a10cc-33f5-11e3-b441-0050568002cf",
+   "Description": "продукти харчування",
+   "DescriptionRu": "продукты питания"
+  },
+  {
+   "Ref": "4a9fcdb4-3d44-11e3-b441-0050568002cf",
+   "Description": "Продукти харчування",
+   "DescriptionRu": "Продукты питания"
+  },
+  {
+   "Ref": "4e42fa20-3d05-11dd-84e9-001a92567626",
+   "Description": "проектор",
+   "DescriptionRu": "проектор"
+  },
+  {
+   "Ref": "2fe893cf-33ee-11e3-b441-0050568002cf",
+   "Description": "прокладка",
+   "DescriptionRu": "прокладка"
+  },
+  {
+   "Ref": "2fe893c6-33ee-11e3-b441-0050568002cf",
+   "Description": "прокладка автомобільна",
+   "DescriptionRu": "прокладка автомобильная"
+  },
+  {
+   "Ref": "2fe893e1-33ee-11e3-b441-0050568002cf",
+   "Description": "Промислове обладнання",
+   "DescriptionRu": "Промышленное оборудование"
+  },
+  {
+   "Ref": "4e42fa25-3d05-11dd-84e9-001a92567626",
+   "Description": "простиладло",
+   "DescriptionRu": "простыня"
+  },
+  {
+   "Ref": "8f469741-33e4-11e3-b441-0050568002cf",
+   "Description": "пульт ДУ",
+   "DescriptionRu": "пульт ДУ"
+  },
+  {
+   "Ref": "8f46971d-33e4-11e3-b441-0050568002cf",
+   "Description": "пуф",
+   "DescriptionRu": "пуф"
+  },
+  {
+   "Ref": "2fe893cc-33ee-11e3-b441-0050568002cf",
+   "Description": "радіатор",
+   "DescriptionRu": "радиатор"
+  },
+  {
+   "Ref": "2fe893c3-33ee-11e3-b441-0050568002cf",
+   "Description": "радіатор автомобільний",
+   "DescriptionRu": "радиатор автомобильный"
+  },
+  {
+   "Ref": "8f469727-33e4-11e3-b441-0050568002cf",
+   "Description": "раковина",
+   "DescriptionRu": "раковина"
+  },
+  {
+   "Ref": "4a9fcdb2-3d44-11e3-b441-0050568002cf",
+   "Description": "регулятор",
+   "DescriptionRu": "регулятор"
+  },
+  {
+   "Ref": "8e150a8f-3b09-11e3-b441-0050568002cf",
+   "Description": "Резинотехнічні вироби ",
+   "DescriptionRu": "Резинотехнические изделия"
+  },
+  {
+   "Ref": "fe327123-3c07-11e5-add9-005056887b8d",
+   "Description": "Рекламна продукція",
+   "DescriptionRu": "Рекламная продукция"
+  },
+  {
+   "Ref": "c9cfa2a6-5599-11e6-a9f2-005056887b8d",
+   "Description": "Рекламні листівки, комплектуючі",
+   "DescriptionRu": "Рекламные листовки, комплектующие"
+  },
+  {
+   "Ref": "c9cfa2a3-5599-11e6-a9f2-005056887b8d",
+   "Description": "Рекламні матеріали",
+   "DescriptionRu": "Рекламные материалы "
+  },
+  {
+   "Ref": "976dd6ad-3fdf-11e3-b441-0050568002cf",
+   "Description": "Рибальське спорядження",
+   "DescriptionRu": "Рыбацкие снасти "
+  },
+  {
+   "Ref": "546ae8ca-3d05-11dd-84e9-001a92567626",
+   "Description": "розетка",
+   "DescriptionRu": "розетка"
+  },
+  {
+   "Ref": "546ae8aa-3d05-11dd-84e9-001a92567626",
+   "Description": "розчинник",
+   "DescriptionRu": "растворитель"
+  },
+  {
+   "Ref": "4e42f9ee-3d05-11dd-84e9-001a92567626",
+   "Description": "рушник",
+   "DescriptionRu": "полотенце"
+  },
+  {
+   "Ref": "546ae8dc-3d05-11dd-84e9-001a92567626",
+   "Description": "Рюкзак",
+   "DescriptionRu": "Рюкзак"
+  },
+  {
+   "Ref": "5b89dbf2-33e9-11e3-b441-0050568002cf",
+   "Description": "рюмки",
+   "DescriptionRu": "рюмки"
+  },
+  {
+   "Ref": "2fe893d1-33ee-11e3-b441-0050568002cf",
+   "Description": "Садова техніка",
+   "DescriptionRu": "Садовая техника"
+  },
+  {
+   "Ref": "8f469725-33e4-11e3-b441-0050568002cf",
+   "Description": "Сантехніка",
+   "DescriptionRu": "Сантехника"
+  },
+  {
+   "Ref": "8f469733-33e4-11e3-b441-0050568002cf",
+   "Description": "сантехнічні матеріали",
+   "DescriptionRu": "сантехнические материалы"
+  },
+  {
+   "Ref": "533df4d9-19d1-11e1-b20c-0026b97ed48a",
+   "Description": "світлодіодні стрічки",
+   "DescriptionRu": "светлодиодные ленты"
+  },
+  {
+   "Ref": "6d6889c4-6247-11df-9863-000c291598e1",
+   "Description": "СВЧ",
+   "DescriptionRu": "СВЧ"
+  },
+  {
+   "Ref": "546ae8fb-3d05-11dd-84e9-001a92567626",
+   "Description": "сервер",
+   "DescriptionRu": "сервер"
+  },
+  {
+   "Ref": "546ae909-3d05-11dd-84e9-001a92567626",
+   "Description": "сироп",
+   "DescriptionRu": "сироп"
+  },
+  {
+   "Ref": "ddb5d784-68a5-11e3-b441-0050568002cf",
+   "Description": "системний блок",
+   "DescriptionRu": "системный блок"
+  },
+  {
+   "Ref": "d6d4976e-3499-11e3-b441-0050568002cf",
+   "Description": "сканер",
+   "DescriptionRu": "сканер"
+  },
+  {
+   "Ref": "ad5465d4-33dd-11e3-b441-0050568002cf",
+   "Description": "скиборізка",
+   "DescriptionRu": "ломкорезка"
+  },
+  {
+   "Ref": "8f46971f-33e4-11e3-b441-0050568002cf",
+   "Description": "Скло",
+   "DescriptionRu": "Стекло"
+  },
+  {
+   "Ref": "8f469724-33e4-11e3-b441-0050568002cf",
+   "Description": "скло",
+   "DescriptionRu": "стекло"
+  },
+  {
+   "Ref": "8f469720-33e4-11e3-b441-0050568002cf",
+   "Description": "скло автомобільне (лобове/заднє/бокове)",
+   "DescriptionRu": "стекло автомобильное (лобовое/заднее/боковое)"
+  },
+  {
+   "Ref": "5b89dbd6-33e9-11e3-b441-0050568002cf",
+   "Description": "скло для мобільного телефону",
+   "DescriptionRu": "стекло для мобильного телефона"
+  },
+  {
+   "Ref": "8f469721-33e4-11e3-b441-0050568002cf",
+   "Description": "склопакети",
+   "DescriptionRu": "стеклопакеты"
+  },
+  {
+   "Ref": "546ae947-3d05-11dd-84e9-001a92567626",
+   "Description": "склосітка",
+   "DescriptionRu": "стеклосетка"
+  },
+  {
+   "Ref": "5b89dbfc-33e9-11e3-b441-0050568002cf",
+   "Description": "склотара",
+   "DescriptionRu": "стеклотара"
+  },
+  {
+   "Ref": "546ae948-3d05-11dd-84e9-001a92567626",
+   "Description": "склотканина",
+   "DescriptionRu": "стеклоткань"
+  },
+  {
+   "Ref": "5b89dbf1-33e9-11e3-b441-0050568002cf",
+   "Description": "склянки",
+   "DescriptionRu": "стаканы"
+  },
+  {
+   "Ref": "5b89dbf9-33e9-11e3-b441-0050568002cf",
+   "Description": "сковорідка",
+   "DescriptionRu": "сковородка"
+  },
+  {
+   "Ref": "546ae915-3d05-11dd-84e9-001a92567626",
+   "Description": "скотч",
+   "DescriptionRu": "скотч"
+  },
+  {
+   "Ref": "546ae921-3d05-11dd-84e9-001a92567626",
+   "Description": "сода",
+   "DescriptionRu": "сода"
+  },
+  {
+   "Ref": "546ae924-3d05-11dd-84e9-001a92567626",
+   "Description": "Соковижималка(и)",
+   "DescriptionRu": "Соковижималка(и)"
+  },
+  {
+   "Ref": "546ae92b-3d05-11dd-84e9-001a92567626",
+   "Description": "соя",
+   "DescriptionRu": "соя"
+  },
+  {
+   "Ref": "5b89dbc5-33e9-11e3-b441-0050568002cf",
+   "Description": "спалах ",
+   "DescriptionRu": "вспышка"
+  },
+  {
+   "Ref": "8f46970f-33e4-11e3-b441-0050568002cf",
+   "Description": "спальня (корпусні меблі)",
+   "DescriptionRu": "спальня (корпусная мебель)"
+  },
+  {
+   "Ref": "4a9fcdb5-3d44-11e3-b441-0050568002cf",
+   "Description": "спеції",
+   "DescriptionRu": "специи"
+  },
+  {
+   "Ref": "546ae930-3d05-11dd-84e9-001a92567626",
+   "Description": "Спецодяг ",
+   "DescriptionRu": "Спецодежда"
+  },
+  {
+   "Ref": "2fe893c8-33ee-11e3-b441-0050568002cf",
+   "Description": "спойлер",
+   "DescriptionRu": "спойлер"
+  },
+  {
+   "Ref": "2fe893e2-33ee-11e3-b441-0050568002cf",
+   "Description": "Спортивне обладнання",
+   "DescriptionRu": "Спортивное оборудование"
+  },
+  {
+   "Ref": "2fe893e3-33ee-11e3-b441-0050568002cf",
+   "Description": "Спортивні товари",
+   "DescriptionRu": "Спортивные товары"
+  },
+  {
+   "Ref": "5b89dc03-33e9-11e3-b441-0050568002cf",
+   "Description": "Стандартні палети",
+   "DescriptionRu": "Стандартные паллеты"
+  },
+  {
+   "Ref": "ddb5d783-68a5-11e3-b441-0050568002cf",
+   "Description": "Статуетка",
+   "DescriptionRu": "Статэтка"
+  },
+  {
+   "Ref": "ad5465eb-33dd-11e3-b441-0050568002cf",
+   "Description": "стерилізатор",
+   "DescriptionRu": "стерилизатор"
+  },
+  {
+   "Ref": "8f469711-33e4-11e3-b441-0050568002cf",
+   "Description": "стіл (кухонний, комп'ютерний, письмовий)",
+   "DescriptionRu": "стол (кухонный, компьютерный, письменный)"
+  },
+  {
+   "Ref": "8f469716-33e4-11e3-b441-0050568002cf",
+   "Description": "стілець",
+   "DescriptionRu": "стул"
+  },
+  {
+   "Ref": "8f46970a-33e4-11e3-b441-0050568002cf",
+   "Description": "стінка (корпусні меблі)",
+   "DescriptionRu": "стенка (корпусная мебель)"
+  },
+  {
+   "Ref": "8f469718-33e4-11e3-b441-0050568002cf",
+   "Description": "столешниця",
+   "DescriptionRu": "столешница"
+  },
+  {
+   "Ref": "5b89dbfa-33e9-11e3-b441-0050568002cf",
+   "Description": "столовий сервіз",
+   "DescriptionRu": "столовый  сервиз"
+  },
+  {
+   "Ref": "5b89dbfd-33e9-11e3-b441-0050568002cf",
+   "Description": "столові прибори",
+   "DescriptionRu": "столовые приборы"
+  },
+  {
+   "Ref": "546ae954-3d05-11dd-84e9-001a92567626",
+   "Description": "стоматологічне обладнання",
+   "DescriptionRu": "стоматологическое оборудование"
+  },
+  {
+   "Ref": "eadc2c7c-5fde-11e2-89c8-d4ae52ab9fab",
+   "Description": "стоматологічні матеріали",
+   "DescriptionRu": "стоматологические материалы"
+  },
+  {
+   "Ref": "5b89dbf3-33e9-11e3-b441-0050568002cf",
+   "Description": "стопки",
+   "DescriptionRu": "стопки"
+  },
+  {
+   "Ref": "223a10cf-33f5-11e3-b441-0050568002cf",
+   "Description": "Сувеніри",
+   "DescriptionRu": "Сувениры"
+  },
+  {
+   "Ref": "546ae95e-3d05-11dd-84e9-001a92567626",
+   "Description": "Сумка",
+   "DescriptionRu": "Сумка"
+  },
+  {
+   "Ref": "546ae939-3d05-11dd-84e9-001a92567626",
+   "Description": "супутникове обладнання",
+   "DescriptionRu": "спутниковое оборудование"
+  },
+  {
+   "Ref": "546ae960-3d05-11dd-84e9-001a92567626",
+   "Description": "сухе молоко",
+   "DescriptionRu": "сухое молоко"
+  },
+  {
+   "Ref": "3c5314e1-e122-11de-b361-000c294065a1",
+   "Description": "сухий жовток",
+   "DescriptionRu": "сухой желток"
+  },
+  {
+   "Ref": "546ae962-3d05-11dd-84e9-001a92567626",
+   "Description": "сухофрукти",
+   "DescriptionRu": "сухофрукты"
+  },
+  {
+   "Ref": "8f469705-33e4-11e3-b441-0050568002cf",
+   "Description": "сушильний автомат",
+   "DescriptionRu": "сушильный автомат"
+  },
+  {
+   "Ref": "ad5465e0-33dd-11e3-b441-0050568002cf",
+   "Description": "сушка для овочів і фруктів",
+   "DescriptionRu": "сушка для овощей и фруктов"
+  },
+  {
+   "Ref": "546ae977-3d05-11dd-84e9-001a92567626",
+   "Description": "тара",
+   "DescriptionRu": "тара"
+  },
+  {
+   "Ref": "5b89dbf4-33e9-11e3-b441-0050568002cf",
+   "Description": "тарілка",
+   "DescriptionRu": "тарелка"
+  },
+  {
+   "Ref": "4e42f9d2-3d05-11dd-84e9-001a92567626",
+   "Description": "таця",
+   "DescriptionRu": "поднос"
+  },
+  {
+   "Ref": "add7ebd5-4b84-11e3-b441-0050568002cf",
+   "Description": "Текстильні вироби",
+   "DescriptionRu": "Текстильные изделия"
+  },
+  {
+   "Ref": "ce3971fa-4bab-11e3-b441-0050568002cf",
+   "Description": "текстильні вироби",
+   "DescriptionRu": "текстильные изделия"
+  },
+  {
+   "Ref": "546ae97a-3d05-11dd-84e9-001a92567626",
+   "Description": "Телевізор(и)",
+   "DescriptionRu": "Телевизор(ы)"
+  },
+  {
+   "Ref": "5b89dbea-33e9-11e3-b441-0050568002cf",
+   "Description": "телескоп",
+   "DescriptionRu": "телескоп"
+  },
+  {
+   "Ref": "5b89dbd0-33e9-11e3-b441-0050568002cf",
+   "Description": "телефонний апарат",
+   "DescriptionRu": "телефонный аппарат"
+  },
+  {
+   "Ref": "2c4d28aa-8dd0-11ee-a361-48df37b92096",
+   "Description": "Тераріум",
+   "DescriptionRu": ""
+  },
+  {
+   "Ref": "ce3971f9-4bab-11e3-b441-0050568002cf",
+   "Description": "тканина",
+   "DescriptionRu": "ткань"
+  },
+  {
+   "Ref": "c57bf97b-3bb3-11e3-b441-0050568002cf",
+   "Description": "Товар,техніка (зворотна доставка)",
+   "DescriptionRu": "Товар, техника (обратная доставка)"
+  },
+  {
+   "Ref": "5b89dbe1-33e9-11e3-b441-0050568002cf",
+   "Description": "Товари для дітей",
+   "DescriptionRu": "Товары для детей"
+  },
+  {
+   "Ref": "49d3a3f0-41fd-11e3-b441-0050568002cf",
+   "Description": "Товари для дому",
+   "DescriptionRu": "Товары для дома"
+  },
+  {
+   "Ref": "223a10d2-33f5-11e3-b441-0050568002cf",
+   "Description": "Товари для саду, городу та відпочинку",
+   "DescriptionRu": "Товары для сада, огорода и отдыха"
+  },
+  {
+   "Ref": "3878ba42-3bea-11e3-b441-0050568002cf",
+   "Description": "товари медичного призначення ",
+   "DescriptionRu": "товары медицинского значения "
+  },
+  {
+   "Ref": "2fe893e4-33ee-11e3-b441-0050568002cf",
+   "Description": "Торгове обладнання",
+   "DescriptionRu": "Торговое оборудование"
+  },
+  {
+   "Ref": "546ae9ae-3d05-11dd-84e9-001a92567626",
+   "Description": "торшер",
+   "DescriptionRu": "торшер"
+  },
+  {
+   "Ref": "546ae9af-3d05-11dd-84e9-001a92567626",
+   "Description": "тосол",
+   "DescriptionRu": "тосол"
+  },
+  {
+   "Ref": "ad5465e1-33dd-11e3-b441-0050568002cf",
+   "Description": "тостер",
+   "DescriptionRu": "тостер"
+  },
+  {
+   "Ref": "546ae9ba-3d05-11dd-84e9-001a92567626",
+   "Description": "трійник",
+   "DescriptionRu": "тройник"
+  },
+  {
+   "Ref": "223a10d4-33f5-11e3-b441-0050568002cf",
+   "Description": "Труби",
+   "DescriptionRu": "Трубы"
+  },
+  {
+   "Ref": "88ade4aa-47be-11e3-b441-0050568002cf",
+   "Description": "ТТН перевізника",
+   "DescriptionRu": "ТТН перевозчика"
+  },
+  {
+   "Ref": "8f469712-33e4-11e3-b441-0050568002cf",
+   "Description": "тумба (для взуття, під телевізор та ін)",
+   "DescriptionRu": "тумба (для обуви,под телевизор и т.д.)"
+  },
+  {
+   "Ref": "f1f1c4d5-d938-11de-9c18-000c2965ae0e",
+   "Description": "Тютюнові вироби",
+   "DescriptionRu": "Табачные изделия"
+  },
+  {
+   "Ref": "8f469730-33e4-11e3-b441-0050568002cf",
+   "Description": "умивальник",
+   "DescriptionRu": "умывальник"
+  },
+  {
+   "Ref": "8f469728-33e4-11e3-b441-0050568002cf",
+   "Description": "унітаз",
+   "DescriptionRu": "унитаз"
+  },
+  {
+   "Ref": "ce3971fc-4bab-11e3-b441-0050568002cf",
+   "Description": "Утилізація",
+   "DescriptionRu": "Утилизация"
+  },
+  {
+   "Ref": "546ae9e5-3d05-11dd-84e9-001a92567626",
+   "Description": "факс",
+   "DescriptionRu": "факс"
+  },
+  {
+   "Ref": "546ae9e6-3d05-11dd-84e9-001a92567626",
+   "Description": "фанера",
+   "DescriptionRu": "фанера"
+  },
+  {
+   "Ref": "2fe893d9-33ee-11e3-b441-0050568002cf",
+   "Description": "фармацевтика",
+   "DescriptionRu": "фармацевтика"
+  },
+  {
+   "Ref": "2fe893d8-33ee-11e3-b441-0050568002cf",
+   "Description": "Фармацевтична промисловість",
+   "DescriptionRu": "Фармацевтическая промышленность"
+  },
+  {
+   "Ref": "8e150a95-3b09-11e3-b441-0050568002cf",
+   "Description": "фасадні матеріали ",
+   "DescriptionRu": "фасадные материалы"
+  },
+  {
+   "Ref": "ad5465e3-33dd-11e3-b441-0050568002cf",
+   "Description": "фен",
+   "DescriptionRu": "фен"
+  },
+  {
+   "Ref": "c387b88b-5c07-11e3-b441-0050568002cf",
+   "Description": "фільтр",
+   "DescriptionRu": "фильтр"
+  },
+  {
+   "Ref": "b9b3d34c-4844-11e3-b441-0050568002cf",
+   "Description": "фітопрепарати",
+   "DescriptionRu": "фитопрепараты"
+  },
+  {
+   "Ref": "546aea00-3d05-11dd-84e9-001a92567626",
+   "Description": "флешкарта",
+   "DescriptionRu": "флешкарта"
+  },
+  {
+   "Ref": "546ae9e7-3d05-11dd-84e9-001a92567626",
+   "Description": "фондю",
+   "DescriptionRu": "фондю"
+  },
+  {
+   "Ref": "8f469743-33e4-11e3-b441-0050568002cf",
+   "Description": "фотоапарат",
+   "DescriptionRu": "фотоаппарат"
+  },
+  {
+   "Ref": "ad5465ed-33dd-11e3-b441-0050568002cf",
+   "Description": "фотоепілятор",
+   "DescriptionRu": "фотоэпилятор"
+  },
+  {
+   "Ref": "546aea0f-3d05-11dd-84e9-001a92567626",
+   "Description": "фотоматеріал",
+   "DescriptionRu": "фотоматериал"
+  },
+  {
+   "Ref": "546aea10-3d05-11dd-84e9-001a92567626",
+   "Description": "фотометр",
+   "DescriptionRu": "фотометр"
+  },
+  {
+   "Ref": "546aea0b-3d05-11dd-84e9-001a92567626",
+   "Description": "фотопапір",
+   "DescriptionRu": "фотобумага"
+  },
+  {
+   "Ref": "546aea11-3d05-11dd-84e9-001a92567626",
+   "Description": "фотоплівка",
+   "DescriptionRu": "фотопленка"
+  },
+  {
+   "Ref": "8f469742-33e4-11e3-b441-0050568002cf",
+   "Description": "Фототехніка",
+   "DescriptionRu": "Фототехника"
+  },
+  {
+   "Ref": "ad5465e4-33dd-11e3-b441-0050568002cf",
+   "Description": "фритюрниця",
+   "DescriptionRu": "фритюрница"
+  },
+  {
+   "Ref": "5b89dbf0-33e9-11e3-b441-0050568002cf",
+   "Description": "фужери",
+   "DescriptionRu": "фужеры"
+  },
+  {
+   "Ref": "8e150a83-3b09-11e3-b441-0050568002cf",
+   "Description": "фурнітура",
+   "DescriptionRu": "фурнитура"
+  },
+  {
+   "Ref": "37fba60a-3fa0-11e3-b441-0050568002cf",
+   "Description": "харчові добавки ",
+   "DescriptionRu": "пищевые добавки "
+  },
+  {
+   "Ref": "ad5465e5-33dd-11e3-b441-0050568002cf",
+   "Description": "хлібопічка",
+   "DescriptionRu": "хлебопечка"
+  },
+  {
+   "Ref": "546aea21-3d05-11dd-84e9-001a92567626",
+   "Description": "хліборізка",
+   "DescriptionRu": "хлеборезка"
+  },
+  {
+   "Ref": "546aea27-3d05-11dd-84e9-001a92567626",
+   "Description": "Холодильне обладнання",
+   "DescriptionRu": "Холодильное оборудование"
+  },
+  {
+   "Ref": "546aea26-3d05-11dd-84e9-001a92567626",
+   "Description": "Холодильник(и)",
+   "DescriptionRu": "Холодильник(и)"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

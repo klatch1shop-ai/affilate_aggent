@@ -1,0 +1,36 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Description": "Адреса-Адреса",
+   "Ref": "DoorsDoors"
+  },
+  {
+   "Description": "Адреса-Відділення",
+   "Ref": "DoorsWarehouse"
+  },
+  {
+   "Description": "Відділення-Відділення",
+   "Ref": "WarehouseWarehouse"
+  },
+  {
+   "Description": "Відділення-Адреса",
+   "Ref": "WarehouseDoors"
+  },
+  {
+   "Description": "Адреса-Поштомат",
+   "Ref": "DoorsPostomat"
+  },
+  {
+   "Description": "Відділення-Поштомат",
+   "Ref": "WarehousePostomat"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

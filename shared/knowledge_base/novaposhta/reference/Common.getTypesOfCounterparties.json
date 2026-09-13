@@ -1,0 +1,20 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Description": "Організація",
+   "Ref": "Organization"
+  },
+  {
+   "Description": "Приватна особа",
+   "Ref": "PrivatePerson"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

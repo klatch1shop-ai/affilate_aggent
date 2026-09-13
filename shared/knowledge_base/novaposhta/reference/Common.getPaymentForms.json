@@ -1,0 +1,20 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Description": "Безготівковий",
+   "Ref": "NonCash"
+  },
+  {
+   "Description": "Готівка",
+   "Ref": "Cash"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

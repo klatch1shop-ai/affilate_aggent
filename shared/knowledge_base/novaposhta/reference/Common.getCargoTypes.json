@@ -1,0 +1,32 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Description": "Посилка",
+   "Ref": "Parcel"
+  },
+  {
+   "Description": "Вантаж",
+   "Ref": "Cargo"
+  },
+  {
+   "Description": "Документи",
+   "Ref": "Documents"
+  },
+  {
+   "Description": "Шини-диски",
+   "Ref": "TiresWheels"
+  },
+  {
+   "Description": "Палети",
+   "Ref": "Pallet"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

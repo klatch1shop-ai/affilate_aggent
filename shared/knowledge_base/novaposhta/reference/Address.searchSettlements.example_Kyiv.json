@@ -1,0 +1,65 @@
+{
+ "success": true,
+ "data": [
+  {
+   "TotalCount": 9,
+   "Addresses": [
+    {
+     "Present": "м. Київ, Київська обл.",
+     "Warehouses": 12560,
+     "MainDescription": "Київ",
+     "Area": "Київська",
+     "Region": "",
+     "SettlementTypeCode": "м.",
+     "Ref": "e718a680-4b33-11e4-ab6d-005056801329",
+     "DeliveryCity": "8d5a980d-391c-11dd-90d9-001a92567626",
+     "AddressDeliveryAllowed": true,
+     "StreetsAvailability": true,
+     "ParentRegionTypes": "область",
+     "ParentRegionCode": "обл.",
+     "RegionTypes": "",
+     "RegionTypesCode": ""
+    },
+    {
+     "Present": "с. Київець, Миколаївський р-н, Львівська обл.",
+     "Warehouses": 3,
+     "MainDescription": "Київець",
+     "Area": "Львівська",
+     "Region": "Миколаївський",
+     "SettlementTypeCode": "с.",
+     "Ref": "0df25497-4b3a-11e4-ab6d-005056801329",
+     "DeliveryCity": "6dbe5985-96d1-11ea-a970-b8830365ade4",
+     "AddressDeliveryAllowed": true,
+     "StreetsAvailability": false,
+     "ParentRegionTypes": "область",
+     "ParentRegionCode": "обл.",
+     "RegionTypes": "район",
+     "RegionTypesCode": "р-н"
+    },
+    {
+     "Present": "с. Київ, Вознесенський р-н, Миколаївська обл.",
+     "Warehouses": 0,
+     "MainDescription": "Київ",
+     "Area": "Миколаївська",
+     "Region": "Вознесенський",
+     "SettlementTypeCode": "с.",
+     "Ref": "0db2df4b-4b3a-11e4-ab6d-005056801329",
+     "DeliveryCity": "06f8795a-4079-11de-b509-001d92f78698",
+     "AddressDeliveryAllowed": true,
+     "StreetsAvailability": false,
+     "ParentRegionTypes": "область",
+     "ParentRegionCode": "обл.",
+     "RegionTypes": "район",
+     "RegionTypesCode": "р-н"
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}

@@ -1,0 +1,160 @@
+# NovaPost
+
+## Home
+
+- [Nova Poshta Integration Platform](https://api-portal.novapost.com/land-page.md): Welcome to your team’s developer platform
+- [Page 1](https://api-portal.novapost.com/page-1.md)
+
+## Getting Started
+
+- [Integration guide](https://api-portal.novapost.com/novaposhta-docs/integration-guide.md): The Nova Post API provides access to international delivery services and enables you to integrate shipment creation, management, and tracking into your systems.
+- [Integration Guide](https://api-portal.novapost.com/novaposhta-docs/integration-guide/integration-guide.md)
+- [API Key Generation](https://api-portal.novapost.com/novaposhta-docs/integration-guide/api-key-generation.md)
+- [How to generate a JWT token](https://api-portal.novapost.com/novaposhta-docs/integration-guide/how-to-generate-a-jwt-token.md): To send request to the Nova Post API, you must generate a JWT token. The token ensures proper authentication and authorization when executing API requests.
+- [How to choose the appropriate endpoint](https://api-portal.novapost.com/novaposhta-docs/integration-guide/how-to-choose-the-appropriate-endpoint.md): Nova Post provides several API endpoints for processing requests related to shipment creation, tracking, and other operations.
+- [Using Tokens](https://api-portal.novapost.com/novaposhta-docs/integration-guide/using-tokens.md): The JWT token is a key component of secure interaction with the Nova Post API.
+- [API Collections in Postman](https://api-portal.novapost.com/novaposhta-docs/integration-guide/api-collections-in-postman.md): This is a collection of predefined requests for testing API methods, designed to simplify integration and eliminate the need to create requests manually.
+- [Testing](https://api-portal.novapost.com/novaposhta-docs/integration-guide/testing.md): Test the API in the sandbox environment before going live. The collection allows safe testing without impacting production.
+
+## API Docs
+
+- [Мethods](https://api-portal.novapost.com/methods/methods.md): The Methods section contains Nova Post API tools for integrating core logistics processes into external systems and automating interaction with delivery services.
+- [SDK for PHP](https://api-portal.novapost.com/methods/methods/sdk-for-php.md)
+- [Authorization](https://api-portal.novapost.com/methods/methods/authorization.md)
+- [Dictionaries](https://api-portal.novapost.com/methods/methods/dictionaries.md)
+- [Services](https://api-portal.novapost.com/methods/methods/services.md)
+- [Shipments](https://api-portal.novapost.com/methods/methods/shipments.md)
+- [Create shipments](https://api-portal.novapost.com/methods/methods/shipments/create-shipments.md)
+- [Domestic shipments within Ukraine](https://api-portal.novapost.com/methods/methods/shipments/create-shipments/domestic-shipments-within-ukraine.md): This page describes the process of creating shipments within Ukraine.
+- [International shipments within Europe](https://api-portal.novapost.com/methods/methods/shipments/create-shipments/international-shipments-within-europe.md): This page describes the process of creating shipments outside of Ukraine. Shipments from Ukraine and to Ukraine are not included.
+- [Cross-border shipments to Ukraine](https://api-portal.novapost.com/methods/methods/shipments/create-shipments/cross-border-shipments-to-ukraine.md): This page describes the process of creating shipments from abroad to Ukraine.
+- [Cross-border shipments from Ukraine](https://api-portal.novapost.com/methods/methods/shipments/create-shipments/cross-border-shipments-from-ukraine.md): This page describes the process of creating shipments from Ukraine for international delivery.
+- [Shipments from EU to UA](https://api-portal.novapost.com/methods/methods/shipments/shipments-from-eu-to-ua.md)
+- [Shipments from UA to UA](https://api-portal.novapost.com/methods/methods/shipments/shipments-from-ua-to-ua.md)
+- [Shipments from US to UA](https://api-portal.novapost.com/methods/methods/shipments/shipments-from-us-to-ua.md)
+- [Shipments from EU to EU](https://api-portal.novapost.com/methods/methods/shipments/shipments-from-eu-to-eu.md)
+- [Return](https://api-portal.novapost.com/methods/methods/shipments/return.md)
+- [Light Return for international shipments within Europe](https://api-portal.novapost.com/methods/methods/shipments/return/light-return-for-international-shipments-within-europe.md)
+- [Light Return for cross-border shipments from Ukraine to Europe](https://api-portal.novapost.com/methods/methods/shipments/return/light-return-for-cross-border-shipments-from-ukraine-to-europe.md)
+- [Delivery cost](https://api-portal.novapost.com/methods/methods/shipments/delivery-cost.md)
+- [Verification status of UA→World](https://api-portal.novapost.com/methods/methods/shipments/verification-status-of-ua-world.md)
+- [Uploads file](https://api-portal.novapost.com/methods/methods/shipments/uploads-file.md)
+- [Print documents](https://api-portal.novapost.com/methods/methods/shipments/print-documents.md)
+- [Marking labels](https://api-portal.novapost.com/methods/methods/shipments/print-documents/marking-labels.md)
+- [Invoice](https://api-portal.novapost.com/methods/methods/shipments/print-documents/invoice.md)
+- [Parcel registry](https://api-portal.novapost.com/methods/methods/shipments/print-documents/parcel-registry.md)
+- [Tracking shipment](https://api-portal.novapost.com/methods/methods/shipments/tracking-shipment.md)
+- [Proof of delivery](https://api-portal.novapost.com/methods/methods/shipments/proof-of-delivery.md)
+- [Repeat Delivery](https://api-portal.novapost.com/methods/methods/shipments/repeat-delivery.md)
+- [Services](https://api-portal.novapost.com/methods/methods/shipments/services.md)
+- [COD](https://api-portal.novapost.com/methods/methods/shipments/services/cod.md)
+- [Registers](https://api-portal.novapost.com/methods/methods/registers.md)
+- [Pickups](https://api-portal.novapost.com/methods/methods/pickups.md)
+- [Webhooks](https://api-portal.novapost.com/methods/methods/webhooks.md)
+- [Subscription types](https://api-portal.novapost.com/methods/methods/webhooks/subscription-types.md)
+- [Subscription list](https://api-portal.novapost.com/methods/methods/webhooks/subscription-list.md)
+- [New subscription](https://api-portal.novapost.com/methods/methods/webhooks/new-subscription.md)
+- [Subscription update](https://api-portal.novapost.com/methods/methods/webhooks/subscription-update.md)
+- [Subscription deletion](https://api-portal.novapost.com/methods/methods/webhooks/subscription-deletion.md)
+- [Adding numbers to a subscription](https://api-portal.novapost.com/methods/methods/webhooks/adding-numbers-to-a-subscription.md)
+- [Deleting numbers from a subscription](https://api-portal.novapost.com/methods/methods/webhooks/deleting-numbers-from-a-subscription.md)
+- [Test webhook](https://api-portal.novapost.com/methods/methods/webhooks/test-webhook.md)
+- [Event types and tracking status codes](https://api-portal.novapost.com/methods/methods/webhooks/event-types-and-tracking-status-codes.md)
+- [Fullfillment](https://api-portal.novapost.com/methods/methods/fullfillment.md)
+- [CMR](https://api-portal.novapost.com/methods/methods/cmr.md)
+- [Manifests](https://api-portal.novapost.com/methods/methods/manifests.md)
+- [Payment for services and goods](https://api-portal.novapost.com/methods/methods/payment-for-services-and-goods.md): Payment for Delivery Services via Nova Post API
+- [Payment on Delivery](https://api-portal.novapost.com/methods/methods/payment-for-services-and-goods/payment-on-delivery.md)
+- [API errors](https://api-portal.novapost.com/methods/methods/api-errors.md): This page describes the most common errors returned by the Nova Post API gateway, without reference to a specific method.
+- [Page 1](https://api-portal.novapost.com/methods/page-1.md)
+- [Page 2](https://api-portal.novapost.com/methods/page-2.md)
+- [Page 3](https://api-portal.novapost.com/methods/page-3.md)
+- [Page 4](https://api-portal.novapost.com/methods/page-4.md)
+- [Page 5](https://api-portal.novapost.com/methods/page-5.md)
+
+## API Docs (UA)
+
+- [General information](https://api-portal.novapost.com/api-docs-ua/eng/general-information.md)
+
+## Changelog
+
+- [Subscribe to informing](https://api-portal.novapost.com/changelog-1/subscribe-to-informing.md)
+- [2026](https://api-portal.novapost.com/changelog-1/2026.md)
+- [December](https://api-portal.novapost.com/changelog-1/2026/december.md)
+- [November](https://api-portal.novapost.com/changelog-1/2026/november.md)
+- [October](https://api-portal.novapost.com/changelog-1/2026/october.md)
+- [September](https://api-portal.novapost.com/changelog-1/2026/september.md)
+- [August (2)](https://api-portal.novapost.com/changelog-1/2026/august-2.md)
+- [July (2)](https://api-portal.novapost.com/changelog-1/2026/july-2.md)
+- [June (3)](https://api-portal.novapost.com/changelog-1/2026/june-3.md)
+- [May (3)](https://api-portal.novapost.com/changelog-1/2026/may-3.md)
+- [April (1)](https://api-portal.novapost.com/changelog-1/2026/april-1.md)
+- [March (1)](https://api-portal.novapost.com/changelog-1/2026/march-1.md)
+- [February (2)](https://api-portal.novapost.com/changelog-1/2026/february-2.md)
+- [January (2)](https://api-portal.novapost.com/changelog-1/2026/january-2.md)
+- [2025](https://api-portal.novapost.com/changelog-1/2025.md)
+- [December (3)](https://api-portal.novapost.com/changelog-1/2025/december-3.md)
+- [November (5)](https://api-portal.novapost.com/changelog-1/2025/november-5.md)
+
+* [Changes to the shipping cost and customs duties calculator for shipments to the United States](https://api-portal.novapost.com/changelog-1/documentation-eng/changes-to-the-shipping-cost-and-customs-duties-calculator-for-shipments-to-the-united-states.md)
+* [Changes to the Delivery Cost Calculator in Europe](https://api-portal.novapost.com/changelog-1/documentation-eng/changes-to-the-delivery-cost-calculator-in-europe.md)
+* [Fulfillment REST API Change Summary](https://api-portal.novapost.com/changelog-1/documentation-eng/fulfillment-rest-api-change-summary.md)
+* [Customs Fees Settings Response Update](https://api-portal.novapost.com/changelog-1/documentation-eng/customs-fees-settings-response-update.md)
+* [The method of calculating the cost of delivery](https://api-portal.novapost.com/changelog-1/documentation-eng/the-method-of-calculating-the-cost-of-delivery.md)
+* [Added shipment registry management methods](https://api-portal.novapost.com/changelog-1/documentation-eng/added-shipment-registry-management-methods.md)
+* [Added custom invoice attachments for business shipments](https://api-portal.novapost.com/changelog-1/documentation-eng/added-custom-invoice-attachments-for-business-shipments.md)
+* [New insuranceCurrencyCode parameter for shipments](https://api-portal.novapost.com/changelog-1/documentation-eng/new-insurancecurrencycode-parameter-for-shipments.md)
+* [The method for obtaining a link to the online payment form](https://api-portal.novapost.com/changelog-1/documentation-eng/the-method-for-obtaining-a-link-to-the-online-payment-form.md)
+* [Returning doc was deleted response for repeated deletion of a shipment](https://api-portal.novapost.com/changelog-1/documentation-eng/returning-doc-was-deleted-response-for-repeated-deletion-of-a-shipment.md)
+* [POST /shipments/calculations](https://api-portal.novapost.com/changelog-1/documentation-eng/post-shipments-calculations.md)
+* [POST, PUT /shipments](https://api-portal.novapost.com/changelog-1/documentation-eng/post-put-shipments.md)
+* [Offline reference guide for clients containing the list of settlements in Ukraine where shipment del](https://api-portal.novapost.com/changelog-1/documentation-eng/offline-reference-guide-for-clients-containing-the-list-of-settlements-in-ukraine-where-shipment-del.md)
+* [GET v.1.0/dictionary/customs-fees/](https://api-portal.novapost.com/changelog-1/documentation-eng/get-v.1.0-dictionary-customs-fees.md)
+* [GET /registry/print](https://api-portal.novapost.com/changelog-1/documentation-eng/get-registry-print.md)
+* [The method of calculating the cost of delivery](https://api-portal.novapost.com/changelog-1/documentation-eng/the-method-of-calculating-the-cost-of-delivery-1.md)
+
+## Internal Solutions
+
+- [SDK for PHP](https://api-portal.novapost.com/internal-solutions/sdk-for-php.md)
+- [Division selection widget](https://api-portal.novapost.com/internal-solutions/division-selection-widget.md)
+- [Changelog](https://api-portal.novapost.com/internal-solutions/division-selection-widget/changelog.md)
+- [11111](https://api-portal.novapost.com/internal-solutions/11111.md)
+
+## Popular Integrations&#x20;
+
+- [Popular integration](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration.md)
+- [Base (Baselinker)](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/base-baselinker.md): Arrange delivery to your store's customers directly through the order management section in Base (Baselinker).
+- [Shopify](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/shopify.md): The app is available regardless of whether you have Shopify Checkout Plus in your subscription. The app supports all rate types: manual, flat, carrier-calculated.
+- [Чекліст](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/cheklist.md)
+- [COD (cash on delivery)](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/cheklist/cod-cash-on-delivery.md): Чекліст допомагає самостійно перевірити, чи коректно налаштована передача параметрів COD в API.
+- [Безготівкова оплата](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/cheklist/bezgotivkova-oplata.md): Чекліст допомагає самостійно перевірити, чи коректно налаштована передача параметрів для безготівкової оплати послуг доставки в API.
+- [Відправка на адресу](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/cheklist/vidpravka-na-adresu.md)
+- [Відправка на поштомат](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/cheklist/vidpravka-na-poshtomat.md)
+- [WooCommerce](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/woocommerce.md): Use the official Nova Post plugin to ensure all services work correctly.
+- [PrestaShop](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/prestashop.md)
+- [Magento](https://api-portal.novapost.com/gotovi-integraciyi/popular-integration/magento.md)
+
+## Checklists
+
+- [COD (cash on delivery)](https://api-portal.novapost.com/checklists/cod-cash-on-delivery.md): The checklist helps you independently verify whether COD parameter transmission in the API is configured correctly.
+- [Non-cash payment](https://api-portal.novapost.com/checklists/non-cash-payment.md): The checklist helps you independently verify whether the parameters for non-cash payment of delivery services are configured correctly in the API.
+
+## Help center
+
+- [Help Center](https://api-portal.novapost.com/help-center/readme.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://api-portal.novapost.com/land-page.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

@@ -1,0 +1,24 @@
+{
+ "success": true,
+ "data": [
+  {
+   "Description": "Відправник",
+   "Ref": "Sender"
+  },
+  {
+   "Description": "Одержувач",
+   "Ref": "Recipient"
+  },
+  {
+   "Description": "Третя особа",
+   "Ref": "ThirdPerson"
+  }
+ ],
+ "errors": [],
+ "warnings": [],
+ "info": [],
+ "messageCodes": [],
+ "errorCodes": [],
+ "warningCodes": [],
+ "infoCodes": []
+}
