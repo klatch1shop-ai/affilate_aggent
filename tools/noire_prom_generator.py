@@ -73,6 +73,16 @@ try:
         NAME_SHORTEN = json.load(_f)
 except (OSError, ValueError):
     NAME_SHORTEN = {}
+
+# Артикули, зняті з фіду вручну (рішення власника), кожен із причиною —
+# data/prom/exclude_skus.json. Перше застосування 13.09.2026: 4 картки
+# Kokos Bellana/Clara з описом чужого товару.
+try:
+    with open(os.path.join(BASE_DIR, 'data', 'prom', 'exclude_skus.json'),
+              encoding='utf-8') as _f:
+        EXCLUDE_SKUS = {k: v for k, v in json.load(_f).items() if not k.startswith('_')}
+except (OSError, ValueError):
+    EXCLUDE_SKUS = {}
 MAX_PARAMS = 100
 MAX_ARTICLE = 25
 MIN_PARAMS = 2           # Prom радить «мінімум 2-3 основні характеристики»
@@ -1413,6 +1423,9 @@ def generate(out_file=OUT, limit=None):
 
         for p in items:
             sku = p['sku']
+            if sku in EXCLUDE_SKUS:
+                st['знято з фіду вручну (exclude_skus.json)'] += 1
+                continue
             name = dehomo((p['name'] or '').strip(), st, 'назва укр.')
             name = fix_name_ua(name, sku, st)
             # У назві не повинно бути посилань і контактів. Єдиний випадок —
