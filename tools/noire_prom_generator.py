@@ -809,9 +809,14 @@ def stable_group_id(key) -> int:
 
 def load_mapping(cur) -> dict:
     """epicentr_code → [(prom_id, name_rule, excluded)], правила спершу."""
+    # Серед рядків без правила виграє вища впевненість, а не менший id: для
+    # 9632 (олії) рядок 78 «→ Масажні косметичні засоби» (0.9, 09.08) не діяв
+    # жодного дня, бо рядок 25 «→ Збуджуючі» (0.75) старший (13.09.2026).
     cur.execute("""SELECT epicentr_code, prom_category_id, name_rule, excluded
                    FROM prom_category_mapping WHERE source='noire'
-                   ORDER BY (name_rule IS NULL), id""")
+                   ORDER BY (name_rule IS NULL),
+                            CASE WHEN name_rule IS NULL THEN -confidence END,
+                            id""")
     out = collections.defaultdict(list)
     for r in cur.fetchall():
         out[r['epicentr_code']].append(

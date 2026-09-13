@@ -1,0 +1,35 @@
+[
+ {
+  "id": 25,
+  "epicentr_code": "9632",
+  "prom_category_id": "161002",
+  "name_rule": null,
+  "confidence": "0.75",
+  "excluded": false,
+  "reasoning": "Олія для еротичного масажу → Збуджуючі засоби. Та сама причина.",
+  "source": "noire",
+  "created_at": "2026-08-08 20:07:41.086846+00:00"
+ },
+ {
+  "id": 26,
+  "epicentr_code": "9630",
+  "prom_category_id": "161002",
+  "name_rule": null,
+  "confidence": "0.7",
+  "excluded": false,
+  "reasoning": "Свічки для інтимного масажу → Збуджуючі засоби. Категорії свічок у Prom немає.",
+  "source": "noire",
+  "created_at": "2026-08-08 20:07:41.086846+00:00"
+ },
+ {
+  "id": 78,
+  "epicentr_code": "9632",
+  "prom_category_id": "16221301",
+  "name_rule": null,
+  "confidence": "0.9",
+  "excluded": false,
+  "reasoning": "Олія для еротичного масажу → Масажні косметичні засоби. Те саме.",
+  "source": "noire",
+  "created_at": "2026-08-09 04:11:56.332378+00:00"
+ }
+]

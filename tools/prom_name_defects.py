@@ -138,7 +138,12 @@ def main():
         import json
         with open(os.path.join(BASE, 'data', 'prom', 'name_fixes.json'), encoding='utf-8') as f:
             fx = json.load(f)
-        seen = {k.lower() for k in fx.get('words', {})} | {w.lower() for w in fx.get('not_defects', [])}
+        nd = fx.get('not_defects', {})
+        # виключення без причини не приймаємо: мовчазний список — той самий
+        # тихий дефолт, що коштував дня з «дефектом 9» (зауваження чату 13.09)
+        if not isinstance(nd, dict) or any(not str(v).strip() for v in nd.values()):
+            sys.exit('not_defects у name_fixes.json: кожне слово має мати причину (словник слово → чому)')
+        seen = {k.lower() for k in fx.get('words', {})} | {w.lower() for w in nd}
     except (OSError, ValueError):
         seen = set()
     rows = []
@@ -147,7 +152,8 @@ def main():
         for cls, w, hint in classify_name(name, freq, uk):
             if w.lower() not in seen:
                 rows.append((o.findtext('vendorCode') or o.get('id'), cls, w, hint, name))
-    print(f'переглянуто раніше (у name_fixes.json): {len(seen)} слів')
+    print(f'переглянуто раніше (name_fixes.json): виправлено {len(fx.get("words", {}))} слів, '
+          f'не помилки {len(nd)} — з причинами')
     cnt = collections.Counter(r[1] for r in rows)
     words = collections.Counter((r[1], r[2]) for r in rows)
     print(f'назв з дефектами: {len({r[0] for r in rows})} · ' +
