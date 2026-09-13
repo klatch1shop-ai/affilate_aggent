@@ -63,6 +63,7 @@ NEGATIVE = [   # мусять пройти — правильні фрази, н
     'смарт-вібратор у трусики', 'вагінальні кульки', 'пінлива сіль',
     'силіконова смарт секс-машина', 'чорні бдсм наручники',
     'анальна міні секс-машина', 'золоте колесо вартенберга',
+    'чорні ремені art of sex', 'червона хрестовина feral feelings',
 ]
 
 
@@ -96,7 +97,13 @@ def mismatch(phrase: str):
     if i >= len(w) or not _CYR.match(w[i]):
         # за означеннями одразу бренд або кінець — у фразі немає іменника
         return (a, '∅ немає іменника') if i < len(w) or len(w) > 1 else None
-    n = _head_word(' '.join(w[i:]))
+    # лише кириличний хвіст: бренд латиницею не іменник («чорні ремені art»)
+    tail = []
+    for x in w[i:]:
+        if not _CYR.match(x):
+            break
+        tail.append(x)
+    n = _head_word(' '.join(tail))
     if n in _TAIL_STOP or n in ('ділдо', 'дилдо'):
         return None
     ga, gn = adj_gender(a), word_gender(n)

@@ -208,6 +208,12 @@ _ADJ_END = re.compile(r"(?:ий|ій|на|не|ні|ова|ове|ові|ева|
 _NOUN_NA = {'вагіна', 'машина', 'піна', 'шина', 'ціна', 'стіна', 'сцена'}
 
 
+def _na_noun(b: str) -> bool:
+    """Іменник на -на/-не, а не прикметник: «хрестовина», «тростина»,
+    «вагіна» (-ина/-іна) — прикметники так майже не закінчуються (13.09)."""
+    return b in _NOUN_NA or b.endswith(('ина', 'іна', 'їна', 'ине', 'іне'))
+
+
 def _head_word(noun: str) -> str:
     """Головне слово типу з кількох слів — перший іменник, а не останнє
     слово: «маска серце» (жін.), «колесо вартенберга» (сер.), «секс-машина
@@ -216,7 +222,7 @@ def _head_word(noun: str) -> str:
     ws = [w for w in (noun or '').lower().split() if w not in _GENDER_PREFIX]
     for w in ws:
         base = w.rsplit('-', 1)[-1]
-        if not _ADJ_END.search(base) or base in _NOUN_NA:
+        if not _ADJ_END.search(base) or _na_noun(base):
             return w
     return ws[-1] if ws else ''
 
