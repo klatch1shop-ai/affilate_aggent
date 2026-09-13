@@ -43,6 +43,7 @@ NP_KEY = os.getenv('NP_API_KEY', '')
 TG_TOKEN = os.getenv('TG_BOT_TOKEN') or os.getenv('TELEGRAM_BOT_TOKEN')
 TG_CHAT = os.getenv('TG_CHAT_ID') or os.getenv('TELEGRAM_ADMIN_ID')
 OUT_DIR = os.path.join(BASE, 'shared', 'feeds', 'orders', 'np_ttn')
+COD_CARD = os.getenv('NP_COD_CARD', '')   # карта власника для післяплати (лише в .env)
 
 # Відправник: Дніпро, Відділення №1 (вул. Повітряна, 2) — перевірено 13.09.2026
 SENDER_CITY = 'db5c88f0-391c-11dd-90d9-001a92567626'
@@ -136,11 +137,8 @@ def main():
           f"оголошена {amount} | вартість доставки {price.get('data')}")
     if not a.create:
         return
-    if cod:
-        # у ручних ТТН власника післяплата йде на карту; через API поле
-        # BackwardDeliveryData[].PaymentCard відповідає 20000201794 «temporary blocked»
-        # (перевірено 13.09, README) — без карти не створюємо
-        sys.exit('післяплата: переказ на карту через API заблоковано НП (20000201794) — створіть ТТН вручну')
+    if cod and not COD_CARD:
+        sys.exit('післяплата: у .env немає NP_COD_CARD — без карти не створюємо')
 
     r = np('Counterparty', 'save', {'CounterpartyType': 'PrivatePerson', 'CounterpartyProperty': 'Recipient', **rcp})
     if not r.get('success'):
@@ -156,9 +154,15 @@ def main():
         'OptionsSeat': [{**BOX, 'volumetricVolume': VOLUME, 'weight': PARCEL_WEIGHT}],
     }
     if cod:
-        params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money', 'RedeliveryString': cod}]
+        # післяплата на карту власника — як у його ручних ТТН; поле PaymentCard
+        # (інші назви НП мовчки ігнорує, README «Перевірено справжньою ТТН»)
+        params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money',
+                                           'RedeliveryString': cod, 'PaymentCard': COD_CARD}]
     doc = np('InternetDocument', 'save', params, retries=1)
     if not doc.get('success'):
+        if '20000201794' in (doc.get('errorCodes') or []):
+            sys.exit('післяплата: НП блокує переказ на карту через API (20000201794) — ТТН не створено, '
+                     'створіть вручну')
         print('ПОМИЛКА створення:', doc.get('errors'), doc.get('warnings'))
         sys.exit(1)
     t = doc['data'][0]
@@ -176,7 +180,8 @@ def main():
     print('наклейка 100×100 збережена:', pdf, len(body), 'байт')
     ok, info = tg_document(pdf, f'📦 <b>ТТН {ttn}</b> — Rozetka #{a.order_id}\n'
                                 f'Київ, {w["Description"][:60]}\n'
-                                f'Післяплата: {cod or "немає (оплачено)"} | оголошена {amount} грн\n'
+                                f'Післяплата: {f"{cod} грн на карту *{COD_CARD[-4:]}" if cod else "немає (оплачено)"}'
+                                f' | оголошена {amount} грн\n'
                                 f'Доставка {t.get("CostOnSite")} грн — платить одержувач')
     print('Telegram:', 'надіслано' if ok else f'НЕ надіслано: {info}')
 
