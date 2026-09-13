@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from prom_keywords import word_gender, _head_word, _GENDER_PREFIX  # noqa: E402
-from prom_kw_matrix import _TAIL_STOP  # noqa: E402
+from prom_kw_matrix import _TAIL_STOP, selftest_name_type, NAME_TYPE_CASES  # noqa: E402
 
 FEED = os.path.join(BASE, 'output', 'noire_prom.xml')
 _CYR = re.compile(r"^[а-яіїєґ'’-]{3,}$")
@@ -115,7 +115,11 @@ def selftest() -> bool:
         if mismatch(p):
             print(f'  ✗ негативний контроль позначено: «{p}» → {mismatch(p)}')
             ok = False
-    print(f'контролі: позитивних {len(POSITIVE)}, негативних {len(NEGATIVE)} — '
+    # тип із назви — джерело іменника для самого детектора; зламане правило
+    # типу зсунуло б і те, що детектор вважає «правильним»
+    ok = selftest_name_type(verbose=False) and ok
+    print(f'контролі: позитивних {len(POSITIVE)}, негативних {len(NEGATIVE)}, '
+          f'типів із назви {len(NAME_TYPE_CASES)} — '
           + ('пройдено' if ok else 'НЕ ПРОЙДЕНО, заміру немає'))
     return ok
 
