@@ -137,9 +137,10 @@ def main():
     if not a.create:
         return
     if cod:
-        # у ручних ТТН власника післяплата йде на карту; як задати карту через API ще не
-        # підтверджено (README, «Повне порівняння всіх полів») — без карти не створюємо
-        sys.exit('післяплата: карту для переказу через API ще не налаштовано — створіть ТТН вручну')
+        # у ручних ТТН власника післяплата йде на карту; через API поле
+        # BackwardDeliveryData[].PaymentCard відповідає 20000201794 «temporary blocked»
+        # (перевірено 13.09, README) — без карти не створюємо
+        sys.exit('післяплата: переказ на карту через API заблоковано НП (20000201794) — створіть ТТН вручну')
 
     r = np('Counterparty', 'save', {'CounterpartyType': 'PrivatePerson', 'CounterpartyProperty': 'Recipient', **rcp})
     if not r.get('success'):
