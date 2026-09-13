@@ -44,7 +44,8 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from prom_keywords import (brand_cyr, word_gender, real_vendor, natural,
-                           GENDER_IDX, NOT_A_NOUN, _ADJ_END, _NOUN_NA)
+                           GENDER_IDX, NOT_A_NOUN, _ADJ_END, _NOUN_NA,
+                           _head_word, _na_noun)
 
 FEED = os.environ.get('PROM_FEED') or os.path.join(BASE, 'output', 'noire_prom.xml')
 MAX_SLOTS = 9
@@ -219,6 +220,9 @@ TYPE_PARAMS = ('Тип інтимної іграшки', 'Тип товару', 
 # Як товар називають покупці, а не каталог. Ці слова в картці не трапляються
 # взагалі — і саме тому вони потрібні: поле пошукових запитів існує, щоб
 # закривати мову покупця, а не мову виробника.
+_NONVAG = (r'ротик|\bрот\b|mouth|throat|мінет|оральн|попк|попа|\bbutt\b|\bass\b'
+           r'|анальн|анус|груди|titties|boobs|ступн|\bfeet\b|\bfoot\b')
+_VAG = r'вагін|vagina|вульв|pussy|кицьк'
 SYNONYM = {
     'пробка': ('анальний плаг', 'анальний корок'),
     'фалоімітатор': ('фалос реалістичний', 'ділдо'),
@@ -310,6 +314,60 @@ def fill_tpl(tpl, noun):
 
 
 _MODIFIER = {'бдсм', 'секс', 'міні', 'смарт'}
+
+
+def _named_base(text):
+    """Основа змазки, названа в тексті: {'вод'}, {'сил'}, {'олі'} або порожньо.
+    Ловить і «на водній основі», і «водна основа» (SX1537)."""
+    t = (text or '').lower()
+    out = set()
+    for b, rx in (('вод', r'водн|водій'), ('сил', r'силікон'), ('олі', r'олійн')):
+        if re.search(r'(?:' + rx + r')\w*\s+основ|основ\w*\s*[:—-]?\s*(?:' + rx + ')', t):
+            out.add(b)
+    return out
+
+
+def _stem(w):
+    return w.replace('-', '')[:6]
+
+
+def _prefer_name_type(vt, nm):
+    """Тип із характеристики, «підтверджений» словом із ХВОСТА назви, —
+    не тип товару: «Мастурбатор з вібрацією Fleshlight…, три віброкулі» →
+    «віброкулі», «Анальна вібропробка … з ерекційним кільцем» → «кільце»,
+    «Насадка на член …, потовщуюча» → «потовщуюча» (13.09.2026). Якщо на
+    початку назви є свій тип і іменник характеристики в ньому не
+    зустрічається — беремо тип із назви. Той самий іменник в іншій формі
+    («віброяйця» при «Віброяйце …») — теж із назви: вона про одиничний товар."""
+    nt = _name_type(nm)
+    # укр. назва постачальника буває російською («Мыло в форме пениса») —
+    # тоді тип із неї в укр. ключі не годиться
+    if not nt or nt == vt or re.search(r'[ыэёъ]', nt):
+        return vt
+    vh, nh = _head_word(vt), _head_word(nt)
+    if _stem(vh) == _stem(nh):
+        # те саме слово: складене з характеристики конкретніше
+        # («вібратор-пульсатор» при «Вібратор пульсатор…») — лишаємо; інакше
+        # форма з назви («віброяйце», «мастурбатор-вагіна», «портупея»)
+        if '-' in vh and len(vh.replace('-', '')) > len(nh.replace('-', '')) + 2:
+            return vt
+        return nt if vh != nh and len(vt.split()) == 1 else vt
+    # іменник характеристики стоїть на початку назви поруч із іншим
+    # («Лубрикант спрей», «Збуджувальний засіб спрей») — він не з хвоста
+    m = _REGION_END.search(nm)
+    region = re.findall(r"[а-яіїєґ][а-яіїєґ'’\-]{2,}", nm[:m.start()] if m else nm)
+    if any(_stem(w) == _stem(vh) for w in region):
+        return vt
+    # «міні-вібратор» з характеристики при «Вібратор We-Vibe…» — той самий
+    # тип, лише точніший (SX3858, 13.09.2026)
+    # Лише коли тип із назви — одне просте слово: складений тип назви
+    # («вібратор-помада», «пульсатор-кролик») сам точніший за характеристику.
+    if any(_stem(w) == _stem(nh) for w in vt.split()):
+        return vt
+    if (' ' not in nt and '-' not in nt
+            and any(_stem(p) == _stem(nh) for w in vt.split() for p in w.split('-'))):
+        return vt
+    return nt
 _FLUFF_ANY = re.compile(r'^(?:шикарн|розкішн|сексуальн|стильн|елегантн|преміальн|найдешевш|найкращ|'
                         r'компактн|потужн|ніжн|зручн|якісн|чарівн|спокуслив)')
 
@@ -318,7 +376,7 @@ def _adj_strict(w):
     """Означення в називному — лише за певними закінченнями. «Змазка»,
     «пробка», «свіча» — іменники; «густа», «м’яка», «золота» — означення."""
     b = w.rsplit('-', 1)[-1]
-    if b in _NOUN_NA:
+    if _na_noun(b):
         return False
     return bool(re.search(r'(?:ий|ій)$', b) or _ADJ_END.search(b)
                 or re.search(r"(?:ста|сте|сті|ота|оте|оті|яка|яке|які|ика|ике|гка)$", b))
@@ -353,10 +411,13 @@ def _name_type(nm):
         k += 1
     if 0 < k < len(rest):
         out += rest[:k + 1]           # «набір (розігрівальних) масажних олій»
-    elif rest and rest[0].endswith(('и', 'і', 'ів', 'ок', 'ей', 'а', 'я')) \
+    elif rest and rest[0].endswith(('и', 'і', 'ів', 'ок', 'а', 'я')) \
             and not _adj_strict(rest[0]):
         out.append(rest[0])                           # «масажер простати»
-    return ' '.join(out)
+    t = ' '.join(out)
+    # «Смарт-стимулятор точки G …» — буква точки латиницею обриває відрізок
+    g = re.match(r'\s*([a-z])(?![\w-])', nm[m.start():]) if m and t.endswith('точки') else None
+    return f'{t} {g.group(1)}' if g else t
 
 
 def _adj_gender(adj):
@@ -499,6 +560,7 @@ def head_noun(prm, category, name=''):
             continue
         if _head_confirmed(v, nm):
             vt = _verified_type(v, nm, prm, k)
+            vt = _prefer_name_type(vt, nm)
             # «вібратори для пар» при назві «Смартвібратор для пар» лишало
             # тип «для пар» — іменник не підтвердився, прийменник лишився
             # (2 картки × 9 фраз, 12.09.2026). Такий тип — не тип.
@@ -604,10 +666,20 @@ def build(name, vendor, category, prm, description='', catname=None):
     mat = (prm.get('Матеріал') or '').split('|')[0].strip().lower()
     slots = collections.OrderedDict()
 
+    # Бренд із кількох слів — одне слово ліміту, як у рос. ключах (12.09):
+    # інакше «шкіряна портупея art of sex» (5) відсікалась і картка
+    # лишалась без брендових фраз, щойно тип ставав точнішим (13.09.2026).
+    units = [u.lower() for u in (ven, cyr) if u and ' ' in u]
+
+    def _wc(x):
+        for u in units:
+            x = x.replace(u, 'BRAND')
+        return len(x.split())
+
     def add(layer, phrase):
         phrase = re.sub(r'\s+', ' ', phrase).strip().lower()
         lo = 1 if layer == 0 else 2      # «фалоімітатор» сам по собі — робочий запит
-        if not (lo <= len(phrase.split()) <= 4):
+        if not (lo <= _wc(phrase) <= 4):
             return
         if phrase in BROAD or not natural(phrase):
             return
@@ -726,6 +798,11 @@ def build(name, vendor, category, prm, description='', catname=None):
             if re.search(pat, name, re.I):
                 add(4, fill_tpl(tpl, noun))
             continue
+        # Основу, названу в назві, опис не перебиває: у силіконових JO Premium
+        # опис порівнює з «лубрикантами на водній основі» (7 карток, 13.09).
+        if 'основ' in pat and _named_base(name) and _named_base(tpl) \
+                and not (_named_base(name) & _named_base(tpl)):
+            continue
         if re.search(pat, src, re.I):
             add(4, fill_tpl(tpl, noun))
 
@@ -734,6 +811,11 @@ def build(name, vendor, category, prm, description='', catname=None):
     # самий дубль, лише під іншою назвою. Тому синонім іде з модифікатором.
     for key, syns in SYNONYM.items():
         if key in noun:
+            # «штучна вагіна» на ротику, попці, грудях — інша анатомія
+            # (106 карток, 13.09.2026); якщо в назві є і вагіна — лишаємо
+            if (key == 'мастурбатор' and re.search(_NONVAG, name.lower())
+                    and not re.search(_VAG, name.lower())):
+                break
             for sy in syns:
                 if ven:
                     add(5, f'{sy} {ven.lower()}')
@@ -781,6 +863,12 @@ def build(name, vendor, category, prm, description='', catname=None):
             if not (a0 ^ a1):
                 continue
             if DESC_STRICT and not _strict_pair(words[i], words[i + 1]):
+                continue
+            # латинське слово пари — модель чи бренд, лише якщо воно є в
+            # назві: з опису приходило «свічка trip» («A Trip to Paris»),
+            # «пробка tpr» (матеріал), «пробка wooomytralalo» (злиплe, 13.09)
+            if any(_LATIN.match(w) and w not in name.lower()
+                   for w in (words[i], words[i + 1])):
                 continue
             add(4, pair)
             if len(slots) >= MAX_SLOTS:
@@ -836,11 +924,65 @@ def txt(o, tag):
     return (e.text or '').strip() if e is not None else ''
 
 
+# Контроль правила типу з назви (11.5/11.6 AGENT_RULES). Об'єднане правило
+# `_name_type` елегантніше за латки, які воно замінило, — але саме тому
+# його зміна може тихо зламати інший вид назви. Кожна пара перевірена
+# вручну 12.09.2026; ліворуч — вид назви, що вже раз ламався.
+NAME_TYPE_CASES = [
+    ('Розкішні вагінальні кульки PILLOW TALK', 'вагінальні кульки'),
+    ('Металеві вагінальні кульки Rosy Gold', 'металеві вагінальні кульки'),
+    ('Натуральна харчова добавка для підвищення лібідо', 'натуральна харчова добавка'),
+    ('Смарт мастурбатор Lelo F1S', 'смарт мастурбатор'),
+    ('Прикраса на руку Art of Sex', 'прикраса'),
+    ('Шикарний вакуумний кліторальний стимулятор Romp', 'вакуумний кліторальний стимулятор'),
+    ('Сексуальні шкіряні гартери з поясом', 'шкіряні гартери'),
+    ('Розтяжка на ліжко Punishment', 'розтяжка'),
+    ('Вібратор-кролик із пульсацією Good Vibes', 'вібратор-кролик'),
+    ('Густа анальна змазка JO', 'густа анальна змазка'),
+    ('Масажер простати Fun Factory', 'масажер простати'),
+    ('Найдешевший масажер простати Alive Nero', 'масажер простати'),
+    ('Набір вагінальних кульок зі зміщеним центром', 'набір вагінальних кульок'),
+    ('Набір розігрівальних масажних олій EXSENS', 'набір розігрівальних масажних олій'),
+    ('Гідропомпа Bathmate Hydro 7', 'гідропомпа'),
+    ('Віброкуля Adrien Lastic Pocket Vibe', 'віброкуля'),
+    ('Вакуумний KISSTOY стимулятор', 'вакуумний стимулятор'),
+    ('Лубрикант змазка-крем з кокосовою олією', 'лубрикант'),
+    ('Збуджувальний засіб бальзам для клітора', 'збуджувальний засіб'),
+    ('Змазка на водній основі JO', 'змазка'),
+    ('Насадка на член Kokos', 'насадка'),
+    ('Колесо Вартенберга Liebe Seele', 'колесо вартенберга'),
+    ('Еротична гра «Пантомім Asgard Games»', 'еротична гра'),
+    ('М’яка пінка для очищення іграшок JO', 'м’яка пінка'),
+    ('Компактна смарт секс-машина Zalo', 'смарт секс-машина'),
+    ('Анальна пробка з хвостом', 'анальна пробка'),
+    ('Потрійне ерекційне кільце Boners', 'потрійне ерекційне кільце'),
+    ('Вібратор для точки G Fun Factory', 'вібратор'),
+    ('Мастурбатор-вагіна Fleshlight', 'мастурбатор-вагіна'),
+    ('Алюмінієва анальна пробка з вібрацією', 'алюмінієва анальна пробка'),
+    ('Синя воскова свічка Art of Sex', 'синя воскова свічка'),
+    ('Ультратонкі безлатексні презервативи SKYN', 'ультратонкі безлатексні презервативи'),
+    ('Звуковий стимулятор клітора LELO SONA', 'звуковий стимулятор клітора'),
+]
+
+
+def selftest_name_type(verbose=True) -> bool:
+    bad = [(n, want, head_noun({}, '', n)) for n, want in NAME_TYPE_CASES
+           if head_noun({}, '', n) != want]
+    for n, want, got in bad:
+        print(f'  ✗ тип із назви: «{n}» → «{got}», очікувалось «{want}»')
+    if verbose:
+        print(f'контроль типу з назви: {len(NAME_TYPE_CASES) - len(bad)}/{len(NAME_TYPE_CASES)}')
+    return not bad
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--selftest', action='store_true', help='лише контроль правила типу')
     ap.add_argument('--sample', type=int, default=0)
     ap.add_argument('--report', action='store_true')
     a = ap.parse_args()
+    if a.selftest:
+        sys.exit(0 if selftest_name_type() else 1)
 
     root = ET.parse(FEED).getroot()
     cats = {c.get('id'): (c.text or '') for c in root.findall('.//category')}

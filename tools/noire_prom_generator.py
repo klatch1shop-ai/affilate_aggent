@@ -173,6 +173,27 @@ def _stems(t: str) -> set:
             if w.lower() not in _STEM_STOP}
 
 
+_BASES = {'вод': r'водн|водій|water|aqua|h2o', 'сил': r'силікон|силикон|silicone',
+          'олі': r'олійн|масля|oil'}
+
+
+def base_conflict(tag: str, name: str, material: str = '') -> bool:
+    """Тег називає одну основу змазки, а назва — іншу: «лубрикант на водной
+    основе» на силіконовому pjur/JO Premium. Теги «Лубриканти» раніше не
+    доходили до карток (кінцевий пробіл у назві категорії); з категорією
+    фіду дійшли — 37 силіконових змазок отримали «водну» (13.09.2026)."""
+    t, n = tag.lower(), (name or '').lower()
+    if 'основ' not in t:
+        return False
+    tb = {b for b, rx in _BASES.items() if re.search(rx, t)}
+    nb = {b for b, rx in _BASES.items() if re.search(r'(?:' + rx + r')\w*\s+основ|основ\w*\s*[:—-]?\s*(?:' + rx + ')', n)}
+    # основа не названа — дивимось матеріал: «силиконовый лубрикант» з
+    # «Матеріал: силікон» поруч із «на водной основе» (PJ10460, 13.09)
+    if not nb and re.search(r'силікон|silicone', (material or '').lower()):
+        nb = {'сил'}
+    return bool(tb and nb and not (tb & nb))
+
+
 def tag_relevant(tag: str, *texts) -> bool:
     """Тег категорії доречний, якщо має спільне значуще слово з назвою товару
     чи назвою категорії. Теги «Секс-машин» зібрано зі сторінки Prom разом із
@@ -1536,6 +1557,10 @@ def generate(out_file=OUT, limit=None):
                         break
                     if gender_conflict(t, name + ' ' + (name_ru or '')):
                         st['тег протилежної статі пропущено'] += 1
+                        continue
+                    if base_conflict(t, name + ' ' + (name_ru or ''),
+                                     (raw.get('Матеріал') or '')):
+                        st['тег іншої основи змазки пропущено'] += 1
                         continue
                     if not tag_relevant(t, name, name_ru or '', cat_ua):
                         st['недоречний тег категорії пропущено'] += 1
