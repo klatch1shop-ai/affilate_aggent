@@ -229,7 +229,7 @@ def get_order_details(order_id: int) -> dict:
             f'{ROZETKA_BASE}/orders/{order_id}',
             headers=rz_headers(),
             verify=False,
-            params={'expand': 'purchases,delivery,status_available,payment_type'},
+            params={'expand': 'purchases,delivery,status_available,payment_type,payment'},
             timeout=30
         )
         return r.json().get('content', {}) if r.status_code == 200 else {}
@@ -306,6 +306,100 @@ def set_ttn(order_id: int, ttn: str) -> bool:
         return False
 
 
+# ── Автоматичне ведення нового замовлення (рішення власника 13.09.2026) ──
+# Раніше нове замовлення (статус 1) агент підтвердити не міг: API зі статусу 1
+# пропонує лише перехід 26 («обробляється менеджером»), а агент пробував
+# тільки 2 і 55 — і чекав, поки власник поставить 26 вручну (затримки до
+# 8 год уночі). Замовлення NOIRE (асортимент не з фіду Carvol) взагалі йшли на
+# ручну обробку без перевірки наявності. Тепер: наявність → оплата → 26 → 2.
+PROCESSING_STATUS = 26          # «обробляється менеджером»
+NOIRE_MIN_STOCK   = int(os.getenv('NOIRE_MIN_STOCK', '1'))   # той самий резерв, що в синхронізації
+
+
+def _status_available(order_id: int):
+    """(поточний статус, доступні переходи без заборонених) або (None, [])."""
+    try:
+        r = requests.get(f'{ROZETKA_BASE}/orders/{order_id}', headers=rz_headers(),
+                         verify=False, params={'expand': 'status_available'}, timeout=30)
+        if r.status_code != 200 or not r.json().get('success'):
+            return None, []
+        c = r.json().get('content', {})
+        av = [x.get('child_id') for x in (c.get('status_available') or []) if x.get('child_id')]
+        return c.get('status'), [x for x in av if x not in FORBIDDEN_STATUSES]
+    except Exception as e:
+        logger.error(f'_status_available #{order_id}: {e}')
+        return None, []
+
+
+def move_to_processing(order_id: int) -> bool:
+    """1 → 26 «обробляється менеджером», лише якщо API сам пропонує цей
+    перехід. True — замовлення вже в 26 або щойно переведене."""
+    cur, av = _status_available(order_id)
+    if cur == PROCESSING_STATUS:
+        return True
+    if cur != 1 or PROCESSING_STATUS not in av:
+        logger.info(f'move_to_processing #{order_id}: current={cur}, available={av} — 26 недоступний')
+        return False
+    try:
+        rp = requests.patch(f'{ROZETKA_BASE}/orders/{order_id}', headers=rz_headers(), verify=False,
+                            json={'status': PROCESSING_STATUS, 'comment': 'Наявність перевірено'},
+                            timeout=15)
+        if rp.json().get('success'):
+            logger.success(f'Статус #{order_id} → 26 (обробляється менеджером)')
+            return True
+        logger.warning(f'move_to_processing #{order_id}: {rp.text[:200]}')
+    except Exception as e:
+        logger.error(f'move_to_processing #{order_id}: {e}')
+    return False
+
+
+def payment_paid(details: dict):
+    """True — Rozetka підтвердила оплату; False — онлайн-оплата ще не
+    надійшла; None — Rozetka оплату не відстежує («Оплата на рахунок
+    продавця»: гроші йдуть власникові напряму, перевіряє лише він)."""
+    pay = details.get('payment') or {}
+    ps = pay.get('payment_status')
+    if isinstance(ps, dict) and ps.get('name'):
+        return ps.get('name') == 'paid'
+    if (details.get('payment_status') or '').lower() == 'оплачено':
+        return True
+    if 'рахунок' in (pay.get('payment_method_name') or '').lower():
+        return None
+    return False
+
+
+def noire_stock(items: list):
+    """Наявність товарів NOIRE у постачальника SexOpt за базою (оновлюється
+    синхронізацією кожні 2 год). → (True — усе є | False — чогось немає |
+    None — перевірити не вдалось, рядки для повідомлення). Критерій той самий,
+    що знімає товар із продажу: доступний, не пошкоджений, залишок ≥ замовленого
+    і > резерву NOIRE_MIN_STOCK."""
+    skus = [i['sku'] for i in items]
+    try:
+        conn = get_connection(); cur = conn.cursor()
+        cur.execute('SELECT sku, quantity, available, damaged_stock FROM sexopt_products '
+                    'WHERE sku = ANY(%s)', (skus,))
+        rows = {r['sku']: r for r in cur.fetchall()}
+        cur.close(); conn.close()
+    except Exception as e:
+        logger.error(f'noire_stock: {e}')
+        return None, ['база постачальника недоступна']
+    verdict, lines = True, []
+    for it in items:
+        r = rows.get(it['sku'])
+        need = int(it.get('quantity') or 1)
+        if r is None:
+            lines.append(f"{it['sku']}: немає в базі постачальника")
+            verdict = None if verdict is True else verdict
+            continue
+        qty = int(r['quantity'] or 0)
+        ok = bool(r['available']) and not r['damaged_stock'] and qty >= need and qty > NOIRE_MIN_STOCK
+        lines.append(f"{it['sku']}: {'є' if ok else 'НЕМАЄ'} (залишок {qty}, треба {need})")
+        if not ok:
+            verdict = False
+    return verdict, lines
+
+
 def confirm_order(order_id: int) -> bool:
     """Підтвердити замовлення (status=2) — перевіряє доступні переходи."""
     def _safe_patch(target_status: int, label: str) -> bool:
@@ -364,6 +458,19 @@ def confirm_order(order_id: int) -> bool:
             logger.info(f'Статус #{order_id} → 55, тепер → 2')
             return _safe_patch(2, 'підтверджено після 55')
 
+        # Зі статусу 1 API пропонує лише 26 — ідемо через нього: 1 → 26 → 2
+        if current_status == 1 and PROCESSING_STATUS in available:
+            if move_to_processing(order_id):
+                cur2, av2 = _status_available(order_id)
+                logger.info(f'confirm_order #{order_id}: після 26 current={cur2}, available={av2}')
+                if 2 in av2:
+                    return _safe_patch(2, 'підтверджено після 26')
+                if 55 in av2 and _safe_patch(55, 'проміжний 55 після 26'):
+                    return _safe_patch(2, 'підтверджено після 55')
+                # 26 стоїть, підтвердження недоступне — наступний цикл (pending_manual
+                # бачить, що статус уже не 1) спробує знову
+                return None
+
         logger.warning(
             f'confirm_order #{order_id}: перехід на 2 недоступний. '
             f'current={current_status}, available={available}'
@@ -382,6 +489,7 @@ def confirm_order(order_id: int) -> bool:
                 if rc.json().get("success"):
                     logger.success(f'confirm_order #{order_id}: cabinet-seller 55 OK')
                     return True
+                logger.warning(f'confirm_order #{order_id}: cabinet-seller відповів: {rc.text[:200]}')
             except Exception as ce:
                 logger.warning(f'confirm_order cabinet fallback: {ce}')
             return None  # sentinel: потрібне ручне підтвердження
@@ -878,8 +986,9 @@ def process_order(order: dict, feed: dict):
     elif db_status in ('waiting_payment', 'waiting_payment_alerted'):
         current = get_order_details(order_id)
         rz_status = current.get('status')
-        if rz_status == 26:
-            # Замовлення ще не оплачене
+        if rz_status == 26 and payment_paid(current) is not True:
+            # Замовлення ще не оплачене (Rozetka віддає статус оплати в
+            # payment.payment_status; для «на рахунок продавця» — лише власник)
             if db_status == 'waiting_payment':
                 saved_at = _get_db_processed_at(order_id)
                 if saved_at:
@@ -892,7 +1001,8 @@ def process_order(order: dict, feed: dict):
                         _update_db_status(order_id, 'waiting_payment_alerted')
             logger.debug(f'#{order_id} waiting_payment — статус Розетки ще 26, пропускаємо')
             return
-        logger.info(f'#{order_id} waiting_payment — статус змінився на {rz_status}, обробляємо знову')
+        logger.info(f'#{order_id} waiting_payment — статус {rz_status}, оплата '
+                    f'{payment_paid(current)}, обробляємо знову')
         delete_from_db(order_id)
         skip_payment_check = True  # payment_type не змінюється, але оплата вже підтверджена статусом
     elif db_status is not None:
@@ -984,6 +1094,47 @@ def process_order(order: dict, feed: dict):
     # Доказу немає — не скасовуємо нічого. Статус 'manual_review' зберігається
     # в базі, тому наступний цикл не візьме замовлення знову і Telegram не
     # засипле однаковими сповіщеннями.
+    # Замовлення лише з товарів NOIRE: наявність звіряємо з базою постачальника,
+    # далі — оплата → 26 → підтвердження. Оформлення в SexOpt — вручну (як і
+    # було), але власникові вже не треба самому звіряти наявність і міняти
+    # статус. Нічого не скасовуємо: немає доказу — лише попередження.
+    if unknown and not out_of_stock and all(i['sku'] in noire for i in items_info):
+        ri = _order_recipient_info(details)
+        stock_ok, lines = noire_stock(items_info)
+        stock_txt = '\n'.join(lines)
+        if stock_ok is True:
+            paid = payment_paid(details)
+            if is_prepaid and paid is not True and not skip_payment_check:
+                moved = move_to_processing(order_id)
+                save_to_db(details, 'waiting_payment')
+                tg(f'⏳ <b>{MARKETPLACE} NOIRE #{order_id} — наявність є, чекаємо оплату</b>\n'
+                   f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн\n{stock_txt}\n'
+                   f'Статус: {"обробляється менеджером" if moved else "НЕ змінено"}\n'
+                   + ('Оплата на рахунок продавця — перевірте надходження й підтвердіть вручну.'
+                      if paid is None else 'Після оплати агент підтвердить сам.'))
+                return
+            res = confirm_order(order_id)
+            if res:
+                save_to_db(details, 'accepted')
+                tg(f'✅ <b>{MARKETPLACE} NOIRE #{order_id} підтверджено</b>\n'
+                   f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн\n{stock_txt}\n'
+                   f'Оформіть замовлення в SexOpt.')
+                logger.info(f'#{order_id} NOIRE: наявність є, підтверджено')
+                return
+            save_to_db(details, 'pending_manual' if res is None else 'manual_review')
+            tg(f'⚠️ <b>{MARKETPLACE} NOIRE #{order_id} — наявність є, але підтвердити не вдалось</b>\n'
+               f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн\n{stock_txt}\n'
+               f'Підтвердіть у кабінеті Розетки.')
+            return
+        if stock_ok is False:
+            save_to_db(details, 'manual_review')
+            tg(f'⚠️ <b>{MARKETPLACE} NOIRE #{order_id} — бракує товару у постачальника</b>\n'
+               f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн\n{stock_txt}\n'
+               f'Статус НЕ змінено, замовлення НЕ скасовано — розберіться вручну.')
+            logger.warning(f'#{order_id} NOIRE: бракує товару — ручна обробка')
+            return
+        # stock_ok is None — перевірити не вдалось: звичайна ручна обробка нижче
+
     if unknown:
         save_to_db(details, 'manual_review')
         tg(f'🖐 <b>{MARKETPLACE} #{order_id} — ручна обробка</b>\n'
@@ -995,7 +1146,8 @@ def process_order(order: dict, feed: dict):
         return
 
     # Передоплата → чекаємо підтвердження оплати (пропускаємо якщо оплата вже підтверджена)
-    if is_prepaid and not skip_payment_check:
+    if is_prepaid and not skip_payment_check and payment_paid(details) is not True:
+        move_to_processing(order_id)
         save_to_db(details, 'waiting_payment')
         tg(f'⏳ <b>{MARKETPLACE} #{order_id} — очікує оплату</b>\n'
            f'Клієнт: {ri["customer"]} {ri["phone"]}\n'
