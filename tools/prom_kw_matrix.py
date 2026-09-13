@@ -324,6 +324,30 @@ _INSERT_NO = r'кільц|мастурбатор|насадк|вібромаса
 _NOT_DOUBLE = r'сумк|насадк|набір|приймач|кабел|чохол|кейс|мастурбатор'
 
 
+_ZONES = {'клітор': r'клітор|\bclit', 'точка g': r'точк\w* g\b|g-?spot|g spot',
+          'анал': r'\bанал|\banal|простат|prostat', 'вагін': r'вагін|vagin'}
+
+
+def _zone_conflict(ph, name):
+    """Фраза з «Призначення» називає одну зону, а назва — іншу, і не
+    називає цієї: «насадка для клітора» на Leten G SPOT Headgear, «вібратор
+    для точки g» на Dorcel Secret Clit, «анальний рідкий вібратор» на
+    «рідкому вібраторі для клітора» (~15 фраз, 13.09.2026). Звороти
+    «підходить для …» не рахуються — вони перелічують кілька зон. Кролики
+    стимулюють обидві зони — їх не чіпаємо."""
+    nm = re.sub(r'підход\w* для[^,]*', ' ', (name or '').lower())
+    if 'кролик' in nm or 'rabbit' in nm:
+        return False
+    pz = {z for z, rx in _ZONES.items() if re.search(rx, ph)}
+    nz = {z for z, rx in _ZONES.items() if re.search(rx, nm)}
+    # точка G — всередині піхви: «вагінальний смарт-вібратор точки g» —
+    # не конфлікт (регресію першої версії знайдено на збірці, 13.09)
+    for z in (pz, nz):
+        if z & {'точка g', 'вагін'}:
+            z |= {'точка g', 'вагін'}
+    return bool(pz and nz and not (pz & nz))
+
+
 def _insertable(noun):
     n = (noun or '').lower()
     return bool(re.search(_INSERT_YES, n)) and not re.search(_INSERT_NO, n)
@@ -729,6 +753,8 @@ def build(name, vendor, category, prm, description='', catname=None):
         stem = {'вагінальний': r'вагін', 'анальний': r'анал'}.get(ph, '^$')
         ph = agree(PURPOSE_ADJ[ph], noun) \
             if (_insertable(noun) or re.search(stem, name.lower())) else None
+    if ph and _zone_conflict(ph, name):
+        ph = None
     if ph:
         add(1, f'{noun} {ph}' if ph.startswith(('для', '3')) else f'{ph} {noun}')
     if (prm.get('Конструкція') or '').strip().lower().startswith('подвійн') \
