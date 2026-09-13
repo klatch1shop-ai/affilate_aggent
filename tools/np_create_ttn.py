@@ -136,6 +136,10 @@ def main():
           f"оголошена {amount} | вартість доставки {price.get('data')}")
     if not a.create:
         return
+    if cod:
+        # у ручних ТТН власника післяплата йде на карту; як задати карту через API ще не
+        # підтверджено (README, «Повне порівняння всіх полів») — без карти не створюємо
+        sys.exit('післяплата: карту для переказу через API ще не налаштовано — створіть ТТН вручну')
 
     r = np('Counterparty', 'save', {'CounterpartyType': 'PrivatePerson', 'CounterpartyProperty': 'Recipient', **rcp})
     if not r.get('success'):
