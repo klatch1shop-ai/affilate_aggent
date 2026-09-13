@@ -38,3 +38,7 @@ claw-code/
 # службові файли, не код (13.09.2026)
 data/tg_digest.jsonl
 data/prom/ua_probe/
+
+# кеші інструментів ноутбука (13.09.2026)
+data/rozetka_search_cache.json
+data/prom/prom_ids.json
