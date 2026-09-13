@@ -11,10 +11,13 @@
     блокує переказ на карту через API (20000201794) — ТТН без післяплати, а в
     Telegram — «додайте післяплату N грн» (власник додає в кабінеті);
   * після створення — зберегти наклейку 100×100 (PDF) і надіслати в Telegram;
-  * якщо щось не так — власник видалить ТТН у кабінеті, пробуємо знову.
+  * якщо щось не так — власник видалить ТТН у кабінеті, пробуємо знову;
+  * (13.09, пізніше) після створення — ТТН у замовлення Rozetka і статус
+    61 «Заплановано передачу перевізникові», з перевіркою читанням.
 
-ТТН у замовлення Rozetka цей скрипт НЕ ставить (статус змінився б на 61) —
-окремим кроком за вказівкою власника.
+Друк наклейки блокує зміни ТТН через API («Document is already printed»),
+тому коли власник має додати післяплату вручну — наклейку не друкуємо,
+у Telegram лише текст (друк — з кабінету після зміни).
 
 Довідка: shared/knowledge_base/novaposhta/README.md
 
@@ -96,6 +99,27 @@ def tg_text(text):
     r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
                       data={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML'}, timeout=30)
     return r.json().get('ok'), r.text[:200]
+
+
+def rozetka_ttn(order_id, ttn):
+    """ТТН у замовлення Rozetka + статус 61 «Заплановано передачу перевізникові»; перевірка читанням.
+
+    PATCH /orders/{id} {status: 61, ttn} — перевірено 13.09 на #905931436 (з 26).
+    """
+    st, av = RZ._status_available(order_id)
+    if st != 61 and 61 not in av:
+        return f'❗ Rozetka: статус 61 недоступний зі статусу {st} — ТТН не додано, додайте вручну'
+    try:
+        r = requests.patch(f'{RZ.ROZETKA_BASE}/orders/{order_id}', headers=RZ.rz_headers(), verify=False,
+                           json={'status': 61, 'ttn': ttn}, timeout=30).json()
+    except Exception as e:
+        r = {'errors': str(e)}
+    time.sleep(3)
+    chk = RZ.get_order_details(order_id)
+    got = chk.get('ttn') or RZ._ttn_of(chk)
+    if chk.get('status') == 61 and got == ttn:
+        return 'Rozetka: ТТН додано, статус «Заплановано передачу перевізникові»'
+    return f'❗ Rozetka: не підтвердилось (статус {chk.get("status")}, ТТН {got or "—"}; {r.get("errors") or ""})'
 
 
 def main():
@@ -182,17 +206,25 @@ def main():
     print(f"СТВОРЕНО ТТН {ttn} (Ref {ref}), вартість {t.get('CostOnSite')} грн, доставка {t.get('EstimatedDeliveryDate')}")
     if cod_todo:
         cod_line = (f'⚠️ <b>ДОДАЙТЕ ПІСЛЯПЛАТУ {cod_todo} грн</b> у кабінеті НП до відправки '
-                    f'(через API на карту заблоковано), після зміни передрукуйте наклейку')
+                    f'(через API на карту заблоковано) і роздрукуйте наклейку звідти')
     elif cod:
         cod_line = f'Післяплата: {cod} грн на карту *{COD_CARD[-4:]}'
     else:
         cod_line = 'Післяплата: немає (оплачено)'
     if cod_todo:
         print(f'УВАГА: ТТН без післяплати — додати {cod_todo} грн вручну')
+    rz_line = rozetka_ttn(a.order_id, ttn)
+    print(rz_line)
     caption = (f'📦 <b>ТТН {ttn}</b> — Rozetka #{a.order_id}\n'
                f'{w.get("CityDescription", "")}, {w["Description"][:60]}\n'
                f'{cod_line}\n'
-               f'Оголошена {amount} грн | доставка {t.get("CostOnSite")} грн — платить одержувач')
+               f'Оголошена {amount} грн | доставка {t.get("CostOnSite")} грн — платить одержувач\n'
+               f'{rz_line}')
+    if cod_todo:
+        # друк заблокував би зміну ТТН через API («Document is already printed»)
+        ok, info = tg_text(caption)
+        print('Telegram (текст, без наклейки):', 'надіслано' if ok else f'НЕ надіслано: {info}')
+        return
 
     os.makedirs(OUT_DIR, exist_ok=True)
     pdf = os.path.join(OUT_DIR, f'{ttn}_rozetka_{a.order_id}_100x100.pdf')
