@@ -132,11 +132,22 @@ def main():
     if not ok:
         sys.exit(1)
 
+    # Переглянуте вручну не показуємо вдруге: і виправлене (words), і хибні
+    # спрацювання (not_defects) з data/prom/name_fixes.json
+    try:
+        import json
+        with open(os.path.join(BASE, 'data', 'prom', 'name_fixes.json'), encoding='utf-8') as f:
+            fx = json.load(f)
+        seen = {k.lower() for k in fx.get('words', {})} | {w.lower() for w in fx.get('not_defects', [])}
+    except (OSError, ValueError):
+        seen = set()
     rows = []
     for o in offers:
         name = o.findtext('name_ua') or ''
         for cls, w, hint in classify_name(name, freq, uk):
-            rows.append((o.findtext('vendorCode') or o.get('id'), cls, w, hint, name))
+            if w.lower() not in seen:
+                rows.append((o.findtext('vendorCode') or o.get('id'), cls, w, hint, name))
+    print(f'переглянуто раніше (у name_fixes.json): {len(seen)} слів')
     cnt = collections.Counter(r[1] for r in rows)
     words = collections.Counter((r[1], r[2]) for r in rows)
     print(f'назв з дефектами: {len({r[0] for r in rows})} · ' +
