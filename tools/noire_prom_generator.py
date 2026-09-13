@@ -219,6 +219,52 @@ except Exception:  # модуль лежить поруч; без нього —
     _fix_homoglyphs = None
 
 
+_NAME_FIXES = None
+
+
+def fix_name_ua(name: str, sku: str, st=None) -> str:
+    """Виправлення укр. назв постачальника з `data/prom/name_fixes.json`:
+    російські слова («размер», «с розой»), одруківки («Подадрунковий»),
+    обрізання на 100-му символі («в подаруно»). Список збирає
+    `tools/prom_name_defects.py`, рядки таблиці переглянуті вручну —
+    правка живе в даних, а не поштучно в коді (13.09.2026)."""
+    global _NAME_FIXES
+    if _NAME_FIXES is None:
+        path = os.path.join(BASE_DIR, 'data', 'prom', 'name_fixes.json')
+        try:
+            with open(path, encoding='utf-8') as f:
+                d = json.load(f)
+        except (OSError, ValueError) as e:
+            logger.warning(f'name_fixes.json: {e}')
+            d = {}
+        words = d.get('words') or {}
+        # довші першими: «косметичка-чохо» раніше за можливий «чохо»
+        _NAME_FIXES = (d.get('names') or {}, [
+            (re.compile(rf"(?<![\wʼ’'-]){re.escape(k)}(?![\wʼ’'-])",
+                        0 if len(k) == 1 else re.I), v)
+            for k, v in sorted(words.items(), key=lambda kv: -len(kv[0]))])
+    names, words = _NAME_FIXES
+    if sku in names:
+        if st is not None:
+            st['укр. назву замінено (була російською)'] += 1
+        return names[sku]
+    new = fix_words_ua(name)
+    if new != name and st is not None:
+        st['укр. назву виправлено (слова)'] += 1
+    return new
+
+
+def fix_words_ua(text: str) -> str:
+    """Лише словникова частина `name_fixes.json` — і для значень
+    характеристик: «Країна бренду: япония» (34), «Матеріал: алюминий»,
+    «термопластический каучук» (44 картки, 13.09.2026)."""
+    if _NAME_FIXES is None:
+        fix_name_ua('', '')
+    for rx, rep in _NAME_FIXES[1]:
+        text = rx.sub(lambda m: rep[:1].upper() + rep[1:] if m.group(0)[:1].isupper() else rep, text)
+    return text
+
+
 def dehomo(t: str, st=None, what: str = '') -> str:
     """Латинські літери всередині кириличних слів у тексті постачальника
     («свечa», «Гуcтая смазка», «Сlassic», «10cм»; 58 слів у назвах і ключах,
@@ -1337,6 +1383,7 @@ def generate(out_file=OUT, limit=None):
         for p in items:
             sku = p['sku']
             name = dehomo((p['name'] or '').strip(), st, 'назва укр.')
+            name = fix_name_ua(name, sku, st)
             # У назві не повинно бути посилань і контактів. Єдиний випадок —
             # серія Doc Johnson «Girls of Social Media», де модель названа
             # нікнеймом (@viking.barbie). Знімаємо лише «@»: сам токен — це
@@ -1372,7 +1419,9 @@ def generate(out_file=OUT, limit=None):
             # збігається з іншою карткою, у видачі вони не відрізняються
             # (докладно — tools/prom_name_shorten.py).
             if sku in NAME_SHORTEN:
-                name = NAME_SHORTEN[sku]
+                # збережені скорочені назви зроблено з тексту постачальника —
+                # у них ті самі «цвет», «чорный» (SO6601, SO7765, 13.09.2026)
+                name = fix_name_ua(dehomo(NAME_SHORTEN[sku]), sku)
                 st['назву скорочено для видимої зони'] += 1
             if len(name) > MAX_NAME:
                 name = name[:MAX_NAME].rsplit(' ', 1)[0].rstrip(' ,.-')
@@ -1609,7 +1658,10 @@ def generate(out_file=OUT, limit=None):
             else:
                 st['габаритів немає (категорія не в довіднику)'] += 1
             for k, v in list(prm.items())[:MAX_PARAMS]:
-                o.append(f'        <param name="{esc(k)}">{esc(v)}</param>')
+                v2 = fix_words_ua(str(v))
+                if v2 != str(v):
+                    st['значення характеристики виправлено (рос. слова)'] += 1
+                o.append(f'        <param name="{esc(k)}">{esc(v2)}</param>')
             o.append('      </offer>')
             offers.append('\n'.join(o))
             st['офферів'] += 1
