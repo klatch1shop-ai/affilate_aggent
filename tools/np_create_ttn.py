@@ -49,7 +49,10 @@ SENDER_CITY = 'db5c88f0-391c-11dd-90d9-001a92567626'
 SENDER_WAREHOUSE = '0d545f59-e1c2-11e3-8c4a-0050568002cf'
 DESCRIPTION = 'Косметика'          # нейтрально, значення з довідника НП
 PARCEL_WEIGHT = '2'                # опція «посилка до 2 кг»
-VOLUME = '0.002'                   # м³ ≈ 20×10×10 см, об'ємна вага 0,5 кг
+# коробка як у всіх ручних ТТН власника: 30×20×10 см (0,006 м³, об'ємна вага 1,5 кг);
+# для поштомата НП вимагає саме OptionsSeat
+BOX = {'volumetricLength': '30', 'volumetricWidth': '20', 'volumetricHeight': '10'}
+VOLUME = '0.006'
 
 
 def np(model, method, props, retries=3):
@@ -145,6 +148,7 @@ def main():
         'CityRecipient': w['CityRef'], 'Recipient': rec['Ref'], 'RecipientAddress': w['Ref'],
         'ContactRecipient': rec['ContactPerson']['data'][0]['Ref'], 'RecipientsPhone': rp,
         'InfoRegClientBarcodes': str(a.order_id),
+        'OptionsSeat': [{**BOX, 'volumetricVolume': VOLUME, 'weight': PARCEL_WEIGHT}],
     }
     if cod:
         params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money', 'RedeliveryString': cod}]

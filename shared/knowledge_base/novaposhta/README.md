@@ -168,6 +168,32 @@ POST https://api.novaposhta.ua/v2.0/json/
   API вимагає `OptionsSeat` (габарити, ≤20 кг, ≤40×60×30 см) — у
   `np_create_ttn.py` ще немає, потрібен стандартний розмір коробки.
 
+**Повне порівняння всіх полів (13.09, 2-й прохід).** Крім опису, номера
+замовлення, типу точки й каналу створення, є ще дві відмінності:
+* **габарити**: у всіх 6 ТТН власника `OptionsSeat` 30×20×10 см
+  (0,006 м³, об'ємна вага 1,5 кг, вага 2); у моїй лише `VolumeGeneral`
+  0,002 → у `np_create_ttn.py` тепер `OptionsSeat` з цією коробкою (він же
+  потрібен для поштоматів);
+* **післяплата на карту**: у обох ТТН власника з післяплатою гроші йдуть на
+  карту (`RedeliveryPaymentCard.CardMaskedNumber`), причому на **різні**:
+  `432334xxxxxx6356` (20451533331993, `RedeliveryPaymentCardRef`
+  `e8774818-7332-4b64-9dc2-6ed312386d59`) і `432334xxxxxx7406`
+  (20451531603272, `a706760f-8aa8-416f-ad82-269a724ac3e5`). Видно в
+  `getDocumentList` (`RedeliveryPaymentCard`) і в
+  `TrackingDocument.getStatusDocuments` з телефоном відправника
+  (`CardMaskedNumber`, `RedeliveryPaymentCardRef`).
+  **Як задати карту через API — не підтверджено:** офіційна сторінка
+  `InternetDocument.save` за Cloudflare (403 і з ноутбука, і з сервера);
+  список карт `Payment.getCards` є, але відповідає «Please update the
+  application» (лише для застосунку НП). Єдиний знайдений приклад
+  (GitHub vladyslav-yarko/bloom-art) — `BackwardDeliveryData[].RecipientBankCard`
+  = повний номер карти. Коди помилок НП підтверджують, що карта в
+  зворотній доставці через API існує: 20000201486 «BackwardDelivery Money
+  with PaymentCard is too high» (ліміт 14 999 грн), 20000201487 «PayerType
+  with PaymentCard must be Recipient». Проба `save` без одержувача нічого не
+  дала — НП зупиняє перевірку на `Recipient not selected` раніше, ніж
+  доходить до зворотної доставки. Перевірити можна лише справжньою ТТН.
+
 Закрито: `ref_id` «1 (АО7507НН)» (#905699729) — справжній Ref пункту
 приймання-видачі (ТТН власника 20451533331993 йде саме туди); порожня
 відповідь `getWarehouses` була тимчасовою.
