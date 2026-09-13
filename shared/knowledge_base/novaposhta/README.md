@@ -110,6 +110,27 @@ POST https://api.novaposhta.ua/v2.0/json/
 видно. Перший прогін — лише розрахунок (`getDocumentPrice`), створення — за
 рішенням власника на конкретному замовленні.
 
+### Наш відправник (власник, 13.09.2026: «всі посилки відправляються з Дніпра, відділення 1»)
+
+| Поле ТТН | Значення | Звідки |
+|---|---|---|
+| `CitySender` | `db5c88f0-391c-11dd-90d9-001a92567626` | `Address.getCities {FindByString: "Дніпро"}` |
+| `SenderAddress` | `0d545f59-e1c2-11e3-8c4a-0050568002cf` — Відділення №1: вул. Повітряна, 2 | `Address.getWarehouses {CityRef, WarehouseId: "1"}` |
+| `Sender` | `ab677114-0b71-11ef-bcd0-48df37b921da` (приватна особа, єдиний відправник в акаунті) | `Counterparty.getCounterparties {CounterpartyProperty: "Sender"}` |
+| `ContactSender` | `ab67fc77-0b71-11ef-bcd0-48df37b921da` (телефон — з цієї ж відповіді, `Phones`) | `Counterparty.getCounterpartyContactPersons {Ref: Sender}` |
+
+Збережених адрес у відправника в акаунті немає — відділення передається
+в `SenderAddress` напряму.
+
+**Перший розрахунок (лише читання, 13.09):** Дніпро №1 → Київ №391,
+посилка 0,5 кг, оголошена вартість 2879 грн, відділення-відділення:
+`getDocumentPrice` → **104,40 грн**; `getDocumentDeliveryDate` → **15.09.2026 18:00**.
+
+**Пастка:** `Address.getWarehouses {Ref}` один раз повернув порожній
+`data` при `success: true`, повтор за 2 с — нормальна відповідь.
+Порожня відповідь ≠ «відділення немає»: повторювати з паузою, лише потім
+переходити на запасний пошук.
+
 ## 5. Звідки брати дані з замовлення Rozetka
 
 `GET /orders/{id}?expand=delivery,purchases,payment` (перевірено 13.09 на
