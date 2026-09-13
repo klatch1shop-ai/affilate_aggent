@@ -1,0 +1,16 @@
+15 7 * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 /home/tek/agent-system/agents/orders/rozetka_github_sync.py >> /tmp/rozetka_sync_cron.log 2>&1
+*/10 * * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 tools/watchdog.py >> /tmp/watchdog.log 2>&1
+0 8 * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 /home/tek/agent-system/agents/orders/price_updater.py >> /home/tek/agent-system/logs/price_updater.log 2>&1
+0 7 * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 /home/tek/agent-system/agents/orders/feed_sync.py >> /tmp/feed_sync_cron.log 2>&1
+30 7 * * * cd /home/tek/agent-system && /home/tek/agent-system/venv/bin/python3 agents/orders/carvol_epicentr_sync.py >> /tmp/carvol_epicentr_sync.log 2>&1
+# NOIRE: ціна+наявність кожні 2 год
+5 */2 * * * cd /home/tek/agent-system && venv/bin/python3 tools/noire_stock_sync.py --quick >> logs/noire_sync_cron.log 2>&1
+# NOIRE: повне оновлення описів/фото щодня о 6:30
+30 6 * * * cd /home/tek/agent-system && venv/bin/python3 tools/noire_stock_sync.py --full >> logs/noire_sync_cron.log 2>&1
+# Обслуговування git: пакування обʼєктів раз на місяць (1-го о 4:20)
+20 4 1 * * cd /home/tek/agent-system && git -c pack.threads=1 -c pack.windowMemory=100m -c core.bigFileThreshold=8m gc --prune=now >> /tmp/git_gc.log 2>&1
+# NOIRE Rozetka: перезбирання + публікація щогодини (Rozetka забирає прайс раз на годину)
+20 * * * * cd /home/tek/agent-system && venv/bin/python3 tools/noire_stock_sync.py --publish-rozetka >> logs/noire_rozetka_publish.log 2>&1
+# NOIRE Prom: перезбирання + публікація кожні 4 год у вікні 07:00-22:00
+40 7,11,15,19 * * * cd /home/tek/agent-system && venv/bin/python3 tools/noire_stock_sync.py --publish-prom >> logs/noire_prom_publish.log 2>&1
+25 */2 * * * cd /home/tek/agent-system && venv/bin/python3 tools/noire_stock_sync.py --publish-epicentr-stock >> logs/noire_epicentr_stock.log 2>&1
