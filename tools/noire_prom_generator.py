@@ -254,6 +254,32 @@ def fix_name_ua(name: str, sku: str, st=None) -> str:
     return new
 
 
+_DESC_FIXES = None
+
+
+def fix_desc_ua(text: str) -> str:
+    """Поодинокі рос. слова в укр. описі: «безремневой страпон» (32),
+    «від телефона» (44), «размер L» — `desc_words` у name_fixes.json. Лише
+    текст між тегами; однолітерних замін тут немає («10 с» — секунди)."""
+    global _DESC_FIXES
+    if _DESC_FIXES is None:
+        try:
+            with open(os.path.join(BASE_DIR, 'data', 'prom', 'name_fixes.json'), encoding='utf-8') as f:
+                words = json.load(f).get('desc_words') or {}
+        except (OSError, ValueError):
+            words = {}
+        _DESC_FIXES = [(re.compile(rf"(?<![\wʼ’'-]){re.escape(k)}(?![\wʼ’'-])", re.I), v)
+                       for k, v in words.items() if len(k) > 1]
+    if not text or not _DESC_FIXES:
+        return text
+
+    def fix(seg):
+        for rx, rep in _DESC_FIXES:
+            seg = rx.sub(lambda m: rep[:1].upper() + rep[1:] if m.group(0)[:1].isupper() else rep, seg)
+        return seg
+    return re.sub(r'>([^<]+)<', lambda m: '>' + fix(m.group(1)) + '<', '>' + text + '<')[1:-1]
+
+
 def fix_words_ua(text: str) -> str:
     """Лише словникова частина `name_fixes.json` — і для значень
     характеристик: «Країна бренду: япония» (34), «Матеріал: алюминий»,
@@ -1459,6 +1485,10 @@ def generate(out_file=OUT, limit=None):
                 desc = rw['rewritten']
                 st['опис унікальний (переписаний)'] += 1
             desc = brand_twins(dehomo(desc, st, 'опис укр.'), vend_clean)
+            _d2 = fix_desc_ua(desc)
+            if _d2 != desc:
+                desc = _d2
+                st['опис укр.: рос. слова виправлено'] += 1
 
             raw = dict(params.get(sku, {}))
             if p['country']:
