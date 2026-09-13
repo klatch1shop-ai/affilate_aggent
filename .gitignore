@@ -5,6 +5,9 @@ __pycache__/
 .env
 *.env
 .env.*
+# копії .env під будь-якою назвою (13.09: автокоміт сервера захопив backups/env_before_...)
+*env_before*
+backups/env*
 logs/*.log
 logs/*.pid
 data/code/
