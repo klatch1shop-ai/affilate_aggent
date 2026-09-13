@@ -34,3 +34,7 @@ claw-code/
 !exports/carvol_epicentr.xml
 !shared/feeds/rozetka_feed.xml
 .cache/
+
+# службові файли, не код (13.09.2026)
+data/tg_digest.jsonl
+data/prom/ua_probe/
