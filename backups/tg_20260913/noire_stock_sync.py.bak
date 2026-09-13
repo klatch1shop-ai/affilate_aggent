@@ -50,9 +50,6 @@ TG_TOKEN = os.getenv('TG_BOT_TOKEN') or os.getenv('TELEGRAM_BOT_TOKEN')
 TG_CHAT = os.getenv('TG_CHAT_ID') or os.getenv('TELEGRAM_ADMIN_ID')
 
 
-from shared.utils import tg_digest  # noqa: E402
-
-
 def tg(text: str):
     if not (TG_TOKEN and TG_CHAT):
         return
@@ -674,19 +671,9 @@ def main():
             from noire_site_price_check import tg_lines
             msg += tg_lines(site)
         logger.info(f'Анти-демпінг: порушень {len(bad)}')
-        # Одразу — лише тривоги: демпінг, ціна сайту нижче РРЦ, збій фіду чи
-        # публікації. Звичайний перебіг (скільки цін змінилось, що знято й
-        # повернуто) — у щоденне зведення watchdog (рішення власника
-        # 13.09.2026: ~5 таких повідомлень на добу ховали замовлення).
-        alarm = bad or site.get('below') or (feed and not feed.get('ok')) \
-            or (gh and not gh.get('ok') and not gh.get('skipped'))
-        if not a.no_tg and alarm:
+        if not a.no_tg and (st['price'] or st['off'] or bad
+                            or site.get('below')):
             tg(msg)
-        if changed and not a.dry:
-            tg_digest.add('NOIRE sync: ціни й наявність',
-                          f"ціни {st['price']} (↑{st['raised']}), знято {st['off']}, "
-                          f"повернуто {st['on']}, немає у прайсі {st['missing']}",
-                          ціни=st['price'], знято=st['off'], повернуто=st['on'])
     elif a.publish:
         # Один раз на добу о 23:00: свіжий XML з поточного стану БД → GitHub.
         # Далі Єпіцентр забирає його зі свого боку о 00:00–02:00.
@@ -716,12 +703,9 @@ def main():
                 tg('❌ <b>NOIRE</b>: push у GitHub не вдався')
     elif a.publish_epicentr_stock:
         st = refresh_stock_feed()
-        # «публікація ok» кожні 2 години — у зведення; збій — одразу
-        if st['ok']:
-            tg_digest.add('Наявність Єпіцентру', f"{st['offers']} офферів", публікацій=1)
-        elif not a.no_tg:
-            tg(f"❌ <b>NOIRE: наявність Єпіцентру</b>\n{st['offers']} офферів, "
-               "публікація не вдалась")
+        if not a.no_tg:
+            tg(f"📦 <b>NOIRE: наявність Єпіцентру</b>\n{st['offers']} офферів, "
+               + ('публікація ok' if st['ok'] else '❌ публікація не вдалась'))
     elif a.publish_rozetka:
         # Щогодини: Rozetka забирає прайс раз на годину, тож немає сенсу
         # тримати опублікований файл старішим за цей інтервал.
@@ -747,8 +731,6 @@ def main():
                            capture_output=True, text=True, timeout=600)
         if not gh.get('ok') and not gh.get('skipped') and not a.no_tg:
             tg('❌ <b>NOIRE Rozetka</b>: push у GitHub не вдався')
-        elif gh.get('ok'):
-            tg_digest.add('Rozetka NOIRE: публікація', f"{feed['offers']} офферів", публікацій=1)
     elif a.publish_prom:
         # Кожні 4 години у вікні 07:00-22:00 — ритм, з яким Prom забирає
         # прайс за посиланням.
@@ -764,15 +746,12 @@ def main():
                     f"публікація {'ok' if gh.get('ok') else 'НЕ ВДАЛАСЬ'}")
         if not gh.get('ok') and not gh.get('skipped') and not a.no_tg:
             tg('❌ <b>NOIRE Prom</b>: push у GitHub не вдався')
-        elif gh.get('ok'):
-            tg_digest.add('Prom NOIRE: публікація', f"{feed['offers']} офферів", публікацій=1)
     elif a.full:
         st = full_sync(dry=a.dry)
-        # нові товари — не збій, а робота на день: у зведення
-        if st['new']:
-            tg_digest.add('Нові товари у постачальника',
-                          f"{st['new']} шт, потребують класифікації: "
-                          f"{', '.join(st['new_skus'][:8])}", нових=st['new'])
+        if not a.no_tg and st['new']:
+            tg(f"📦 <b>NOIRE: нові товари у постачальника</b>\n"
+               f"{st['new']} шт — потребують класифікації та описів\n"
+               f"Приклади: {', '.join(st['new_skus'][:8])}")
     else:
         ap.print_help()
 

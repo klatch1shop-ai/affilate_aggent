@@ -27,8 +27,6 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 # ── config ───────────────────────────────────────────────────────────────────
 
 REPO_DIR = "/home/tek/agent-system"
@@ -42,8 +40,7 @@ CHAT_ID   = (
 )
 
 SERVICES        = ["rozetka-order-agent", "tg-dispatcher", "noire-notifier"]
-REPORT_INTERVAL = timedelta(hours=24)   # було 6 год — «Watchdog OK» 4 рази на добу
-REPORT_HOUR     = int(os.getenv("WATCHDOG_REPORT_HOUR", "21"))   # одне зведення на добу, після 19:40
+REPORT_INTERVAL = timedelta(hours=6)
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
 SYNC_LOG        = "/tmp/rozetka_sync_cron.log"
 # Початок прогону в логу. Лог дописується, тож без цієї межі перевірка або
@@ -667,26 +664,13 @@ def check_carvol_rozetka_feed() -> dict:
 # ── report every 6h ───────────────────────────────────────────────────────────
 
 def should_report() -> bool:
-    """Одне зведення на добу — перший запуск після REPORT_HOUR, якщо сьогодні
-    ще не надсилали (рішення власника 13.09.2026: лише тривоги одразу + один
-    звіт на добу; доти звіт ішов кожні 6 год навіть коли все гаразд)."""
-    now = datetime.now()
-    if now.hour < REPORT_HOUR:
-        return False
     if not os.path.exists(STATE_FILE):
         return True
     try:
-        last = datetime.fromtimestamp(float(Path(STATE_FILE).read_text().strip()))
-        return last.date() < now.date() or (last.hour < REPORT_HOUR and last.date() == now.date())
+        last = float(Path(STATE_FILE).read_text().strip())
+        return (time.time() - last) >= REPORT_INTERVAL.total_seconds()
     except Exception:
         return True
-
-
-def _last_report_ts() -> float:
-    try:
-        return float(Path(STATE_FILE).read_text().strip())
-    except Exception:
-        return time.time() - REPORT_INTERVAL.total_seconds()
 
 
 def save_report_ts():
@@ -737,7 +721,7 @@ def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict,
 
     if all_ok:
         status_line = "  ".join(svc_parts) + ("  ✅ sync" if sync_ok else "  ❌ sync")
-        msg = (f"📋 <b>Щоденний звіт</b> [{ts}] — усе працює\n{status_line}\n"
+        msg = (f"🔔 <b>Watchdog OK</b> [{ts}]\n{status_line}\n"
                f"<b>Фіди:</b>\n" + "\n".join(feed_lines))
     else:
         problems = []
@@ -750,30 +734,13 @@ def send_report(git_r: dict, svc_r: dict, cron_r: dict, sync_r: dict,
             problems.append(f"❌ rozetka sync ({sync_r['msg'][:40]})")
         if not cron_r["ok"]:
             problems.append(f"⚠️ cron ({cron_r['msg'][:40]})")
-        msg = (f"📋 <b>Щоденний звіт</b> [{ts}] — 🚨 є проблеми\n" + "\n".join(problems)
+        msg = (f"🚨 <b>Watchdog</b> [{ts}]\n" + "\n".join(problems)
                + ("\n" if problems else "")
                + "<b>Фіди:</b>\n" + "\n".join(feed_lines))
 
-    # Усе, що синхронізації й публікації за добу записали в зведення
-    # (shared/utils/tg_digest.py) замість окремих повідомлень.
-    since = _last_report_ts()
-    try:
-        from shared.utils import tg_digest
-        entries = tg_digest.read_since(since)
-        msg += "\n\n<b>Оновлення за добу:</b>\n" + tg_digest.summary(entries)
-    except Exception as e:
-        entries = None
-        msg += f"\n\n<b>Оновлення за добу:</b> не зібрано ({str(e)[:80]})"
-    now_ts = time.time()
     save_report_ts()
     tg(msg)
-    if entries is not None:
-        try:
-            tg_digest.trim_before(now_ts)
-        except Exception as e:
-            log(f"[report] зведення не очищено: {e}")
-    log(f"[report] щоденний звіт ({'OK' if all_ok else 'PROBLEMS'}) відправлено в Telegram, "
-        f"подій у зведенні: {len(entries) if entries is not None else '?'}")
+    log(f"[report] 6h звіт ({'OK' if all_ok else 'PROBLEMS'}) відправлено в Telegram")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
