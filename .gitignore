@@ -42,3 +42,6 @@ data/prom/ua_probe/
 # кеші інструментів ноутбука (13.09.2026)
 data/rozetka_search_cache.json
 data/prom/prom_ids.json
+
+# замовлення й наклейки ТТН — особисті дані покупців, не в репозиторій (13.09.2026)
+shared/feeds/orders/
