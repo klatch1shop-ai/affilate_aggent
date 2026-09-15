@@ -52,13 +52,51 @@ def prom_ids():
     return {str(r['external_id']): str(r['prom_id']) for r in json.load(open(p, encoding='utf-8'))} if os.path.exists(p) else {}
 
 
+def auto_products(n, seed, ids, skip):
+    """n наших карток із різних категорій: запит перепису = бренд + до 2 латинських слів
+    моделі після бренду в назві; ті самі токени — умова «той самий товар» (колір не
+    враховується — варіанти кольору потрапляють у групу, це зазначено у звіті)."""
+    import random
+    import xml.etree.ElementTree as ET
+    offers = [o for o in ET.parse(PS.FEED).getroot().iter('offer')]
+    random.Random(seed).shuffle(offers)
+    seen_cat, out = set(), []
+    for o in offers:
+        sku = (o.findtext('vendorCode') or o.get('id') or '').strip()
+        cat = o.findtext('portal_category_id')
+        if sku in skip or sku not in ids or cat in seen_cat and len(seen_cat) < 40:
+            continue
+        brand = re.sub(r'\s*\(.*?\)\s*$', '', o.findtext('vendor') or '').strip()
+        name = o.findtext('name_ua') or ''
+        m = re.search(re.escape(brand), name, re.I) if brand else None
+        if not m:
+            continue
+        btok = set(brand.lower().split())
+        model = [w for w in re.findall(r"[A-Za-z0-9][A-Za-z0-9'\-\.]*", name[m.end():])
+                 if len(w) > 2 and not w.isdigit() and w.lower() not in btok | {'the', 'and', 'for', 'with'}][:2]
+        if not model:
+            continue
+        must = [brand.lower()] + [w.lower() for w in model]
+        out.append((sku, ids[sku], f"{brand} {' '.join(model)}", must))
+        seen_cat.add(cat)
+        if len(out) >= n:
+            break
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', required=True)
     ap.add_argument('--cap', type=int, default=8)
+    ap.add_argument('--auto', type=int, default=0, help='замість 10 заданих — N автоматично обраних карток')
+    ap.add_argument('--seed', type=int, default=20260917)
     a = ap.parse_args()
     PS.ensure_feed()
     ids = prom_ids()
+    global PRODUCTS
+    if a.auto:
+        PRODUCTS = auto_products(a.auto, a.seed, ids, {p[0] for p in PRODUCTS})
+        print('обрано:', [(p[0], p[2]) for p in PRODUCTS], flush=True)
     ctl = PS.control()
     print(f'контроль SO5178: {ctl}-та позиція', flush=True)
     out = []
