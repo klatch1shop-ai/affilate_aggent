@@ -1,0 +1,94 @@
+{
+ "deleted_at": "2026-09-15",
+ "reason": "мертві правила за назвою під хибними кодами; рішення власника 15.09 «видалити»",
+ "rows": [
+  {
+   "id": 81,
+   "epicentr_code": "9448",
+   "prom_category_id": "15131004",
+   "name_rule": "менструальн",
+   "confidence": "0.95",
+   "excluded": false,
+   "reasoning": "Догляд за іграшками → Менструальні чаші. Те саме.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 83,
+   "epicentr_code": "9526",
+   "prom_category_id": "161217",
+   "name_rule": "спринцівк|анальний душ|douche",
+   "confidence": "0.95",
+   "excluded": false,
+   "reasoning": "Те саме для аксесуарів.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 88,
+   "epicentr_code": "9452",
+   "prom_category_id": "330619",
+   "name_rule": "інтимн.{0,10}гігієн|для інтимних зон|intime balance",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Збуджуючі → Засоби для інтимної гігієни. Prom правий, 7 товарів.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 89,
+   "epicentr_code": "9452",
+   "prom_category_id": "330623",
+   "name_rule": "сіль для ванн|для ванни",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Збуджуючі → Засоби для прийняття ванн. Prom правий, 5 товарів.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 90,
+   "epicentr_code": "9452",
+   "prom_category_id": "330622",
+   "name_rule": "гель для душу|body wash",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Збуджуючі → Засоби для душу. Prom правий, 3 товари.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 91,
+   "epicentr_code": "9452",
+   "prom_category_id": "331502",
+   "name_rule": "після гоління|для гоління|shav",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Збуджуючі → Косметика для гоління. Prom правий, 2 товари.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:11:56.332378+00:00"
+  },
+  {
+   "id": 207,
+   "epicentr_code": "9452",
+   "prom_category_id": "161007",
+   "name_rule": "низькотемпературн|бдсм.{0,12}свічк|sm low temperature",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Збуджуючі → БДСМ-іграшки: низькотемпературні свічки Fetish Tentation — це БДСМ-реквізит, а не косметика. 13 товарів.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:16:14.952009+00:00"
+  },
+  {
+   "id": 208,
+   "epicentr_code": "9484",
+   "prom_category_id": "161007",
+   "name_rule": "уретральн|sperm stopper|penis plug|катетер",
+   "confidence": "0.9",
+   "excluded": false,
+   "reasoning": "Анальні пробки → БДСМ-іграшки: уретральні стимулятори Sinner Gear. 12.",
+   "source": "noire",
+   "created_at": "2026-08-09 04:16:14.952009+00:00"
+  }
+ ]
+}
