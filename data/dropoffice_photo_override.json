@@ -1,0 +1,53 @@
+{
+ "_про": "Rozetka #7253098 п.4 (15.09): на фото лише товар. Перегляд усіх 1108 перших фото; заміна — фото постачальника лише з товаром.",
+ "override": {
+  "991941780": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems221/c8ddc394ca-1_resize_1200x1200.jpg",
+   "index": 1,
+   "why": "перше фото — колаж «КУПУЮТЬ РАЗОМ»"
+  },
+  "991943376": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems1376/bf4b9771db-1_resize_1200x1200.jpg",
+   "index": 1,
+   "why": "перше фото — колаж «КУПУЮТЬ РАЗОМ» (приклад Rozetka)"
+  },
+  "991943507": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems1107/0b046a3fa7-1_resize_1200x1200.jpg",
+   "index": 2,
+   "why": "перше фото — інтер’єр кухні з іншими предметами"
+  },
+  "991943638": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems1456/2d10c38f65-1_resize_1200x1200.jpg",
+   "index": 3,
+   "why": "перше фото — інтер’єр"
+  },
+  "991943837": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems1729/9b111f4173-1_resize_1200x1200.jpg",
+   "index": 1,
+   "why": "перше фото — колаж «КУПУЮТЬ РАЗОМ»"
+  },
+  "991944386": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems2347/a2efd08ac0-5_resize_1200x1200.jpg",
+   "index": 3,
+   "why": "перше фото — інтер’єр з меблями"
+  },
+  "991944387": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems2346/cd3a8d4560-5_resize_1200x1200.jpg",
+   "index": 3,
+   "why": "перше фото — інтер’єр з меблями"
+  },
+  "991944430": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems2423/3e0c717044-1_resize_1200x1200.jpg",
+   "index": 1,
+   "why": "перше фото — рамка з підписом WB0289"
+  },
+  "991944452": {
+   "url": "https://kabinet.dropoffice.com.ua/uploads/cache/CatalogItems/CatalogItems2342/fd0d1ec42e-1_resize_1200x1200.jpg",
+   "index": 4,
+   "why": "перше фото — інфографіка з текстом"
+  }
+ },
+ "exclude": {
+  "991944099": "усі 7 фото постачальника з плашкою «Причина уцінки — наявність дефектів…» — уцінений товар, чистого фото немає"
+ }
+}

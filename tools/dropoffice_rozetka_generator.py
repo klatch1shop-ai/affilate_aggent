@@ -104,6 +104,15 @@ CYRILLIC = re.compile(r'[а-яА-ЯіІєЄїЇґҐёЁ]')
 # аркушах 11.09.2026). З режимом «лише перше фото» чистого фото в них немає.
 BAD_FIRST_PHOTO = {'SW-00000579'}
 
+# Rozetka #7253098 п.4 (15.09.2026): «на фото лише товар». Переглянуто всі 1108
+# перших фото: колажі «КУПУЮТЬ РАЗОМ», інтер'єри з меблями, текст на фото.
+# Для них — інше фото постачальника лише з товаром (за точною адресою), або
+# картку виключено, якщо чистого фото немає.
+PHOTO_FILE = os.path.join(BASE_DIR, 'data', 'dropoffice_photo_override.json')
+_PH = json.load(open(PHOTO_FILE, encoding='utf-8')) if os.path.exists(PHOTO_FILE) else {}
+PHOTO_OVERRIDE = {k: v['url'] for k, v in (_PH.get('override') or {}).items()}
+PHOTO_EXCLUDE = dict(_PH.get('exclude') or {})
+
 # rz_id категорій, на які посилаються правила нижче
 DP, PL, PVC, KOV = '4629548', '4648788', '4641184', '4625988'
 
@@ -197,6 +206,28 @@ def name_triple(name: str):
     return {float(m.group(i).replace(',', '.')) for i in (1, 2, 3)}
 
 
+_NAME_DIMS = re.compile(r'(\d+(?:[.,]\d+)?)\s*(?:мм|mm|см|cm|м|m)?\s*[хxХX*×]\s*(\d+(?:[.,]\d+)?)\s*(?:мм|mm|см|cm|м|m)?'
+                        r'(?:\s*[хxХX*×]\s*(\d+(?:[.,]\d+)?)\s*(?:мм|mm|см|cm|м|m)?)?(?![\w])', re.I)
+_UNIT_K = {'мм': 1, 'mm': 1, 'см': 10, 'cm': 10, 'м': 1000, 'm': 1000}
+
+
+def name_dims_mm(name: str):
+    """Розмір із назви в мм з урахуванням одиниць (Rozetka #7253098 п.3):
+    «200х150х0.8см» → (2000, 1500, 8); «0.40х10м» → (400, 10000);
+    «60*60cm*2cm» → (600, 600, 20). Число без одиниці бере одиницю наступного
+    («0.45х10м х 0.07мм»: 0.45 м); якщо одиниці немає ніде — мм."""
+    m = _NAME_DIMS.search(name or '')
+    if not m:
+        return None
+    parts = re.findall(r'(\d+(?:[.,]\d+)?)\s*(мм|mm|см|cm|м|m)?(?=\s*[хxХX*×]|\s|$|[^0-9A-Za-zА-Яа-яІіЇїЄєҐґ])',
+                       m.group(0), re.I)
+    res, carry = [], 'мм'
+    for num, u in reversed(parts):
+        carry = (u or carry).lower()
+        res.append(float(num.replace(',', '.')) * _UNIT_K[carry])
+    return tuple(reversed(res))
+
+
 def fmt(x: float) -> str:
     """0.45 → «0.45», 600.0 → «600». Крапка, як у довідниках Rozetka."""
     s = f'{x:.4f}'.rstrip('0').rstrip('.')
@@ -235,7 +266,8 @@ def fix_ua(t: str) -> str:
 
 # Перший розмір у назві: «700х700х5мм», «60см», «1.22м». «3D» сюди не
 # потрапляє — після цифри там літера D, а не «х» чи одиниця.
-_FIRST_DIM = re.compile(r'\d+(?:\.\d+)?\s*(?:[хxХX*×]\s*\d|мм\b|см\b|м\b|mm\b|cm\b)')
+_FIRST_DIM = re.compile(r'\d+(?:\.\d+)?\s*(?:[хxХX*×]\s*\d|(?:мм|см|м|mm|cm|m)\s*[хxХX*×]|мм\b|см\b|м\b|mm\b|cm\b)')
+# «1.45мх 3м» (15.09): одиниця, одразу за нею «х» — без цього бренд вставав посеред розміру
 def build_name(raw: str, vendor: str, article: str, kind: str) -> str:
     """Тип → Бренд → Модель/Розмір → Колір → (Артикул) — чекліст модератора, п.7.
 
@@ -365,6 +397,102 @@ def clean_description(raw: str, stats: collections.Counter) -> str:
         res = re.sub(r'<(ul|ol)>\s*</\1>', '', res)
     res = re.sub(r'(?:<br>\s*){3,}', '<br><br>', res)
     return _MULTISPACE.sub(' ', res).strip()
+
+
+# Rozetka #7253098 п.1 (15.09.2026): «в описах лише інформація про конкретну
+# одиницю товару; в товарах не повинно бути асортименту». І п.3 — невідповідність:
+# технічні рядки опису постачальник округлює («152 x 914» при назві 152.4х914.4,
+# площа 0,138 проти 0.1393). Розміри й площа є в характеристиках, де рахуються з
+# назви, тож у описі ці рядки прибираємо — джерело розбіжностей зникає.
+_SPEC = (r'(?:габаритні\s+|габаритные\s+)?(?:розміри(?:\s+в\s+асортименті)?|розмір|размеры(?:\s+в\s+ассортименте)?|размер)'
+         r'|вага(?:\s+рулонів)?|вес(?:\s+рулонов)?|площа\s+покриття|площадь\s+покрытия'
+         r'|кольори\s+в\s+асортименті|цвета\s+в\s+ассортименте')
+_SPEC_LIST = re.compile(rf'<p>\s*(?:<(?:strong|b)>)?\s*(?:{_SPEC})\s*:\s*(?:</(?:strong|b)>)?\s*</p>\s*<(ul|ol)>.*?</\1>',
+                        re.I | re.S)
+_SPEC_BLOCK = re.compile(rf'<(p|li)>\s*(?:<(?:strong|b)>)?\s*(?:{_SPEC})\s*:.*?</\1>', re.I | re.S)
+_ASSORT_CLAUSE = [
+    (re.compile(r'\s+у\s+широкому\s+різноманітті\s+кольорів', re.I), ''),
+    (re.compile(r'\s+в\s+широком\s+разнообразии\s+цветов', re.I), ''),
+    (re.compile(r'\s+(?:і|та)\s+різноманіт\w*\s+кольор\w*(?:\s+(?:та|і)\s+(?:дизайн|візерунк)\w*)?', re.I), ''),
+    (re.compile(r'\s+и\s+разнообрази\w*\s+цвет\w*(?:\s+и\s+(?:дизайн|узор)\w*)?', re.I), ''),
+]
+_ASSORT_SENT = re.compile(
+    r'асортимент|ассортимент'
+    r'|(?:доступн|представлен|пропону|бува|предлага|быва)\w*\b[^.;]{0,60}?\b(?:різн|різноманітн|разн|различн|разнообразн)\w*\s+'
+    r'(?:кольор|розмір|дизайн|варіац|цвет|размер|вариац)'
+    r'|комбінувати\s+різні\s+кольори|комбинировать\s+разные\s+цвета'
+    r'|різноманітн\w*\s+(?:кольор|дизайн)|разнообрази\w*\s+(?:цвет|дизайн)',
+    re.I)
+
+
+def unit_only_description(desc: str, stats: collections.Counter) -> str:
+    """Опис лише про цю одиницю товару: без асортименту й без технічних рядків розміру."""
+    n0 = plain_len(desc)
+    s = _SPEC_LIST.sub('', desc)
+    s = _SPEC_BLOCK.sub('', s)
+    if plain_len(s) != n0:
+        stats['опис: прибрано рядки розміру/ваги/площі/асортименту'] += 1
+    for rx, rep in _ASSORT_CLAUSE:
+        s = rx.sub(rep, s)
+    out, pos = [], 0
+    for m in re.finditer(r'<[^>]+>', s):
+        out.append(('text', s[pos:m.start()]))
+        out.append(('tag', m.group(0)))
+        pos = m.end()
+    out.append(('text', s[pos:]))
+    parts, cut = [], 0
+    for kind, val in out:
+        if kind == 'tag':
+            parts.append(val)
+            continue
+        keep = []
+        for sent in _SENT_SPLIT.split(val):
+            if _ASSORT_SENT.search(sent):
+                cut += 1
+                continue
+            keep.append(sent)
+        parts.append(' '.join(keep))
+    if cut:
+        stats['опис: прибрано речення про асортимент'] += 1
+    res = ''.join(parts)
+    res = re.sub(r'<li>\s*\d+\.?\s*</li>', '', res)          # «<li>6.</li>» — порожній пункт постачальника
+    for _ in range(3):
+        res = re.sub(r'<(p|strong|b|em|i|li|h3|sup)>\s*(?:<br>\s*)*</\1>', '', res)
+        res = re.sub(r'<(ul|ol)>\s*</\1>', '', res)
+    return _MULTISPACE.sub(' ', res).strip()
+
+
+_DESC_DIM = re.compile(r'\d+(?:[.,]\d+)?\s*(?:мм|mm|см|cm|м|m)?\s*[хxХX*×]\s*\d+(?:[.,]\d+)?'
+                       r'(?:\s*(?:мм|mm|см|cm|м|m)?\s*[хxХX*×]\s*\d+(?:[.,]\d+)?)?\s*(?:мм|mm|см|cm|м|m)(?![а-яa-z])', re.I)
+_DESC_SKIP = re.compile(r'пакуван|упаков|коробк|площ|розрахун|=|кімнат|квадрат|\bм\d|гвинт|болт|приклад', re.I)
+
+
+def align_desc_sizes(desc: str, raw_name: str, stats: collections.Counter) -> str:
+    """Rozetka #7253098 п.3: розмір у реченні опису («700х700х8мм») має збігатися з
+    назвою («700х700х5мм»). Назва — джерело правди: з неї ж рахуються характеристики.
+    Лише розміри з явною одиницею (без неї «1,5х2,0» — метри, вгадувати не можна);
+    речення про пакування й розрахунки не чіпаємо."""
+    nd = name_dims_mm(raw_name)
+    if not nd or len(nd) < 2:
+        return desc
+
+    def fix_sentence(sent):
+        if _DESC_SKIP.search(re.sub(r'<[^>]+>', ' ', sent)):
+            return sent
+
+        def rep(m):
+            got = name_dims_mm(m.group(0))
+            if not got or len(got) < 2 or all(any(abs(x - y) <= max(0.6, 0.02 * y) for y in nd) for x in got):
+                return m.group(0)
+            if len(got) == 3 and len(nd) == 3:
+                new = nd
+            else:
+                new = [x for x in nd if x in sorted(nd)[-2:]][:2]
+            stats['опис: розмір приведено до назви'] += 1
+            return 'х'.join(fmt(x) for x in new) + ' мм'
+        return _DESC_DIM.sub(rep, sent)
+    # межі: кінець речення І кінець абзацу/пункту — заголовок без крапки не злипається з наступним
+    return ''.join(fix_sentence(p) for p in re.split(r'((?<=[.!?])\s+|</p>|</li>|<br>)', desc))
 
 
 def _balance_parens(t: str) -> str:
@@ -499,6 +627,7 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
 
     # розміри: відкидаємо ті, що суперечать повному розміру в назві
     tri = name_triple(raw_name)
+    nd = name_dims_mm(raw_name)
     dims = {}
     for k in ('Товщина', 'Ширина', 'Довжина', 'Висота'):
         v = to_mm(sp.get(k))
@@ -507,6 +636,12 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
                 stats[f'розмір не розібрано: {k}'] += 1
             continue
         if tri and not any(abs(v - t) < 1e-6 for t in tri):
+            stats[f'розмір суперечить назві — не виведено: {k}'] += 1
+            continue
+        # назва з одиницями см/м («0.40х10м», «60*60cm*2cm»): звіряємо теж; товщину —
+        # лише коли в назві 3 розміри (у «67см х 10м» товщини немає — не суперечність)
+        if not tri and nd and (len(nd) == 3 or k != 'Товщина') \
+                and not any(abs(v - t) <= max(0.05, 0.01 * t) for t in nd):
             stats[f'розмір суперечить назві — не виведено: {k}'] += 1
             continue
         dims[k] = v
@@ -681,15 +816,41 @@ def build_params(cat: str, opts: dict, sp: dict, name: str, raw_name: str,
     # для покупця, не фільтр: повний розмір і площа, як у постачальника
     # Якщо «Розміру» немає, складаємо його з розмірів, які вже пройшли звірку
     # з назвою: нових чисел тут не з'являється, лише інший запис тих самих.
-    size = sp.get('Розмір')
-    if not size and W and L:
-        # довжина першою — так пишуть назви постачальника («3000х12х4мм»)
-        size = 'х'.join(fmt(x) for x in (L, W, T) if x) + ' мм'
+    # Rozetka #7253098 п.3 (15.09): «Розмір» постачальника («914,4*152,5*1,5мм»)
+    # і його площа (0.084 при назві 275х285 = 0.0784) розходились із назвою.
+    # Коли в назві є повний розмір — і «Розмір», і площа рахуються з неї.
+    m3 = _TRIPLE.search(raw_name or '')
+    if m3:
+        size = 'х'.join(fmt(float(m3.group(i).replace(',', '.'))) for i in (1, 2, 3)) + ' мм'
+    elif nd:                          # «0.40х10м» → «400х10000 мм», без чисел постачальника
+        size = 'х'.join(fmt(x) for x in nd) + ' мм'
+    else:
+        size = sp.get('Розмір')
+        if not size and W and L:
+            # довжина першою — так пишуть назви постачальника («3000х12х4мм»)
+            size = 'х'.join(fmt(x) for x in (L, W, T) if x) + ' мм'
     P.extra('Розмір', size)
     area = sp.get('Площа, що покривається панеллю')
     if area:
+        if nd and len(nd) >= 2:      # не множина tri: у 680х680х4 дві сторони однакові
+            a, b = sorted(nd)[-2:]
+            area = fmt(round(a * b / 1e6, 4))
         P.extra('Площа покриття однією одиницею, м²', area.replace(',', '.'))
     return P.out
+
+
+_UNIT_NORM = {'микрон': 'мкм', 'мк': 'мкм'}
+_BARE_NUM = re.compile(r'^\d+(?:[.,]\d+)?$')
+
+
+def with_unit(name: str, value: str, opts: dict) -> str:
+    """Rozetka #7253098 п.2 (15.09): «не вказані одиниці виміру в частині параметрів».
+    Число без одиниці → число + одиниця з довідника категорії Rozetka (у ній число
+    й пораховане в build_params). Назви з одиницею («Довжина, мм», «…, м²») — як є."""
+    unit = (opts.get(name) or (None, None, None))[1]
+    if not unit or not _BARE_NUM.match(value or '') or re.search(r',\s*\S+$', name):
+        return value
+    return f'{value} {_UNIT_NORM.get(unit, unit)}'
 
 
 # Довідник «Килимів» дає ширину й довжину діапазонами в метрах, і між ними є
@@ -723,6 +884,14 @@ def pictures(offer, mode: str, stats) -> list:
             continue
         seen.add(url)
         kept.append(url)
+    want = PHOTO_OVERRIDE.get(offer.get('id'))
+    if want:
+        want = re.sub(r'^http://', 'https://', want)
+        if want in kept:
+            stats['фото: замінено перше (колаж/інтер’єр/текст)'] += 1
+            kept = [want] + [u for u in kept if u != want]
+        else:
+            stats['фото: заміну не знайдено в джерелі'] += 1
     if mode == 'first':
         return kept[:1]
     return kept[:MAX_PICTURES]
@@ -777,6 +946,9 @@ def generate(out_file: str, photo_mode: str) -> None:
         if photo_mode == 'first' and article in BAD_FIRST_PHOTO:
             drop('перше фото — інфографіка')
             continue
+        if o.get('id') in PHOTO_EXCLUDE:
+            drop('немає фото лише з товаром (Rozetka п.4)')
+            continue
         try:
             price = float((o.findtext('price') or '0').replace(',', '.'))
         except ValueError:
@@ -798,8 +970,10 @@ def generate(out_file: str, photo_mode: str) -> None:
         name_ua = build_name(fix_ua(raw_ua), vendor, article, kind)
         name_ru = build_name(raw_ru or raw_ua, vendor, article, kind)
 
-        desc_ua = clean_description(fix_ua(o.findtext('description_ua') or ''), stats)
-        desc_ru = clean_description(o.findtext('description') or '', stats)
+        desc_ua = align_desc_sizes(unit_only_description(
+            clean_description(fix_ua(o.findtext('description_ua') or ''), stats), stats), raw_ua, stats)
+        desc_ru = align_desc_sizes(unit_only_description(
+            clean_description(o.findtext('description') or '', stats), stats), raw_ua, stats)
         if plain_len(desc_ua) < 50:
             drop('опис порожній після чистки')
             continue
@@ -837,7 +1011,9 @@ def generate(out_file: str, photo_mode: str) -> None:
                   f'        <description>{cdata(desc_ru)}</description>',
                   f'        <description_ua>{cdata(desc_ua)}</description_ua>']
         for k, vals in prm.items():
-            v = vals[0] if len(vals) == 1 else cdata('<br>'.join(vals))
+            v = with_unit(k, vals[0], opts) if len(vals) == 1 else cdata('<br>'.join(vals))
+            if len(vals) == 1 and v != vals[0]:
+                stats['характеристика: додано одиницю'] += 1
             lines.append(f'        <param name="{esc(k)}">{v if len(vals) > 1 else esc(v)}</param>')
         lines.append('      </offer>')
         body += lines
