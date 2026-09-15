@@ -59,17 +59,28 @@ def main():
         if len(parts) >= 3:
             tests.append(('order_seg_swap', r['sku'], r['prom_id'], ', '.join([parts[0], parts[2], parts[1]] + parts[3:])))
 
-    # 2. фраза лише з ключів, без слів назви (без розділеного збігу)
+    # 2. фраза лише з ключів, без жодного слова назви (без розділеного збігу) і з рідкісним
+    #    словом (≤3 товари каталогу мають його в ключах) — інакше тисячі результатів і тест
+    #    нічого не розрізняє (15.09: перша версія дала «іграшки для чоловіків»)
+    ids = {}
+    if os.path.exists(PS.IDS):
+        import json
+        ids = {str(r['external_id']): str(r['prom_id']) for r in json.load(open(PS.IDS, encoding='utf-8'))}
+    ids.update({r['sku']: r['prom_id'] for r in rows})
+    kwmap = {sku: [x.strip() for x in (o.findtext('keywords_ua') or '').split(',') if x.strip()] for sku, o in offers.items()}
+    df = {}
+    for ks in kwmap.values():
+        for w in set().union(*[words(k) for k in ks]) if ks else set():
+            df[w] = df.get(w, 0) + 1
     cand = []
     for sku, o in offers.items():
-        pid = next((r['prom_id'] for r in rows if r['sku'] == sku), None)
         nw = words(o.findtext('name_ua'))
-        for k in [x.strip() for x in (o.findtext('keywords_ua') or '').split(',') if x.strip()]:
+        for k in kwmap[sku]:
             kw = words(k)
-            if len(k.split()) >= 3 and kw and not (kw & nw):
-                cand.append((sku, pid, k))
+            if len(k.split()) >= 2 and kw and not (kw & nw) and min(df.get(w, 99) for w in kw) <= 3:
+                cand.append((sku, ids.get(sku), k))
                 break
-    known = [c for c in cand if c[1]]                       # prom_id відомий лише для карток заміру
+    known = [c for c in cand if c[1]]
     rnd.shuffle(known)
     for sku, pid, k in known[:12]:
         tests.append(('kw', sku, pid, k))
