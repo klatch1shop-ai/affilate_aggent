@@ -5,7 +5,7 @@
   * відправка завжди з Дніпра, відділення №1;
   * за доставку платить замовник (одержувач, готівкою);
   * посилка — опція «до 2 кг»; оголошена вартість = сума замовлення;
-  * опис вантажу нейтральний;
+  * опис вантажу — коротка назва товару (15.09; спершу було «нейтрально»);
   * оплачене замовлення — БЕЗ післяплати; оплата при отриманні — З
     післяплатою на суму замовлення (на карту власника, NP_COD_CARD). Поки НП
     блокує переказ на карту через API (20000201794) — ТТН без післяплати, а в
@@ -53,7 +53,7 @@ COD_CARD = os.getenv('NP_COD_CARD', '')   # карта власника для �
 # Відправник: Дніпро, Відділення №1 (вул. Повітряна, 2) — перевірено 13.09.2026
 SENDER_CITY = 'db5c88f0-391c-11dd-90d9-001a92567626'
 SENDER_WAREHOUSE = '0d545f59-e1c2-11e3-8c4a-0050568002cf'
-DESCRIPTION = 'Косметика'          # нейтрально, значення з довідника НП
+DESCRIPTION = 'Косметика'          # запасний опис, якщо НП не прийме коротку назву
 PARCEL_WEIGHT = '2'                # опція «посилка до 2 кг»
 # коробка як у всіх ручних ТТН власника: 30×20×10 см (0,006 м³, об'ємна вага 1,5 кг);
 # для поштомата НП вимагає саме OptionsSeat
@@ -122,6 +122,40 @@ def rozetka_ttn(order_id, ttn):
     return f'❗ Rozetka: не підтвердилось (статус {chk.get("status")}, ТТН {got or "—"}; {r.get("errors") or ""})'
 
 
+def short_description(d):
+    """Опис вантажу — коротка назва товару, як у ручних ТТН власника («Satisfyer Juicy»,
+    «Otouch DECOR», «Pjur Woman», «Тренажер»). Рішення власника 15.09.
+
+    Бренд — `vendor` із sexopt_products без країни; коротка назва = бренд + наступне
+    слово з назви. Бренду в назві немає → перше слово назви. Кілька позицій → « +N»."""
+    arts = [str((p.get('item') or {}).get('article') or p.get('article') or '').strip() for p in (d.get('purchases') or [])]
+    names = {str((p.get('item') or {}).get('article') or p.get('article') or '').strip():
+             p.get('item_name') or (p.get('item') or {}).get('name') or '' for p in (d.get('purchases') or [])}
+    rows = {}
+    try:
+        conn = RZ.get_connection(); cur = conn.cursor()
+        cur.execute('SELECT sku, name, vendor FROM sexopt_products WHERE sku = ANY(%s)', (arts,))
+        rows = {r['sku']: r for r in cur.fetchall()}
+        cur.close(); conn.close()
+    except Exception:
+        pass
+    shorts = []
+    for a in arts:
+        name = (rows.get(a) or {}).get('name') or names.get(a) or ''
+        brand = re.sub(r'\s*\(.*?\)\s*$', '', (rows.get(a) or {}).get('vendor') or '').strip()
+        words = name.split()
+        m = re.search(re.escape(brand), name, re.I) if brand else None
+        if m:
+            nxt = re.match(r'\s*([A-Za-z0-9][\w\-]*)', name[m.end():])
+            shorts.append(brand + (' ' + nxt.group(1) if nxt else ''))
+        elif words:
+            shorts.append(words[0].strip(',.'))
+    if not shorts:
+        return DESCRIPTION
+    text = shorts[0] + (f' +{len(shorts) - 1}' if len(shorts) > 1 else '')
+    return text[:40]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('order_id', type=int)
@@ -165,7 +199,8 @@ def main():
         'CitySender': SENDER_CITY, 'CityRecipient': w['CityRef'], 'Weight': PARCEL_WEIGHT,
         'ServiceType': 'WarehouseWarehouse', 'Cost': amount, 'CargoType': 'Parcel', 'SeatsAmount': '1',
         **({'RedeliveryCalculate': {'CargoType': 'Money', 'Amount': cod}} if cod else {})})
-    print(f"#{a.order_id}: {w['Description']} | оплата {ptype} paid={paid} → післяплата {cod or 'НІ'} | "
+    desc = short_description(d)
+    print(f"#{a.order_id}: опис «{desc}» | {w['Description']} | оплата {ptype} paid={paid} → післяплата {cod or 'НІ'} | "
           f"оголошена {amount} | вартість доставки {price.get('data')}")
     if not a.create:
         return
@@ -179,7 +214,7 @@ def main():
     params = {
         'PayerType': 'Recipient', 'PaymentMethod': 'Cash', 'DateTime': date.today().strftime('%d.%m.%Y'),
         'CargoType': 'Parcel', 'Weight': PARCEL_WEIGHT, 'VolumeGeneral': VOLUME, 'ServiceType': 'WarehouseWarehouse',
-        'SeatsAmount': '1', 'Description': DESCRIPTION, 'Cost': amount, **snd,
+        'SeatsAmount': '1', 'Description': desc, 'Cost': amount, **snd,
         'CityRecipient': w['CityRef'], 'Recipient': rec['Ref'], 'RecipientAddress': w['Ref'],
         'ContactRecipient': rec['ContactPerson']['data'][0]['Ref'], 'RecipientsPhone': rp,
         'InfoRegClientBarcodes': str(a.order_id),
@@ -191,6 +226,10 @@ def main():
         params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money',
                                            'RedeliveryString': cod, 'PaymentCard': COD_CARD}]
     doc = np('InternetDocument', 'save', params, retries=1)
+    if not doc.get('success') and any('escription' in str(e) for e in doc.get('errors') or []):
+        print(f'НП не прийняла опис «{desc}»: {doc.get("errors")} — повтор з «{DESCRIPTION}»')
+        params['Description'] = DESCRIPTION
+        doc = np('InternetDocument', 'save', params, retries=1)
     cod_todo = None   # післяплату власник додає вручну в кабінеті НП
     if not doc.get('success') and cod and '20000201794' in (doc.get('errorCodes') or []):
         # власник 13.09: поки НП блокує переказ на карту через API — створювати без
