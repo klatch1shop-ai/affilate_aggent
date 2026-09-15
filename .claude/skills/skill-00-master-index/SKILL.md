@@ -36,6 +36,7 @@ description: "Головний покажчик усіх методів проє
 | `.claude/skills/rozetka/SKILL-30-rozetka-search.md` | **Пошук по Rozetka без токена: конкуренти за артикулом, їхні ціни, вибір категорії нового постачальника** (`tools/rozetka_competitors.py`) |
 | `.claude/skills/prom/SKILL-31-prom-search.md` | **Пошук по Prom без браузера: видимість конкретної картки за prom_id, які поля враховує пошук, замір 12.09** (`tools/prom_search.py`) |
 | `.claude/skills/skill-32-supplier-crm-smtm/SKILL.md` | **CRM постачальника SexOpt (new.smtm.com.ua): вхід, пошук за артикулом, кошик через внутрішній API, пастки з кількістю; оформлення — наступний крок** (`tools/smtm_crm.py`) |
+| `.claude/skills/skill-33-noire-order-end-to-end/SKILL.md` | **Повний шлях замовлення NOIRE: Rozetka → агент → ТТН НП → ТТН у Rozetka (61) → CRM постачальника → Telegram; перевірка кожного кроку, поточна поведінка післяплати** |
 | `.claude/skills/{prom,rozetka,epicentr,khoroshop}/SKILL.md` | базові скіли майданчиків |
 | `shared/knowledge_base/rozetka/api_auth.md` | Rozetka API (замість неіснуючого SKILL-12) |
 
