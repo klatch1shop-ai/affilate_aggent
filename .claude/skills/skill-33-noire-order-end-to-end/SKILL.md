@@ -25,11 +25,11 @@ description: "Повний шлях замовлення NOIRE з Rozetka: ві�
 | 5 | Telegram «NOIRE підтверджено — оформіть у SexOpt» | агент | Telegram | ✅ |
 | 6 | ТТН Нової Пошти | `tools/np_create_ttn.py <id> --create` (поки запуск вручну) | вивід «СТВОРЕНО ТТН»; НП `getDocumentList`: `InfoRegClientBarcodes == <id>` | ✅ 20451536399378, 15.09 |
 | 7 | **ТТН у Rozetka + статус 61** | той самий скрипт (`rozetka_ttn()`) | Rozetka: `status == 61` і ТТН у `ttn` **або** `delivery.declaration_number` (дивитись обидва, `_ttn_of()`) | ✅ `ttn = 20451536399378`, `declaration_number` порожній |
-| 8 | Кошик CRM: артикул і кількість | `tools/smtm_crm.py add SKU N` | `/inner/cart` → рівно N шт | ✅ SX2730 × 2, 637,20 грн |
+| 8 | Кошик CRM: артикул і кількість | `tools/smtm_crm.py add SKU N` | `/inner/cart` → рівно N шт | ✅ SX2730 × 2 = **14,16 $** (7,08 $ × 2, договір USD) ≈ 637,20 грн за курсом 45,00 |
 | 9 | «Оформити» → «Оформити замовлення» (Нова пошта, не змінювати) | зараз натискає власник | сторінка «Замовлення ID … успішно прийняте!»; лист від `info@smtm.com.ua` «ID … - new order» | ✅ ID 1393615, лист 10:25 |
 | 10 | Прикріпити ТТН: «Прикріпити файл» → номер + PDF 100×100 → «Прикріпити» | я (Playwright) | «Файл успішно прикріплений»; `/inner/checkout/<id>`: `ttnNumber`, `ttnOrigin: TTN_FILE`, `waitForTtn: false` | ✅ 10:45 |
 | 11 | Telegram: ID CRM, Rozetka №, позиції, до сплати, ТТН + PDF | я | Telegram | ✅ |
-| 12 | Запис суми «До сплати» | я | `shared/feeds/orders/supplier_orders.jsonl` (поза git) | ✅ 637,20 грн |
+| 12 | Запис суми «До сплати» **у валюті рядка замовлення** + грн | я | «Історія замовлень» CRM («Разом: 14,16$») і лист («Усього: 637,20 UAH»); `supplier_orders.jsonl` (поза git) | ✅ 14,16 $ = 637,20 грн |
 | 13 | Оплата постачальнику (ціна дійсна 1 робочий день) | власник | — | ⏳ ще не вивчено |
 
 Порядок **ТТН → CRM** обов'язковий: CRM на кроці 10 вимагає номер і PDF.

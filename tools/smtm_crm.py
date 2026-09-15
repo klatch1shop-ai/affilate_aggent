@@ -70,7 +70,10 @@ class Crm:
         os.chmod(STATE, 0o600)
 
     def cart_items(self):
-        """{артикул: (кількість, сума, валюта договору)} з /inner/cart."""
+        """{артикул: (кількість, сума, agreement кошика)} з /inner/cart.
+
+        agreement кошика — НЕ валюта товару (15.09: кошик «EUR», товар у USD).
+        Суму до сплати брати з «Історії замовлень» / листа."""
         data = self.api('/uk/inner/cart?id=0&{}')
         if not isinstance(data, dict) or '__error' in data or 'cart' not in data:
             sys.exit(f'кошик не прочитано: {data if isinstance(data, dict) else type(data)}')
@@ -155,7 +158,7 @@ def main():
             elif sys.argv[1] == 'cart':
                 items = crm.cart_items()
                 for sku, (amt, s, cur) in items.items():
-                    print(f'{sku} × {amt:g} = {s} {cur}')
+                    print(f'{sku} × {amt:g} = {s} (валюта — у рядку замовлення; agreement кошика {cur})')
                 print(f'позицій: {len(items)}')
             else:
                 ok = crm.add(sys.argv[2], int(sys.argv[3]))
