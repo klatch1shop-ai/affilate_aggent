@@ -1,0 +1,35 @@
+test	sku	prom_id	query	run1	run2	main_n	partial_n	partial_container	ours_on_page
+order_orig	SO6140	3152112874	Мастурбатор-вагіна Fleshlight Pink Lady Mini-Lotus Нова текстура, abs-пластик	main:1	main:1	9	0	True	main:1:3152112874;main:8:3152112875
+order_first_last	SO6140	3152112874	Fleshlight Pink Lady Mini-Lotus Нова текстура Мастурбатор-вагіна, abs-пластик			9	0	True	main:8:3152112875
+order_orig	SX1722	3152116464	Перлинний комплект Leg Avenue Faux Pearl, One Size, ліф, трусики та наручники, метал	main:1	main:1	1	0	True	main:1:3152116464
+order_first_last	SX1722	3152116464	комплект Leg Avenue Faux Pearl Перлинний, One Size, ліф, трусики та наручники, метал			1	0	True	
+order_seg_swap	SX1722	3152116464	Перлинний комплект Leg Avenue Faux Pearl, ліф, One Size, трусики та наручники, метал	main:1	main:1	1	0	True	main:1:3152116464
+order_orig	SX1209	3152115636	Вакуумний кліторальний стимулятор Satisfyer Mermaid Vibes Mint/Pink, 2 мотори, силікон	main:1	main:1	10	0	True	main:1:3152115636
+order_first_last	SX1209	3152115636	кліторальний стимулятор Satisfyer Mermaid Vibes Mint/Pink Вакуумний, 2 мотори, силікон			10	0	True	
+order_seg_swap	SX1209	3152115636	Вакуумний кліторальний стимулятор Satisfyer Mermaid Vibes Mint/Pink, силікон, 2 мотори			10	0	True	
+order_orig	SO8701	3152114264	Вакуумна помпа для вульви Men Powerup Pussy Pump Premium Fun розмір S (11 см), механічний насос	main:2	main:2	3	0	True	main:2:3152114264
+order_first_last	SO8701	3152114264	помпа для вульви Men Powerup Pussy Pump Premium Fun розмір S (11 см) Вакуумна, механічний насос			3	0	True	
+order_orig	SO8779	3152114420	Вібратор для точки G Satisfyer G-Force Violet, 10 режимів + 5 рівнів інтенсивності, силікон	main:2	main:2	9	0	True	main:2:3152114420
+order_first_last	SO8779	3152114420	для точки G Satisfyer G-Force Violet Вібратор, 10 режимів + 5 рівнів інтенсивності, силікон			9	0	True	
+order_seg_swap	SO8779	3152114420	Вібратор для точки G Satisfyer G-Force Violet, силікон, 10 режимів + 5 рівнів інтенсивності			9	0	True	
+kw	SO8909	3152114518	подарункові коробки і пакети			10	0	True	
+kw	SO8621	3152114235	веб камери			10	0	True	
+kw	SX3467	3152118265	веб камери			10	0	True	
+kw	SX2564	3152117096	масажні доріжки і килимки			10	0	True	
+kw	SO8910	3152114519	подарункові коробки і пакети			10	0	True	
+kw	SO3746	3152111546	меблі для сексу			10	0	True	
+kw	SO3479	3152111484	жіночі епілятори та електробритви			10	0	True	
+kw	SO6071	3152112822	медичні маски і респіратори			10	0	True	
+kw	SO3744	3152111545	меблі для сексу			10	0	True	
+notfound	SO6310	3152113135	Металева анальна пробка Кролячий хвостик Alive Fluffy Twist Plug L Purple, діаметр 3,8 см			10	0	True	
+notfound	SX1201	3152115628	Вібратор для точки G Rocks Off Chaiamo G Black, 10 режимів, діаметр 3 см			2	0	True	
+notfound	SO6083	3152112835	Смарт-масажер простати Satisfyer Deep Diver Grey, діаметр 3,3 см			1	0	True	
+notfound	SO6306	3152113131	Металева анальна пробка Кролячий хвостик Alive Fluffy Twist Plug S Purple, діаметр 2,9 см			10	0	True	
+notfound	SO3506	3152111497	Змазка на водній основі JO GELATO White Chocolate Raspberry (120 мл) без цукру та парабенів			10	0	True	
+notfound	SO9747	3152114909	Шкіряний чокер з манжетами Art of Sex - Leather Chezarro, метал			10	0	True	
+notfound	SO7026	3152113557	Фалоімітатор SilexD Johnny Pink Glow in the dark, діаметр 3,5см, двошаровий, силікон+Silexpan			10	0	True	
+notfound	SO4519	3152112127	Реалістичний фалоімітатор Strap-On-Me Soft REALISTIC DILDO Violet - Size S, діаметр 3,6 см			5	0	True	
+notfound	SX2188	3152116513	Лубрикант на водній основі Bijoux Indiscrets - Sex au Naturel 500 мл			10	0	True	
+notfound	SO2461	3152110746	Автоматична вакуумна помпа на акумуляторі Men Powerup			10	0	True	
+notfound	SX3232	3152117774	Мастурбатор Kokos Onahole Edition 004 by Vanilla Vibe			10	0	True	
+notfound	SO6304	3152113129	Менструальна чаша Femintimate Eve Cup New розмір M, об’єм — 35 мл, ергономічний дизайн, діаметр 4 см			10	0	True	
