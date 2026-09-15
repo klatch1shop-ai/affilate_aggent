@@ -109,7 +109,16 @@ def locate(results: list, prom_id: str) -> tuple:
     return mine, other
 
 
+def ensure_feed(max_age_h: float = 12):
+    """Опублікований фід не старший за max_age_h (інакше контроль бере застарілу назву — 15.09)."""
+    if not os.path.exists(FEED) or time.time() - os.path.getmtime(FEED) > max_age_h * 3600:
+        os.makedirs(os.path.dirname(FEED), exist_ok=True)
+        urllib.request.urlretrieve(FEED_URL, FEED + '.tmp')
+        os.replace(FEED + '.tmp', FEED)
+
+
 def control_name():
+    ensure_feed()
     try:
         for o in ET.parse(FEED).getroot().iter('offer'):
             if (o.findtext('vendorCode') or o.get('id')) == CONTROL[0]:
