@@ -27,6 +27,8 @@ STEPS = [
     ('одиниці виміру (весь фід)', 'tools/prom_units_normalize.py'),
     ('характеристики категорії', 'tools/prom_params_fill.py'),
     ('назви, описи, ключі', 'tools/prom_content_fix.py'),
+    # маркер-експеримент (15.09, docs/prom_marker_experiment_20260915.md); вимикається в data/prom/marker_experiment.json
+    ('маркер-експеримент ключів', 'tools/prom_marker_step.py'),
 ]
 
 
