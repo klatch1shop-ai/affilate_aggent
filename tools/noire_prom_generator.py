@@ -61,6 +61,7 @@ MAX_PICTURES = 10        # офіційний ліміт Prom (у Rozetka 15)
 IN_STOCK = os.getenv('NOIRE_PROM_IN_STOCK', '0') == '1'
 BROKEN_PICS = set()
 ACTUAL_CAT = {}
+NEW_RULES = set()      # рядки зіставлення, створені після знімка 16.08 (варіант А, 15.09)
 SUPPLIER_PARAMS = {}
 MAX_NAME = 110           # правила оформлення карток
 
@@ -862,11 +863,34 @@ def load_mapping(cur) -> dict:
 
 def resolve_category(mapping: dict, ec: str, name: str):
     """Категорія Prom за кодом Єпіцентру, з урахуванням правил по назві."""
+    pid, _rule, excluded = winning_rule(mapping, ec, name)
+    return pid, excluded
+
+
+def winning_rule(mapping: dict, ec: str, name: str):
+    """(prom_id, name_rule, excluded) рядка зіставлення, який виграв для товару."""
     for pid, rule, excluded in mapping.get(ec, []):
         if rule and not re.search(rule, name, re.I):
             continue
-        return pid, excluded
-    return None, False
+        return pid, rule, excluded
+    return None, None, False
+
+
+def load_new_rules(cur) -> set:
+    """(код, prom_id, правило) рядків зіставлення, створених ПІСЛЯ знімка prom_actual_category.
+
+    Варіант А (власник 15.09): знімок 16.08 лишається основою — перевірка 40 із 293
+    розбіжностей показала, що він правіший за старе зіставлення у 26 проти 6, — але
+    свідомі виправлення зіставлення, зроблені після знімка, мають пріоритет над ним."""
+    try:
+        cur.execute("""SELECT m.epicentr_code, m.prom_category_id, m.name_rule
+                       FROM prom_category_mapping m
+                       WHERE m.source='noire'
+                         AND m.created_at > (SELECT max(updated_at) FROM prom_actual_category)""")
+        return {(r['epicentr_code'], r['prom_category_id'], r['name_rule']) for r in cur.fetchall()}
+    except psycopg2.Error:
+        cur.connection.rollback()
+        return set()
 
 
 def load_rates(cur) -> dict:
@@ -1342,6 +1366,9 @@ def generate(out_file=OUT, limit=None):
     BROKEN_PICS = load_broken_pics(cur)
     global ACTUAL_CAT
     ACTUAL_CAT = load_actual_categories(cur)
+    global NEW_RULES
+    NEW_RULES = load_new_rules(cur)
+    logger.info(f'Правил зіставлення після знімка 16.08: {len(NEW_RULES)}')
     global SUPPLIER_PARAMS
     SUPPLIER_PARAMS = load_supplier_params(cur)
     ru = load_ru(cur)
@@ -1371,10 +1398,16 @@ def generate(out_file=OUT, limit=None):
         # мапінг іде через два шари (sexopt → epicentr → prom) і на межових
         # товарах помиляється. Наполягати на своєму означає щоразу давати
         # системі привід переносити товар.
+        # Варіант А (15.09): але правило зіставлення, створене ПІСЛЯ знімка 16.08, має
+        # пріоритет — інакше жодне свідоме виправлення не діяло б на старі товари.
         actual = ACTUAL_CAT.get(head['sku'])
         if actual and actual != pid:
-            pid = actual
-            st['категорію взято з Prom'] += len(items)
+            wpid, wrule, _ = winning_rule(mapping, head['ec'], head['name'] or '')
+            if (head['ec'], wpid, wrule) in NEW_RULES:
+                st['правило після знімка 16.08 — діє правило'] += len(items)
+            else:
+                pid = actual
+                st['категорію взято з Prom'] += len(items)
         if not pid:
             st['без мапінгу'] += len(items)
             continue
