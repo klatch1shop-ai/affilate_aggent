@@ -128,9 +128,17 @@ def control_name():
     return CONTROL[2]
 
 
-def control():
-    res = search(control_name(), pages=1)
-    mine, _ = locate(res, CONTROL[1])
+def control(tries: int = 3):
+    # 15.09: навіть контроль «мигає» — одиночний запит раз не знайшов SO5178, два
+    # наступні — 1-ша позиція. Тому до 3 спроб; скільки знадобилось — у повідомленні.
+    for t in range(1, tries + 1):
+        res = search(control_name(), pages=1)
+        mine, _ = locate(res, CONTROL[1])
+        if mine:
+            if t > 1:
+                print(f'  (контроль знайдено з {t}-ї спроби)', flush=True)
+            break
+        time.sleep(PAUSE)
     if not mine:
         sys.exit(f'КОНТРОЛЬ НЕ ПРОЙДЕНО: {CONTROL[0]} не знайдено за власною назвою '
                  f'(блоків {len(res)}). Звіт не будується.')
