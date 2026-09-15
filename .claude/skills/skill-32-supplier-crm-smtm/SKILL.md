@@ -44,6 +44,7 @@ Rozetka: підтверджено (2) → ТТН НП (np_create_ttn.py) → [CR
 | Головне значення | «Замовлення **ID 1393615** від 15.09.2026 успішно прийняте!»; ID зростає (вчора 1392013) | — | ✅ |
 | Лист-підтвердження | від `info@smtm.com.ua`, тема «ID <id> - new order on new.smtm.com.ua»; приходить **при оформленні** (1393615: 10:25:30), у листі позиції, «Усього», вкладення `ID<id>.pdf`; вартість дійсна 1 робочий день | Gmail | ✅ |
 | Telegram | підсумок: ID CRM, Rozetka №, позиції, до сплати, ТТН + PDF 100×100 | `sendDocument` | ✅ |
+| Список замовлень | `GET /uk/inner/order` → `items[]`: `id`, `orderDate`, `ttnNumber`, `ttnOrigin`, `waitForTtn`, `totalSum` (грн), `depositPaidAmount`, `cartItems[]` (артикул, `amount`, `sum`, **`currency`** товару), `orders[][]` (`docNumber` «П000…», `docSum`, `currency`, `agreement`, **`paid`**, `status`: Попереднє замовлення / Сплачено / Передано на склад / Закрито) | — | ✅ читання |
 | Після прикріплення | як у 1392013: `ttnNumber` = наша ТТН, `ttnOrigin: TTN_FILE`, `waitForTtn: false`, рядок «Передано на склад» | `GET /uk/inner/checkout/<id>` | ✅ читання |
 
 ---
