@@ -131,7 +131,9 @@ def main():
     base = list(csv.DictReader(open(a.base, encoding='utf-8'), delimiter='\t'))
     if a.limit:
         base = base[:a.limit]
-    PS.load_catalogue()                                   # оновлює кеш опублікованого фіду
+    if not os.path.exists(PS.FEED) or time.time() - os.path.getmtime(PS.FEED) > 12 * 3600:
+        urllib.request.urlretrieve(PS.FEED_URL, PS.FEED + '.tmp')   # опублікований фід (кеш 12 год)
+        os.replace(PS.FEED + '.tmp', PS.FEED)
     offers = {(o.findtext('vendorCode') or o.get('id') or '').strip(): o
               for o in ET.parse(PS.FEED).getroot().iter('offer')}
     live = api_state()

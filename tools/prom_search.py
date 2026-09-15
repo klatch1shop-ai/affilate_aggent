@@ -52,7 +52,9 @@ UA = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
       '(KHTML, like Gecko) Chrome/128.0 Safari/537.36')
 PAUSE = float(os.getenv('PROM_PAUSE', '2.0'))
 CONTROL = ('SO5178', '3152112459',
-           'Батіг Art of Sex з рукояттю, натуральна шкіра, колір чорний, довжина - 120 см')
+           'Батіг з рукояттю Art of Sex, натуральна шкіра, колір чорний, довжина - 120 см')
+# 15.09: назву SO5178 виправлено (порядок слів) — за СТАРОЮ назвою картки вже немає (0/2),
+# за новою 1-ша позиція (2/2). Тому контроль бере поточну назву з опублікованого фіду.
 
 _BLOCK = re.compile(r'<[^>]*data-qaid="product_block"[^>]*>')
 
@@ -107,8 +109,18 @@ def locate(results: list, prom_id: str) -> tuple:
     return mine, other
 
 
+def control_name():
+    try:
+        for o in ET.parse(FEED).getroot().iter('offer'):
+            if (o.findtext('vendorCode') or o.get('id')) == CONTROL[0]:
+                return (o.findtext('name_ua') or '').strip() or CONTROL[2]
+    except (OSError, ET.ParseError):
+        pass
+    return CONTROL[2]
+
+
 def control():
-    res = search(CONTROL[2], pages=1)
+    res = search(control_name(), pages=1)
     mine, _ = locate(res, CONTROL[1])
     if not mine:
         sys.exit(f'КОНТРОЛЬ НЕ ПРОЙДЕНО: {CONTROL[0]} не знайдено за власною назвою '
