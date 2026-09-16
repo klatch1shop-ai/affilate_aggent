@@ -1,0 +1,39 @@
+...............F................F.FF..F...                               [100%]
+=================================== FAILURES ===================================
+_ test_intent[\u0446\u0456\u043d\u043e\u0432\u0456 \u0430\u043b\u0435\u0440\u0442\u0438-price_alerts] _
+tests/test_voice_intents.py:90: in test_intent
+    assert p(text)['intent'] == intent, f'{text!r} → {p(text)}'
+E   AssertionError: 'цінові алерти' → {'intent': 'orders_new', 'params': {}, 'mutating': False, 'confidence': 0.5, 'raw': 'цінові алерти'}
+E   assert 'orders_new' == 'price_alerts'
+E     
+E     - price_alerts
+E     + orders_new
+_______________________________ test_marketplace _______________________________
+tests/test_voice_intents.py:111: in test_marketplace
+    assert p('що з фідом розетки')['params'].get('marketplace') == 'rozetka'
+E   AssertionError: assert None == 'rozetka'
+E    +  where None = <built-in method get of dict object at 0x726c20271200>('marketplace')
+E    +    where <built-in method get of dict object at 0x726c20271200> = {}.get
+_____________________ test_marketplace_does_not_set_intent _____________________
+tests/test_voice_intents.py:126: in test_marketplace_does_not_set_intent
+    assert r['params'].get('marketplace') == 'rozetka'
+E   AssertionError: assert None == 'rozetka'
+E    +  where None = <built-in method get of dict object at 0x726c2028d800>('marketplace')
+E    +    where <built-in method get of dict object at 0x726c2028d800> = {}.get
+____________________ test_price_word_does_not_beat_context _____________________
+tests/test_voice_intents.py:133: in test_price_word_does_not_beat_context
+    assert r['params'].get('marketplace') == 'rozetka'
+E   AssertionError: assert None == 'rozetka'
+E    +  where None = <built-in method get of dict object at 0x726c20251140>('marketplace')
+E    +    where <built-in method get of dict object at 0x726c20251140> = {}.get
+____________________________ test_confidence_levels ____________________________
+tests/test_voice_intents.py:151: in test_confidence_levels
+    assert p('статус системи')['confidence'] >= 0.8
+E   assert 0.5 >= 0.8
+=========================== short test summary info ============================
+FAILED tests/test_voice_intents.py::test_intent[\u0446\u0456\u043d\u043e\u0432\u0456 \u0430\u043b\u0435\u0440\u0442\u0438-price_alerts]
+FAILED tests/test_voice_intents.py::test_marketplace - AssertionError: assert...
+FAILED tests/test_voice_intents.py::test_marketplace_does_not_set_intent - As...
+FAILED tests/test_voice_intents.py::test_price_word_does_not_beat_context - A...
+FAILED tests/test_voice_intents.py::test_confidence_levels - assert 0.5 >= 0.8
+5 failed, 37 passed in 0.05s
