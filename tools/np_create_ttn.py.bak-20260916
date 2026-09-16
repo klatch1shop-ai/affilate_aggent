@@ -53,11 +53,6 @@ COD_CARD = os.getenv('NP_COD_CARD', '')   # карта власника для �
 # Відправник: Дніпро, Відділення №1 (вул. Повітряна, 2) — перевірено 13.09.2026
 SENDER_CITY = 'db5c88f0-391c-11dd-90d9-001a92567626'
 SENDER_WAREHOUSE = '0d545f59-e1c2-11e3-8c4a-0050568002cf'
-# служби доставки Rozetka, які насправді є Новою Поштою (перевірено на замовленнях):
-#   5     — відділення (13.09, #906078985)
-#   43660 — поштомат   (16.09, #906209393)
-# ServiceType для обох — WarehouseWarehouse: поштомат у НП теж «відділення».
-NP_SERVICES = {5: 'відділення', 43660: 'поштомат'}
 DESCRIPTION = 'Косметика'          # запасний опис, якщо НП не прийме коротку назву
 PARCEL_WEIGHT = '2'                # опція «посилка до 2 кг»
 # коробка як у всіх ручних ТТН власника: 30×20×10 см (0,006 м³, об'ємна вага 1,5 кг);
@@ -171,10 +166,8 @@ def main():
     if not d:
         sys.exit('замовлення не прочитано')
     dl = d.get('delivery') or {}
-    kind = NP_SERVICES.get(dl.get('delivery_service_id'))
-    if not kind:
-        sys.exit(f"доставка не Нова Пошта (delivery_service_id={dl.get('delivery_service_id')}, "
-                 f"назва «{dl.get('delivery_service_name')}»). Відомі: {NP_SERVICES}")
+    if dl.get('delivery_service_id') != 5:
+        sys.exit(f"доставка не Нова Пошта (delivery_service_id={dl.get('delivery_service_id')})")
     if d.get('ttn') or RZ._ttn_of(d):
         sys.exit(f'у замовленні вже є ТТН: {d.get("ttn") or RZ._ttn_of(d)}')
 
@@ -194,18 +187,6 @@ def main():
     w = wh['data'][0]
     if str(w.get('Number')) not in str(dl.get('place_number')):
         sys.exit(f"номер відділення не збігся: НП {w.get('Number')} ≠ Rozetka {dl.get('place_number')}")
-    # Поштомат — окремий тип точки (16.09: delivery_service_id 43660). Звіряємо з
-    # довідником НП, а не з назвою служби в Rozetka, і перевіряємо ліміт ваги комірки.
-    is_postomat = w.get('CategoryOfWarehouse') == 'Postomat'
-    if (kind == 'поштомат') != is_postomat:
-        sys.exit(f"тип точки не збігся: Rozetka каже «{kind}», НП — "
-                 f"CategoryOfWarehouse={w.get('CategoryOfWarehouse')}")
-    limit = float(w.get('TotalMaxWeightAllowed') or 0)
-    if limit and float(PARCEL_WEIGHT) > limit:
-        sys.exit(f'вага {PARCEL_WEIGHT} кг більша за ліміт точки {limit:g} кг')
-    if cod and is_postomat:
-        # у поштоматах післяплата має свої обмеження, ТТН такого виду ми ще не робили
-        sys.exit(f'післяплата {cod} грн у поштомат — випадок не перевірений, потрібне рішення власника')
 
     rp = phone380(dl.get('recipient_phone') or d.get('recipient_phone'))
     rcp = {'FirstName': dl.get('recipient_first_name'), 'LastName': dl.get('recipient_last_name'),
@@ -219,7 +200,7 @@ def main():
         'ServiceType': 'WarehouseWarehouse', 'Cost': amount, 'CargoType': 'Parcel', 'SeatsAmount': '1',
         **({'RedeliveryCalculate': {'CargoType': 'Money', 'Amount': cod}} if cod else {})})
     desc = short_description(d)
-    print(f"#{a.order_id}: опис «{desc}» | {kind}: {w['Description']} | оплата {ptype} paid={paid} → післяплата {cod or 'НІ'} | "
+    print(f"#{a.order_id}: опис «{desc}» | {w['Description']} | оплата {ptype} paid={paid} → післяплата {cod or 'НІ'} | "
           f"оголошена {amount} | вартість доставки {price.get('data')}")
     if not a.create:
         return
