@@ -114,9 +114,10 @@ def compare():
     with open(LOG, encoding='utf-8') as f:
         rd = csv.DictReader(f, delimiter='\t')
         for r in rd:
-            day = r['checked'][:10]
+            # ключ — повна мітка часу, а не дата: за день буває кілька заходів,
+            # і різниця між ними так само важлива (ротація чи поріг)
             skus = {s for s in r['skus'].split(',') if s}
-            days[r['group']][day] |= skus
+            days[r['group']][r['checked']] |= skus
     for grp in sorted(days):
         seq = sorted(days[grp])
         print(f'\n=== група {grp}')
