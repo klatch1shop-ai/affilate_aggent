@@ -27,8 +27,24 @@ import urllib.parse
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'tools'))
-CONF = os.path.join(BASE_DIR, 'data', 'prom', 'marker_experiment.json')
+CONFS = [os.path.join(BASE_DIR, 'data', 'prom', f)
+         for f in ('marker_experiment.json', 'price_marker_experiment.json')]
 LOG = os.path.join(BASE_DIR, 'docs', 'prom_marker_experiment_log.tsv')
+
+
+def load_conf():
+    """Активні експерименти в один перелік груп; мітка групи — name або lang."""
+    groups, ids = [], {}
+    for path in CONFS:
+        if not os.path.exists(path):
+            continue
+        c = json.load(open(path, encoding='utf-8'))
+        if not c.get('active'):
+            continue
+        ids.update(c.get('prom_ids', {}))
+        for g in c['groups']:
+            groups.append({**g, 'label': g.get('name') or g['lang']})
+    return {'groups': groups, 'prom_ids': ids}
 
 
 def api_check(conf):
@@ -40,10 +56,10 @@ def api_check(conf):
             p = (r.json() or {}).get('product', {}) if r.status_code == 200 else {}
             has = g['marker'] in (p.get('keywords') or '')
             ok += has
-            print(f"  {g['lang']} {s:8} {p.get('status')} {p.get('presence')} змінено {p.get('date_modified')} "
+            print(f"  {g['label']} {s:8} {p.get('status')} {p.get('presence')} змінено {p.get('date_modified')} "
                   f"| маркер у keywords (рос.): {has}")
             time.sleep(0.3)
-        print(f"група {g['lang']}: маркер у рос. keywords API — {ok}/{len(g['skus'])}")
+        print(f"група {g['label']}: маркер у рос. keywords API — {ok}/{len(g['skus'])}")
 
 
 def browser_check(conf):
@@ -77,9 +93,9 @@ def browser_check(conf):
                         total += len(r['items'])
                         if len(r['items']) < 10:
                             break
-                    rows.append((now, g['lang'], g['marker'], lang, run, len(hits['main']), len(hits['partial']), total,
+                    rows.append((now, g['label'], g['marker'], lang, run, len(hits['main']), len(hits['partial']), total,
                                  ','.join(sorted(hits['main'] | hits['partial']))))
-                    print(f"група {g['lang']} «{g['marker']}» · пошук {lang} · прогін {run}: "
+                    print(f"група {g['label']} «{g['marker']}» · пошук {lang} · прогін {run}: "
                           f"основний {len(hits['main'])}/{len(pids)}, частковий {len(hits['partial'])}/{len(pids)}, усього блоків {total}",
                           flush=True)
     new = not os.path.exists(LOG)
@@ -133,7 +149,9 @@ def main():
     a = ap.parse_args()
     if a.compare:
         return compare()
-    conf = json.load(open(CONF, encoding='utf-8'))
+    conf = load_conf()
+    if not conf['groups']:
+        sys.exit('активних маркер-експериментів немає')
     api_check(conf) if a.api else browser_check(conf)
 
 

@@ -7,13 +7,8 @@
 `keywords`. У назві й описі маркера немає, тож розділеного збігу бути не може:
 запит = одне слово, яке є лише в ключах.
 
-Налаштування — два файли, обидва необов'язкові:
-  data/prom/marker_experiment.json       — «чи шукає Prom за ключами» (15.09)
-  data/prom/price_marker_experiment.json — ціновий поріг видимості (16.09,
-                                            docs/prom_price_threshold_experiment_plan.md)
-"active": false у файлі вимикає його експеримент. Якщо жодного активного —
-фід проходить без змін. Картка не може бути у двох експериментах одночасно:
-перетин SKU зупиняє крок.
+Налаштування — data/prom/marker_experiment.json; "active": false вимикає крок
+(фід проходить без змін). Нічого не робить, якщо файла немає.
 
     STEP_SRC=feed.xml python3 tools/prom_marker_step.py --write out.xml
 """
@@ -25,28 +20,23 @@ import xml.etree.ElementTree as ET
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FEED = os.environ.get('STEP_SRC') or os.path.join(BASE, 'output', 'noire_prom.xml')
-CONFS = [os.path.join(BASE, 'data', 'prom', f)
-         for f in ('marker_experiment.json', 'price_marker_experiment.json')]
+CONF = os.path.join(BASE, 'data', 'prom', 'marker_experiment.json')
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--write', required=True)
     a = ap.parse_args()
-    confs = [json.load(open(c, encoding='utf-8')) for c in CONFS if os.path.exists(c)]
-    confs = [c for c in confs if c.get('active')]
-    if not confs:
+    conf = json.load(open(CONF, encoding='utf-8')) if os.path.exists(CONF) else {}
+    if not conf.get('active'):
         shutil.copy2(FEED, a.write)
-        print('маркер-експерименти вимкнено — фід без змін')
+        print('маркер-експеримент вимкнено — фід без змін')
         return
     field = {'ua': 'keywords_ua', 'ru': 'keywords'}
     want = {}
-    for conf in confs:
-        for grp in conf['groups']:
-            for sku in grp['skus']:
-                if sku in want:
-                    raise SystemExit(f'SKU {sku} у двох експериментах одразу — крок зупинено')
-                want[sku] = (field[grp['lang']], grp['marker'])
+    for grp in conf['groups']:
+        for sku in grp['skus']:
+            want[sku] = (field[grp['lang']], grp['marker'])
     tree = ET.parse(FEED)
     done, missing = {}, set(want)
     for o in tree.getroot().iter('offer'):
@@ -64,7 +54,6 @@ def main():
         done[tag] = done.get(tag, 0) + 1
         missing.discard(sku)
     tree.write(a.write, encoding='utf-8', xml_declaration=True)
-    print(f'експериментів активних: {len(confs)}, карток: {len(want)}')
     print(f'маркер додано: {done}' + (f'; у фіді немає: {sorted(missing)}' if missing else ''))
 
 
