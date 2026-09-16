@@ -7,17 +7,11 @@
 
     venv/bin/python tools/prom_marker_check.py                  # ноутбук (Camoufox)
     venv/bin/python tools/prom_marker_check.py --api            # сервер: чи імпортовано маркер (API)
-    venv/bin/python tools/prom_marker_check.py --compare        # склад знахідок між днями (з журналу)
-
-`--compare` відповідає на питання чату 16.09: частка може лишатись тією самою,
-але склад — мінятись. Стабільний перелік = поріг потрапляння у видачу;
-змінний перелік = ротація видимості. Це різні механізми.
 
 API віддає лише рос. `keywords` — тож --api підтверджує імпорт лише для групи RU;
 для групи UA ознака імпорту — `date_modified` після публікації.
 """
 import argparse
-import csv
 import datetime
 import json
 import os
@@ -91,48 +85,10 @@ def browser_check(conf):
     print(f'→ {LOG}')
 
 
-def compare():
-    """Склад знахідок по днях: той самий перелік чи ротація."""
-    import collections
-    days = collections.defaultdict(lambda: collections.defaultdict(set))
-    with open(LOG, encoding='utf-8') as f:
-        rd = csv.DictReader(f, delimiter='\t')
-        for r in rd:
-            day = r['checked'][:10]
-            skus = {s for s in r['skus'].split(',') if s}
-            days[r['group']][day] |= skus
-    for grp in sorted(days):
-        seq = sorted(days[grp])
-        print(f'\n=== група {grp}')
-        prev = None
-        for day in seq:
-            cur = days[grp][day]
-            line = f'  {day}: знайдено {len(cur):2}'
-            if prev is not None:
-                new, lost = cur - prev, prev - cur
-                kept = len(cur & prev)
-                line += f' | той самий {kept}, нових {len(new)}, зникло {len(lost)}'
-                if new:
-                    line += f'\n      нові:   {",".join(sorted(new))}'
-                if lost:
-                    line += f'\n      зникли: {",".join(sorted(lost))}'
-            print(line)
-            prev = cur
-        if len(seq) >= 2:
-            first, last = days[grp][seq[0]], days[grp][seq[-1]]
-            if first and last:
-                stable = len(first & last) / max(len(first), len(last))
-                print(f'  склад {seq[0]} → {seq[-1]}: збіг {stable:.0%} '
-                      f'({"поріг — перелік стабільний" if stable >= 0.8 else "схоже на ротацію"})')
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--api', action='store_true')
-    ap.add_argument('--compare', action='store_true')
     a = ap.parse_args()
-    if a.compare:
-        return compare()
     conf = json.load(open(CONF, encoding='utf-8'))
     api_check(conf) if a.api else browser_check(conf)
 
