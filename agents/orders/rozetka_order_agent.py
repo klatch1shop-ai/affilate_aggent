@@ -659,9 +659,17 @@ def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_
         tg(f'⚠️ <b>{head} — наявність є, але підтвердити не вдалось</b>\n{who}\n{stock_txt}\n'
            f'Постачальнику НЕ надіслано. Підтвердіть у кабінеті Rozetka.')
         return
+    # «ОПЛАЧЕНО» пишемо лише коли Rozetka підтвердила оплату (або статус уже
+    # змінився після оплати) — інакше постачальник відправив би без післяплати неоплачене.
+    paid_now = is_prepaid and (paid is True or skip_payment_check)
+    if is_prepaid and not paid_now:
+        save_to_db(details, 'manual_review')
+        tg(f'⚠️ <b>{head} — передоплата, але оплату не підтверджено</b>\n{who}\n'
+           f'Постачальнику НЕ надіслано — перевірте оплату в кабінеті.')
+        return
     try:
-        sent, to, mode = TS.send_to_supplier(order_id, ri, items_info, is_prepaid)
-        exp = TS.record_sent(order_id, ri, items_info, is_prepaid, mode if sent else 'off')
+        sent, to, mode = TS.send_to_supplier(order_id, ri, items_info, paid_now)
+        exp = TS.record_sent(order_id, ri, items_info, paid_now, mode if sent else 'off')
     except Exception as e:
         save_to_db(details, 'accepted')
         logger.error(f'#{order_id} TOPTUL: лист постачальнику не надіслано: {e}')

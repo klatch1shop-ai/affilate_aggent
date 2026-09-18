@@ -39,6 +39,14 @@ TOPTUL_ROZETKA_FEED = os.getenv('TOPTUL_ROZETKA_FEED', os.path.join(BASE, 'outpu
 SUPPLIER_EMAIL = 'opt@grandinstrument.ua'
 SUPPLIER_CODE = '000160594'          # персональний код клієнта (лист Русанова 27.04.2026)
 CUTOFF_HOUR = 14                     # відправлене до 14:00 постачальник везе того ж дня
+# Власник 18.09.2026, дослівно: оплачене на Rozetka замовлення постачальник має
+# відправити БЕЗ післяплати й виставити нам рахунок.
+PAID_NOTE = 'ОПЛАЧЕНО ЗАМОВНИКОМ, ВИШЛІТЬ РАХУНОК ТА ВІДПРАВЛЯЙТЕ БЕЗ ПІСЛЯПЛАТИ'
+
+
+def payment_line(total, paid):
+    """Рядок оплати для постачальника: оплачене — без післяплати, інакше — накладений платіж на суму."""
+    return PAID_NOTE if paid else f'Наложенным платежом {total:.0f} грн'
 SMTP_USER = os.getenv('SMTP_USER')
 SMTP_PASS = os.getenv('SMTP_PASS')
 SMTP_HOST = os.getenv('SMTP_HOST', 'smtp.gmail.com')
@@ -162,8 +170,7 @@ def build_excel(order_id, ri, items, prepaid):
     ws.set_column('A:A', 5); ws.set_column('B:B', 22); ws.set_column('C:C', 55); ws.set_column('D:D', 14)
     ws.write('A1', 'Перевозчик', bold); ws.write('C1', 'Новая Почта')
     ws.write('A2', 'Оплата', bold)
-    ws.write('C2', f"Передоплата (Rozetka) {ri['total']:.0f} грн" if prepaid
-             else f"Наложенным платежом {ri['total']:.0f} грн")
+    ws.write('C2', payment_line(ri['total'], prepaid), red if prepaid else None)
     ws.write('A3', 'Коментарий', bold)
     ws.write('C3', f"{ri['customer']}  {ri['phone']}\n{ri['city']} {ri['warehouse']}", wrap)
     ws.set_row(2, 35)
@@ -182,8 +189,7 @@ def build_excel(order_id, ri, items, prepaid):
 def email_body(order_id, ri, items, prepaid):
     lines = '\n'.join(f"{i}. {it['sku']} | {str(it['name'])[:50]} | {it['quantity']} шт."
                       for i, it in enumerate(items, 1))
-    pay = (f"Передоплата (Rozetka) {ri['total']:.0f} грн" if prepaid
-           else f"Наложенным платежом {ri['total']:.0f} грн")
+    pay = payment_line(ri['total'], prepaid)
     return (f"Добрый день!\n\nЗаказ #{order_id}\nКод клиента: {SUPPLIER_CODE}\n\nТовары:\n{lines}\n\n"
             f"Получатель: {ri['customer']}\nТелефон: {ri['phone']}\n"
             f"Доставка: Нова Пошта, {ri['city']} {ri['warehouse']}\nОплата: {pay}\n\n"
