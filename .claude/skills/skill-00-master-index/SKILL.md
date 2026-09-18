@@ -38,6 +38,7 @@ description: "Головний покажчик усіх методів проє
 | `.claude/skills/skill-32-supplier-crm-smtm/SKILL.md` | **CRM постачальника SexOpt (new.smtm.com.ua): вхід, пошук за артикулом, кошик через внутрішній API, пастки з кількістю; оформлення — наступний крок** (`tools/smtm_crm.py`) |
 | `.claude/skills/skill-33-noire-order-end-to-end/SKILL.md` | **Повний шлях замовлення NOIRE: Rozetka → агент → ТТН НП → ТТН у Rozetka (61) → CRM постачальника → Telegram; перевірка кожного кроку, поточна поведінка післяплати** |
 | `.claude/skills/skill-34-free-llm-channels/SKILL.md` | **Безкоштовні канали LLM: шлюз OmniRoute (docker, localhost:20128), перемикання omniroute → ollama, замір якості каналів, межі застосування** (`shared/utils/llm_router.py`, `tools/llm_channel_bench.py`) |
+| `.claude/skills/skill-35-toptul-rozetka-orders/SKILL.md` | **TOPTUL з Rozetka → «Гранд Інструмент»: лист із бланком, облік, звірка ТТН о 21:00 з листа «Рассылка ТТН»** (`agents/orders/toptul_supplier.py`, `tools/toptul_ttn_reconcile.py`, `tools/supplier_ttn_mail.py`) |
 | `.claude/skills/{prom,rozetka,epicentr,khoroshop}/SKILL.md` | базові скіли майданчиків |
 | `shared/knowledge_base/rozetka/api_auth.md` | Rozetka API (замість неіснуючого SKILL-12) |
 
