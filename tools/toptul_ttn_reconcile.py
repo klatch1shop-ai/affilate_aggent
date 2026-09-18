@@ -30,6 +30,35 @@ def tg(text):
     return r.ok
 
 
+def stale_rozetka(hours=20):
+    """Усі підтверджені замовлення Rozetka без ТТН довше `hours` — будь-який постачальник.
+
+    18.09.2026: два замовлення Carvol від 17.09 добу стояли підтвердженими без ТТН.
+    Carvol надіслав номери ТЕКСТОМ, диспетчер приймає від нього лише PDF і
+    проігнорував їх — ніхто не помітив. Ця перевірка ловить наслідок, хоч би
+    яка була причина.
+    """
+    import datetime as dt
+    import rozetka_order_agent as RZ
+    noire = RZ.get_noire_articles() or set()
+    toptul = TS.toptul_articles() or set()
+    out = []
+    for st in (2, 26):
+        for o in RZ.get_orders_by_status(st) or []:
+            d = RZ.get_order_details(o['id']) or o
+            if RZ._ttn_of(d):
+                continue
+            created = dt.datetime.fromisoformat(str(d.get('created'))[:19])
+            age = (dt.datetime.now() - created).total_seconds() / 3600
+            if age < hours:
+                continue
+            arts = [str((p.get('item') or {}).get('article') or '') for p in d.get('purchases') or []]
+            sup = ('NOIRE' if all(a in noire for a in arts) else 'TOPTUL' if all(a in toptul for a in arts)
+                   else 'Carvol' if arts else '?')
+            out.append(f"🚨 #{o['id']} ({sup}) — підтверджено {created:%d.%m %H:%M}, ТТН немає вже {age:.0f} год")
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--write', action='store_true')
@@ -37,6 +66,9 @@ def main():
     a = ap.parse_args()
     TS.init_table()
     report = TS.reconcile(write_ttn=a.write)
+    stale = stale_rozetka()
+    if stale:
+        report += '\n\n<b>Rozetka: підтверджені без ТТН</b>\n' + '\n'.join(stale)
     print(report)
     if a.no_tg:
         return
