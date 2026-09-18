@@ -70,9 +70,16 @@ def browser_check(conf):
     with Camoufox(headless=True, humanize=True, geoip=True, locale='uk-UA') as br:
         page = br.new_page()
         page.set_default_timeout(45000)
-        ctl = B.search_both(page, B.PS.control_name())
-        if not B.where(ctl, B.PS.CONTROL[1]).startswith('main'):
-            sys.exit('КОНТРОЛЬ SO5178 НЕ ПРОЙДЕНО — перевірка не будується')
+        # контроль теж мигає (43 % видимих карток) — до 3 спроб, як у prom_search.control();
+        # 17.09 одна невдала спроба зупинила всю перевірку дня
+        for attempt in range(1, 4):
+            ctl = B.search_both(page, B.PS.control_name())
+            if B.where(ctl, B.PS.CONTROL[1]).startswith('main'):
+                break
+            print(f'контроль: спроба {attempt} — картки немає, повтор', flush=True)
+            page.wait_for_timeout(5000 * attempt)
+        else:
+            sys.exit('КОНТРОЛЬ SO5178 НЕ ПРОЙДЕНО за 3 спроби — перевірка не будується')
         for g in conf['groups']:
             pids = {conf['prom_ids'][s]: s for s in g['skus']}
             for lang, root in (('ua', 'https://prom.ua/ua/search'), ('ru', 'https://prom.ua/search')):
