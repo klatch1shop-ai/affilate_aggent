@@ -61,3 +61,11 @@ def test_parse_ttn_command():
     for bad in ('/ttn 906298386', '/ttn 12345 20451539117101', '/ttn 906298386 2045153911710',
                 '/status 906298386 20451539117101', ''):
         assert parse_ttn_command(bad) is None, bad
+
+
+def test_order_from_reply():
+    from ai_brain.carvol_text import order_from_reply
+    cap = '📦 Замовлення Розетка #906298386\n👤 Негуляев Андрей\n380972197663\n💰 500 грн'
+    assert order_from_reply(cap) == '906298386'
+    assert order_from_reply('📦 Замовлення Розетка #906311571 …') == '906311571'
+    assert order_from_reply('без номера') is None and order_from_reply(None) is None

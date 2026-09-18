@@ -76,3 +76,17 @@ def parse_ttn_command(text):
     if not (ORDER.fullmatch(oid) and TTN.fullmatch(ttn)):
         return None
     return oid, ttn
+
+
+REPLY_ORDER = re.compile(r'Замовлення\s+\S+\s*#\s*(\d{9})|#\s*(\d{9})')
+
+
+def order_from_reply(reply_text):
+    """Номер замовлення з повідомлення бота, на яке відповів Carvol.
+
+    18.09.2026 (скрін від Carvol): вони відповідають (reply) на наше повідомлення
+    «📦 Замовлення Розетка #906298386 …» самим номером ТТН. Номер замовлення —
+    у повідомленні, на яке відповіли; це найточніше джерело.
+    """
+    m = REPLY_ORDER.search(reply_text or '')
+    return (m.group(1) or m.group(2)) if m else None

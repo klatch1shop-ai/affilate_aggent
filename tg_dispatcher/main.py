@@ -301,6 +301,12 @@ async def handle_carvol_text(message: Message):
                           'recipient': str(dl.get('recipient_title') or '')})
     ids = extract_order_ids(text)
     hint = ids[0] if len(ids) == 1 and len(ttns) == 1 else None
+    # Carvol відповідає (reply) на наше повідомлення з замовленням — номер звідти точніший
+    from ai_brain.carvol_text import order_from_reply
+    reply = message.reply_to_message
+    reply_oid = order_from_reply((reply.caption or reply.text or '') if reply else '')
+    if reply_oid and len(ttns) == 1:
+        hint = reply_oid
     # власник 18.09.2026: «треба автоматично все» — за замовчуванням вносимо самі
     # (лише коли НП підтвердила телефон рівно одного кандидата); confirm — лише пропозиція
     mode = (os.getenv('CARVOL_TEXT_TTN') or 'apply').strip().lower()
