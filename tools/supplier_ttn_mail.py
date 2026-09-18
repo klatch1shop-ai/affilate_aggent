@@ -102,6 +102,8 @@ def np_city(ttn, phone):
         'apiKey': key, 'modelName': 'TrackingDocument', 'calledMethod': 'getStatusDocuments',
         'methodProperties': {'Documents': [{'DocumentNumber': ttn, 'Phone': re.sub(r'\D', '', phone or '')}]}}).json()
     d = (r.get('data') or [{}])[0]
+    if str(d.get('StatusCode')) == '3':      # «Номер не знайдено»: старі ТТН НП віддає не завжди
+        return 'NOT_FOUND'
     return d.get('CityRecipient') or None
 
 
@@ -114,6 +116,8 @@ def match(rec, orders):
                       else 'імені немає серед відкритих замовлень — на розгляд людині')
     o = cands[0]
     city = np_city(rec['ttn'], o['customer_phone'])
+    if city == 'NOT_FOUND':
+        return o, 'збіг за іменем; НП: «номер не знайдено» (архівна ТТН?) — ПІДТВЕРДИТИ'
     if city is None:
         return o, 'збіг за іменем; місто НП не перевірено (немає ключа НП або відповіді) — ПІДТВЕРДИТИ'
     if o['delivery_city'] and words(o['delivery_city']) & words(city):
