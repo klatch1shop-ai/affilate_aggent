@@ -58,16 +58,6 @@ async def security_middleware(handler, event, data):
     if CARVOL_TG_CHAT_ID and user_id == CARVOL_TG_CHAT_ID:
         if getattr(event, 'document', None):
             return await handler(event, data)
-        # 18.09.2026: 17.09 Carvol надіслав ТТН ТЕКСТОМ, і тут вони зникли без сліду —
-        # два замовлення добу без ТТН. Тепер текст іде в окремий обробник.
-        if getattr(event, 'text', None):
-            return await handle_carvol_text(event)
-        # решта (фото, голос…) не губиться: копія власнику
-        try:
-            await bot.copy_message(ADMIN_ID, event.chat.id, event.message_id)
-            await bot.send_message(ADMIN_ID, '📨 Carvol надіслав не PDF і не текст — копія вище, розберіться вручну.')
-        except Exception as e:
-            logger.error(f'TTN-IN: копія повідомлення Carvol не вдалась: {e}')
         # Було: мовчазне ігнорування. 09.09.2026 виявилось, що ТТН від Carvol
         # не надходять із 19.08, і розрізнити «не надсилали» від «надсилали, а
         # ми не прийняли» неможливо — слідів немає взагалі. Обробника фото в
@@ -193,31 +183,6 @@ async def cmd_orders(message: Message):
         await message.answer(f'❌ Помилка: {e}')
 
 
-@dp.message(Command('ttn'))
-async def cmd_ttn(message: Message):
-    """/ttn ORDER_ID ТТН — внести ТТН вручну (18.09.2026: бот радив цю команду, але її не було)."""
-    from ai_brain.carvol_text import parse_ttn_command
-    from agents.orders.rozetka_order_agent import set_ttn, change_status, get_order_details, _ttn_of
-    p = parse_ttn_command(message.text)
-    if not p:
-        await message.answer('Формат: <code>/ttn 906298386 20451539117101</code> '
-                             '(номер замовлення — 9 цифр, ТТН — 14)', parse_mode='HTML')
-        return
-    oid, ttn = int(p[0]), p[1]
-    ok_ttn = await asyncio.to_thread(set_ttn, oid, ttn)
-    ok_st = await asyncio.to_thread(change_status, oid, 3) if ok_ttn else False
-    await asyncio.sleep(2)
-    actual = _ttn_of(await asyncio.to_thread(get_order_details, oid) or {})
-    logger.info(f'/ttn #{oid} {ttn}: set_ttn={ok_ttn}, status3={ok_st}, GET={actual!r}')
-    if ok_ttn and actual == ttn:
-        await message.answer(f'✅ #{oid}: ТТН <code>{ttn}</code> внесено й перевірено (GET). '
-                             f'Статус {"«передано в доставку»" if ok_st else "НЕ змінено — перевірте"}.',
-                             parse_mode='HTML')
-    else:
-        await message.answer(f'🚨 #{oid}: ТТН НЕ збереглась (set_ttn={ok_ttn}, GET: {actual or "порожньо"}).',
-                             parse_mode='HTML')
-
-
 @dp.message(Command('learn'))
 async def cmd_learn(message: Message):
     """Навчити агента новому правилу."""
@@ -270,66 +235,6 @@ def _fmt_source_info(ttn: str, data_source: str,
         f'Телефон: <code>{phone}</code>\n'
         f'Місто: {city_line}'
     )
-
-
-async def handle_carvol_text(message: Message):
-    """Текст від Carvol: ЗАВЖДИ копія власнику; якщо є ТТН — знайти замовлення.
-
-    Режим CARVOL_TEXT_TTN (.env): apply (за замовчуванням, власник 18.09) — внести
-    самостійно, лише якщо НП підтвердила телефон одержувача рівно одного
-    кандидата; confirm — лише запропонувати замовлення й готову команду /ttn.
-    """
-    text = message.text or ''
-    logger.warning(f'TTN-IN: текст від Carvol: {text[:300]!r}')
-    await bot.send_message(ADMIN_ID, f'📨 <b>Carvol написав:</b>\n{html_escape(text[:1500])}', parse_mode='HTML')
-
-    from ai_brain.carvol_text import extract_ttns, extract_order_ids, resolve
-    ttns = extract_ttns(text)
-    if not ttns:
-        return
-    from agents.orders.rozetka_order_agent import (get_orders_by_status, get_order_details, set_ttn,
-                                                   change_status, _ttn_of)
-    from agents.orders.np_api import get_ttn_info
-    cands = []
-    for st in (2, 26):
-        for o in await asyncio.to_thread(get_orders_by_status, st) or []:
-            d = await asyncio.to_thread(get_order_details, o['id']) or o
-            if _ttn_of(d):
-                continue
-            dl = d.get('delivery') or {}
-            cands.append({'order_id': o['id'], 'phone': dl.get('recipient_phone') or '',
-                          'recipient': str(dl.get('recipient_title') or '')})
-    ids = extract_order_ids(text)
-    hint = ids[0] if len(ids) == 1 and len(ttns) == 1 else None
-    # власник 18.09.2026: «треба автоматично все» — за замовчуванням вносимо самі
-    # (лише коли НП підтвердила телефон рівно одного кандидата); confirm — лише пропозиція
-    mode = (os.getenv('CARVOL_TEXT_TTN') or 'apply').strip().lower()
-    for ttn in ttns:
-        oid, why = await asyncio.to_thread(resolve, ttn, cands, get_ttn_info, hint)
-        logger.info(f'TTN-IN: текст → ttn={ttn} → #{oid} ({why}), режим {mode}')
-        if not oid:
-            await bot.send_message(ADMIN_ID, f'❓ ТТН <code>{ttn}</code> — замовлення не визначено: {why}.\n'
-                                             f'Відкритих без ТТН: {len(cands)}. Вкажіть: <code>/ttn ORDER_ID {ttn}</code>',
-                                   parse_mode='HTML')
-            continue
-        if mode != 'apply':
-            await bot.send_message(ADMIN_ID, f'🔎 ТТН <code>{ttn}</code> → замовлення <b>#{oid}</b> ({why}).\n'
-                                             f'Підтвердіть командою:\n<code>/ttn {oid} {ttn}</code>',
-                                   parse_mode='HTML')
-            continue
-        ok_ttn = await asyncio.to_thread(set_ttn, oid, ttn)
-        ok_st = await asyncio.to_thread(change_status, oid, 3) if ok_ttn else False
-        await asyncio.sleep(2)
-        actual = _ttn_of(await asyncio.to_thread(get_order_details, oid) or {})
-        ok = ok_ttn and actual == ttn
-        await bot.send_message(ADMIN_ID, (f'✅ #{oid}: ТТН <code>{ttn}</code> внесено й перевірено (GET), '
-                                          f'статус {"«передано в доставку»" if ok_st else "НЕ змінено"} · {why}') if ok else
-                               (f'🚨 #{oid}: ТТН <code>{ttn}</code> НЕ збереглась (GET: {actual or "порожньо"}). '
-                                f'Вручну: <code>/ttn {oid} {ttn}</code>'), parse_mode='HTML')
-
-
-def html_escape(s):
-    return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 @dp.message(F.document)
@@ -418,31 +323,6 @@ async def handle_document(message: Message):
                 parse_mode='HTML',
             )
             return
-
-        # --- Кілька збігів або жодного: розрізняємо телефоном у НП ---
-        # 18.09.2026: при однаковій ціні збігів кілька (телефон у PDF замаскований),
-        # бот зупинявся й радив неіснуючу команду /ttn. Тепер: ТТН перевіряється в НП
-        # з телефоном кожного кандидата; рівно один підтверджений — він і є.
-        if len(matches) != 1:
-            from ai_brain.carvol_text import resolve
-            pool = [m['order_id'] for m in matches]
-            if not pool:
-                from agents.orders.rozetka_order_agent import get_orders_by_status, _ttn_of
-                for st in (2, 26):
-                    for o in await asyncio.to_thread(get_orders_by_status, st) or []:
-                        pool.append(o['id'])
-            cands = []
-            from agents.orders.rozetka_order_agent import _ttn_of as _has_ttn
-            for oid_ in dict.fromkeys(pool):
-                d_ = await asyncio.to_thread(get_order_details, oid_) or {}
-                if _has_ttn(d_):
-                    continue                     # у замовлення вже є ТТН — другу не даємо
-                cands.append({'order_id': oid_, 'phone': (d_.get('delivery') or {}).get('recipient_phone') or ''})
-            oid_np, why_np = await asyncio.to_thread(resolve, ttn, cands, get_ttn_info)
-            logger.info(f'TTN-IN: {len(matches)} збігів → перевірка НП телефоном: #{oid_np} ({why_np})')
-            if oid_np:
-                matches = [{'order_id': oid_np, 'score': 1.0, 'match_by': 'НП: телефон одержувача'}]
-                match_source = f'{match_source} → НП-телефон'
 
         # --- Кілька збігів — список без кнопок ---
         if len(matches) > 1:
