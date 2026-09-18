@@ -25,12 +25,23 @@ def _key():
 
 
 def our_document(ttn, days=14):
-    """Накладна з нашого кабінету (Ref, StateId, Printed…) або None."""
-    r = requests.post(NP_URL, timeout=60, json={
-        'apiKey': _key(), 'modelName': 'InternetDocument', 'calledMethod': 'getDocumentList',
-        'methodProperties': {'DateTimeFrom': (date.today() - timedelta(days=days)).strftime('%d.%m.%Y'),
-                             'DateTimeTo': date.today().strftime('%d.%m.%Y'), 'GetFullList': '1'}}).json()
-    return next((d for d in r.get('data') or [] if d.get('IntDocNumber') == str(ttn)), None)
+    """Накладна з нашого кабінету (Ref, StateId, Printed…) або None.
+
+    18.09.2026: НП обмежує частоту («To many requests, try again after 1 seconds»)
+    і повертає порожній список. Порожнеча через відмову ≠ «накладної немає» —
+    перша версія назвала нашу ж накладну NOIRE чужою. Тепер: повтор, а якщо
+    відмова лишається — виняток, не None.
+    """
+    import time
+    body = {'apiKey': _key(), 'modelName': 'InternetDocument', 'calledMethod': 'getDocumentList',
+            'methodProperties': {'DateTimeFrom': (date.today() - timedelta(days=days)).strftime('%d.%m.%Y'),
+                                 'DateTimeTo': date.today().strftime('%d.%m.%Y'), 'GetFullList': '1'}}
+    for attempt in range(4):
+        r = requests.post(NP_URL, timeout=60, json=body).json()
+        if not r.get('errors'):
+            return next((d for d in r.get('data') or [] if d.get('IntDocNumber') == str(ttn)), None)
+        time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"НП відмовила: {r.get('errors')}")
 
 
 def label_pdf(ttn, out_dir='/tmp'):
