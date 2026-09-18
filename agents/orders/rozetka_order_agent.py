@@ -669,7 +669,9 @@ def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_
            f'Помилка: {str(e)[:150]}\nНадішліть замовлення в «Гранд Інструмент» вручну.')
         return
     save_to_db(details, 'accepted')
-    where = {'live': f'постачальнику ({to})', 'test': f'ТЕСТ — на нашу скриньку ({to})',
+    where = {'live': f'постачальнику ({to})',
+             'test': f'⚠️ ТЕСТОВИЙ РЕЖИМ — лист лише на нашу скриньку ({to}). '
+                     f'ПЕРЕШЛІТЬ його на {TS.SUPPLIER_EMAIL}, інакше постачальник замовлення не отримає',
              'off': 'лист вимкнено (TOPTUL_SEND_MODE=off)'}[mode]
     tg(f'✅ <b>{head} підтверджено</b>\n{who}\n{stock_txt}\n'
        f'📧 Замовлення: {where}\nТТН очікується {exp:%d.%m} (відправлене до {TS.CUTOFF_HOUR}:00 — того ж дня).')
