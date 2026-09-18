@@ -235,6 +235,19 @@ def record_sent(order_id, ri, items, prepaid, mode, note=''):
 
 
 # ── звірка о 21:00 ───────────────────────────────────────────────────
+_rz_ttn_cache = {}
+
+
+def _ttn_in_rozetka(oid):
+    """ТТН, яка вже стоїть у замовленні Rozetka (внесли вручну чи раніше). Кеш на прохід."""
+    if oid not in _rz_ttn_cache:
+        import sys
+        sys.path.insert(0, os.path.join(BASE, 'agents', 'orders'))
+        import rozetka_order_agent as RZ
+        d = RZ.get_order_details(oid) or {}
+        _rz_ttn_cache[oid] = RZ._ttn_of(d) or None
+    return _rz_ttn_cache[oid]
+
 def reconcile(today=None, write_ttn=False):
     """Лист «Рассылка ТТН» → наші відкриті замовлення TOPTUL. → текст звіту для Telegram.
 
@@ -280,6 +293,11 @@ def reconcile(today=None, write_ttn=False):
                         (rec['ttn'], 'ttn_written' if 'записано в Rozetka ✅' in state else 'ttn_found',
                          why, oid))
             lines.append(f"✅ #{oid} → ТТН {rec['ttn']} ({state})")
+        elif _ttn_in_rozetka(oid):
+            cur.execute("""update toptul_supplier_orders set ttn=%s, ttn_at=now(), ttn_source='rozetka',
+                           status='ttn_written', updated_at=now() where rozetka_order_id=%s""",
+                        (_ttn_in_rozetka(oid), oid))
+            lines.append(f"✅ #{oid} — ТТН уже в Rozetka ({_ttn_in_rozetka(oid)})")
         elif o['expected_ttn_date'] and o['expected_ttn_date'] <= today:
             cur.execute("update toptul_supplier_orders set status='alert', updated_at=now() where rozetka_order_id=%s", (oid,))
             lines.append(f"🚨 #{oid} — ТТН немає, хоча очікувалась {o['expected_ttn_date']:%d.%m} "
