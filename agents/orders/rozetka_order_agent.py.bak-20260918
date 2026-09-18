@@ -25,8 +25,6 @@ import xlsxwriter
 sys.path.append('/home/tek/agent-system')
 from dotenv import load_dotenv; load_dotenv('/home/tek/agent-system/.env')
 from shared.utils.db import get_connection
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import toptul_supplier as TS  # noqa: E402  TOPTUL → «Гранд Інструмент» (18.09.2026)
 
 # === КОНСТАНТИ ===
 ROZETKA_API_TOKEN = os.getenv('ROZETKA_API_TOKEN')
@@ -634,48 +632,6 @@ def save_to_db(order: dict, status: str):
 
 # === HELPЕР: дані отримувача ===
 
-def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_check):
-    """TOPTUL: той самий порядок, що в NOIRE, плюс лист постачальнику. Нічого не скасовує."""
-    stock_ok, lines = TS.check_stock(items_info)
-    stock_txt = '\n'.join(lines)
-    head = f'{MARKETPLACE} TOPTUL #{order_id}'
-    who = f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн'
-    if stock_ok is not True:
-        save_to_db(details, 'manual_review')
-        tg(f'⚠️ <b>{head} — наявність не підтверджена</b>\n{who}\n{stock_txt}\n'
-           f'Замовлення НЕ скасовано, постачальнику НЕ надіслано — розберіться вручну.')
-        return
-    paid = payment_paid(details)
-    if is_prepaid and paid is not True and not skip_payment_check:
-        moved = move_to_processing(order_id)
-        save_to_db(details, 'waiting_payment')
-        tg(f'⏳ <b>{head} — наявність є, чекаємо оплату</b>\n{who}\n{stock_txt}\n'
-           f'Статус: {"обробляється менеджером" if moved else "НЕ змінено"}. '
-           f'Після оплати агент підтвердить і надішле постачальнику сам.')
-        return
-    res = confirm_order(order_id)
-    if not res:
-        save_to_db(details, 'pending_manual' if res is None else 'manual_review')
-        tg(f'⚠️ <b>{head} — наявність є, але підтвердити не вдалось</b>\n{who}\n{stock_txt}\n'
-           f'Постачальнику НЕ надіслано. Підтвердіть у кабінеті Rozetka.')
-        return
-    try:
-        sent, to, mode = TS.send_to_supplier(order_id, ri, items_info, is_prepaid)
-        exp = TS.record_sent(order_id, ri, items_info, is_prepaid, mode if sent else 'off')
-    except Exception as e:
-        save_to_db(details, 'accepted')
-        logger.error(f'#{order_id} TOPTUL: лист постачальнику не надіслано: {e}')
-        tg(f'🚨 <b>{head} підтверджено, але лист постачальнику НЕ надіслано</b>\n{who}\n'
-           f'Помилка: {str(e)[:150]}\nНадішліть замовлення в «Гранд Інструмент» вручну.')
-        return
-    save_to_db(details, 'accepted')
-    where = {'live': f'постачальнику ({to})', 'test': f'ТЕСТ — на нашу скриньку ({to})',
-             'off': 'лист вимкнено (TOPTUL_SEND_MODE=off)'}[mode]
-    tg(f'✅ <b>{head} підтверджено</b>\n{who}\n{stock_txt}\n'
-       f'📧 Замовлення: {where}\nТТН очікується {exp:%d.%m} (відправлене до {TS.CUTOFF_HOUR}:00 — того ж дня).')
-    logger.info(f'#{order_id} TOPTUL: підтверджено, лист {mode}, ТТН очікується {exp}')
-
-
 def _order_recipient_info(order: dict) -> dict:
     """Повертає {customer, phone, city, warehouse, total, payment_str}."""
     delivery  = order.get('delivery') or {}
@@ -1080,10 +1036,6 @@ def process_order(order: dict, feed: dict):
     out_of_stock = []     # товар Carvol, якого немає у фіді → справді немає
 
     noire = get_noire_articles()
-    # TOPTUL (18.09.2026): третій асортимент акаунта. Доти товар TOPTUL падав у
-    # гілку «Carvol поза фідом → немає в наявності» і замовлення СКАСОВУВАЛОСЬ.
-    toptul = TS.toptul_articles()
-    toptul_items = []
 
     for purchase in purchases:
         offer_id  = (purchase.get('item') or {}).get('article') or purchase.get('article', '')
@@ -1096,12 +1048,7 @@ def process_order(order: dict, feed: dict):
             available = None
             unknown.append(sku)
             logger.info(f'  {sku} — товар NOIRE, автоматично не обробляється')
-        elif toptul and sku in toptul:
-            available = None           # наявність — з живого фіду постачальника нижче
-            unknown.append(sku)        # змішане замовлення — лише вручну
-            toptul_items.append(sku)
-            logger.info(f'  {sku} — товар TOPTUL (Гранд Інструмент)')
-        elif not noire or not feed or toptul is None:
+        elif not noire or not feed:
             # Один зі списків недоступний: або не відрізнити постачальника,
             # або не перевірити наявність. Скасовувати не маємо права.
             # Головний цикл із порожнім фідом сюди не дійде, але правило має
@@ -1143,11 +1090,6 @@ def process_order(order: dict, feed: dict):
                f'Відсутні SKU: {", ".join(out_of_stock)}\n'
                f'Замовлення лишається активним — розібратись вручну.')
         return
-
-    # Замовлення лише з товарів TOPTUL → «Гранд Інструмент»: наявність → оплата →
-    # підтвердження → лист постачальнику → облік для звірки ТТН о 21:00.
-    if toptul_items and len(toptul_items) == len(items_info) and not out_of_stock:
-        return _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_check)
 
     # Доказу немає — не скасовуємо нічого. Статус 'manual_review' зберігається
     # в базі, тому наступний цикл не візьме замовлення знову і Telegram не
