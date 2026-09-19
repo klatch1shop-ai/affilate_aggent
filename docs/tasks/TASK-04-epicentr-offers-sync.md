@@ -159,3 +159,10 @@ def apply_results(self, parsed: dict) -> None
 venv/bin/python -m pytest tests/test_epicentr_offers.py -q     → усі зелені
 ```
 Звіт `docs/reports/TASK-04-report.md` — як у `AGENTS.md`, з розділом «Самостійні рішення».
+
+## 7. Відповіді на питання виконавця (19.09.2026, план Codex)
+
+1. **`EpicentrAuthError` під час дозбору старих результатів (§4.8 п. 2) теж зупиняє
+   всю синхронізацію**: решту `results` не питати, пачки не надсилати, `stopped=True`,
+   помилка — в `errors`. Невірний ключ не має давати «часткову» роботу. Інші
+   `EpicentrError` у п. 2 — як і було: записати й продовжити.
