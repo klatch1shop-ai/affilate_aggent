@@ -26,7 +26,7 @@ from pathlib import Path
 import requests
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, CommandStart
-from aiogram.types import Message
+from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from dotenv import load_dotenv
 
 BASE = Path(__file__).resolve().parent.parent
@@ -34,6 +34,9 @@ sys.path.insert(0, str(BASE))
 load_dotenv(BASE / '.env')
 
 from helper.access import is_allowed, parse_ids                     # noqa: E402
+from helper.digest import build_digest, due                         # noqa: E402
+from helper.keyboards import MENU, to_query                         # noqa: E402
+from tg_dispatcher.ai_brain import commands                         # noqa: E402
 from helper.feeds import feeds_status                               # noqa: E402
 from helper.inbox_cycle import DeliveryQueue, InboxCycle            # noqa: E402
 from helper.services import answer, build_fetchers                  # noqa: E402
@@ -116,6 +119,15 @@ def feeds_now():
     return feeds_status({k: str(v) for k, v in FEEDS.items()}, time.time())
 
 
+def services_now():
+    out = {}
+    for name in SERVICES:
+        r = subprocess.run(['systemctl', '--user', 'is-active', name],
+                           capture_output=True, text=True, timeout=10)
+        out[name] = r.stdout.strip() or 'невідомо'
+    return out
+
+
 def system_now():
     lines = []
     for name in SERVICES:
@@ -137,6 +149,15 @@ def make_fetchers():
 # ── Telegram ──────────────────────────────────────────────────────────
 
 dp = Dispatcher()
+KEYBOARD = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text=t) for t in row] for row in MENU],
+                               resize_keyboard=True, is_persistent=True)
+
+
+def help_text():
+    """Лише підключені команди: «Перевірка цін» без джерела даних не показуємо."""
+    lines = [f"{c['title']}: «{commands._EXAMPLES[i]}»" for i, c in commands.COMMANDS.items()
+             if c['fetcher'] is None or c['fetcher'] in FETCHERS]
+    return '\n'.join(lines)
 RZ, FETCHERS = make_fetchers()
 DATA.mkdir(parents=True, exist_ok=True)
 REMIND_MAX_MIN = int(os.getenv('HELPER_REMIND_MAX_H', '48')) * 60
@@ -186,10 +207,11 @@ def allowed(message: Message) -> bool:
 async def on_start(message: Message):
     if not allowed(message):
         return
-    await message.answer('Я помічник NOIRE. Пишіть звичайним текстом, наприклад:\n\n'
-                         + answer('', FETCHERS)
+    await message.answer('Я помічник NOIRE. Кнопки внизу або звичайний текст, наприклад:\n\n'
+                         + help_text()
                          + f'\n\nНові повідомлення покупців Rozetka приходять сюди карткою.'
-                         f'\nВідповіді покупцям: режим «{REPLY_MODE}».')
+                         f'\nВідповіді покупцям: режим «{REPLY_MODE}».'
+                         '\nЩоранку о 9:00 — короткий звіт.', reply_markup=KEYBOARD)
 
 
 @dp.message(F.reply_to_message, F.text)
@@ -210,8 +232,49 @@ async def on_reply(message: Message):
 async def on_text(message: Message):
     if not allowed(message):
         return
-    text = await asyncio.to_thread(answer, message.text, FETCHERS)
-    await message.answer(text[:4000], parse_mode=None)
+    query = to_query(message.text)
+    if intents_help(query):
+        text = help_text()
+    else:
+        text = await asyncio.to_thread(answer, query, FETCHERS)
+    await message.answer(text[:4000], parse_mode=None, reply_markup=KEYBOARD)
+
+
+def intents_help(query):
+    from tg_dispatcher.ai_brain.intents import parse
+    p = parse(query)
+    return p['intent'] == 'help' or p['intent'] == 'unknown' or p['confidence'] < 0.5
+
+
+DIGEST_STATE = DATA / 'digest_last.txt'
+
+
+def _digest_last():
+    try:
+        return datetime.strptime(DIGEST_STATE.read_text().strip(), '%Y-%m-%d').date()
+    except (OSError, ValueError):
+        return None
+
+
+def _safe_call(fn):
+    try:
+        return fn()
+    except Exception:
+        log.exception('ранковий звіт: джерело недоступне')
+        return None
+
+
+def digest_if_due():
+    now = datetime.now(timezone.utc)
+    if not due(now, _digest_last()):
+        return None
+    un = _safe_call(lambda: STATE['store'].unanswered(now, 30, max_age_min=REMIND_MAX_MIN))
+    text = build_digest(now, _safe_call(RZ.active_orders), un, _safe_call(feeds_now),
+                        _safe_call(services_now))
+    tg_send(text)
+    from helper.digest import KYIV
+    DIGEST_STATE.write_text(now.astimezone(KYIV).strftime('%Y-%m-%d'))
+    return text
 
 
 async def inbox_loop():
@@ -219,6 +282,10 @@ async def inbox_loop():
         try:
             res = await in_db(lambda: STATE['cycle'].poll())
             await in_db(lambda: STATE['cycle'].remind())
+            try:
+                await in_db(digest_if_due)
+            except Exception:
+                log.exception('ранковий звіт')
             log.info('чат покупців: нових %s, доставлено %s, у черзі %s, помилок %s',
                      res['new'], res['delivered'], res['queued'], len(res['errors']))
         except Exception:
