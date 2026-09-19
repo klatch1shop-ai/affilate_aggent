@@ -83,7 +83,7 @@ GROUPS: tuple[str, ...]      # порядок груп для довідки
 def by_group() -> dict[str, list[str]]
 def help_text(available: set[str] | None = None) -> str
 ```
-- `CATALOG` містить **усі** наміри з `intents.py`, крім `unknown` (9 старих + 17 нових).
+- `CATALOG` містить **усі** наміри з `intents.py`, крім `unknown` (8 старих + 17 нових).
 - `risk`: усі поточні — `'R0'`. `needs` — як у таблиці §5 (для старих — як у `commands.COMMANDS`;
   для `supplier_stock` — `['article']`, бо `sku` приймається як артикул).
 - `example`: фраза, яку `intents.parse` розпізнає **саме як цей намір** з `confidence >= 0.5`
