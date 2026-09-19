@@ -2,6 +2,8 @@
 
 import re
 
+from . import catalog, views
+
 
 COMMANDS: dict = {
     'orders_new': {'needs': [], 'fetcher': 'orders_new', 'title': 'Нові замовлення'},
@@ -14,12 +16,19 @@ COMMANDS: dict = {
     'help': {'needs': [], 'fetcher': None, 'title': 'Довідка'},
 }
 
+ALL_COMMANDS = {**COMMANDS, **{
+    intent: {'needs': entry['needs'], 'fetcher': intent, 'title': entry['title']}
+    for intent, entry in catalog.CATALOG.items() if intent not in COMMANDS
+}}
+
 # Межі за цифрами не дозволяють приховати частину номера замовлення чи ТТН.
 _PHONE = re.compile(r'(?<!\d)\+?(?:380\d{7,9}|0\d{9,11})(?!\d)')
 _PROMPTS = {
     'order_id': 'Вкажіть номер замовлення (9 цифр)',
     'ttn': 'Вкажіть номер ТТН (14 цифр)',
     'sku': 'Вкажіть артикул',
+    'status': 'Уточніть: скасовані, виконані чи в дорозі',
+    'article': 'Вкажіть артикул постачальника',
 }
 _EXAMPLES = {
     'orders_new': 'замовлення розетки за сьогодні',
@@ -40,30 +49,40 @@ def _safe(text: str) -> str:
     return mask_private(text)
 
 
+def _params(parsed: dict) -> dict:
+    """Нормалізувати артикул постачальника без зміни вхідних даних."""
+    params = dict(parsed.get('params') or {})
+    if parsed.get('intent') == 'supplier_stock' and not str(params.get('article') or '').strip():
+        params['article'] = params.get('sku')
+    return params
+
+
 def missing_params(parsed: dict) -> list:
     """Перелічити відсутні або порожні обов'язкові параметри."""
-    needs = COMMANDS.get(parsed.get('intent'), {}).get('needs', [])
-    params = parsed.get('params') or {}
+    needs = ALL_COMMANDS.get(parsed.get('intent'), {}).get('needs', [])
+    params = _params(parsed)
     return [key for key in needs if not str(params.get(key) or '').strip()]
 
 
 def dispatch(parsed: dict, fetchers: dict) -> str:
     """Виконати команду через передану функцію та підготувати відповідь."""
     intent = parsed.get('intent')
-    if intent not in COMMANDS or parsed.get('confidence', 0) < 0.5 or intent == 'help':
+    if intent not in ALL_COMMANDS or parsed.get('confidence', 0) < 0.5 or intent == 'help':
         return fmt_help()
     missing = missing_params(parsed)
     if missing:
         return _safe('\n'.join(_PROMPTS[key] for key in missing))
-    command = COMMANDS[intent]
+    command = ALL_COMMANDS[intent]
     fetcher = fetchers.get(command['fetcher'])
     if fetcher is None:
         return _safe(f"⚠️ Команда ще не підключена: {command['title']}")
-    allowed = command['needs'] + ['marketplace', 'period']
-    params = {key: value for key, value in (parsed.get('params') or {}).items()
+    allowed = command['needs'] + ['marketplace', 'period', 'status', 'source', 'goods_tab']
+    params = {key: value for key, value in _params(parsed).items()
               if key in allowed}
     try:
         result = fetcher(**params)
+        if intent in views.FORMATTERS:
+            return views.FORMATTERS[intent](result, params)
         if intent == 'stock':
             return fmt_stock(result, params['sku'])
         formatters = {
@@ -149,5 +168,4 @@ def fmt_feeds(feeds: dict) -> str:
 
 def fmt_help() -> str:
     """Показати приклад фрази для кожної доступної команди."""
-    return _safe('\n'.join(f"{command['title']}: «{_EXAMPLES[intent]}»"
-                           for intent, command in COMMANDS.items()))
+    return _safe(catalog.help_text())
