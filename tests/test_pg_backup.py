@@ -54,7 +54,7 @@ def test_backup_failure_keeps_old_and_no_part(tmp_path, kw):
 
 
 def test_rotate_keeps_recent_and_min_three(tmp_path):
-    for d in (1, 2, 3, 10, 19):
+    for d in (1, 2, 3, 10, 15, 19):          # 3 свіжі (10, 15, 19) — мінімум виконано
         (tmp_path / f'pg_agentdb_202609{d:02d}-0100.dump').write_bytes(b'x')
     (tmp_path / 'notes.txt').write_text('чуже')
     (tmp_path / 'pg_agentdb_20260801-0100.dump.part').write_bytes(b'x')
