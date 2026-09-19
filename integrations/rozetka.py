@@ -190,7 +190,8 @@ class RozetkaClient:
 
     def order_counts(self) -> dict:
         content = self._request('/orders/counts', {})
-        fields = {'new': 'new', 'in_work': 'inNotDone', 'delivering': 'delivering',
+        fields = {'new': 'new', 'not_done': 'inNotDone',   # «невиконані» = скасовані (звірено 20.09: 25+59=84)
+                   'delivering': 'delivering',
                   'done': 'inDone', 'unwatched': 'unwatched'}
         try:
             return {key: int(content[field]) if field in content else None

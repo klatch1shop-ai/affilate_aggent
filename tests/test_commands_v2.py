@@ -24,7 +24,7 @@ class FakeRz:
         self.calls = []
 
     def order_counts(self):
-        return {'new': 2, 'in_work': 25, 'delivering': None, 'done': 59, 'unwatched': 0}
+        return {'new': 2, 'not_done': 25, 'delivering': None, 'done': 59, 'unwatched': 0}
 
     def orders(self, types):
         self.calls.append(('orders', types))
@@ -109,7 +109,7 @@ def test_label_and_buyer_rating_not_connected():
 
 def test_orders_counts():
     out, _ = ask('скільки замовлень у роботі')
-    assert 'Нових: 2' in out and 'У роботі: 25' in out and 'В дорозі: —' in out and 'Виконано: 59' in out
+    assert 'Нових: 2' in out and 'Невиконані (скасовані): 25' in out and 'В дорозі: —' in out and 'Виконано: 59' in out
 
 
 @pytest.mark.parametrize('phrase,shown,hidden', [
@@ -231,3 +231,20 @@ def test_missing_dependency_says_not_connected():
     assert 'backup_status' not in f
     out = services.answer('бекап', f)
     assert out.startswith('⚠️') and 'не підключена' in out
+
+
+def test_orders_search_respects_period():
+    """Живий прогін 20.09: період ігнорувався — «за тиждень» показувало все."""
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    assert services._period_start('week', datetime(2026, 9, 20, 10, 0, tzinfo=ZoneInfo('Europe/Kyiv'))) == '2026-09-13 00:00:00'
+    assert services._period_start(None) is None
+    fresh = (datetime.now(ZoneInfo('Europe/Kyiv')) - timedelta(days=1)).strftime('%Y-%m-%d 10:00:00')
+
+    class Rz(FakeRz):
+        def orders(self, types):
+            return [dict(order(906000010, 3), created='2020-01-01 10:00:00'),
+                    dict(order(906000011, 3), created=fresh)]
+    f = services.build_fetchers(rozetka=Rz())
+    assert [o['id'] for o in f['orders_search'](status='cancelled', period='week')] == [906000011]
+    assert [o['id'] for o in f['orders_search'](status='cancelled')] == [906000010, 906000011]

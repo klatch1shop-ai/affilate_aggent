@@ -31,13 +31,15 @@ def build_fetchers(rozetka=None, novaposhta=None, stock_lookup=None,
         fetchers['orders_new'] = orders_new
         fetchers['order_details'] = order_details
 
-        def orders_search(status, **kwargs):
+        def orders_search(status, period=None, **kwargs):
             groups = {'completed': 2, 'cancelled': 3, 'delivering': 1}
             if status not in groups:
                 raise ValueError('Невідомий стан замовлень')
+            since = _period_start(period)
             return [order for order in rozetka.orders(1)
                     if order.get('status_group') == groups[status]
-                    and (status != 'delivering' or str(order.get('ttn') or '').strip())]
+                    and (status != 'delivering' or str(order.get('ttn') or '').strip())
+                    and (since is None or str(order.get('created') or '') >= since)]
 
         def refunds(**kwargs):
             return ([dict(row, kind='refund') for row in rozetka.refunds()]
@@ -83,6 +85,22 @@ def build_fetchers(rozetka=None, novaposhta=None, stock_lookup=None,
     if supplier_stock is not None:
         fetchers['supplier_stock'] = lambda article, **kwargs: supplier_stock(article)
     return fetchers
+
+
+def _period_start(period, now=None):
+    """Початок періоду як рядок 'YYYY-MM-DD 00:00:00' за Києвом (формат `created` Rozetka).
+
+    20.09: «скасовані замовлення за тиждень» показували всі 25 за весь час — період
+    ігнорувався (прогалина завдання TASK-11, знайдена живим прогоном).
+    """
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    if period is None:
+        return None
+    today = (now or datetime.now(ZoneInfo('Europe/Kyiv'))).date()
+    start = {'today': today, 'yesterday': today - timedelta(days=1),
+             'week': today - timedelta(days=7)}.get(period)
+    return f'{start:%Y-%m-%d} 00:00:00' if start else None
 
 
 def _without_params(function):

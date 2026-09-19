@@ -50,9 +50,9 @@ REFUND_DETAIL = dict(REFUND, order_date='2026-09-18 09:46:44', chat_id=115089894
 
 def test_order_counts_mapping():
     c, _ = client({'/orders/counts': [ok({'unwatched': 0, 'new': 2, 'inNotDone': 25, 'delivering': 3, 'inDone': 59})]})
-    assert c.order_counts() == {'new': 2, 'in_work': 25, 'delivering': 3, 'done': 59, 'unwatched': 0}
+    assert c.order_counts() == {'new': 2, 'not_done': 25, 'delivering': 3, 'done': 59, 'unwatched': 0}
     c2, _ = client({'/orders/counts': [ok({'new': 1})]})
-    assert c2.order_counts() == {'new': 1, 'in_work': None, 'delivering': None, 'done': None, 'unwatched': None}
+    assert c2.order_counts() == {'new': 1, 'not_done': None, 'delivering': None, 'done': None, 'unwatched': None}
 
 
 def test_clean_refund_whitelist():

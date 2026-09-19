@@ -19,7 +19,7 @@ def _text(lines):
 
 def orders_counts(result, params):
     return _text([f'{title}: {_value(result, key)}' for key, title in (
-        ('new', 'Нових'), ('in_work', 'У роботі'), ('delivering', 'В дорозі'),
+        ('new', 'Нових'), ('not_done', 'Невиконані (скасовані)'), ('delivering', 'В дорозі'),
         ('done', 'Виконано'), ('unwatched', 'Непереглянутих'))])
 
 
