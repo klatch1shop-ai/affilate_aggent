@@ -52,3 +52,6 @@ shared/feeds/orders/
 # оптові прайси постачальників — комерційні дані, репо публічне
 data/toptul/private/
 *опт*.xlsx
+
+# журнали інструментів (llm_router тощо) — не в git
+logs/*.jsonl

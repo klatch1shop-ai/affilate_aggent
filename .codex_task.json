@@ -1,0 +1,9 @@
+{
+  "instructions_dir": "docs/tasks",
+  "never": [
+    "tests/*", "docs/tasks/*", "CLAUDE.md", "AGENTS.md", ".codex_task.json",
+    "agents/*", "tg_dispatcher/main.py", "tools/*", "shared/*", "orchestrator/*",
+    "output/*", "data/*", "venv/*", ".claude/*", "docker-compose.yml", "requirements.txt"
+  ],
+  "always": ["docs/reports/*"]
+}
