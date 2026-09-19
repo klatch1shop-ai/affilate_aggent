@@ -1,0 +1,15 @@
+[Unit]
+Description=NOIRE helper bot (чат покупців, текстові команди; лише читання)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/tek/agent-system
+Environment=PATH=/home/tek/agent-system/venv/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/tek/agent-system/venv/bin/python3 helper_bot/main.py
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=default.target
