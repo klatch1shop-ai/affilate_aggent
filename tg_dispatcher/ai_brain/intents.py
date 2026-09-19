@@ -10,6 +10,25 @@ from typing import Any
 _TTN_RE = re.compile(r'\b\d{14}\b')
 _ORDER_ID_RE = re.compile(r'\b\d{9}\b')
 _SKU_RE = re.compile(r'\b([a-zA-Z]{2}\d{4,5})\b')
+_ARTICLE_RE = re.compile(r'\b[a-zA-Z]{2,6}\d{3,8}[a-zA-Z]*(?:-[a-zA-Z]+)*\b')
+_PARAM_KEYWORDS = {
+    'status': {
+        'cancelled': ('скасован', 'отмен'),
+        'completed': ('виконан', 'доставлен', 'отриман'),
+        'delivering': ('в дорозі', 'доставляються', 'отправлен'),
+    },
+    'source': {
+        'toptul': ('toptul', 'топтул'),
+        'noire': ('noire', 'нуар'),
+        'dropoffice': ('dropoffice', 'дропофіс'),
+        'carvol': ('carvol', 'карвол'),
+    },
+    'goods_tab': {
+        'moderation': ('модерац',),
+        'errors': ('помилк',),
+        'hidden': ('прихован',),
+    },
+}
 # Основи слів, а не повні форми: «розетка / розетки / розетці / на розетці».
 # Приймання 16.09: повні форми давали marketplace=None у трьох фразах з чотирьох.
 _MARKETPLACE_KEYWORDS = {
@@ -34,6 +53,17 @@ _PERIOD_KEYWORDS = {
 
 # --- Ключові слова намірів (українська/російська) ---
 _INTENT_KEYWORDS: dict[str, list[str]] = {
+    'ttn_stuck': ['без руху', 'застряг', 'не забрали'],
+    'label': ['етикетк', 'надрукуй', 'друк'],
+    'refunds': ['повернен'],
+    'item_comments': ['відгук', 'питання про товари'],
+    'unanswered_chats': [
+        'чекає відповіді', 'чати без відповіді', 'нові повідомлення покупців',
+    ],
+    'moderation': ['модерац', 'помилки товарів', 'приховані товари'],
+    'balance': ['баланс', 'грошей на баланс'],
+    'invoices': ['рахунк'],
+    'backup_status': ['бекап', 'резервна копія'],
     'orders_new': [
         'замовленн', 'заказ',          # основа слова: «замовлення розетки», «заказы»
         'нові замовлення', 'новые заказы',
@@ -93,8 +123,8 @@ def _normalize(text: str) -> str:
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-def _extract_params(normalized: str) -> dict[str, Any]:
-    """Вилучення параметрів з нормалізованого тексту."""
+def _extract_params(normalized: str, raw: str) -> dict[str, Any]:
+    """Вилучення параметрів зі збереженням дефісів в артикулах."""
     params: dict[str, Any] = {}
 
     # 1. ТТН (14 цифр) — перевіряємо першим
@@ -113,6 +143,10 @@ def _extract_params(normalized: str) -> dict[str, Any]:
     if sku_match:
         # Повертаємо великими літерами
         params['sku'] = sku_match.group(1).upper()
+    else:
+        article_match = _ARTICLE_RE.search(raw)
+        if article_match:
+            params['article'] = article_match.group().upper()
 
     # 4. Маркетплейс
     for keyword, marketplace in _MARKETPLACE_KEYWORDS.items():
@@ -126,15 +160,30 @@ def _extract_params(normalized: str) -> dict[str, Any]:
             params['period'] = period
             break
 
+    for key, values in _PARAM_KEYWORDS.items():
+        for value, keywords in values.items():
+            if any(keyword in normalized for keyword in keywords):
+                params[key] = value
+                break
+
     return params
 
 def _determine_intent(normalized: str, params: dict[str, Any]) -> tuple[str, float]:
     """Визначення наміру та впевненості на основі параметрів та ключових слів."""
     # --- 1. Якщо є параметри, що однозначно визначають намір ---
     if 'ttn' in params:
+        if any(word in normalized for word in ('етикетк', 'надрукуй', 'друк')):
+            return 'label', 1.0
         return 'ttn_status', 1.0
     if 'order_id' in params:
+        if 'повернен' in normalized:
+            return 'refund_detail', 1.0
+        if 'викуп' in normalized or 'рейтинг покупця' in normalized:
+            return 'buyer_rating', 1.0
         return 'order_status', 1.0
+    if ('article' in params or 'sku' in params) and re.search(
+            r'\b[ув] постачальник(?:а|ів)\b', normalized):
+        return 'supplier_stock', 1.0
     if 'sku' in params:
         # Якщо поряд з артикулом є слово про ціну → price_alerts, інакше → stock
         sku_index = normalized.find(params['sku'].lower())
@@ -143,7 +192,20 @@ def _determine_intent(normalized: str, params: dict[str, Any]) -> tuple[str, flo
             return 'price_alerts', 1.0
         return 'stock', 1.0
 
-    # --- 2. Якщо параметрів немає, шукаємо за ключовими словами ---
+    # --- 2. Однозначні комбінації випереджають загальні слова ---
+    if re.search(r'\b(?:без|нема|немає) ттн\b', normalized):
+        return 'orders_without_ttn', 1.0
+    if re.search(r'\bттн від постачальник|\bприйшли ттн\b', normalized):
+        return 'supplier_ttn', 1.0
+    has_orders = bool(re.search(r'\b(?:замовлен|заказ)', normalized))
+    if has_orders and re.search(r'\b(?:скільки|сколько|кількість|количество)\b', normalized):
+        return 'orders_counts', 1.0
+    if has_orders and 'status' in params:
+        return 'orders_search', 1.0
+    if 'відгуки про магазин' in normalized or 'оцінки магазину' in normalized:
+        return 'shop_reviews', 1.0
+
+    # --- 3. Решта — ключові слова зі старою шкалою впевненості ---
     best_intent = 'unknown'
     best_confidence = 0.0
     best_score = 0  # кількість збігів ключових слів
@@ -193,7 +255,7 @@ def parse(text: str) -> dict[str, Any]:
 
     raw_text = text                      # §2.1: raw — вхідний текст без змін
     normalized = _normalize(text)
-    params = _extract_params(normalized)
+    params = _extract_params(normalized, raw_text)
     intent, confidence = _determine_intent(normalized, params)
 
     return {
