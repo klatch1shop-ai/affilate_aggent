@@ -34,8 +34,10 @@ _EXAMPLES = {
 
 
 def _safe(text: str) -> str:
-    """Приховати телефонні номери в усіх текстових полях відповіді."""
-    return _PHONE.sub('[телефон приховано]', text)
+    """Приховати контакти в усіх текстових полях відповіді."""
+    from tg_dispatcher.privacy import mask_private
+
+    return mask_private(text)
 
 
 def missing_params(parsed: dict) -> list:
