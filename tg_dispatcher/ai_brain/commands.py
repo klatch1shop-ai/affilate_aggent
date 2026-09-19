@@ -75,9 +75,16 @@ def dispatch(parsed: dict, fetchers: dict) -> str:
         if intent in formatters:
             return formatters[intent](result)
         return _safe(result)
-    except Exception:
+    except Exception as error:
+        message = f"⚠️ Не вдалося виконати дію: {command['title']}"
+        try:
+            from integrations.errors import ApiError
+        except ImportError:
+            return _safe(message)
+        if isinstance(error, ApiError):
+            return _safe(f'{message} — {error}')
         # Не розкриваємо дані покупців, що могли потрапити в текст винятку.
-        return _safe(f"⚠️ Не вдалося виконати дію: {command['title']}")
+        return _safe(message)
 
 
 def fmt_orders(orders: list) -> str:
