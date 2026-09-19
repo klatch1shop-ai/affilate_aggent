@@ -69,7 +69,8 @@ class InboxStore:
                 ON CONFLICT (marketplace) DO UPDATE SET value=excluded.value
             ''', (marketplace, value))
 
-    def unanswered(self, now: datetime, older_than_min: int) -> list[dict]:
+    def unanswered(self, now: datetime, older_than_min: int,
+                   max_age_min: int | None = None) -> list[dict]:
         """Знайти чати, останнє повідомлення яких очікує відповіді."""
         if now.utcoffset() is None:
             raise ValueError('Поточний час має містити часову зону')
@@ -84,8 +85,11 @@ class InboxStore:
         result = []
         for marketplace, chat_id, buyer_name, created in rows:
             waiting = now - datetime.fromisoformat(created)
+            waiting_min = int(waiting.total_seconds() // 60)
+            if max_age_min is not None and waiting_min > max_age_min:
+                continue
             if waiting > timedelta(minutes=older_than_min):
                 result.append(dict(marketplace=marketplace, chat_id=chat_id,
                                    buyer_name=buyer_name,
-                                   waiting_min=int(waiting.total_seconds() // 60)))
+                                   waiting_min=waiting_min))
         return result

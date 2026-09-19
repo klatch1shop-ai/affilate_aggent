@@ -108,6 +108,14 @@ def fmt_order(order: dict) -> str:
         lines.append(f"{item.get('article', '—')} × {purchase.get('quantity', '—')}")
     if order.get('ttn'):
         lines.append(f"ТТН: {order['ttn']}")
+    info = order.get('ttn_info')
+    if isinstance(info, dict):
+        if 'error' in info:
+            lines.append(f"Посилка: ⚠️ {info['error']}")
+        else:
+            fields = [('Status', 'Посилка'), ('WarehouseRecipient', 'Відділення'),
+                      ('ScheduledDeliveryDate', 'Очікується')]
+            lines.extend(f'{title}: {info[key]}' for key, title in fields if info.get(key))
     return _safe('\n'.join(lines))
 
 

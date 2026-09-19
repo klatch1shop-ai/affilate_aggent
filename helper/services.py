@@ -13,8 +13,21 @@ def build_fetchers(rozetka=None, novaposhta=None, stock_lookup=None,
                 raise ApiError('helper', f'майданчик {marketplace} ще не підключено')
             return rozetka.active_orders()
 
+        def order_details(order_id, **kwargs):
+            order = rozetka.order(order_id)
+            if novaposhta is None:
+                return order
+            order = dict(order)
+            ttn = ''.join(str(order.get('ttn') or '').split())
+            if len(ttn) == 14 and ttn.isascii() and ttn.isdigit():
+                try:
+                    order['ttn_info'] = novaposhta.ttn_status(ttn)
+                except (ApiError, ValueError) as error:
+                    order['ttn_info'] = {'error': str(error)}
+            return order
+
         fetchers['orders_new'] = orders_new
-        fetchers['order_details'] = lambda order_id, **kwargs: rozetka.order(order_id)
+        fetchers['order_details'] = order_details
     if novaposhta is not None:
         fetchers['ttn_status'] = lambda ttn, **kwargs: novaposhta.ttn_status(ttn)
     if stock_lookup is not None:

@@ -177,7 +177,7 @@ def test_digest_problems_and_limits():
     assert '💬 Чати без відповіді: 1' in lines and '🟢 Rozetka · чат 42: 95 хв' in lines
     assert '📦 Фіди з проблемами:' in lines
     assert '❌ prom: вік 500 хв; офферів: 5403' in lines and '❌ epicentr: вік — хв; офферів: 0' in lines
-    assert not any(l.startswith('❌ rozetka') for l in lines)
+    assert not any(l.startswith('❌ rozetka:') for l in lines)
     assert '🖥 Служби з проблемами:' in lines and '❌ rozetka-order-agent: failed' in lines
 
 
