@@ -184,11 +184,51 @@ class RecentStore:
                 if x['waiting_min'] <= REMIND_MAX_MIN]
 
 
+class RozetkaChats:
+    """Чати Rozetka лише ПОШУКОМ — без відкриття.
+
+    19.09 за офіційною документацією (api-seller.rozetka.com.ua/apidoc):
+    * `GET /messages/{id}` («Відкрити чат») ПОЗНАЧАЄ ЧАТ ПРОЧИТАНИМ — власник втратив би
+      позначку «нове» в кабінеті. Тому тут його немає взагалі.
+    * `/messages/search` без `msgType` віддає лише чати по товарах; питання по
+      замовленнях (повернення, «де посилка») — лише з `msgType=orders`.
+    * Пошук з `expand=messages` віддає всю розмову (перевірено: 16/16) і не читає її.
+    Обидва типи зливаються в одну «сторінку» для collect_rozetka; курсор спільний
+    (обходяться всі сторінки обох типів, тож це безпечно).
+    """
+    TYPES = ('items', 'orders')
+
+    def __init__(self, rz):
+        self.rz, self.cache = rz, {}
+
+    def list_page(self, page):
+        chats, pages = [], 0
+        for t in self.TYPES:
+            c = self.rz._request('/messages/search', {'msgType': t, 'page': page,
+                                                      'expand': 'messages', 'sort': '-updated'})
+            pages = max(pages, int((c.get('_meta') or {}).get('pageCount') or 0))
+            for ch in c.get('chats') or []:
+                self.cache[ch['id']] = ch
+                chats.append(ch)
+        return {'chats': chats, '_meta': {'pageCount': pages}}
+
+    def get_chat(self, chat_id):
+        if chat_id in self.cache:
+            return self.cache[chat_id]
+        for t in self.TYPES:
+            c = self.rz._request('/messages/search', {'msgType': t, 'id': chat_id, 'expand': 'messages'})
+            for ch in c.get('chats') or []:
+                if ch['id'] == chat_id:
+                    return ch
+        raise LookupError(f'чат {chat_id} не знайдено')
+
+
 def _init_db():
     STATE['store'] = InboxStore(str(DATA / 'inbox.db'))
     STATE['queue'] = DeliveryQueue(str(DATA / 'queue.db'))
-    STATE['cycle'] = InboxCycle(RecentStore(STATE['store']), STATE['queue'], RZ.chats_page,
-                                RZ.chat, tg_send, lambda: datetime.now(timezone.utc))
+    src = RozetkaChats(RZ)
+    STATE['cycle'] = InboxCycle(RecentStore(STATE['store']), STATE['queue'], src.list_page,
+                                src.get_chat, tg_send, lambda: datetime.now(timezone.utc))
 
 
 async def in_db(fn, *args):
