@@ -40,7 +40,13 @@ load_dotenv(os.path.join(BASE, '.env'))
 OMNIROUTE_URL = os.getenv('OMNIROUTE_URL', 'http://localhost:20128')
 OMNIROUTE_MODEL = os.getenv('OMNIROUTE_MODEL', 'auto')       # 'auto' = шлюз обирає сам
 OLLAMA_URL = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
-CHAIN = [c.strip() for c in os.getenv('LLM_CHAIN', 'omniroute,ollama').split(',') if c.strip()]
+GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models'
+GEMINI_MODELS = [m.strip() for m in os.getenv(
+    'GEMINI_MODELS', 'gemini-flash-lite-latest,gemini-3.1-flash-lite,gemini-3-flash-preview,gemini-flash-latest'
+).split(',') if m.strip()]
+_gemini_day_out = {}                 # модель → дата, коли вичерпано добовий ліміт
+# 19.09.2026: OmniRoute видалено, безкоштовний канал — Gemini (AI Studio, ключ власника).
+CHAIN = [c.strip() for c in os.getenv('LLM_CHAIN', 'gemini,ollama').split(',') if c.strip()]
 LOG = os.path.join(BASE, 'logs', 'llm_router.jsonl')
 COOLDOWN = int(os.getenv('LLM_COOLDOWN', '300'))             # скільки тримати впалий канал вимкненим
 _down = {}                                                   # канал → час, до якого не чіпаємо
@@ -77,6 +83,45 @@ def call_omniroute(prompt, timeout=120, model=None, max_tokens=None):
     return text, d.get('model') or body['model']
 
 
+def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
+    """Gemini через REST AI Studio (безкоштовний тариф). Ключ — лише в заголовку.
+
+    Безкоштовні ліміти — ДОБОВІ й окремі для кожної моделі (19.09: gemini-flash-latest —
+    лише 20 запитів/добу). Тому ланцюжок моделей GEMINI_MODELS: вичерпано добу
+    (429 …PerDay…) — одразу наступна модель; хвилинний ліміт чи 503 — пауза й повтор.
+    Каталогу не віримо: gemini-2.5-* є в списку, але «недоступні новим користувачам».
+    """
+    key = os.getenv('GEMINI_API_KEY', '')
+    if not key:
+        raise RuntimeError('GEMINI_API_KEY не задано')
+    cfg = {'temperature': 0.3}
+    if max_tokens:
+        cfg['maxOutputTokens'] = max_tokens
+    body = {'contents': [{'parts': [{'text': prompt}]}], 'generationConfig': cfg}
+    last = 'нема моделей'
+    for m in ([model] if model else GEMINI_MODELS):
+        if _gemini_day_out.get(m) == time.strftime('%Y-%m-%d'):
+            continue
+        for attempt in range(3):
+            r = requests.post(f'{GEMINI_URL}/{m}:generateContent', timeout=timeout,
+                              headers={'x-goog-api-key': key}, json=body)
+            if r.status_code == 429 and 'PerDay' in r.text:
+                _gemini_day_out[m] = time.strftime('%Y-%m-%d')
+                break
+            if r.status_code not in (429, 503):
+                break
+            time.sleep(5 * (attempt + 1))
+        if r.status_code != 200:
+            last = f'{m}: HTTP {r.status_code}'
+            continue
+        parts = (((r.json().get('candidates') or [{}])[0].get('content') or {}).get('parts') or [])
+        text = ''.join(p.get('text', '') for p in parts if not p.get('thought')).strip()
+        if text:
+            return text, m
+        last = f'{m}: порожня відповідь'
+    raise RuntimeError(f'Gemini: {last}')
+
+
 def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None):
     m = model or _ollama_model(task)
     r = requests.post(f'{OLLAMA_URL}/api/generate',
@@ -102,7 +147,9 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
             continue
         t0 = time.time()
         try:
-            if ch == 'omniroute':
+            if ch == 'gemini':
+                text, model = call_gemini(prompt, timeout, max_tokens=max_tokens)
+            elif ch == 'omniroute':
                 text, model = call_omniroute(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'ollama':
                 text, model = call_ollama(prompt, timeout, task=task, max_tokens=max_tokens)
@@ -132,7 +179,8 @@ def selftest(prompt=None):
     for ch in CHAIN:
         t0 = time.time()
         try:
-            text, model = (call_omniroute(prompt, 90) if ch == 'omniroute'
+            text, model = (call_gemini(prompt, 90) if ch == 'gemini'
+                           else call_omniroute(prompt, 90) if ch == 'omniroute'
                            else call_ollama(prompt, 90, task='text'))
             out.append({'channel': ch, 'ok': True, 'model': model,
                         'ms': int((time.time() - t0) * 1000), 'sample': text[:120]})
