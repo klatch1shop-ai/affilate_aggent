@@ -5599,3 +5599,15 @@ SO5178, знайдені проблеми → причина → правка (�
   наявність), правило в CLAUDE.md, посилання в SKILL-16, інструменти
   `tools/rozetka_photo_audit.py` (до подачі) і `tools/rozetka_source_status.py`
   (після подачі; вада з повторними сторінками API виправлена — 50 → 5).
+
+- **19.09 — звільнення диска ноутбука: 11 → 68 ГБ (рішення власника).**
+  Видалено: образи Docker без контейнерів (TensorFlow 7,7 ГБ, Grafana,
+  Prometheus, CUDA, Adminer, Redis-commander), OmniRoute і Open WebUI
+  (контейнери й образи; том Open WebUI 1 ГБ **лишено** — там можуть бути
+  розмови), кеші pip/uv/npm (6,4 ГБ), моделі Ollama deepseek-coder-v2,
+  llama3.1:8b, dolphin-llama3, aya-expanse, deepseek-coder:6.7b, gemma3:4b
+  (~31 ГБ; лишено llama3.2:3b і qwen2.5:7b — їх використовує model_selector),
+  16 проміжних фідів у output/ (фіди, які згадують інструменти Prom, і
+  noire_epicentr_phase1* лишено). Попутно: контейнер agent_n8n падає по колу —
+  338 перезапусків, «no PostgreSQL user name specified» (давня проблема, не
+  від цих дій). Системний журнал 2,7 ГБ стиснути може лише власник (sudo).
