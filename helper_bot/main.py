@@ -15,6 +15,7 @@
 """
 import asyncio
 import logging
+from concurrent.futures import ThreadPoolExecutor
 import os
 import subprocess
 import sys
@@ -138,9 +139,12 @@ def make_fetchers():
 dp = Dispatcher()
 RZ, FETCHERS = make_fetchers()
 DATA.mkdir(parents=True, exist_ok=True)
-STORE = InboxStore(str(DATA / 'inbox.db'))
-QUEUE = DeliveryQueue(str(DATA / 'queue.db'))
 REMIND_MAX_MIN = int(os.getenv('HELPER_REMIND_MAX_H', '48')) * 60
+# SQLite дозволяє з'єднання лише в потоці, де його створено. Тому вся робота з
+# базами чату — в ОДНОМУ окремому потоці, і бази відкриваються саме в ньому
+# (19.09: перший запуск упав з ProgrammingError, коли цикл пішов через to_thread).
+DB_EXEC = ThreadPoolExecutor(max_workers=1, thread_name_prefix='helper-db')
+STATE = {}
 
 
 class RecentStore:
@@ -159,9 +163,15 @@ class RecentStore:
                 if x['waiting_min'] <= REMIND_MAX_MIN]
 
 
-CYCLE = InboxCycle(RecentStore(STORE), QUEUE, RZ.chats_page, RZ.chat, tg_send,
-                   lambda: datetime.now(timezone.utc))
-LOCK = asyncio.Lock()                   # SQLite і цикл — з одного потоку за раз
+def _init_db():
+    STATE['store'] = InboxStore(str(DATA / 'inbox.db'))
+    STATE['queue'] = DeliveryQueue(str(DATA / 'queue.db'))
+    STATE['cycle'] = InboxCycle(RecentStore(STATE['store']), STATE['queue'], RZ.chats_page,
+                                RZ.chat, tg_send, lambda: datetime.now(timezone.utc))
+
+
+async def in_db(fn, *args):
+    return await asyncio.get_running_loop().run_in_executor(DB_EXEC, fn, *args)
 
 
 def allowed(message: Message) -> bool:
@@ -186,9 +196,8 @@ async def on_start(message: Message):
 async def on_reply(message: Message):
     if not allowed(message):
         return
-    async with LOCK:
-        plan = await asyncio.to_thread(plan_reply, message.reply_to_message.message_id,
-                                       message.text, STORE, REPLY_MODE)
+    plan = await in_db(lambda: plan_reply(message.reply_to_message.message_id,
+                                          message.text, STATE['store'], REPLY_MODE))
     if plan['action'] == 'send':
         # Надсилання в Rozetka ще не перевірене на живому чаті — лише з дозволу власника.
         await message.answer('⚠️ Надсилання покупцю ще не підключене. Текст не надіслано.')
@@ -208,9 +217,8 @@ async def on_text(message: Message):
 async def inbox_loop():
     while True:
         try:
-            async with LOCK:
-                res = await asyncio.to_thread(CYCLE.poll)
-                await asyncio.to_thread(CYCLE.remind)
+            res = await in_db(lambda: STATE['cycle'].poll())
+            await in_db(lambda: STATE['cycle'].remind())
             log.info('чат покупців: нових %s, доставлено %s, у черзі %s, помилок %s',
                      res['new'], res['delivered'], res['queued'], len(res['errors']))
         except Exception:
@@ -222,6 +230,7 @@ async def main():
     if not TOKEN or not ADMIN_ID or not ALLOWED:
         raise SystemExit('Потрібні HELPER_BOT_TOKEN і TELEGRAM_ADMIN_ID у .env')
     bot = Bot(TOKEN)
+    await in_db(_init_db)
     asyncio.create_task(inbox_loop())
     log.info('старт: доступ %s користувачам, режим відповідей %s', len(ALLOWED), REPLY_MODE)
     await dp.start_polling(bot)
