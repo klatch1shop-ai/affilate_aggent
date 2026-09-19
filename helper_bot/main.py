@@ -138,12 +138,37 @@ def system_now():
     return '\n'.join(lines)
 
 
+def unanswered_now():
+    # Окреме з'єднання: команди виконуються в іншому потоці, ніж цикл чатів (SQLite).
+    st = InboxStore(str(DATA / 'inbox.db'))
+    return st.unanswered(datetime.now(timezone.utc), 30, max_age_min=REMIND_MAX_MIN)
+
+
+def backup_now():
+    files = sorted((Path.home() / 'backups' / 'pg').glob('pg_*.dump'), key=lambda p: p.stat().st_mtime)
+    if not files:
+        return {'last': None, 'size_mb': None, 'age_h': None, 'ok': False}
+    last = files[-1]
+    age_h = (time.time() - last.stat().st_mtime) / 3600
+    return {'last': datetime.fromtimestamp(last.stat().st_mtime).strftime('%Y-%m-%d %H:%M'),
+            'size_mb': round(last.stat().st_size / 1024 / 1024, 1), 'age_h': round(age_h, 1),
+            'ok': age_h < 26}
+
+
+def orders_without_ttn_now(rz):
+    active = {o['id']: o for o in rz.orders(4) + rz.orders(2)}.values()
+    return [{'id': o['id'], 'created': o.get('created'), 'source': 'rozetka'}
+            for o in active if not str(o.get('ttn') or '').strip()]
+
+
 def make_fetchers():
     rz = RozetkaClient(http_get, os.getenv('ROZETKA_API_TOKEN', ''), time.sleep)
     np_key = os.getenv('NP_API_KEY', '')
     np = NovaPoshtaClient(http_post, np_key, time.sleep) if np_key else None
     return rz, build_fetchers(rozetka=rz, novaposhta=np, stock_lookup=stock_lookup,
-                              feeds_status=feeds_now, system_status=system_now)
+                              feeds_status=feeds_now, system_status=system_now,
+                              unanswered=unanswered_now, backup_status=backup_now,
+                              orders_without_ttn=lambda: orders_without_ttn_now(rz))
 
 
 # ── Telegram ──────────────────────────────────────────────────────────
@@ -154,10 +179,10 @@ KEYBOARD = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text=t) for t in row] f
 
 
 def help_text():
-    """Лише підключені команди: «Перевірка цін» без джерела даних не показуємо."""
-    lines = [f"{c['title']}: «{commands._EXAMPLES[i]}»" for i, c in commands.COMMANDS.items()
-             if c['fetcher'] is None or c['fetcher'] in FETCHERS]
-    return '\n'.join(lines)
+    """Лише підключені команди, згруповано за каталогом (TASK-09)."""
+    from tg_dispatcher.ai_brain.catalog import help_text as catalog_help
+    available = {i for i, c in commands.ALL_COMMANDS.items() if c['fetcher'] in FETCHERS}
+    return catalog_help(available)
 RZ, FETCHERS = make_fetchers()
 DATA.mkdir(parents=True, exist_ok=True)
 REMIND_MAX_MIN = int(os.getenv('HELPER_REMIND_MAX_H', '48')) * 60
