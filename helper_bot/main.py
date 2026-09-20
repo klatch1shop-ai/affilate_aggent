@@ -41,6 +41,8 @@ from helper.keyboards import MENU, to_query                         # noqa: E402
 from tg_dispatcher.ai_brain import commands                         # noqa: E402
 from helper.feeds import feeds_status                               # noqa: E402
 from helper.inbox_cycle import DeliveryQueue, InboxCycle            # noqa: E402
+from helper.selfcheck import render as selfcheck_render, run_checks  # noqa: E402
+from helper.testplan import test_text                               # noqa: E402
 from helper.services import answer, build_fetchers                  # noqa: E402
 from integrations.novaposhta import NovaPoshtaClient                # noqa: E402
 from integrations.rozetka import RozetkaClient                      # noqa: E402
@@ -182,6 +184,144 @@ def make_fetchers():
                               orders_without_ttn=lambda: orders_without_ttn_now(rz))
 
 
+def _rows(sql, params=()):
+    """Читання з Postgres одним запитом. Тільки SELECT."""
+    from shared.utils.db import get_connection
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(sql, params)
+        return [dict(r) for r in cur.fetchall()]
+    finally:
+        conn.close()
+
+
+def funnel_now(sku):
+    """Воронка товару зі справжніх даних (TASK-28). Лише читання."""
+    import json
+    from research import funnel
+    prod = _rows('SELECT sku, name_uk, price_our, price_supplier FROM my_products '
+                 'WHERE upper(sku) = upper(%s) LIMIT 1', (sku,))
+    if not prod:
+        return f'Товару {sku} нема в базі my_products'
+    prod = prod[0]
+    sku = prod['sku']
+    market = _rows('SELECT min_price, median_price, sellers_count, analyzed_at '
+                   'FROM market_prices WHERE sku = %s ORDER BY analyzed_at DESC LIMIT 1', (sku,))
+    prices = []
+    if market and market[0]['min_price']:
+        m = market[0]
+        prices = [{'seller': f"ринок ({m['sellers_count']} продавців)", 'price': float(m['min_price'])},
+                  {'seller': 'медіана ринку', 'price': float(m['median_price'] or m['min_price'])}]
+    orders = []
+    for r in _rows('SELECT id, status, total_price, items, created_at FROM orders'):
+        items = r['items'] if isinstance(r['items'], list) else json.loads(r['items'] or '[]')
+        if not any(str(i.get('sku') or '').upper() == sku.upper() for i in items):
+            continue
+        created = r['created_at']
+        if created.tzinfo is None:
+            created = created.replace(tzinfo=timezone.utc)
+        orders.append({'id': r['id'], 'created': created,
+                       'status': {'confirmed': 'done', 'delivered': 'done',
+                                  'cancelled': 'cancelled'}.get(r['status'], 'processing'),
+                       'sum': float(r['total_price'] or 0)})
+    f = funnel.build(sku, orders=orders, returns=[], questions=[], reviews=[], prices=prices,
+                     our_price=float(prod['price_our']) if prod['price_our'] else None,
+                     now=datetime.now(timezone.utc))
+    text = f"{prod['name_uk'] or ''}\n{funnel.report(f)}"
+    if market:
+        text += f"\n⚠️ Ціни ринку зібрані {str(market[0]['analyzed_at'])[:10]}"
+    elif prices == []:
+        text += '\n⚠️ Цін конкурентів для цього SKU у базі нема'
+    return text
+
+
+def hypotheses_now():
+    """Відкриті гіпотези й звірки, яким настав час (TASK-25)."""
+    from research.hypotheses import HypothesisStore, render as render_h
+    st = HypothesisStore(str(DATA / 'hypotheses.db'))
+    now = datetime.now(timezone.utc)
+    s = st.summary(now)
+    lines = [f"🔎 Гіпотези: відкритих {s['open']} · підтверджених {s['confirmed']} · "
+             f"спростованих {s['rejected']} · неясних {s['unclear']} · звірок сьогодні {s['due']}"]
+    for h in st.open_items()[:5]:
+        lines.append('')
+        lines.append(render_h(h))
+    for d in st.due(now)[:5]:
+        lines.append(f"⏰ час звіряти: {d['subject']} — {d['text']} (етап {d['stage']} дн)")
+    if s['open'] == 0:
+        lines.append('Поки жодної гіпотези не записано — це нормально, модуль щойно підключений.')
+    return '\n'.join(lines)
+
+
+def build_selfchecks():
+    """Перевірки нових модулів на справжніх даних. Лише читання, нічого не надсилають."""
+    from content import edit_plan, ingest, photo_facts, trends, voice
+    from research import debate, funnel, hypotheses, veto
+
+    def check_veto():
+        plan = {'kind': 'price_update', 'sku': 'TEST', 'marketplace': 'rozetka', 'source': 'noire',
+                'mode': 'live', 'fields': {'price': 10.0}, 'files': [], 'text': ''}
+        ctx = {'floor': {'TEST': 100.0}, 'approved': False, 'evidence': []}
+        problems = veto.check(plan, ctx)
+        assert veto.verdict(problems) == 'stop', problems
+        return f'ціна 10 при порозі 100 → {veto.verdict(problems)}, правил спрацювало {len(problems)}'
+
+    def check_funnel():
+        rows = _rows('SELECT sku FROM my_products WHERE price_our IS NOT NULL LIMIT 1')
+        if not rows:
+            return 'у my_products нема товарів з ціною'
+        out = funnel_now(rows[0]['sku'])
+        wanted = [l for l in out.splitlines() if l.startswith(('Замовлення:', 'Ціна:'))]
+        return f"{rows[0]['sku']}: " + ' | '.join(wanted or out.splitlines()[:1])
+
+    def check_hypotheses():
+        st = hypotheses.HypothesisStore(str(DATA / 'hypotheses.db'))
+        return f"база {DATA / 'hypotheses.db'} відкрита, відкритих {len(st.open_items())}"
+
+    def check_debate():
+        ev = [{'id': 'e1', 'text': 'доказ'}]
+        pro = debate.parse_side('[{"point": "теза", "refs": ["e1"]}]')
+        con = debate.parse_side('[{"point": "здогад", "refs": []}]')
+        m = debate.merge(pro, con, ev)
+        return f"зараховано за {len(m['for'])}, проти {len(m['against'])}, підсумок {m['balance']}"
+
+    def check_photo_facts():
+        c = photo_facts.compare({'weight': '190 г'}, {'weight': '180 g'})
+        return photo_facts.report(c).splitlines()[0] + ' (190 г проти 180 g)'
+
+    def check_trends():
+        v = {'id': 'x', 'title': 'т', 'url': 'u', 'channel': 'к', 'views': 1000,
+             'upload_date': (datetime.now(timezone.utc).date().strftime('%Y%m%d'))}
+        return f"швидкість {trends.velocity(v, datetime.now(timezone.utc).date()):.0f} переглядів/день"
+
+    def check_video():
+        script = {'hook': 'Гачок', 'points': ['раз', 'два', 'три'], 'cta': 'Замовляй'}
+        lines = voice.plan_lines(script)
+        shots = edit_plan.plan_shots(['/a.jpg', '/b.jpg'], [3.0, 3.0])
+        cmd = edit_plan.command(['/a.jpg', '/b.jpg'], [3.0, 3.0], '/out.mp4')
+        return f'реплік {len(lines)}, кадрів {len(shots)}, аргументів ffmpeg {len(cmd)}'
+
+    def check_ingest():
+        note = ingest.build_note(ingest.parse_report('# Перевірка\n\n**Дата:** 20.09.2026.\n\n'
+                                                    '## Секція\nТекст, тел 0671234567.\n'),
+                                 source='самоперевірка', known=['Rozetka'])
+        assert '0671234567' not in note['content']
+        return f"нотатка {note['path']}, телефон замаскований"
+
+    def check_feeds():
+        st = feeds_now()
+        return ' · '.join(
+            f"{k}: {'✅' if v['ok'] else '❌'} {v['age_min']} хв, {v['offers']} товарів"
+            for k, v in st.items())
+
+    return [('ризик-вето (27)', check_veto), ('воронка товару (28)', check_funnel),
+            ('памʼять гіпотез (25)', check_hypotheses), ('спір за/проти (26)', check_debate),
+            ('факти за фото (31)', check_photo_facts), ('радар трендів (32)', check_trends),
+            ('озвучка й монтаж (29, 30)', check_video), ('нотатки Obsidian (20)', check_ingest),
+            ('стан фідів', check_feeds)]
+
+
 # ── Telegram ──────────────────────────────────────────────────────────
 
 dp = Dispatcher()
@@ -299,7 +439,49 @@ async def on_start(message: Message):
                          + help_text()
                          + f'\n\nНові повідомлення покупців Rozetka приходять сюди карткою.'
                          f'\nВідповіді покупцям: режим «{REPLY_MODE}».'
-                         '\nЩоранку о 9:00 — короткий звіт.', reply_markup=KEYBOARD)
+                         '\nЩоранку о 9:00 — короткий звіт.'
+                         '\n\n/тест — покрокова інструкція для перевірки,'
+                         '\n/самоперевірка — прогін усіх нових модулів.', reply_markup=KEYBOARD)
+
+
+@dp.message(Command('test'))
+@dp.message(Command('тест'))
+async def on_test(message: Message):
+    if not allowed(message):
+        return
+    await message.answer(test_text(), parse_mode=None, reply_markup=KEYBOARD)
+
+
+@dp.message(Command('selfcheck'))
+@dp.message(Command('самоперевірка'))
+async def on_selfcheck(message: Message):
+    if not allowed(message):
+        return
+    await message.answer('Перевіряю модулі на справжніх даних…')
+    results = await asyncio.to_thread(lambda: run_checks(build_selfchecks()))
+    await message.answer(selfcheck_render(results)[:4000], parse_mode=None)
+
+
+@dp.message(Command('funnel'))
+@dp.message(Command('воронка'))
+async def on_funnel(message: Message):
+    if not allowed(message):
+        return
+    parts = (message.text or '').split(maxsplit=1)
+    if len(parts) < 2:
+        await message.answer('Вкажіть артикул: /воронка SO3142')
+        return
+    text = await asyncio.to_thread(funnel_now, parts[1].strip())
+    await message.answer(text[:4000], parse_mode=None)
+
+
+@dp.message(Command('hypotheses'))
+@dp.message(Command('гіпотези'))
+async def on_hypotheses(message: Message):
+    if not allowed(message):
+        return
+    text = await asyncio.to_thread(hypotheses_now)
+    await message.answer(text[:4000], parse_mode=None)
 
 
 @dp.message(F.reply_to_message, F.text)

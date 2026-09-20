@@ -25,3 +25,4 @@ gspread
 google-auth
 google-auth-httplib2
 google-api-python-client
+aiogram>=3.31
