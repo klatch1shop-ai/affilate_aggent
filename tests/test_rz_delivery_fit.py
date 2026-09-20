@@ -165,8 +165,8 @@ def test_select_buckets():
     assert [r['sku'] for r in s['overpriced']] == ['E']
     assert [r['sku'] for r in s['ready']] == ['A']
     assert {r['sku'] for r in s['no_price']} == {'D', 'F'}
-    assert s['low_margin'] == []
-    assert s['totals']['all'] == 6 and s['totals']['ready'] == 1
+    assert 'low_margin' not in s
+    assert s['totals']['all'] == 6 and s['totals']['ready'] == 1 and s['totals']['raised'] == 0
     assert s['profit_sum'] == pytest.approx(265.32)
 
 
@@ -187,10 +187,13 @@ def test_select_missing_rates_without_default():
     assert s['no_price'][0]['price'] is None
 
 
-def test_select_low_margin():
+def test_min_profit_raises_price_instead_of_dropping():
+    # price_item сам піднімає ціну під потрібний прибуток — «малої маржі» бути не може
     s = rz.select([item('A')], RATES, min_profit=1000.0)
-    assert [r['sku'] for r in s['low_margin']] == ['A'] and s['ready'] == []
-    assert s['profit_sum'] == 0.0
+    assert [r['sku'] for r in s['ready']] == ['A']
+    assert s['ready'][0]['profit'] >= 1000.0
+    assert s['ready'][0]['price'] > rz.select([item('A')], RATES)['ready'][0]['price']
+    assert s['totals']['raised'] == 1
 
 
 def test_select_empty():
@@ -205,10 +208,17 @@ def test_report():
     assert lines[0] == '📦 Доставка в магазини ROZETKA: підходить 1 з 6'
     assert lines[1].startswith('Прохідні: очікуваний прибуток 265.32 ₴')
     assert 'доставка 35 ₴ уже врахована' in lines[1]
-    assert lines[2] == ('Завеликі: 1 · Дорожчі за конкурентів: 1 · Без ціни: 2 · '
-                        'Мала маржа: 0 · Без габаритів: 1')
+    assert lines[2] == 'Завеликі: 1 · Дорожчі за конкурентів: 1 · Без ціни: 2 · Без габаритів: 1'
     assert lines[3] == '⚠️ Без габаритів не можна вважати прохідними — це 1 товар'
     assert lines[4] == '• A — 976 ₴, прибуток 265.32 ₴'
+    assert not any(l.startswith('Ціну підняли') for l in lines)
+
+
+def test_report_mentions_raised_price():
+    s = rz.select([item('A', wholesale=900.0, rrp=910.0)], RATES)
+    lines = rz.report(s).splitlines()
+    assert s['totals']['raised'] == 1
+    assert 'Ціну підняли вище РРЦ заради беззбитковості: 1' in lines
 
 
 def test_report_no_ready_and_empty():
