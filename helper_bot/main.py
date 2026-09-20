@@ -343,6 +343,13 @@ def digest_if_due():
 
 
 async def inbox_loop():
+    # Один раз на старті: давні відкриті розмови (покупець написав, відповіді нема),
+    # яких ще не показували карткою — TASK-12.
+    try:
+        added = await in_db(lambda: STATE['cycle'].backfill())
+        log.info('дозавантаження відкритих розмов: %s', added)
+    except Exception:
+        log.exception('дозавантаження відкритих розмов')
     while True:
         try:
             res = await in_db(lambda: STATE['cycle'].poll())
