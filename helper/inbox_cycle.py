@@ -41,7 +41,8 @@ class DeliveryQueue:
 
 class InboxCycle:
     def __init__(self, store, queue, list_page, get_chat, send, clock,
-                 remind_after_min: int = 30, remind_every_min: int = 60):
+                 remind_after_min: int = 30, remind_every_min: int = 60,
+                 backfill_days: int = 7, remind_schedule=None):
         self.store = store
         self.queue = queue
         self.list_page = list_page
@@ -50,9 +51,26 @@ class InboxCycle:
         self.clock = clock
         self.remind_after_min = remind_after_min
         self.remind_every_min = remind_every_min
+        self.backfill_days = backfill_days
+        self.remind_schedule = (tuple(remind_schedule) if remind_schedule is not None
+                                else (remind_every_min, 180, 360, 1440))
+        if not self.remind_schedule or any(pause < 0 for pause in self.remind_schedule):
+            raise ValueError('Розклад нагадувань має містити невід’ємні паузи')
         self._alert_errors = frozenset()
-        self._reminded_at = None
-        self._reminded_chats = frozenset()
+
+    def backfill(self) -> int:
+        """Поставити в чергу нитки відкритих чатів, які ще не показували."""
+        linked = self.store.linked_chats()
+        count = 0
+        for item in self.store.open_chats(self.clock(), self.backfill_days):
+            marketplace, chat_id = item['marketplace'], item['chat_id']
+            if (marketplace, chat_id) in linked:
+                continue
+            messages = self.store._last_messages(marketplace, chat_id, 3)
+            self.queue.push(f'{marketplace}:thread:{chat_id}', render.thread_card(messages),
+                            marketplace, chat_id)
+            count += 1
+        return count
 
     def poll(self) -> dict:
         res = collect.collect_rozetka(self.list_page, self.get_chat, self.store,
@@ -95,18 +113,21 @@ class InboxCycle:
     def remind(self) -> str | None:
         now = self.clock()
         items = self.store.unanswered(now, self.remind_after_min)
-        if not items:
+        due = []
+        for item in items:
+            state = self.store._reminder_state(item['marketplace'], item['chat_id'])
+            if state is not None:
+                sent_at, count = state
+                pause = self.remind_schedule[min(count - 1, len(self.remind_schedule) - 1)]
+                if now - sent_at < timedelta(minutes=pause):
+                    continue
+            due.append(item)
+        if not due:
             return None
-        chats = frozenset((item['marketplace'], item['chat_id']) for item in items)
-        if (self._reminded_at is not None
-                and now - self._reminded_at < timedelta(minutes=self.remind_every_min)
-                and not chats.difference(self._reminded_chats)):
-            return None
-        text = render.reminder(items)
+        text = render.reminder_detail(due)
         try:
             self.send(text)
         except Exception:
             return None
-        self._reminded_at = now
-        self._reminded_chats = chats
+        self.store._record_reminders(due, now)
         return text

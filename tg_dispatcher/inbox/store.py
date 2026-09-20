@@ -2,8 +2,9 @@
 
 import sqlite3
 from dataclasses import astuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
+from tg_dispatcher.privacy import mask_private
 from .model import BuyerMessage
 
 
@@ -26,6 +27,11 @@ class InboxStore:
             );
             CREATE TABLE IF NOT EXISTS cursors (
                 marketplace TEXT PRIMARY KEY, value TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS reminder_state (
+                marketplace TEXT NOT NULL, chat_id TEXT NOT NULL,
+                sent_at TEXT NOT NULL, sent_count INTEGER NOT NULL,
+                PRIMARY KEY (marketplace, chat_id)
             );
         ''')
 
@@ -57,6 +63,53 @@ class InboxStore:
             'SELECT marketplace, chat_id FROM tg_links WHERE tg_message_id=?',
             (tg_message_id,)).fetchone()
 
+    def linked_chats(self) -> set[tuple[str, str]]:
+        """Повернути чати, картки яких уже доставлено."""
+        return set(self._db.execute('SELECT DISTINCT marketplace, chat_id FROM tg_links'))
+
+    def _last_messages(self, marketplace: str, chat_id: str,
+                       limit: int = 3) -> list[BuyerMessage]:
+        """Прочитати останні повідомлення чату в часовому порядку."""
+        if limit <= 0:
+            return []
+        rows = self._db.execute('''
+            SELECT marketplace, chat_id, msg_id, direction, body, created,
+                   buyer_name, subject, order_id, item_id, has_files
+            FROM messages WHERE marketplace=? AND chat_id=?
+            ORDER BY created DESC, rowid DESC LIMIT ?
+        ''', (marketplace, chat_id, limit)).fetchall()
+        messages = []
+        for row in reversed(rows):
+            values = list(row)
+            values[5] = datetime.fromisoformat(values[5])
+            values[10] = bool(values[10])
+            messages.append(BuyerMessage(*values))
+        return messages
+
+    def _reminder_state(self, marketplace: str, chat_id: str):
+        """Прочитати час і кількість успішних нагадувань."""
+        row = self._db.execute('''
+            SELECT sent_at, sent_count FROM reminder_state
+            WHERE marketplace=? AND chat_id=?
+        ''', (marketplace, chat_id)).fetchone()
+        return (datetime.fromisoformat(row[0]), row[1]) if row else None
+
+    def _record_reminders(self, items: list[dict], now: datetime) -> None:
+        """Атомарно врахувати лише успішно надіслані нагадування."""
+        with self._db:
+            self._db.executemany('''
+                INSERT INTO reminder_state VALUES (?, ?, ?, 1)
+                ON CONFLICT (marketplace, chat_id) DO UPDATE SET
+                    sent_at=excluded.sent_at, sent_count=reminder_state.sent_count + 1
+            ''', [(item['marketplace'], item['chat_id'],
+                   now.astimezone(timezone.utc).isoformat()) for item in items])
+
+    def open_chats(self, now: datetime, max_age_days: int = 7) -> list[dict]:
+        """Знайти відкриті чати, молодші за задану кількість діб."""
+        max_age = timedelta(days=max_age_days)
+        return [item for item, waiting in self._waiting_chats(now)
+                if timedelta(0) <= waiting < max_age]
+
     def get_cursor(self, marketplace: str) -> str | None:
         row = self._db.execute('SELECT value FROM cursors WHERE marketplace=?',
                                (marketplace,)).fetchone()
@@ -72,24 +125,29 @@ class InboxStore:
     def unanswered(self, now: datetime, older_than_min: int,
                    max_age_min: int | None = None) -> list[dict]:
         """Знайти чати, останнє повідомлення яких очікує відповіді."""
+        result = []
+        for item, waiting in self._waiting_chats(now):
+            if max_age_min is not None and item['waiting_min'] > max_age_min:
+                continue
+            if waiting > timedelta(minutes=older_than_min):
+                result.append(item)
+        return result
+
+    def _waiting_chats(self, now: datetime):
+        """Прочитати контекст останніх вхідних повідомлень відкритих чатів."""
         if now.utcoffset() is None:
             raise ValueError('Поточний час має містити часову зону')
         rows = self._db.execute('''
-            SELECT marketplace, chat_id, buyer_name, created FROM (
+            SELECT marketplace, chat_id, buyer_name, created, subject, body FROM (
                 SELECT *, ROW_NUMBER() OVER (
                     PARTITION BY marketplace, chat_id ORDER BY created DESC, rowid DESC
                 ) AS position FROM messages
             ) WHERE position=1 AND direction='in'
             ORDER BY created
         ''')
-        result = []
-        for marketplace, chat_id, buyer_name, created in rows:
+        for marketplace, chat_id, buyer_name, created, subject, body in rows:
             waiting = now - datetime.fromisoformat(created)
             waiting_min = int(waiting.total_seconds() // 60)
-            if max_age_min is not None and waiting_min > max_age_min:
-                continue
-            if waiting > timedelta(minutes=older_than_min):
-                result.append(dict(marketplace=marketplace, chat_id=chat_id,
-                                   buyer_name=buyer_name,
-                                   waiting_min=waiting_min))
-        return result
+            yield (dict(marketplace=marketplace, chat_id=chat_id,
+                        buyer_name=buyer_name, subject=subject,
+                        last_text=mask_private(body)[:200], waiting_min=waiting_min), waiting)

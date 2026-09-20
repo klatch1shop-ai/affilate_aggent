@@ -6,18 +6,20 @@ from .normalize import from_rozetka
 
 
 def collect_rozetka(list_page, get_chat, store, now: datetime,
-                    first_run_hours: int = 24, max_pages: int = 20) -> dict:
+                    first_run_hours: int = 24, max_pages: int = 20,
+                    msg_type: str | None = None) -> dict:
     """Обійти список чатів, не зсуваючи курсор за неповного збору."""
     if now.utcoffset() is None or max_pages < 1:
         raise ValueError('Потрібні час із зоною та додатна межа сторінок')
-    cursor = store.get_cursor('rozetka')
+    cursor_key = 'rozetka' if msg_type is None else f'rozetka:{msg_type}'
+    cursor = store.get_cursor(cursor_key)
     result = dict(new=[], cursor=cursor, errors=[], chats_checked=0)
     newest = cursor
     cutoff = now - timedelta(hours=first_run_hours)
     page, page_count = 1, 1
     while page <= min(page_count, max_pages):
         try:
-            content = list_page(page)
+            content = list_page(page) if msg_type is None else list_page(page, msg_type)
             page_count = max(page_count, int(content['_meta']['pageCount']))
             chats = content['chats']
         except Exception:
@@ -44,6 +46,6 @@ def collect_rozetka(list_page, get_chat, store, now: datetime,
             f'Неповний обхід: отримано {page - 1} сторінок із {page_count}')
     result['new'].sort(key=lambda msg: msg.created)
     if not result['errors'] and newest is not None:
-        store.set_cursor('rozetka', newest)
+        store.set_cursor(cursor_key, newest)
         result['cursor'] = newest
     return result
