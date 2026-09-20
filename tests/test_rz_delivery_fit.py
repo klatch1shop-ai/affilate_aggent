@@ -7,7 +7,7 @@ import importlib
 
 import pytest
 
-rz = importlib.import_module('tools.rz_delivery_fit')
+rz = importlib.import_module('research.rz_delivery_fit')
 
 RANGES = [[0, 4999, 18], [5000, 9999, 10], [10000, 19999, 7], [20000, 999999999, 5]]
 DIMS_OK = {'length': 20.0, 'width': 10.0, 'height': 5.0, 'weight': 1.2}
