@@ -26,7 +26,8 @@ from pathlib import Path
 import requests
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, CommandStart
-from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from aiogram.types import (CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup,
+                           KeyboardButton, Message, ReplyKeyboardMarkup)
 from dotenv import load_dotenv
 
 BASE = Path(__file__).resolve().parent.parent
@@ -34,6 +35,7 @@ sys.path.insert(0, str(BASE))
 load_dotenv(BASE / '.env')
 
 from helper.access import is_allowed, parse_ids                     # noqa: E402
+from helper.ack import AckStore                                     # noqa: E402
 from helper.digest import build_digest, due                         # noqa: E402
 from helper.keyboards import MENU, to_query                         # noqa: E402
 from tg_dispatcher.ai_brain import commands                         # noqa: E402
@@ -90,11 +92,20 @@ def http_post(url, json=None, headers=None):
     return _call('POST', url, json=json, headers=headers)
 
 
+ACK_BUTTON = {'inline_keyboard': [[{'text': '✅ Прочитав', 'callback_data': 'ack_all'}]]}
+
+
 def tg_send(text):
-    """Синхронне надсилання власнику (для InboxCycle, що працює в потоці)."""
-    status, body = _call('POST', f'{TG_API}/sendMessage', json={
-        'chat_id': ADMIN_ID, 'text': text, 'parse_mode': 'HTML',
-        'disable_web_page_preview': True})
+    """Надсилання власнику (для InboxCycle в окремому потоці).
+
+    Під нагадуванням «⏰ …» — кнопка «Прочитав»: далі цей чат мовчить добу,
+    поки покупець не напише знову (TASK-13, AckStore).
+    """
+    payload = {'chat_id': ADMIN_ID, 'text': text, 'parse_mode': 'HTML',
+               'disable_web_page_preview': True}
+    if text.startswith('⏰'):
+        payload['reply_markup'] = ACK_BUTTON
+    status, body = _call('POST', f'{TG_API}/sendMessage', json=payload)
     if status != 200 or not (body or {}).get('ok'):
         raise ConnectionError(f'Telegram {status}')
     return body['result']['message_id']
@@ -205,8 +216,19 @@ class RecentStore:
         return getattr(self._store, name)
 
     def unanswered(self, now, older_than_min):
-        return [x for x in self._store.unanswered(now, older_than_min)
-                if x['waiting_min'] <= REMIND_MAX_MIN]
+        out = []
+        for x in self._store.unanswered(now, older_than_min):
+            if x['waiting_min'] > REMIND_MAX_MIN:
+                continue
+            last = self._last_msg_id(x['marketplace'], x['chat_id'])
+            if STATE['ack'].is_acked(x['marketplace'], x['chat_id'], now=now, last_msg_id=last):
+                continue
+            out.append(dict(x, last_msg_id=last))
+        return out
+
+    def _last_msg_id(self, marketplace, chat_id):
+        msgs = self._store._last_messages(marketplace, chat_id, 1)
+        return msgs[0].msg_id if msgs else ''
 
 
 class RozetkaChats:
@@ -251,6 +273,7 @@ class RozetkaChats:
 def _init_db():
     STATE['store'] = InboxStore(str(DATA / 'inbox.db'))
     STATE['queue'] = DeliveryQueue(str(DATA / 'queue.db'))
+    STATE['ack'] = AckStore(str(DATA / 'ack.db'))
     src = RozetkaChats(RZ)
     STATE['cycle'] = InboxCycle(RecentStore(STATE['store']), STATE['queue'], src.list_page,
                                 src.get_chat, tg_send, lambda: datetime.now(timezone.utc))
@@ -340,6 +363,25 @@ def digest_if_due():
     from helper.digest import KYIV
     DIGEST_STATE.write_text(now.astimezone(KYIV).strftime('%Y-%m-%d'))
     return text
+
+
+@dp.callback_query(F.data == 'ack_all')
+async def on_ack(call: CallbackQuery):
+    """«Прочитав»: тиша по всіх чатах, що зараз чекають, доки покупець не напише знову."""
+    if not call.from_user or not is_allowed(call.from_user.id, ALLOWED):
+        return await call.answer('Немає доступу')
+
+    def do():
+        now = datetime.now(timezone.utc)
+        chats = STATE['store'].unanswered(now, 0, max_age_min=REMIND_MAX_MIN)
+        for c in chats:
+            last = STATE['cycle'].store._last_msg_id(c['marketplace'], c['chat_id'])
+            STATE['ack'].ack(c['marketplace'], c['chat_id'], now=now, last_msg_id=last,
+                             user_id=call.from_user.id)
+        return len(chats)
+
+    n = await in_db(do)
+    await call.answer(f'✅ Записав: {n} чат(ів) мовчать добу')
 
 
 async def inbox_loop():
