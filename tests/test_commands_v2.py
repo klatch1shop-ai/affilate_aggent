@@ -3,6 +3,8 @@
 Написані замовником ДО виконання. Виконавець їх не змінює. Дані вигадані.
 """
 import importlib
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -12,8 +14,13 @@ views = importlib.import_module('tg_dispatcher.ai_brain.views')
 services = importlib.import_module('helper.services')
 
 
+# Дата «вчора» рахується під час запуску: із зашитою датою тест «виконані замовлення
+# вчора» зеленів лише в один конкретний день (упав 21.09, коли вчора стало 20.09).
+YESTERDAY = (datetime.now(ZoneInfo('Europe/Kyiv')) - timedelta(days=1)).strftime('%Y-%m-%d 10:00:00')
+
+
 def order(oid, group, ttn=None, amount='100.00'):
-    return {'id': oid, 'created': '2026-09-19 10:00:00', 'status': 1, 'status_group': group, 'amount': amount,
+    return {'id': oid, 'created': YESTERDAY, 'status': 1, 'status_group': group, 'amount': amount,
             'cost': amount, 'ttn': ttn, 'total_quantity': 1, 'purchases': []}
 
 
