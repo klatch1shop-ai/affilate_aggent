@@ -124,8 +124,10 @@ def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
 
 def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None):
     m = model or _ollama_model(task)
-    r = requests.post(f'{OLLAMA_URL}/api/generate',
-                      json={'model': m, 'prompt': prompt, 'stream': False}, timeout=timeout)
+    body = {'model': m, 'prompt': prompt, 'stream': False}
+    if max_tokens:                      # інакше параметр був порожньою обіцянкою (аудит TASK-36)
+        body['options'] = {'num_predict': int(max_tokens)}
+    r = requests.post(f'{OLLAMA_URL}/api/generate', json=body, timeout=timeout)
     r.raise_for_status()
     text = (r.json().get('response') or '').strip()
     if not text:
