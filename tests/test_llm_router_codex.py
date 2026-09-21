@@ -122,3 +122,19 @@ def test_ask_escalation_only_after_chain_exhausted(monkeypatch, tmp_path):
     monkeypatch.setattr(router, 'call_codex', lambda *a, **k: called.append(1) or ('x', 'codex-exec'))
     out = router.ask('питання', min_len=1, escalate_to_codex=True)
     assert out['channel'] == 'gemini' and called == []
+
+
+def test_usage_limit_raises_specific_error(monkeypatch):
+    err = 'OpenAI Codex v0.155\nuser\nхай\nERROR: You’ve hit your usage limit. try again at Sep 22nd'
+    monkeypatch.setattr(router.subprocess, 'run', FakeRun(returncode=1, stderr=err, write_text=''))
+    with pytest.raises(router.CodexLimitError) as e:
+        router.call_codex('питання')
+    assert 'usage limit' in str(e.value)
+
+
+def test_other_failure_keeps_stderr_tail_not_banner(monkeypatch):
+    err = 'BANNER ' * 100 + '\nсправжня причина збою'
+    monkeypatch.setattr(router.subprocess, 'run', FakeRun(returncode=1, stderr=err, write_text=''))
+    with pytest.raises(RuntimeError) as e:
+        router.call_codex('питання')
+    assert 'справжня причина' in str(e.value)

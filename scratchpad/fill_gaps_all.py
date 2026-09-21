@@ -9,7 +9,7 @@ import base64, collections, json, os, re, sys, tempfile, time, requests
 sys.path.insert(0, os.path.expanduser('~/agent-system'))
 from dotenv import load_dotenv; load_dotenv(os.path.expanduser('~/agent-system/.env'))
 from shared.utils.db import get_connection
-from shared.utils.llm_router import call_codex
+from shared.utils.llm_router import call_codex, CodexLimitError
 
 SP = os.path.dirname(os.path.abspath(__file__))
 API = 'https://core-api.epicentrm.com.ua'
@@ -19,6 +19,8 @@ KEY = os.getenv('GEMINI_API_KEY')
 CHECKPOINT = f'{SP}/fill_gaps_all_progress.json'
 BREAKER_LIMIT = 20          # підряд провалів обох джерел — стоп
 MAX_ATTRS_PER_CARD = 2
+MAX_CODEX_CALLS = int(os.getenv('MAX_CODEX_CALLS', '60'))   # бюджет ескалацій за прогін (спільна квота Codex)
+codex_calls = 0
 
 s = requests.Session()
 def login():
@@ -58,6 +60,10 @@ def gemini(parts, escalation_prompt=None, image_bytes=None):
         break
     if not escalation_prompt:
         return f'HTTP{"?" if g is None else g.status_code}', 0, 'gemini'
+    global codex_calls
+    if codex_calls >= MAX_CODEX_CALLS:
+        return 'CODEX_FAIL:бюджет ескалацій вичерпано', 0, 'codex'
+    codex_calls += 1
     img_path = None
     try:
         if image_bytes:
@@ -65,6 +71,10 @@ def gemini(parts, escalation_prompt=None, image_bytes=None):
                 f.write(image_bytes); img_path = f.name
         txt, _ = call_codex(escalation_prompt, image_path=img_path, timeout=180)
         return txt, 0, 'codex'
+    except CodexLimitError as e:
+        print(f'\nСТОП: вичерпано ліміт Codex — {e}', flush=True)
+        save_checkpoint(state)
+        sys.exit(3)
     except Exception as e:
         return f'CODEX_FAIL:{type(e).__name__}:{str(e)[:80]}', 0, 'codex'
     finally:

@@ -153,6 +153,10 @@ def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None
     return text, m
 
 
+class CodexLimitError(RuntimeError):
+    """Вичерпано ліміт використання Codex (ChatGPT). Повторювати марно до вказаного часу."""
+
+
 def call_codex(prompt, image_path=None, timeout=180, model=None):
     """Ескалація до Codex CLI, коли Gemini впав — рішення власника 21.09.2026.
 
@@ -177,7 +181,11 @@ def call_codex(prompt, image_path=None, timeout=180, model=None):
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
         if r.returncode != 0:
-            raise RuntimeError(f'codex exec: код {r.returncode}: {(r.stderr or "")[:300]}')
+            err = (r.stderr or '')
+            if 'usage limit' in err.lower():
+                # 21.09: 268 ескалацій вичерпали ліміт, а помилку ховав банер на початку stderr
+                raise CodexLimitError(err.strip().splitlines()[-1][:300])
+            raise RuntimeError(f'codex exec: код {r.returncode}: {err.strip()[-300:]}')
         text = open(out_path, encoding='utf-8').read().strip()
     finally:
         try:
