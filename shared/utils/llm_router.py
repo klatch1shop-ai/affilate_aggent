@@ -29,6 +29,8 @@ OmniRoute (docker, localhost:20128) дає безкоштовні хмарні �
 import argparse
 import json
 import os
+import subprocess
+import tempfile
 import time
 
 import requests
@@ -151,12 +153,54 @@ def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None
     return text, m
 
 
-def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_len=1):
-    """Питає канали по черзі. Повертає {text, channel, model, ms, tried}.
+def call_codex(prompt, image_path=None, timeout=180, model=None):
+    """Ескалація до Codex CLI, коли Gemini впав — рішення власника 21.09.2026.
+
+    НЕ в CHAIN за замовчуванням і не викликається автоматично з `ask()`, доки не
+    попросили `escalate_to_codex=True`: Codex — обмежений ресурс під нашим власним
+    добовим запобіжником (`codex_task.py`), а не безкоштовний запасний канал для
+    фонової автоматики. Використовувати свідомо, в інтерактивних/пілотних скриптах.
+
+    `codex exec` уміє те саме, що й `call_gemini`, — текст і аналіз фото (`-i`),
+    але моделі й ліміти OpenAI зазвичай більші за безкоштовний тариф Gemini.
+    Перевірено вручну 21.09: та сама фотографія дала той самий колір, що й Gemini.
+    """
+    cmd = ['codex', 'exec', prompt, '--skip-git-repo-check', '--sandbox', 'read-only',
+          '--ephemeral']
+    if model:
+        cmd += ['-m', model]
+    if image_path:
+        cmd += ['-i', image_path]
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        out_path = f.name
+    cmd += ['-o', out_path]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        if r.returncode != 0:
+            raise RuntimeError(f'codex exec: код {r.returncode}: {(r.stderr or "")[:300]}')
+        text = open(out_path, encoding='utf-8').read().strip()
+    finally:
+        try:
+            os.unlink(out_path)
+        except OSError:
+            pass
+    if not text:
+        raise RuntimeError('codex exec: порожня відповідь')
+    return text, model or 'codex-exec'
+
+
+def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_len=1,
+       escalate_to_codex=False, image_path=None):
+    """Питає канали по черзі. Повертає {text, channel, model, ms, tried, tokens}.
 
     `min_len` — мінімальна довжина осмисленої відповіді: коротший рядок
     вважається збоєм каналу, а не результатом (у NIM саме так виглядали
     напівживі моделі).
+
+    `escalate_to_codex=True` — коли весь звичайний ланцюжок вичерпано (усі
+    канали впали чи на паузі), останньою спробою питає `call_codex`
+    (з `image_path`, якщо задано). За замовчуванням вимкнено — ескалація лише
+    свідома, не для фонової автоматики.
     """
     tried = []
     for ch in (chain or CHAIN):
@@ -192,6 +236,25 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
             _down[ch] = time.time() + COOLDOWN
             _log({'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'channel': ch, 'error': str(e)[:200],
                   'task': task})
+
+    if escalate_to_codex:
+        t0 = time.time()
+        try:
+            text, model = call_codex(prompt, image_path=image_path, timeout=max(timeout, 180))
+            if len(text) < min_len:
+                raise RuntimeError(f'відповідь коротша за {min_len} символів')
+            ms = int((time.time() - t0) * 1000)
+            rec = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'channel': 'codex', 'model': model,
+                  'ms': ms, 'prompt_len': len(prompt), 'text_len': len(text),
+                  'task': task, 'tried': tried}
+            _log(rec)
+            return {'text': text, 'channel': 'codex', 'model': model, 'ms': ms,
+                    'tried': tried, 'tokens': None}
+        except Exception as e:
+            tried.append(f'codex:{type(e).__name__}')
+            _log({'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'channel': 'codex',
+                  'error': str(e)[:200], 'task': task})
+
     raise RuntimeError(f'усі канали недоступні: {tried}')
 
 

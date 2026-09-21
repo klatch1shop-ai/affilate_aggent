@@ -3,10 +3,11 @@
 Ідея: людина дивиться не все, а лише РОЗБІЖНОСТІ. Збіг двох джерел — кандидат на запис,
 розбіжність або «не видно» — у чергу до власника. Нічого не записуємо.
 """
-import base64, collections, json, os, re, sys, requests
+import base64, collections, json, os, re, sys, tempfile, requests
 sys.path.insert(0, os.path.expanduser('~/agent-system'))
 from dotenv import load_dotenv; load_dotenv(os.path.expanduser('~/agent-system/.env'))
 from shared.utils.db import get_connection
+from shared.utils.llm_router import call_codex
 SP = os.path.dirname(os.path.abspath(__file__))
 API = 'https://core-api.epicentrm.com.ua'
 GEM = 'https://generativelanguage.googleapis.com/v1beta/models'
@@ -22,25 +23,50 @@ s.headers['Authorization'] = f"Bearer {r.json()['token']['auth']}"
 NOT_SEEN = ('НЕ ВИДНО', 'НЕ ВКАЗАНО')
 
 
-def gemini(parts):
+def gemini(parts, escalation_prompt=None, image_bytes=None, image_mime=None):
+    """Основний виклик Gemini; при провалі (429/PerDay/будь-яка помилка) —
+    ескалація на Codex (рішення власника 21.09.2026, `call_codex` у llm_router).
+    """
     body = {'contents': [{'parts': parts}],
             'generationConfig': {'temperature': 0.0, 'maxOutputTokens': 300}}
     g = requests.post(f'{GEM}/{MODEL}:generateContent', timeout=180,
                       headers={'x-goog-api-key': KEY}, json=body)
-    if g.status_code != 200:
-        return f'HTTP{g.status_code}', 0
-    j = g.json()
-    p = ((j.get('candidates') or [{}])[0].get('content') or {}).get('parts') or []
-    txt = ''.join(x.get('text', '') for x in p if not x.get('thought')).strip()
-    return txt, (j.get('usageMetadata') or {}).get('totalTokenCount', 0)
+    if g.status_code == 200:
+        j = g.json()
+        p = ((j.get('candidates') or [{}])[0].get('content') or {}).get('parts') or []
+        txt = ''.join(x.get('text', '') for x in p if not x.get('thought')).strip()
+        if txt:
+            return txt, (j.get('usageMetadata') or {}).get('totalTokenCount', 0), 'gemini'
+    # Gemini впав або порожня відповідь — пробуємо Codex, якщо для цього питання
+    # передано текст ескалації (у нього більші ліміти, кращі моделі — рішення 21.09).
+    if not escalation_prompt:
+        return f'HTTP{g.status_code}', 0, 'gemini'
+    img_path = None
+    try:
+        if image_bytes:
+            with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+                f.write(image_bytes)
+                img_path = f.name
+        txt, _ = call_codex(escalation_prompt, image_path=img_path, timeout=180)
+        return txt, 0, 'codex'
+    except Exception as e:
+        return f'CODEX_FAIL:{type(e).__name__}', 0, 'codex'
+    finally:
+        if img_path:
+            try:
+                os.unlink(img_path)
+            except OSError:
+                pass
 
 
 def ask_photo(img_bytes, mime, attr):
     q = (f'На фото — товар. Визнач характеристику «{attr}» САМОГО ВИРОБУ (не упаковки, не фону). '
          f'Відповідай коротко, українською, лише значення — без пояснень і без одиниць у дужках. '
          f'Якщо з фото це визначити неможливо — відповідай точно: НЕ ВИДНО.')
-    return gemini([{'text': q}, {'inlineData': {'mimeType': mime,
-                   'data': base64.b64encode(img_bytes).decode()}}])
+    ans, tok, src = gemini([{'text': q}, {'inlineData': {'mimeType': mime,
+                            'data': base64.b64encode(img_bytes).decode()}}],
+                           escalation_prompt=q, image_bytes=img_bytes, image_mime=mime)
+    return ans, tok, src
 
 
 def ask_text(desc, name, attr):
@@ -48,7 +74,8 @@ def ask_text(desc, name, attr):
          f'Визнач характеристику «{attr}». Бери ЛИШЕ те, що прямо написано в тексті — '
          f'не здогадуйся, не виводь із бренду чи категорії. Відповідай коротко, українською, '
          f'лише значення. Якщо в тексті цього нема — відповідай точно: НЕ ВКАЗАНО.')
-    return gemini([{'text': q}])
+    ans, tok, src = gemini([{'text': q}], escalation_prompt=q)
+    return ans, tok, src
 
 
 clean = lambda t: re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', t or '')).strip()
@@ -75,12 +102,12 @@ for c in cards:
         continue
     desc = clean(db[c['sku']]['description_html'])
     for code, attr, typ in c['missing'][:2]:                 # не більше 2 на картку
-        a, t1 = ask_photo(img.content, img.headers.get('Content-Type', 'image/jpeg'), attr)
-        b, t2 = ask_text(desc, db[c['sku']]['name'], attr)
+        a, t1, src_a = ask_photo(img.content, img.headers.get('Content-Type', 'image/jpeg'), attr)
+        b, t2, src_b = ask_text(desc, db[c['sku']]['name'], attr)
         tok += t1 + t2
-        # Помилка транспорту — це НЕ відповідь. Інакше «HTTP429 == HTTP429» рахувалось
-        # як збіг і роздувало точність (спіймано на першому ж прогоні 21.09).
-        if a.startswith('HTTP') or b.startswith('HTTP'):
+        # Помилка транспорту — це НЕ відповідь, навіть якщо це вже друга спроба
+        # (Codex теж може впасти). «HTTP429 == HTTP429» рахувалось як збіг 21.09.
+        if a.startswith('HTTP') or b.startswith('HTTP') or a.startswith('CODEX_FAIL') or b.startswith('CODEX_FAIL'):
             tally['помилка запиту'] += 1
             rows.append({'sku': c['sku'], 'attr': attr, 'code': code, 'photo': a, 'text': b,
                          'verdict': 'помилка запиту', 'url': url})
@@ -97,7 +124,8 @@ for c in cards:
             v = 'РОЗБІЖНІСТЬ'
         tally[v] += 1
         rows.append({'sku': c['sku'], 'attr': attr, 'code': code, 'photo': a, 'text': b,
-                     'verdict': v, 'url': url})
-        print(f"{c['sku']:<9} {attr[:21]:<22} {a[:17]:<18} {b[:17]:<18} {v}")
+                     'verdict': v, 'url': url, 'src_photo': src_a, 'src_text': src_b})
+        mark = '*' if 'codex' in (src_a, src_b) else ' '
+        print(f"{c['sku']:<9} {attr[:21]:<22} {a[:17]:<18} {b[:17]:<18} {v}{mark}")
 json.dump(rows, open(f'{SP}/two_sources.json', 'w', encoding='utf-8'), ensure_ascii=False)
 print('\nпідсумок:', dict(tally), '· токенів:', tok, '· модель:', MODEL)

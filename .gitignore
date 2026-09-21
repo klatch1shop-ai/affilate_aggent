@@ -55,3 +55,7 @@ data/toptul/private/
 
 # журнали інструментів (llm_router тощо) — не в git
 logs/*.jsonl
+logs/*.txt
+
+# знімки кабінету Епіцентру та інші великі дампи для пілотних скриптів — не код
+scratchpad/*.json
