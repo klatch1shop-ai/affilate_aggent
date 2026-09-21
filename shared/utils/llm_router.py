@@ -83,8 +83,23 @@ def call_omniroute(prompt, timeout=120, model=None, max_tokens=None):
     return text, d.get('model') or body['model']
 
 
+def _usage(data):
+    """Справжні токени з відповіді провайдера, якщо він їх віддав (аудит TASK-36).
+
+    Досі ми рахували символи й через це не могли перевірити жодну обіцянку економії.
+    Немає `usageMetadata` — повертаємо None, а не нулі: «не знаємо» і «нуль» різні речі.
+    """
+    u = (data or {}).get('usageMetadata') or {}
+    if not u:
+        return None
+    return {'in': u.get('promptTokenCount'), 'out': u.get('candidatesTokenCount'),
+            'total': u.get('totalTokenCount')}
+
+
 def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
     """Gemini через REST AI Studio (безкоштовний тариф). Ключ — лише в заголовку.
+
+    Повертає (текст, модель, токени|None).
 
     Безкоштовні ліміти — ДОБОВІ й окремі для кожної моделі (19.09: gemini-flash-latest —
     лише 20 запитів/добу). Тому ланцюжок моделей GEMINI_MODELS: вичерпано добу
@@ -114,10 +129,11 @@ def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
         if r.status_code != 200:
             last = f'{m}: HTTP {r.status_code}'
             continue
-        parts = (((r.json().get('candidates') or [{}])[0].get('content') or {}).get('parts') or [])
+        data = r.json()
+        parts = (((data.get('candidates') or [{}])[0].get('content') or {}).get('parts') or [])
         text = ''.join(p.get('text', '') for p in parts if not p.get('thought')).strip()
         if text:
-            return text, m
+            return text, m, _usage(data)
         last = f'{m}: порожня відповідь'
     raise RuntimeError(f'Gemini: {last}')
 
@@ -149,8 +165,9 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
             continue
         t0 = time.time()
         try:
+            tokens = None
             if ch == 'gemini':
-                text, model = call_gemini(prompt, timeout, max_tokens=max_tokens)
+                text, model, tokens = call_gemini(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'omniroute':
                 text, model = call_omniroute(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'ollama':
@@ -164,8 +181,12 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
             rec = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'channel': ch, 'model': model,
                    'ms': ms, 'prompt_len': len(prompt), 'text_len': len(text),
                    'task': task, 'tried': tried}
+            if tokens:
+                rec.update({'tokens_in': tokens.get('in'), 'tokens_out': tokens.get('out'),
+                            'tokens_total': tokens.get('total')})
             _log(rec)
-            return {'text': text, 'channel': ch, 'model': model, 'ms': ms, 'tried': tried}
+            return {'text': text, 'channel': ch, 'model': model, 'ms': ms, 'tried': tried,
+                    'tokens': tokens}
         except Exception as e:                                  # канал впав — наступний
             tried.append(f'{ch}:{type(e).__name__}')
             _down[ch] = time.time() + COOLDOWN
