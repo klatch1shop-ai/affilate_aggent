@@ -40,6 +40,8 @@ CTR, конверсією і ставкою ProSale. Втрата в іншом�
 import os, re, sys, json, argparse, collections
 import xml.etree.ElementTree as ET
 
+import pymorphy3
+
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.join(BASE, 'tools'))
@@ -295,6 +297,53 @@ def _strict_pair(w1, w2):
     """
     return (any(w in DESC_NOM for w in (w1, w2))
             and any(_LATIN.match(w) for w in (w1, w2)))
+
+
+_MORPH_UK = pymorphy3.MorphAnalyzer(lang='uk')
+_morph_cache = {}
+
+
+def _morph_parses(word):
+    """УСІ розбори, не лише parse()[0]. pymorphy3 без контексту речення не
+    вміє обрати ймовірніший — для рівнозначних форм («кульки»: родовий
+    однини й називний множини мають однаковий score=1.0) [0] — це перший
+    запис у словнику, не «найімовірніший» (знайдено 25.09.2026: «вагінальні
+    кульки» відхилялось, бо parse()[0] для «кульки» випадково дав родовий
+    однини). Тому перевіряємо, чи згодиться БУДЬ-ЯКА пара розборів."""
+    if word not in _morph_cache:
+        _morph_cache[word] = [p.tag for p in _MORPH_UK.parse(word)]
+    return _morph_cache[word]
+
+
+def _adj_noun_agree(adj_word, noun_word):
+    """25.09.2026: заміна `_strict_pair` для шару 3 — справжня морфологія
+    замість закінчень і вимоги латиниці. `adj_word` МАЄ стояти ПЕРЕД
+    `noun_word` (порядок обов'язковий): заміряно на живому фіді (5384
+    офферів) — «прикметник перед іменником, узгоджені» дає ~97% зрозумілих
+    фраз («ерекційне кільце», «анальний вібратор»), а зворотний порядок
+    майже завжди уламок речення («вібратор здатний», «стимулятор готовий»,
+    «фалоімітатор можна») — дієприкметники й присудки, не означення.
+
+    Обидва слова мають бути в НАЗИВНОМУ відмінку (люди шукають «потужний
+    вібратор», а не «потужного вібратора») і узгоджені в числі та (для
+    однини) роді. Дає 2721 фразу додатково до 859 чинних — «Порожній слот
+    краще за сміттєвий» (докстрінг вище) тепер коштує менше: морфологія
+    відрізняє «ерекційне кільце» від «вазі вагінальні», а не лише вгадує
+    за закінченням.
+    """
+    for at in _morph_parses(adj_word):
+        if at.POS != 'ADJF' or at.case != 'nomn':
+            continue
+        for nt in _morph_parses(noun_word):
+            if nt.POS != 'NOUN' or nt.case != 'nomn':
+                continue
+            is_plural = at.number == 'plur' or nt.number == 'plur'
+            if is_plural and (at.number != 'plur' or nt.number != 'plur'):
+                continue
+            if not is_plural and at.gender != nt.gender:
+                continue
+            return True
+    return False
 
 
 def agree(adj_forms, noun):
@@ -880,17 +929,18 @@ def build(name, vendor, category, prm, description='', catname=None):
 
     # шар 3: предметні словосполучення з опису
     #
-    # ВИМКНЕНО 08.09.2026 після заміру на всьому фіді. Запобіжник _is_adj
-    # спирається на закінчення, а `а`/`я`/`ні` збігаються з родовим і місцевим
-    # відмінком іменників («лубриканта», «страпона», «ванні»). Тому XOR-фільтр
-    # «означення + іменник» пропускав склейки з тексту: «лубрикантом водній»,
-    # «означає насадка», «вимикається стимулятор».
-    # Масштаб: 2574 картки (47.9 %), 4777 фраз (11.4 % усіх слотів).
-    # Спирається на правило з докстрінгу цього ж файла: сміттєвий ключ гірший
-    # за порожній слот — порожній не несе негативного сигналу, сміттєвий дає
-    # покази без кліків.
-    # Вмикати назад можна лише разом зі справжнім визначенням частини мови
-    # (морфологічна бібліотека), а не правкою списку закінчень.
+    # Історія: до 19.09.2026 єдиним запобіжником був `_is_adj` (закінчення)
+    # + `_strict_pair` (тип у називному + латиниця = бренд) — точність 89 %,
+    # 859 фраз на фіді 5384 офферів. `_is_adj` плутав закінчення прикметника
+    # з родовим/місцевим відмінком іменника («лубриканта», «ванні»), тому
+    # звужений XOR-фільтр пропускав лише 859 із ~3500 придатних фраз.
+    #
+    # 25.09.2026: справжня морфологія (`_adj_noun_agree`, pymorphy3) замість
+    # закінчень — заміряно на тому самому фіді: 2721 фраза ДОДАТКОВО, якість
+    # на вибірці 40+20 — «ерекційне кільце», «анальний вібратор», «потужний
+    # вібратор-кролик» тощо, майже без сміття. `_strict_pair` лишається як
+    # ДРУГИЙ, незалежний шлях — він ловить тип+бренд («вібратор lovense»),
+    # а не прикметник+іменник, морфологія латинські бренди не розпізнає.
     if DESC_BIGRAMS and len(slots) < MAX_SLOTS and description:
         plain = re.sub(r'<[^>]+>', ' ', description[:1500]).lower()
         # `&\w+;` знімав `&mdash;` і `&rsquo;`, але НЕ числові `&#39;`:
@@ -904,14 +954,15 @@ def build(name, vendor, category, prm, description='', catname=None):
                 continue
             if not any(nn in pair for nn in DESC_NOUNS):
                 continue
-            # Люди шукають «чорна маска», а не «товару маска». Тому пара має
-            # бути «означення + іменник» або «іменник + означення»; іменник у
-            # непрямому відмінку поруч з іншим іменником — це склейка з тексту,
-            # а не пошукова фраза.
-            a0 = _is_adj(words[i]); a1 = _is_adj(words[i + 1])
-            if not (a0 ^ a1):
-                continue
-            if DESC_STRICT and not _strict_pair(words[i], words[i + 1]):
+            # Люди шукають «чорна маска», а не «маска чорна» чи «товару
+            # маска» — прикметник МАЄ стояти перед іменником, обидва в
+            # називному (`_adj_noun_agree`). Другий, незалежний шлях —
+            # `_strict_pair`: тип + бренд латиницею, морфологія бренди
+            # не розпізнає як іменник.
+            ok = _adj_noun_agree(words[i], words[i + 1])
+            if not ok and DESC_STRICT:
+                ok = _strict_pair(words[i], words[i + 1])
+            if not ok:
                 continue
             # латинське слово пари — модель чи бренд, лише якщо воно є в
             # назві: з опису приходило «свічка trip» («A Trip to Paris»),
@@ -1048,8 +1099,8 @@ def main():
         new = build(name, txt(o, 'vendor'), cats.get(txt(o, 'categoryId'), ''), prm, desc)
         old = [x.strip() for x in txt(o, 'keywords_ua').split(',') if x.strip()]
         purpose = (prm.get('Призначення') or '').lower()
-        contra_old += sum(1 for p in old if contradicts(p, purpose))
-        contra_new += sum(1 for p in new if contradicts(p, purpose))
+        contra_old += sum(1 for p in old if contradicts(p, purpose, name))
+        contra_new += sum(1 for p in new if contradicts(p, purpose, name))
         for p in old:
             old_all[p] += 1
         for p in new:

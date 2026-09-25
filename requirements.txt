@@ -26,3 +26,5 @@ google-auth
 google-auth-httplib2
 google-api-python-client
 aiogram>=3.31
+pymorphy3>=2.0
+pymorphy3-dicts-uk
