@@ -1,6 +1,6 @@
 """Ядро синхронізації офферів; транспорт передається ззовні."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 import json
 import sqlite3
@@ -10,7 +10,7 @@ RATE_LIMIT = 120
 RATE_WINDOW = 120.0
 AVAILABILITY = ('in_stock', 'under_the_order', 'not_available')
 MODES = ('off', 'dry', 'live')
-_STATUSES = ('enqueued', 'processed', 'skipped', 'forbidden')
+_STATUSES = ('enqueued', 'processed', 'skipped', 'forbidden', 'stale')
 
 
 class EpicentrError(Exception):
@@ -59,9 +59,14 @@ def desired_state(rows: list[dict]) -> tuple[dict, list[dict]]:
     return desired, blocked
 
 
-def diff(desired: dict, sent: dict) -> list[dict]:
+def diff(desired: dict, sent: dict, forbidden=None) -> list[dict]:
+    forbidden = forbidden or {}
     changes = []
     for sku in sorted(desired):
+        if sku in forbidden and all(
+                forbidden[sku].get(field) == desired[sku].get(field)
+                for field in ('price', 'availability')):
+            continue
         item = {'sku': sku}
         for field in ('price', 'availability'):
             value = desired[sku].get(field)
@@ -99,7 +104,7 @@ def parse_results(resp: dict) -> dict:
     for item in resp['items']:
         if not isinstance(item, dict) or (item.get('sku') is None and 'id' not in item):
             raise EpicentrError('Некоректний запис результату')
-        sku = str(item['sku']) if item.get('sku') is not None else str(item['id'])
+        sku = str(item['sku']).strip() if item.get('sku') is not None else str(item['id']).strip()
         status = item.get('status')
         if isinstance(status, str) and status in result['by_status']:
             result['by_status'][status].append(sku)
@@ -118,6 +123,9 @@ class SentStore:
         self.connection.executescript('''
             CREATE TABLE IF NOT EXISTS sent (
                 sku TEXT PRIMARY KEY, price TEXT, availability TEXT
+            );
+            CREATE TABLE IF NOT EXISTS forbidden (
+                sku TEXT PRIMARY KEY, price TEXT, availability TEXT, at TEXT
             );
             CREATE TABLE IF NOT EXISTS pending (
                 sequence INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -146,14 +154,43 @@ class SentStore:
                    str(item['price']) if item.get('price') is not None else None,
                    item.get('availability'), timestamp) for item in items])
 
-    def pending_requests(self) -> list[str]:
-        return [row[0] for row in self.connection.execute('''
-            SELECT request_id FROM pending GROUP BY request_id
-            HAVING SUM(CASE WHEN status = 'enqueued' THEN 1 ELSE 0 END) > 0
-            ORDER BY MIN(sequence)
-        ''')]
+    def forbidden_map(self) -> dict:
+        return {sku: {'price': Decimal(price) if price is not None else None,
+                      'availability': availability}
+                for sku, price, availability in self.connection.execute(
+                    'SELECT sku, price, availability FROM forbidden')}
 
-    def apply_results(self, parsed: dict) -> None:
+    def pending_requests(self, now: datetime | None = None, stale_after_days: int = 14) -> list[str]:
+        """Без now зберігає стару поведінку: повертає чергу без перевірки давності."""
+        if now is not None and (now.tzinfo is None or now.utcoffset() is None):
+            raise ValueError('Час перевірки має містити часовий пояс')
+        cutoff = (now.astimezone(timezone.utc) - timedelta(days=stale_after_days)
+                  if now is not None else None)
+        requests = []
+        with self.connection:
+            rows = self.connection.execute('''
+                SELECT request_id, MIN(CASE WHEN status = 'enqueued' THEN at END)
+                FROM pending GROUP BY request_id
+                HAVING SUM(CASE WHEN status = 'enqueued' THEN 1 ELSE 0 END) > 0
+                ORDER BY MIN(sequence)
+            ''').fetchall()
+            for request_id, earliest in rows:
+                if cutoff is not None and datetime.fromisoformat(earliest) < cutoff:
+                    self.connection.execute('''
+                        UPDATE pending SET status = 'stale'
+                        WHERE request_id = ? AND status = 'enqueued'
+                    ''', (request_id,))
+                else:
+                    requests.append(request_id)
+        return requests
+
+    def apply_results(self, parsed: dict, now: datetime | None = None) -> None:
+        """Старі виклики без now отримують поточний час обробки в UTC."""
+        if now is None:
+            now = datetime.now(timezone.utc)
+        if now.tzinfo is None or now.utcoffset() is None:
+            raise ValueError('Час обробки має містити часовий пояс')
+        timestamp = now.astimezone(timezone.utc).isoformat()
         with self.connection:
             for status in ('processed', 'skipped', 'forbidden'):
                 for sku in parsed['by_status'][status]:
@@ -163,7 +200,16 @@ class SentStore:
                     ''', (parsed['request_id'], sku)).fetchone()
                     if row is None:
                         continue
-                    if status != 'forbidden':
+                    if status == 'forbidden':
+                        self.connection.execute('''
+                            INSERT INTO forbidden(sku, price, availability, at)
+                            VALUES (?, ?, ?, ?)
+                            ON CONFLICT(sku) DO UPDATE SET
+                                price = excluded.price,
+                                availability = excluded.availability,
+                                at = excluded.at
+                        ''', (sku, *row, timestamp))
+                    else:
                         self.connection.execute('''
                             INSERT INTO sent(sku, price, availability) VALUES (?, ?, ?)
                             ON CONFLICT(sku) DO UPDATE SET
@@ -239,7 +285,7 @@ def run(rows, store, client, mode: str = 'off') -> dict:
               'by_status': {s: 0 for s in _STATUSES}, 'errors': [], 'stopped': False}
 
     def apply(parsed):
-        store.apply_results(parsed)
+        store.apply_results(parsed, datetime.now(timezone.utc))
         for status, skus in parsed['by_status'].items():
             report['by_status'][status] += len(skus)
         # Деталі відмов зберігаються в SQLite; звіт не копіює довільні дані API.
@@ -249,7 +295,7 @@ def run(rows, store, client, mode: str = 'off') -> dict:
             report['errors'].append(f'Невідомий статус артикулу {sku}')
 
     if mode == 'live':
-        for request_id in store.pending_requests():
+        for request_id in store.pending_requests(datetime.now(timezone.utc)):
             try:
                 parsed = parse_results(client.results(request_id))
                 if parsed['request_id'] != request_id:
@@ -263,7 +309,7 @@ def run(rows, store, client, mode: str = 'off') -> dict:
                 report['errors'].append(str(error))
 
     desired, report['blocked'] = desired_state(rows)
-    changes = diff(desired, store.get_all())
+    changes = diff(desired, store.get_all(), store.forbidden_map())
     parts = batches(changes)
     report['changes'], report['batches'] = len(changes), len(parts)
     if mode == 'dry':
