@@ -98,7 +98,7 @@ def _usage(data):
             'total': u.get('totalTokenCount')}
 
 
-def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
+def call_gemini(prompt, timeout=120, model=None, max_tokens=None, image_bytes=None, image_mime=None):
     """Gemini через REST AI Studio (безкоштовний тариф). Ключ — лише в заголовку.
 
     Повертає (текст, модель, токени|None).
@@ -107,6 +107,10 @@ def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
     лише 20 запитів/добу). Тому ланцюжок моделей GEMINI_MODELS: вичерпано добу
     (429 …PerDay…) — одразу наступна модель; хвилинний ліміт чи 503 — пауза й повтор.
     Каталогу не віримо: gemini-2.5-* є в списку, але «недоступні новим користувачам».
+
+    `image_bytes`/`image_mime` — аналіз фото (аудит 25.09: пілот заповнення атрибутів
+    хардкодив ОДНУ модель напряму в обхід цього ланцюжка й тому вичерпував добовий
+    ліміт учетверо швидше, ніж треба, — зайві ескалації на Codex).
     """
     key = os.getenv('GEMINI_API_KEY', '')
     if not key:
@@ -114,7 +118,12 @@ def call_gemini(prompt, timeout=120, model=None, max_tokens=None):
     cfg = {'temperature': 0.3}
     if max_tokens:
         cfg['maxOutputTokens'] = max_tokens
-    body = {'contents': [{'parts': [{'text': prompt}]}], 'generationConfig': cfg}
+    parts = [{'text': prompt}]
+    if image_bytes:
+        import base64
+        parts.append({'inlineData': {'mimeType': image_mime or 'image/jpeg',
+                                     'data': base64.b64encode(image_bytes).decode()}})
+    body = {'contents': [{'parts': parts}], 'generationConfig': cfg}
     last = 'нема моделей'
     for m in ([model] if model else GEMINI_MODELS):
         if _gemini_day_out.get(m) == time.strftime('%Y-%m-%d'):

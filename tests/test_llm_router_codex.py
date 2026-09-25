@@ -138,3 +138,67 @@ def test_other_failure_keeps_stderr_tail_not_banner(monkeypatch):
     with pytest.raises(RuntimeError) as e:
         router.call_codex('питання')
     assert 'справжня причина' in str(e.value)
+
+
+# ── call_gemini підтримує фото (аудит 25.09: пілот хардкодив одну модель) ──
+
+class FakeGeminiResp:
+    def __init__(self, status=200, text='', candidates=None, usage=None):
+        self.status_code, self.text = status, text
+        self._c, self._u = candidates, usage
+
+    def json(self):
+        body = {}
+        if self._c is not None:
+            body['candidates'] = self._c
+        if self._u is not None:
+            body['usageMetadata'] = self._u
+        return body
+
+
+def test_call_gemini_accepts_image(monkeypatch):
+    seen = {}
+
+    def fake_post(url, timeout=None, headers=None, json=None):
+        seen['body'] = json
+        return FakeGeminiResp(200, candidates=[{'content': {'parts': [{'text': 'чорний'}]}}])
+
+    monkeypatch.setattr(router.requests, 'post', fake_post)
+    monkeypatch.setenv('GEMINI_API_KEY', 'test')
+    text, model, tokens = router.call_gemini('який колір?', model='gemini-flash-lite-latest',
+                                             image_bytes=b'fake-jpeg-bytes', image_mime='image/jpeg')
+    assert text == 'чорний'
+    parts = seen['body']['contents'][0]['parts']
+    assert parts[0] == {'text': 'який колір?'}
+    assert parts[1]['inlineData']['mimeType'] == 'image/jpeg'
+    import base64
+    assert base64.b64decode(parts[1]['inlineData']['data']) == b'fake-jpeg-bytes'
+
+
+def test_call_gemini_without_image_unchanged(monkeypatch):
+    seen = {}
+
+    def fake_post(url, timeout=None, headers=None, json=None):
+        seen['body'] = json
+        return FakeGeminiResp(200, candidates=[{'content': {'parts': [{'text': 'ok'}]}}])
+
+    monkeypatch.setattr(router.requests, 'post', fake_post)
+    monkeypatch.setenv('GEMINI_API_KEY', 'test')
+    router.call_gemini('текст', model='gemini-flash-lite-latest')
+    assert seen['body']['contents'][0]['parts'] == [{'text': 'текст'}]
+
+
+def test_call_gemini_falls_through_model_chain_with_image(monkeypatch):
+    calls = []
+
+    def fake_post(url, timeout=None, headers=None, json=None):
+        calls.append(url)
+        if len(calls) == 1:
+            return FakeGeminiResp(429, text='…PerDay…')
+        return FakeGeminiResp(200, candidates=[{'content': {'parts': [{'text': 'прозорий'}]}}])
+
+    monkeypatch.setattr(router.requests, 'post', fake_post)
+    monkeypatch.setenv('GEMINI_API_KEY', 'test')
+    monkeypatch.setattr(router, '_gemini_day_out', {})
+    text, model, tokens = router.call_gemini('колір?', image_bytes=b'x', image_mime='image/jpeg')
+    assert text == 'прозорий' and len(calls) == 2

@@ -9,7 +9,7 @@ import base64, collections, json, os, re, sys, tempfile, time, requests
 sys.path.insert(0, os.path.expanduser('~/agent-system'))
 from dotenv import load_dotenv; load_dotenv(os.path.expanduser('~/agent-system/.env'))
 from shared.utils.db import get_connection
-from shared.utils.llm_router import call_codex, CodexLimitError
+from shared.utils.llm_router import call_codex, call_gemini, CodexLimitError
 
 SP = os.path.dirname(os.path.abspath(__file__))
 API = 'https://core-api.epicentrm.com.ua'
@@ -36,30 +36,19 @@ same = lambda a, b: re.sub(r'[^0-9a-zа-яіїєґ]', '', a.lower())[:12] == \
 is_fail = lambda t: t.startswith('HTTP') or t.startswith('CODEX_FAIL')
 
 
-def gemini(parts, escalation_prompt=None, image_bytes=None):
-    body = {'contents': [{'parts': parts}], 'generationConfig': {'temperature': 0.0, 'maxOutputTokens': 300}}
-    for attempt in range(2):
-        try:
-            g = requests.post(f'{GEM}/{MODEL}:generateContent', timeout=180,
-                              headers={'x-goog-api-key': KEY}, json=body)
-        except requests.RequestException as e:
-            g = None
-            last_err = str(e)[:120]
-            break
-        if g.status_code == 200:
-            j = g.json()
-            p = ((j.get('candidates') or [{}])[0].get('content') or {}).get('parts') or []
-            txt = ''.join(x.get('text', '') for x in p if not x.get('thought')).strip()
-            if txt:
-                return txt, (j.get('usageMetadata') or {}).get('totalTokenCount', 0), 'gemini'
-            last_err = 'порожня відповідь'
-        elif g.status_code == 503:
-            time.sleep(3); continue
-        else:
-            last_err = f'HTTP{g.status_code}'
-        break
+def gemini(text_prompt, escalation_prompt=None, image_bytes=None, image_mime=None):
+    """Питає Gemini ПОВНИМ ланцюжком моделей (call_gemini у llm_router — 4 моделі,
+    4 окремі добові квоти), а не однією моделлю напряму. Лише коли весь ланцюжок
+    вичерпано — ескалація на Codex у межах MAX_CODEX_CALLS.
+    """
+    try:
+        text, model, _tok = call_gemini(text_prompt, timeout=180, max_tokens=300,
+                                        image_bytes=image_bytes, image_mime=image_mime)
+        return text, 0, 'gemini'
+    except Exception:
+        pass
     if not escalation_prompt:
-        return f'HTTP{"?" if g is None else g.status_code}', 0, 'gemini'
+        return 'HTTP?', 0, 'gemini'
     global codex_calls
     if codex_calls >= MAX_CODEX_CALLS:
         return 'CODEX_FAIL:бюджет ескалацій вичерпано', 0, 'codex'
@@ -86,16 +75,14 @@ def gemini(parts, escalation_prompt=None, image_bytes=None):
 def ask_photo(img_bytes, mime, attr):
     q = (f'На фото — товар. Визнач характеристику «{attr}» САМОГО ВИРОБУ (не упаковки, не фону). '
          f'Відповідай коротко, українською, лише значення. Якщо визначити неможливо — НЕ ВИДНО.')
-    return gemini([{'text': q}, {'inlineData': {'mimeType': mime,
-                   'data': base64.b64encode(img_bytes).decode()}}],
-                   escalation_prompt=q, image_bytes=img_bytes), q
+    return gemini(q, escalation_prompt=q, image_bytes=img_bytes, image_mime=mime), q
 
 
 def ask_text(desc, name, attr):
     q = (f'Ось назва та опис товару від постачальника.\n\nНАЗВА: {name}\n\nОПИС: {desc[:4000]}\n\n'
          f'Визнач характеристику «{attr}». Бери ЛИШЕ те, що прямо написано в тексті — не здогадуйся. '
          f'Відповідай коротко, українською, лише значення. Якщо в тексті цього нема — НЕ ВКАЗАНО.')
-    return gemini([{'text': q}], escalation_prompt=q), q
+    return gemini(q, escalation_prompt=q), q
 
 
 def load_checkpoint():

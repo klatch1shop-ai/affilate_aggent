@@ -1,10 +1,16 @@
-"""Регресія 21.09.2026: ask_photo/ask_text у scratchpad/fill_gaps_all.py викликали
-gemini() без escalation_prompt — при падінні Gemini повертали 'HTTP429' замість
-реальної ескалації на Codex, і батч-прогін зупинявся переривником одразу
-(перевірено: 39 підряд «помилок запиту» після вичерпання добового ліміту Gemini).
+"""Регресія 21.09 і 25.09.2026 навколо scratchpad/fill_gaps_all.py.
 
-Тест перевіряє САМЕ це зʼєднання — що ask_photo/ask_text передають escalation_prompt
-у gemini(), а не повторює тести самого call_codex (вони в test_llm_router_codex.py).
+21.09: ask_photo/ask_text викликали gemini() без escalation_prompt — при падінні
+Gemini повертали 'HTTP429' замість реальної ескалації на Codex.
+
+25.09: gemini() хардкодив ОДНУ модель Gemini напряму замість повного ланцюжка
+`call_gemini` (4 моделі, 4 окремі добові квоти) — вичерпував квоту вчетверо
+швидше й ішов в ескалацію на Codex там, де досить було наступної моделі.
+Перевірено: прогін на 1790 картках упирався в переривник щоразу, коли одна
+модель і бюджет ескалацій вичерпувались одночасно.
+
+Тест перевіряє САМЕ ці зʼєднання, а не самі call_gemini/call_codex
+(вони в test_llm_router_codex.py).
 """
 import importlib.util
 import os
@@ -33,24 +39,40 @@ def _load_module():
 
 @pytest.fixture
 def mod(monkeypatch):
+    """Модуль із call_gemini, що завжди падає — щоб перевірити шлях ескалації."""
     m = _load_module()
 
-    class Fake429:
-        status_code = 429
-        text = 'PerDay quota exceeded'
+    def fail(*a, **k):
+        raise RuntimeError('Gemini: усі моделі вичерпано')
 
-    monkeypatch.setattr(m.requests, 'post', lambda *a, **k: Fake429())
+    monkeypatch.setattr(m, 'call_gemini', fail)
     return m
 
 
-def test_ask_photo_escalates_when_gemini_down(mod, monkeypatch):
+def test_gemini_tries_full_chain_before_codex(monkeypatch):
+    """call_gemini (ланцюжок 4 моделей), а не одна модель напряму."""
+    m = _load_module()
+    seen = {}
+
+    def fake_call_gemini(prompt, **k):
+        seen['called'] = True
+        seen['image_bytes'] = k.get('image_bytes')
+        return 'чорний', 'gemini-3-flash-preview', {'total': 10}
+
+    monkeypatch.setattr(m, 'call_gemini', fake_call_gemini)
+    (text, tokens, src), q = m.ask_photo(b'fake', 'image/jpeg', 'Колір')
+    assert seen['called'] is True and seen['image_bytes'] == b'fake'
+    assert src == 'gemini' and text == 'чорний'
+
+
+def test_ask_photo_escalates_when_whole_chain_down(mod, monkeypatch):
     monkeypatch.setattr(mod, 'call_codex', lambda prompt, **k: ('чорний', 'codex-exec'))
     (text, tokens, src), q = mod.ask_photo(b'fake-bytes', 'image/jpeg', 'Колір')
     assert src == 'codex' and text == 'чорний'
     assert 'Колір' in q
 
 
-def test_ask_text_escalates_when_gemini_down(mod, monkeypatch):
+def test_ask_text_escalates_when_whole_chain_down(mod, monkeypatch):
     monkeypatch.setattr(mod, 'call_codex', lambda prompt, **k: ('силікон', 'codex-exec'))
     (text, tokens, src), q = mod.ask_text('опис товару', 'назва товару', 'Матеріал')
     assert src == 'codex' and text == 'силікон'
@@ -66,18 +88,3 @@ def test_ask_photo_passes_image_bytes_to_codex(mod, monkeypatch):
     monkeypatch.setattr(mod, 'call_codex', fake_codex)
     mod.ask_photo(b'fake-bytes', 'image/jpeg', 'Колір')
     assert seen['has_image'] is True
-
-
-def test_ask_photo_and_text_still_return_gemini_result_when_it_works(monkeypatch):
-    m = _load_module()
-
-    class FakeOK:
-        status_code = 200
-
-        def json(self):
-            return {'candidates': [{'content': {'parts': [{'text': 'білий'}]}}],
-                    'usageMetadata': {'totalTokenCount': 12}}
-
-    monkeypatch.setattr(m.requests, 'post', lambda *a, **k: FakeOK())
-    (text, tokens, src), q = m.ask_photo(b'fake', 'image/jpeg', 'Колір')
-    assert src == 'gemini' and text == 'білий' and tokens == 12
