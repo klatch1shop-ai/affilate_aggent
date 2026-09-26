@@ -63,6 +63,25 @@ def test_mark_read_hides_old_but_keeps_new(tmp_path):
     assert len(open(path, encoding='utf-8').read().strip().splitlines()) == 3
 
 
+def test_parse_lines_skips_broken_and_empty():
+    text = ('{"ts": "2026-09-26 10:00:00", "text": "перше"}\n'
+            '\n'
+            'це не json\n'
+            '{"ts": "2026-09-26 11:00:00", "text": "друге"}\n')
+    assert [e['text'] for e in inbox.parse_lines(text)] == ['перше', 'друге']
+    assert inbox.parse_lines('') == [] and inbox.parse_lines(None) == []
+
+
+def test_after_cursor_filters_by_time():
+    entries = [{'ts': '2026-09-26 10:00:00', 'text': 'старе'},
+               {'ts': '2026-09-26 12:00:00', 'text': 'нове'}]
+    assert [e['text'] for e in inbox.after(entries, '2026-09-26 11:00:00')] == ['нове']
+    # порожній курсор — усе, бо ще нічого не читали
+    assert len(inbox.after(entries, '')) == 2
+    # курсор рівно на записі — сам запис уже прочитаний, не повторюємо
+    assert [e['text'] for e in inbox.after(entries, '2026-09-26 10:00:00')] == ['нове']
+
+
 def test_broken_line_does_not_hide_rest(tmp_path):
     path = tmp_path / 'inbox.jsonl'
     path.write_text('це не json\n' + json.dumps({'text': 'живе', 'read': False},

@@ -48,6 +48,30 @@ def append(path, text, from_id=None, now=None):
     return entry
 
 
+def parse_lines(text):
+    """JSONL-текст → список записів. Побитий рядок пропускаємо, не падаємо.
+
+    Потрібно окремо від `unread`, бо бот пише скриньку на сервері, а читає її
+    Claude з ноутбука — вміст приходить рядком через ssh, а не з файлу.
+    """
+    out = []
+    for line in (text or '').splitlines():
+        if not line.strip():
+            continue
+        try:
+            out.append(json.loads(line))
+        except ValueError:
+            continue
+    return out
+
+
+def after(entries, cursor):
+    """Записи, новіші за курсор (позначку часу). Порожній курсор — усі."""
+    if not cursor:
+        return list(entries)
+    return [e for e in entries if str(e.get('ts') or '') > str(cursor)]
+
+
 def unread(path):
     """Непрочитані повідомлення. Немає файлу — порожній список, не помилка."""
     try:
