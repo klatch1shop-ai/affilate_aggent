@@ -77,6 +77,57 @@ def test_http_error_raises(monkeypatch):
         router.call_groq('питання')
 
 
+def test_image_url_goes_as_openai_content_list(monkeypatch):
+    monkeypatch.setenv('OPENROUTER_API_KEY', 'test-key')
+    seen = {}
+
+    def fake_post(url, timeout=None, headers=None, json=None):
+        seen['body'] = json
+        return FakeResp(content='чашки, 2 шт')
+
+    monkeypatch.setattr(router.requests, 'post', fake_post)
+    router.call_openrouter('що на фото?', image_url='https://cdn/x.jpeg')
+    content = seen['body']['messages'][0]['content']
+    assert content[0] == {'type': 'text', 'text': 'що на фото?'}
+    assert content[1]['image_url']['url'] == 'https://cdn/x.jpeg'
+
+
+def test_image_bytes_become_data_uri(monkeypatch):
+    monkeypatch.setenv('OPENROUTER_API_KEY', 'test-key')
+    seen = {}
+
+    def fake_post(url, timeout=None, headers=None, json=None):
+        seen['body'] = json
+        return FakeResp(content='ok')
+
+    monkeypatch.setattr(router.requests, 'post', fake_post)
+    router.call_openrouter('колір?', image_bytes=b'jpeg-bytes', image_mime='image/jpeg')
+    url = seen['body']['messages'][0]['content'][1]['image_url']['url']
+    assert url.startswith('data:image/jpeg;base64,')
+    import base64
+    assert base64.b64decode(url.split(',', 1)[1]) == b'jpeg-bytes'
+
+
+def test_url_wins_over_bytes_to_avoid_needless_base64(monkeypatch):
+    monkeypatch.setenv('OPENROUTER_API_KEY', 'test-key')
+    seen = {}
+    monkeypatch.setattr(router.requests, 'post',
+                        lambda url, timeout=None, headers=None, json=None:
+                        (seen.update(body=json), FakeResp(content='ok'))[1])
+    router.call_openrouter('?', image_url='https://cdn/x.jpeg', image_bytes=b'ignored')
+    assert seen['body']['messages'][0]['content'][1]['image_url']['url'] == 'https://cdn/x.jpeg'
+
+
+def test_no_image_keeps_plain_string_content(monkeypatch):
+    monkeypatch.setenv('GROQ_API_KEY', 'test-key')
+    seen = {}
+    monkeypatch.setattr(router.requests, 'post',
+                        lambda url, timeout=None, headers=None, json=None:
+                        (seen.update(body=json), FakeResp(content='ok'))[1])
+    router.call_groq('звичайний текст')
+    assert seen['body']['messages'][0]['content'] == 'звичайний текст'
+
+
 def test_ask_routes_to_groq_when_in_chain(monkeypatch, tmp_path):
     monkeypatch.setattr(router, 'call_groq', lambda *a, **k: ('відповідь groq', 'oss-120b'))
     monkeypatch.setattr(router, '_down', {})
@@ -89,3 +140,30 @@ def test_ask_not_in_default_chain():
     assert 'groq' not in router.CHAIN
     assert 'cerebras' not in router.CHAIN
     assert 'openrouter' not in router.CHAIN
+
+
+def test_photo_request_switches_to_vision_model(monkeypatch):
+    """26.09: живий прогін дав HTTP 404 «No endpoints found» — текстова модель
+    за замовчуванням просто не приймає зображень. Модель має залежати від того,
+    чи є фото, інакше збій виглядає як проблема ключа."""
+    monkeypatch.setenv('OPENROUTER_API_KEY', 'test-key')
+    seen = {}
+    monkeypatch.setattr(router.requests, 'post',
+                        lambda url, timeout=None, headers=None, json=None:
+                        (seen.update(body=json), FakeResp(content='ok'))[1])
+
+    router.call_openrouter('що на фото?', image_url='https://cdn/x.jpeg')
+    assert seen['body']['model'] == router.OPENROUTER_VISION_MODEL
+
+    router.call_openrouter('звичайний текст')
+    assert seen['body']['model'] == router.OPENROUTER_MODEL
+
+
+def test_explicit_model_still_wins_over_vision_default(monkeypatch):
+    monkeypatch.setenv('OPENROUTER_API_KEY', 'test-key')
+    seen = {}
+    monkeypatch.setattr(router.requests, 'post',
+                        lambda url, timeout=None, headers=None, json=None:
+                        (seen.update(body=json), FakeResp(content='ok'))[1])
+    router.call_openrouter('?', image_url='https://cdn/x.jpeg', model='my/model:free')
+    assert seen['body']['model'] == 'my/model:free'
