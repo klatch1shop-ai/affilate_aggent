@@ -162,6 +162,55 @@ def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None
     return text, m
 
 
+GROQ_MODEL = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
+CEREBRAS_MODEL = os.getenv('CEREBRAS_MODEL', 'gpt-oss-120b')
+OPENROUTER_MODEL = os.getenv('OPENROUTER_MODEL', 'nvidia/nemotron-3-super-120b-a12b:free')
+
+
+def _call_openai_compat(url, key_env, model, prompt, timeout, max_tokens):
+    """Спільний виклик для Groq/Cerebras/OpenRouter — усі OpenAI-сумісні chat/completions.
+
+    26.09.2026: gpt-oss/nemotron — reasoning-моделі, `reasoning`-токени йдуть у
+    ту саму квоту `max_tokens`, що й відповідь. При `max_tokens=30` `content`
+    виходив порожнім (усе зʼїла reasoning) — тому мінімум 200, інакше збій
+    виглядав би як «порожня відповідь», а не як замалий ліміт.
+    """
+    key = os.getenv(key_env, '')
+    if not key:
+        raise RuntimeError(f'{key_env} не задано')
+    body = {'model': model, 'messages': [{'role': 'user', 'content': prompt}],
+            'max_tokens': max(max_tokens or 0, 200)}
+    r = requests.post(url, timeout=timeout, headers={'Authorization': f'Bearer {key}'}, json=body)
+    if r.status_code != 200:
+        raise RuntimeError(f'{key_env}: HTTP {r.status_code}: {r.text[:200]}')
+    data = r.json()
+    text = ((data.get('choices') or [{}])[0].get('message') or {}).get('content', '').strip()
+    if not text:
+        raise RuntimeError(f'{key_env}: порожня відповідь')
+    return text, data.get('model') or model
+
+
+def call_groq(prompt, timeout=120, model=None, max_tokens=None):
+    """Груq — паралельний до Gemini безкоштовний канал, тест 26.09.2026 (реєстр Prom).
+
+    НЕ в CHAIN за замовчуванням — той самий принцип, що й Codex: канал під
+    ключем власника, вмикається свідомо, не для мовчазного фонового фолбеку."""
+    return _call_openai_compat('https://api.groq.com/openai/v1/chat/completions',
+                               'GROQ_API_KEY', model or GROQ_MODEL, prompt, timeout, max_tokens)
+
+
+def call_cerebras(prompt, timeout=120, model=None, max_tokens=None):
+    """Cerebras — те саме, окремий провайдер (~1M токенів/добу на free-тарифі)."""
+    return _call_openai_compat('https://api.cerebras.ai/v1/chat/completions',
+                               'CEREBRAS_API_KEY', model or CEREBRAS_MODEL, prompt, timeout, max_tokens)
+
+
+def call_openrouter(prompt, timeout=120, model=None, max_tokens=None):
+    """OpenRouter — пул безкоштовних моделей (`:free`) різних провайдерів під одним ключем."""
+    return _call_openai_compat('https://openrouter.ai/api/v1/chat/completions',
+                               'OPENROUTER_API_KEY', model or OPENROUTER_MODEL, prompt, timeout, max_tokens)
+
+
 class CodexLimitError(RuntimeError):
     """Вичерпано ліміт використання Codex (ChatGPT). Повторювати марно до вказаного часу."""
 
@@ -233,6 +282,12 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
                 text, model = call_omniroute(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'ollama':
                 text, model = call_ollama(prompt, timeout, task=task, max_tokens=max_tokens)
+            elif ch == 'groq':
+                text, model = call_groq(prompt, timeout, max_tokens=max_tokens)
+            elif ch == 'cerebras':
+                text, model = call_cerebras(prompt, timeout, max_tokens=max_tokens)
+            elif ch == 'openrouter':
+                text, model = call_openrouter(prompt, timeout, max_tokens=max_tokens)
             else:
                 tried.append(f'{ch}:невідомий канал')
                 continue
