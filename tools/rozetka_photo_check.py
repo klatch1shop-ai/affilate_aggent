@@ -187,31 +187,33 @@ def run(queue, limit, workers=4, chunk=None):
 
 
 def report(queue):
+    """CSV на перевірку власником: що з фото не так і чим його замінити."""
     rows = queue._conn.execute(
-        'SELECT key, payload, verdict, answer_a, error FROM tasks WHERE state = ?',
-        (DONE,)).fetchall()
-    by_card = {}
-    for row in rows:
-        payload = json.loads(row['payload'])
-        card = by_card.setdefault(payload['article'], {'name': payload['name'], 'photos': {}})
-        card['photos'][payload['index']] = {'verdict': row['verdict'], 'url': payload['url'],
-                                            'answer': row['answer_a']}
+        "SELECT key, verdict, answer_a, error FROM tasks WHERE state IN ('готова','збій')").fetchall()
     os.makedirs(os.path.dirname(REPORT), exist_ok=True)
+    counts = {}
     with open(REPORT, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['article', 'name', 'перше_фото_придатне', 'пропонований_індекс',
-                         'пропоноване_фото', 'усього_фото', 'опис_поточного'])
-        for article, card in sorted(by_card.items()):
-            photos = card['photos']
-            first = photos.get(0) or {}
-            good = [i for i in sorted(photos) if photos[i]['verdict'] == 'придатне']
-            suggest = next((i for i in good if i != 0), None)
-            writer.writerow([article, card['name'],
-                             'так' if first.get('verdict') == 'придатне' else 'ні',
-                             '' if first.get('verdict') == 'придатне' else (suggest if suggest is not None else 'НЕМАЄ ПРИДАТНОГО'),
-                             '' if first.get('verdict') == 'придатне' or suggest is None else photos[suggest]['url'],
-                             len(photos), (first.get('answer') or '')[:200]])
-    print(f'карток у звіті: {len(by_card)} → {REPORT}')
+        writer.writerow(['article', 'name', 'вердикт', 'замінити_на_фото', 'посилання',
+                         'перевірено_фото', 'усього_фото', 'що_на_першому_фото'])
+        for row in sorted(rows, key=lambda r: r['key']):
+            if row['error']:
+                writer.writerow([row['key'], '', 'ПОМИЛКА', '', '', '', '', row['error'][:150]])
+                counts['ПОМИЛКА'] = counts.get('ПОМИЛКА', 0) + 1
+                continue
+            data = json.loads(row['answer_a'])
+            first = (data.get('фото') or {}).get('0') or {}
+            counts[row['verdict']] = counts.get(row['verdict'], 0) + 1
+            writer.writerow([
+                data.get('article'), data.get('name'), row['verdict'],
+                data.get('придатний_індекс') if data.get('придатний_індекс') else '',
+                data.get('пропоноване_фото', ''),
+                data.get('перевірено_фото'), data.get('усього_фото'),
+                first.get('що_на_фото', ''),
+            ])
+    for verdict, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f'  {n:>4}  {verdict}')
+    print(f'→ {REPORT}')
 
 
 def main():
