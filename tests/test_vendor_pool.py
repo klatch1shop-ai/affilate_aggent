@@ -2,6 +2,8 @@
 може підтвердити сам себе. Саме ця дірка знецінила 94% попереднього прогону
 атрибутів Епіцентру (196 із 218 «ЗБІГів» — модель погодилась сама з собою).
 """
+import os
+
 import pytest
 
 from shared.utils import vendor_pool as vp
@@ -122,3 +124,46 @@ def test_one_side_unknown_is_not_disagreement():
 
 def test_one_side_unknown_same_vendor_still_only_one_knows():
     assert vp.verdict('2', 'НЕ ВКАЗАНО', 'codex', 'codex') == vp.ONLY_ONE_KNOWS
+
+
+def test_vendors_that_need_bytes_actually_receive_the_image(monkeypatch):
+    """ЗНАЙДЕНО 26.09: gemini приймає лише image_bytes, codex — лише файл, і
+    обидва мовчки ігнорували image_url. Вони відповідали «НЕ ВИДНО» на фото,
+    якого не бачили, а я записав це в їхню непридатність.
+
+    Підміна саме атрибута пакета: `from shared.utils import llm_router` бере
+    атрибут з `shared.utils`, а не з `sys.modules`, тож підміна в sys.modules
+    не діяла — і тест ходив у справжню мережу.
+    """
+    import shared.utils as pkg
+
+    monkeypatch.setattr(vp, '_fetch', lambda url, **k: (b'jpeg-bytes', 'image/jpeg'))
+    seen = {}
+
+    class FakeRouter:
+        @staticmethod
+        def call_gemini(prompt, timeout=None, max_tokens=None, image_bytes=None, image_mime=None):
+            seen['gemini_bytes'] = image_bytes
+            return 'ok', 'model', None
+
+        @staticmethod
+        def call_codex(prompt, image_path=None, timeout=None):
+            seen['codex_path'] = image_path
+            seen['codex_file_existed'] = bool(image_path) and os.path.exists(image_path)
+            return 'ok', 'codex-exec'
+
+        @staticmethod
+        def call_openrouter(prompt, **kw):
+            return 'ok', 'm'
+
+        call_groq = call_cerebras = call_openrouter
+
+    monkeypatch.setattr(pkg, 'llm_router', FakeRouter, raising=False)
+
+    vp.call('gemini', 'що на фото?', image_url='https://cdn/x.jpg')
+    assert seen['gemini_bytes'] == b'jpeg-bytes'
+
+    vp.call('codex', 'що на фото?', image_url='https://cdn/x.jpg')
+    assert seen['codex_path'].endswith('.jpg')
+    assert seen['codex_file_existed']                     # файл існував НА МОМЕНТ виклику
+    assert not os.path.exists(seen['codex_path'])         # і прибрано після

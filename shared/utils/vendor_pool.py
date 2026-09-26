@@ -148,7 +148,30 @@ def first_ok(vendors, prompt, stats=None, **kw):
     return None, None, errors
 
 
+def _fetch(url, _cache={}):
+    """Байти зображення за посиланням — для вендорів, які не вміють брати URL.
+
+    ЗНАЙДЕНО 26.09.2026: gemini приймає лише `image_bytes`, codex — лише шлях
+    до файлу, і обидва мовчки ІГНОРУВАЛИ `image_url`. Через це вони «дивились»
+    на фото, якого не отримували, і відповідали «НЕ ВИДНО» — а я записав це в
+    їхню непридатність. Порожня відповідь через відсутні дані виглядає так
+    само, як через невміння; різницю видно лише коли передаси дані насправді.
+    """
+    if url in _cache:
+        return _cache[url]
+    import requests
+    resp = requests.get(url, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
+    resp.raise_for_status()
+    if len(_cache) > 32:
+        _cache.clear()
+    _cache[url] = (resp.content, resp.headers.get('content-type', 'image/jpeg').split(';')[0])
+    return _cache[url]
+
+
 def _default_callers():
+    import os
+    import tempfile
+
     from shared.utils import llm_router as r
 
     def openrouter(prompt, image_url=None, image_bytes=None, image_mime=None,
@@ -160,14 +183,31 @@ def _default_callers():
 
     def gemini(prompt, image_url=None, image_bytes=None, image_mime=None,
                timeout=180, max_tokens=300):
+        if image_url and not image_bytes:          # інакше запит піде БЕЗ фото
+            image_bytes, image_mime = _fetch(image_url)
         text, _model, _tok = r.call_gemini(prompt, timeout=timeout, max_tokens=max_tokens,
                                            image_bytes=image_bytes, image_mime=image_mime)
         return text
 
     def codex(prompt, image_url=None, image_bytes=None, image_mime=None,
               timeout=180, max_tokens=300):
-        text, _ = r.call_codex(prompt, timeout=timeout)
-        return text
+        if image_url and not image_bytes:
+            image_bytes, image_mime = _fetch(image_url)
+        path = None
+        try:
+            if image_bytes:
+                suffix = '.png' if 'png' in (image_mime or '') else '.jpg'
+                with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as f:
+                    f.write(image_bytes)
+                    path = f.name
+            text, _ = r.call_codex(prompt, image_path=path, timeout=timeout)
+            return text
+        finally:
+            if path:
+                try:
+                    os.unlink(path)
+                except OSError:
+                    pass
 
     def groq(prompt, image_url=None, image_bytes=None, image_mime=None,
              timeout=180, max_tokens=300):
