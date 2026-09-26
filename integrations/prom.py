@@ -45,3 +45,23 @@ class PromClient:
         if status is not None:
             params['status'] = status
         return self._list('orders', params)
+
+    def order(self, order_id) -> dict:
+        """Одне замовлення (`GET /orders/{id}`) — реєстр `orders_get`, 26.09.2026."""
+        try:
+            status, body = call_with_retry(
+                lambda: self._get(f'{BASE}/orders/{order_id}', params={}, headers={
+                    'Authorization': f'Bearer {self._token}',
+                }), sleep=self._sleep,
+            )
+        except (ConnectionError, TimeoutError):
+            raise ApiError('prom', 'немає зв’язку') from None
+        if status in (401, 403):
+            raise AuthError('prom', 'невірний або прострочений токен', code=status)
+        if status == 404:
+            raise ApiError('prom', 'замовлення не знайдено', code=404)
+        if status != 200:
+            raise ApiError('prom', 'помилка HTTP', code=status)
+        if not isinstance(body, dict) or not isinstance(body.get('order'), dict):
+            raise ApiError('prom', 'відсутнє або некоректне замовлення')
+        return body['order']

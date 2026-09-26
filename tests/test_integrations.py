@@ -346,6 +346,32 @@ def test_prom_auth_error_not_empty_list(status):
     assert TOKEN not in str(e.value)
 
 
+def test_prom_order_by_id():
+    c, g = prom_client({'/orders/12345': [(200, {'order': {'id': 12345, 'status': 'pending'}})]})
+    assert c.order(12345) == {'id': 12345, 'status': 'pending'}
+    assert g.calls[0][0] == 'https://my.prom.ua/api/v1/orders/12345'
+
+
+def test_prom_order_not_found():
+    c, _ = prom_client({'/orders/99': [(404, {'error': 'Not found'})]})
+    with pytest.raises(errors.ApiError) as e:
+        c.order(99)
+    assert e.value.code == 404
+
+
+@pytest.mark.parametrize('status', [401, 403])
+def test_prom_order_auth_error(status):
+    c, _ = prom_client({'/orders/1': [(status, {'error': 'Unauthorized'})]})
+    with pytest.raises(errors.AuthError):
+        c.order(1)
+
+
+def test_prom_order_bad_body():
+    c, _ = prom_client({'/orders/1': [(200, {'unexpected': {}})]})
+    with pytest.raises(errors.ApiError):
+        c.order(1)
+
+
 def test_prom_bad_body_and_limits():
     c, _ = prom_client({'/messages/list': [(200, {'unexpected': []})], '/orders/list': [(500, None)]})
     with pytest.raises(errors.ApiError):

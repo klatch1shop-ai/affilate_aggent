@@ -7,15 +7,23 @@ from tg_dispatcher.ai_brain import commands, intents
 def build_fetchers(rozetka=None, novaposhta=None, stock_lookup=None,
                    feeds_status=None, system_status=None, unanswered=None,
                    backup_status=None, supplier_stock=None, supplier_ttn=None,
-                   orders_without_ttn=None, ttn_stuck=None) -> dict:
+                   orders_without_ttn=None, ttn_stuck=None, prom=None) -> dict:
     fetchers = {}
     if rozetka is not None:
         def orders_new(marketplace=None, **kwargs):
+            if marketplace == 'prom':
+                if prom is None:
+                    raise ApiError('helper', 'майданчик prom ще не підключено')
+                return prom.orders()
             if marketplace not in (None, 'rozetka'):
                 raise ApiError('helper', f'майданчик {marketplace} ще не підключено')
             return rozetka.active_orders()
 
-        def order_details(order_id, **kwargs):
+        def order_details(order_id, marketplace=None, **kwargs):
+            if marketplace == 'prom':
+                if prom is None:
+                    raise ApiError('helper', 'майданчик prom ще не підключено')
+                return prom.order(order_id)
             order = rozetka.order(order_id)
             if novaposhta is None:
                 return order

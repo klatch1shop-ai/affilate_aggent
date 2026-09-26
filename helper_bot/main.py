@@ -45,6 +45,7 @@ from helper.selfcheck import render as selfcheck_render, run_checks  # noqa: E40
 from helper.testplan import test_text                               # noqa: E402
 from helper.services import answer, build_fetchers                  # noqa: E402
 from integrations.novaposhta import NovaPoshtaClient                # noqa: E402
+from integrations.prom import PromClient                            # noqa: E402
 from integrations.rozetka import RozetkaClient                      # noqa: E402
 from tg_dispatcher.inbox.reply import plan_reply                    # noqa: E402
 from tg_dispatcher.inbox.store import InboxStore                    # noqa: E402
@@ -178,10 +179,13 @@ def make_fetchers():
     rz = RozetkaClient(http_get, os.getenv('ROZETKA_API_TOKEN', ''), time.sleep)
     np_key = os.getenv('NP_API_KEY', '')
     np = NovaPoshtaClient(http_post, np_key, time.sleep) if np_key else None
+    prom_key = os.getenv('PROM_API_TOKEN', '')
+    prom = PromClient(http_get, prom_key, time.sleep) if prom_key else None
     return rz, build_fetchers(rozetka=rz, novaposhta=np, stock_lookup=stock_lookup,
                               feeds_status=feeds_now, system_status=system_now,
                               unanswered=unanswered_now, backup_status=backup_now,
-                              orders_without_ttn=lambda: orders_without_ttn_now(rz))
+                              orders_without_ttn=lambda: orders_without_ttn_now(rz),
+                              prom=prom)
 
 
 def _rows(sql, params=()):
