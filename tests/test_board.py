@@ -71,3 +71,16 @@ def test_telegram_summary_has_no_markdown_tables():
 def test_telegram_says_when_no_vendor_alive():
     text = board.render_telegram([], vendors=[{'name': 'codex', 'alive': False}])
     assert 'жодного' in text
+
+
+def test_unprobed_vendor_is_not_shown_as_dead():
+    """Знайдено на живому прогоні: з --no-probe alive=None рендерився ✖️,
+    тобто «не питали» виглядало як «мертвий»."""
+    text = board.render_vendors([{'name': 'groq', 'alive': None}])
+    assert '| groq | — | — |' in text
+    assert '✖️' not in text
+
+
+def test_telegram_counts_only_really_alive():
+    text = board.render_telegram([], vendors=[{'name': 'groq', 'alive': None}])
+    assert 'жодного' in text

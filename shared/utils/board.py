@@ -57,7 +57,10 @@ def render_vendors(vendors):
     lines = ['## Провайдери', '', '| вендор | живий | придатний | примітка |',
              '|---|---|---|---|']
     for v in vendors:
-        alive = '✅' if v.get('alive') else '✖️'
+        # None — «не питали», і це НЕ те саме, що «мертвий». Без цієї різниці
+        # дошка з --no-probe показувала всіх провайдерів як недоступних.
+        alive = v.get('alive')
+        alive = '—' if alive is None else ('✅' if alive else '✖️')
         useful = v.get('useful')
         useful = '—' if useful is None else ('✅' if useful else '✖️')
         lines.append(f"| {v['name']} | {alive} | {useful} | {v.get('note', '')} |")
