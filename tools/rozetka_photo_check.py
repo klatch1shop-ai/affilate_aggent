@@ -90,39 +90,76 @@ def load_cards():
 
 
 def fill(queue):
-    """Одна задача = одне фото. Дрібні задачі переживають обрив краще за великі."""
-    tasks = []
-    for card in load_cards():
-        for index, url in enumerate(card['pictures']):
-            tasks.append({'key': f"{card['article']}#{index}", 'kind': 'photo',
-                          'payload': {'article': card['article'], 'index': index,
-                                      'url': url, 'name': card['name']}})
+    """Одна задача = одна КАРТКА з усіма її фото.
+
+    Спершу було по задачі на фото — це перевіряло всі 3955 фото наосліп.
+    Але питання стоїть інакше: «чи придатне перше фото, а якщо ні — яке з
+    решти його замінить». Отже фото перевіряються по черзі й перевірка
+    спиняється на першому придатному. Заміряно: придатних ~24%, у картці
+    в середньому 5.2 фото, тож рання зупинка знімає близько третини запитів.
+    """
+    tasks = [{'key': card['article'], 'kind': 'card',
+              'payload': {'article': card['article'], 'name': card['name'],
+                          'pictures': card['pictures']}}
+             for card in load_cards()]
     return queue.add_many(tasks)
 
 
-def run_one(task, retries=2):
-    """Одне фото через пул. Другого джерела тут НЕ беремо: фото вміє читати
-    лише openrouter (заміри 26.09), тож чесніше записати одне джерело, ніж
-    вдавати перевірку другим, який на фото каже «НЕ ВИДНО».
+VENDORS = [v.strip() for v in os.getenv('PHOTO_VENDORS', 'gemini').split(',') if v.strip()]
 
-    Повтор саме на порожню відповідь: у прогоні 26.09 це 8 із 11 збоїв, і
-    вона минуща — те саме фото з другої спроби читається нормально.
-    """
-    payload = task['payload']
+
+def ask_photo(url, retries=2):
+    """Одне фото. Повтор саме на порожню відповідь: у прогоні 26.09 це 8 із 11
+    збоїв, і вона минуща — те саме фото з другої спроби читається нормально."""
     for attempt in range(retries + 1):
         text, vendor, errors = vp.first_ok(
-            ['openrouter'], QUESTION, image_url=payload['url'], timeout=120, max_tokens=400)
+            VENDORS, QUESTION, image_url=url, timeout=120, max_tokens=400)
         if text or not any('порожня' in e for e in errors):
             break
         time.sleep(2 * (attempt + 1))
     if not text:
-        return task['key'], {'error': '; '.join(errors)[:200]}
-    answer = parse_answer(text)
-    if answer is None:
-        return task['key'], {'error': f'нерозбірлива відповідь: {text[:120]}',
-                             'vendor_a': vendor}
-    return task['key'], {'vendor_a': vendor, 'answer_a': json.dumps(answer, ensure_ascii=False),
-                         'verdict': 'придатне' if is_good_first_photo(answer) else 'непридатне'}
+        return None, None, '; '.join(errors)[:200]
+    return parse_answer(text), vendor, None
+
+
+def run_one(task):
+    """Картка: перевіряємо фото по черзі й СПИНЯЄМОСЬ на першому придатному.
+
+    Обсяг тягне gemini: після оплати (26.09) він відповідає за ~1.5 с без
+    добової стелі, тоді як безкоштовний openrouter дає 50 запитів на добу.
+    Тому openrouter тут НЕ другим джерелом на кожен рядок — його мало, —
+    а окремою вибіркою для контролю якості. Вдавати, що кожен рядок
+    перевірено двома, коли другого вистачає на 1%, було б тією самою
+    брехнею, проти якої написано vendor_pool.
+    """
+    payload = task['payload']
+    seen, vendor_used, first_error = {}, None, None
+    good_index = None
+    for index, url in enumerate(payload['pictures']):
+        answer, vendor, error = ask_photo(url)
+        if error:
+            first_error = first_error or error
+            continue
+        vendor_used = vendor_used or vendor
+        seen[index] = answer
+        if is_good_first_photo(answer):
+            good_index = index
+            break                      # далі не питаємо — заміну вже знайдено
+    if not seen:
+        return task['key'], {'error': first_error or 'жодне фото не прочитано'}
+    result = {'article': payload['article'], 'name': payload['name'],
+              'перевірено_фото': len(seen), 'усього_фото': len(payload['pictures']),
+              'придатний_індекс': good_index,
+              'фото': {str(i): a for i, a in seen.items()}}
+    if good_index == 0:
+        verdict = 'перше фото придатне'
+    elif good_index is not None:
+        verdict = f'замінити першим фото №{good_index}'
+        result['пропоноване_фото'] = payload['pictures'][good_index]
+    else:
+        verdict = 'немає придатного фото'
+    return task['key'], {'vendor_a': vendor_used, 'verdict': verdict,
+                         'answer_a': json.dumps(result, ensure_ascii=False)}
 
 
 def run(queue, limit, workers=4, chunk=None):
@@ -135,14 +172,14 @@ def run(queue, limit, workers=4, chunk=None):
     chunk = chunk or max(workers * 2, 4)
     done = 0
     while done < limit:
-        tasks = queue.take(min(chunk, limit - done), kind='photo')
+        tasks = queue.take(min(chunk, limit - done), kind='card')
         if not tasks:
             break
         with ThreadPoolExecutor(max_workers=workers) as pool:
             for key, result in pool.map(run_one, tasks):
                 queue.finish(key, **result)
                 done += 1
-                mark = '✗' if result.get('error') else ('✅' if result.get('verdict') == 'придатне' else '⬜')
+                mark = '✗' if result.get('error') else ('✅' if result.get('verdict') == 'перше фото придатне' else '⬜')
                 print(f'  {mark} {key}', flush=True)
     if not done:
         print('нових задач немає')

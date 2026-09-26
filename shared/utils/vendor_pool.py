@@ -20,6 +20,7 @@ Gemini вичерпав добову квоту, обидва запити ти�
   groq       — лише текст (gpt-oss-120b)
   cerebras   — лише текст (gpt-oss-120b)
 """
+import os
 import time
 
 VISION = ('kimi', 'openrouter', 'gemini', 'codex')
@@ -149,6 +150,45 @@ def first_ok(vendors, prompt, stats=None, **kw):
     return None, None, errors
 
 
+# 0 = вимкнено. ЗАМІРЯНО 26.09: Gemini нарахував РІВНО 1220 вхідних токенів і
+# за повне фото (67 КБ), і за зменшене (15 КБ) — ставка за зображення фіксована,
+# тож зменшення економить трафік, але не гроші, ще й додає роботи процесору
+# (1673 мс проти 1428). Вмикати лише там, де провайдер справді рахує площу.
+MAX_SIDE = int(os.environ.get('VENDOR_IMAGE_MAX_SIDE', '0'))
+
+
+def shrink(data, max_side=None):
+    """Зменшує зображення до `max_side` по довшій стороні.
+
+    Навіщо: провайдери рахують зображення тілами — у Gemini картинка до 384 px
+    коштує фіксовані 258 токенів, більша ріжеться на тайли й дорожчає кратно
+    площі. Для питань «чи є цензурна зірочка», «чи це таблиця розмірів»
+    деталізація понад 384 px нічого не додає, а платити за неї доводиться на
+    кожному з тисяч фото.
+
+    Не вдалось розібрати (не зображення, битий файл) — повертаємо як є:
+    краще дорожчий запит, ніж утрачений.
+    """
+    max_side = max_side if max_side is not None else MAX_SIDE
+    if not max_side:
+        return data, None
+    try:
+        from io import BytesIO
+
+        from PIL import Image
+        img = Image.open(BytesIO(data))
+        if max(img.size) <= max_side:
+            return data, 'image/jpeg' if img.format == 'JPEG' else f'image/{(img.format or "jpeg").lower()}'
+        img.thumbnail((max_side, max_side), Image.LANCZOS)
+        if img.mode not in ('RGB', 'L'):
+            img = img.convert('RGB')
+        buf = BytesIO()
+        img.save(buf, format='JPEG', quality=85)
+        return buf.getvalue(), 'image/jpeg'
+    except Exception:
+        return data, None
+
+
 def _fetch(url, _cache={}):
     """Байти зображення за посиланням — для вендорів, які не вміють брати URL.
 
@@ -163,9 +203,11 @@ def _fetch(url, _cache={}):
     import requests
     resp = requests.get(url, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
     resp.raise_for_status()
+    mime = resp.headers.get('content-type', 'image/jpeg').split(';')[0]
+    data, new_mime = shrink(resp.content)
     if len(_cache) > 32:
         _cache.clear()
-    _cache[url] = (resp.content, resp.headers.get('content-type', 'image/jpeg').split(';')[0])
+    _cache[url] = (data, new_mime or mime)
     return _cache[url]
 
 
