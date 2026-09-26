@@ -70,7 +70,7 @@ def fake_callers(**behaviour):
                 raise result
             return result
         return fn
-    return {n: make(n) for n in ('openrouter', 'gemini', 'codex', 'groq', 'cerebras')}
+    return {n: make(n) for n in ('kimi', 'openrouter', 'gemini', 'codex', 'groq', 'cerebras')}
 
 
 def test_call_rejects_photo_for_text_only_vendor():
@@ -167,3 +167,10 @@ def test_vendors_that_need_bytes_actually_receive_the_image(monkeypatch):
     assert seen['codex_path'].endswith('.jpg')
     assert seen['codex_file_existed']                     # файл існував НА МОМЕНТ виклику
     assert not os.path.exists(seen['codex_path'])         # і прибрано після
+
+
+def test_kimi_is_first_choice_for_photos():
+    """Без добової стелі — тому саме він має брати обсяг, а не 50-запитовий
+    OpenRouter."""
+    first, second = vp.pick_two(['openrouter', 'kimi', 'groq'])
+    assert first == 'kimi' and second != 'kimi'

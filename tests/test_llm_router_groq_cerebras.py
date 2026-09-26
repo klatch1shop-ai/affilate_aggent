@@ -167,3 +167,29 @@ def test_explicit_model_still_wins_over_vision_default(monkeypatch):
                         (seen.update(body=json), FakeResp(content='ok'))[1])
     router.call_openrouter('?', image_url='https://cdn/x.jpeg', model='my/model:free')
     assert seen['body']['model'] == 'my/model:free'
+
+
+def test_kimi_uses_moonshot_endpoint_and_supports_photos(monkeypatch):
+    """Kimi платний, але без добової стелі — заради цього його й додано."""
+    monkeypatch.setenv('KIMI_API_KEY', 'test-key')
+    seen = {}
+    monkeypatch.setattr(router.requests, 'post',
+                        lambda url, timeout=None, headers=None, json=None:
+                        (seen.update(url=url, body=json, headers=headers), FakeResp(content='ок'))[1])
+
+    text, _ = router.call_kimi('що на фото?', image_url='https://cdn/x.jpeg')
+    assert text == 'ок'
+    assert seen['url'] == 'https://api.moonshot.ai/v1/chat/completions'
+    assert seen['headers']['Authorization'] == 'Bearer test-key'
+    assert seen['body']['model'] == router.KIMI_MODEL
+    assert seen['body']['messages'][0]['content'][1]['image_url']['url'] == 'https://cdn/x.jpeg'
+
+
+def test_kimi_missing_key_raises(monkeypatch):
+    monkeypatch.delenv('KIMI_API_KEY', raising=False)
+    with pytest.raises(RuntimeError, match='KIMI_API_KEY'):
+        router.call_kimi('питання')
+
+
+def test_kimi_not_in_default_chain():
+    assert 'kimi' not in router.CHAIN

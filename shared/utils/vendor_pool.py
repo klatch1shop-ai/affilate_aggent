@@ -13,7 +13,8 @@ Gemini вичерпав добову квоту, обидва запити ти�
     справжніх даних, а не на враженнях.
 
 Хто що вміє (перевірено живими запитами 26.09):
-  openrouter — текст і ФОТО (nemotron-3-nano-omni, вендор NVIDIA)
+  kimi       — текст і ФОТО, платний (~$0.95/1М), БЕЗ добової стелі
+  openrouter — текст і ФОТО (nemotron-3-nano-omni, вендор NVIDIA), 50/добу
   gemini     — текст і фото, але добова квота ~20 запитів на модель
   codex      — текст і фото, спільна квота з робочими задачами
   groq       — лише текст (gpt-oss-120b)
@@ -21,8 +22,8 @@ Gemini вичерпав добову квоту, обидва запити ти�
 """
 import time
 
-VISION = ('openrouter', 'gemini', 'codex')
-TEXT = ('groq', 'cerebras', 'openrouter', 'gemini', 'codex')
+VISION = ('kimi', 'openrouter', 'gemini', 'codex')
+TEXT = ('groq', 'cerebras', 'kimi', 'openrouter', 'gemini', 'codex')
 
 UNVERIFIED = 'НЕ ПЕРЕВІРЕНО (одне джерело)'
 AGREE = 'ЗБІГ'
@@ -174,6 +175,13 @@ def _default_callers():
 
     from shared.utils import llm_router as r
 
+    def kimi(prompt, image_url=None, image_bytes=None, image_mime=None,
+             timeout=180, max_tokens=300):
+        text, _ = r.call_kimi(prompt, timeout=timeout, max_tokens=max_tokens,
+                              image_url=image_url, image_bytes=image_bytes,
+                              image_mime=image_mime)
+        return text
+
     def openrouter(prompt, image_url=None, image_bytes=None, image_mime=None,
                    timeout=180, max_tokens=300):
         text, _ = r.call_openrouter(prompt, timeout=timeout, max_tokens=max_tokens,
@@ -219,5 +227,5 @@ def _default_callers():
         text, _ = r.call_cerebras(prompt, timeout=timeout, max_tokens=max_tokens)
         return text
 
-    return {'openrouter': openrouter, 'gemini': gemini, 'codex': codex,
-            'groq': groq, 'cerebras': cerebras}
+    return {'kimi': kimi, 'openrouter': openrouter, 'gemini': gemini,
+            'codex': codex, 'groq': groq, 'cerebras': cerebras}

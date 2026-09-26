@@ -165,6 +165,11 @@ def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None
 GROQ_MODEL = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
 CEREBRAS_MODEL = os.getenv('CEREBRAS_MODEL', 'gpt-oss-120b')
 OPENROUTER_MODEL = os.getenv('OPENROUTER_MODEL', 'nvidia/nemotron-3-super-120b-a12b:free')
+# Kimi (Moonshot): платний, але дешевий і БЕЗ добової стелі, на відміну від
+# безкоштовних. K2.6 уміє зображення й коштує втричі менше за K3 (офіційний
+# прайс platform.kimi.ai, 26.09.2026: 0.95/4.00 проти 3.00/15.00 за 1М токенів).
+# Точний ідентифікатор моделі звіряти через GET /v1/models — не вгадувати.
+KIMI_MODEL = os.getenv('KIMI_MODEL', 'kimi-k2.6')
 # Окрема модель для фото: 26.09 живий тест дав HTTP 404 «No endpoints found», бо
 # текстова модель просто не приймає зображень, а не бо ключ чи URL погані.
 OPENROUTER_VISION_MODEL = os.getenv('OPENROUTER_VISION_MODEL',
@@ -225,6 +230,21 @@ def call_cerebras(prompt, timeout=120, model=None, max_tokens=None):
     """Cerebras — те саме, окремий провайдер (~1M токенів/добу на free-тарифі)."""
     return _call_openai_compat('https://api.cerebras.ai/v1/chat/completions',
                                'CEREBRAS_API_KEY', model or CEREBRAS_MODEL, prompt, timeout, max_tokens)
+
+
+def call_kimi(prompt, timeout=120, model=None, max_tokens=None,
+              image_url=None, image_bytes=None, image_mime=None):
+    """Kimi (Moonshot) — API сумісний з OpenAI, тож той самий виклик.
+
+    Навіщо платний вендор у пулі безкоштовних: безкоштовні тарифи мають ДОБОВУ
+    стелю (заміряно 26.09: OpenRouter 50/добу, Gemini ~80), а невикористане не
+    накопичується. Партія на 4000 фото через них — 30 днів; через Kimi — години
+    за ~$7. Плюс це четвертий незалежний вендор для перехресної перевірки.
+    """
+    return _call_openai_compat('https://api.moonshot.ai/v1/chat/completions',
+                               'KIMI_API_KEY', model or KIMI_MODEL, prompt,
+                               timeout, max_tokens, image_url=image_url,
+                               image_bytes=image_bytes, image_mime=image_mime)
 
 
 def call_openrouter(prompt, timeout=120, model=None, max_tokens=None,
@@ -321,6 +341,8 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
                 text, model = call_cerebras(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'openrouter':
                 text, model = call_openrouter(prompt, timeout, max_tokens=max_tokens)
+            elif ch == 'kimi':
+                text, model = call_kimi(prompt, timeout, max_tokens=max_tokens)
             else:
                 tried.append(f'{ch}:невідомий канал')
                 continue
