@@ -88,7 +88,10 @@ def test_first_ok_skips_broken_and_reports_why():
     text, vendor, errors = vp.first_ok(['openrouter', 'gemini'], 'питання',
                                        stats=stats, callers=callers)
     assert text == 'Гель' and vendor == 'gemini'
-    assert errors == ['openrouter:RuntimeError']      # збій видно, а не проковтнуто
+    # не лише тип: «RuntimeError» однаково виглядає для вичерпаної квоти
+    # й порожньої відповіді, тому причина має бути в тексті
+    assert errors[0].startswith('openrouter:RuntimeError')
+    assert '429' in errors[0]
     assert stats.summary()['openrouter']['збоїв'] == 1
     assert stats.summary()['gemini']['відповів'] == 1
 

@@ -142,7 +142,9 @@ def first_ok(vendors, prompt, stats=None, **kw):
         except Exception as e:
             if stats is not None:
                 stats.record(vendor, False)
-            errors.append(f'{vendor}:{type(e).__name__}')
+            # Сам тип помилки нічого не пояснює: «RuntimeError» однаково
+            # виглядає і для вичерпаної квоти, і для порожньої відповіді.
+            errors.append(f'{vendor}:{type(e).__name__}: {str(e)[:160]}')
     return None, None, errors
 
 
