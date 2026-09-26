@@ -93,6 +93,40 @@ def test_orders_other_marketplace_is_visible_error():
     assert 'prom' in str(e.value)
 
 
+class FakeProm:
+    def __init__(self):
+        self.calls = []
+
+    def orders(self, **kwargs):
+        self.calls.append('orders')
+        return [{'id': 1, 'status': 'pending'}]
+
+    def order(self, order_id):
+        self.calls.append(('order', order_id))
+        return {'id': order_id, 'status': 'pending'}
+
+
+def test_prom_orders_new_when_connected():
+    pr = FakeProm()
+    f = services.build_fetchers(rozetka=FakeRozetka(), prom=pr)
+    assert f['orders_new'](marketplace='prom') == [{'id': 1, 'status': 'pending'}]
+    assert pr.calls == ['orders']
+
+
+def test_prom_order_details_when_connected():
+    pr = FakeProm()
+    f = services.build_fetchers(rozetka=FakeRozetka(), prom=pr)
+    assert f['order_details'](order_id=555, marketplace='prom') == {'id': 555, 'status': 'pending'}
+
+
+def test_prom_order_details_without_marketplace_stays_rozetka():
+    rz = FakeRozetka()
+    f = services.build_fetchers(rozetka=rz, prom=FakeProm())
+    out = f['order_details'](order_id='906298386')
+    assert out['id'] == 906298386
+    assert ('order', '906298386') in rz.calls
+
+
 def test_answer_end_to_end():
     f = services.build_fetchers(rozetka=FakeRozetka(), novaposhta=FakeNP())
     out = services.answer('що із замовленням 906298386', f)

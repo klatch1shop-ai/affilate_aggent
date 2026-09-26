@@ -43,8 +43,10 @@ from helper.feeds import feeds_status                               # noqa: E402
 from helper.inbox_cycle import DeliveryQueue, InboxCycle            # noqa: E402
 from helper.selfcheck import render as selfcheck_render, run_checks  # noqa: E402
 from helper.testplan import test_text                               # noqa: E402
+from helper import vscode_inbox                                     # noqa: E402
 from helper.services import answer, build_fetchers                  # noqa: E402
 from integrations.novaposhta import NovaPoshtaClient                # noqa: E402
+from integrations.prom import PromClient                            # noqa: E402
 from integrations.rozetka import RozetkaClient                      # noqa: E402
 from tg_dispatcher.inbox.reply import plan_reply                    # noqa: E402
 from tg_dispatcher.inbox.store import InboxStore                    # noqa: E402
@@ -59,6 +61,8 @@ REPLY_MODE = os.getenv('HELPER_REPLY_MODE', 'draft')
 POLL_SEC = int(os.getenv('HELPER_POLL_SEC', '300'))
 # Бази — поза репозиторієм: data/ у git не ігнорується, а тут дані покупців.
 DATA = Path(os.getenv('HELPER_DATA_DIR', str(Path.home() / 'helper_data')))
+# Пошта «власник → Claude»: поза репозиторієм, бо це листування, а не код.
+VSCODE_INBOX = Path(os.getenv('VSCODE_INBOX', str(DATA / 'vscode_inbox.jsonl')))
 FEEDS = {                                    # лише фіди, що оновлюються щодня
     'rozetka': BASE / 'output' / 'noire_rozetka.xml',
     'prom': BASE / 'output' / 'noire_prom.xml',
@@ -178,10 +182,13 @@ def make_fetchers():
     rz = RozetkaClient(http_get, os.getenv('ROZETKA_API_TOKEN', ''), time.sleep)
     np_key = os.getenv('NP_API_KEY', '')
     np = NovaPoshtaClient(http_post, np_key, time.sleep) if np_key else None
+    prom_key = os.getenv('PROM_API_TOKEN', '')
+    prom = PromClient(http_get, prom_key, time.sleep) if prom_key else None
     return rz, build_fetchers(rozetka=rz, novaposhta=np, stock_lookup=stock_lookup,
                               feeds_status=feeds_now, system_status=system_now,
                               unanswered=unanswered_now, backup_status=backup_now,
-                              orders_without_ttn=lambda: orders_without_ttn_now(rz))
+                              orders_without_ttn=lambda: orders_without_ttn_now(rz),
+                              prom=prom)
 
 
 def _rows(sql, params=()):
@@ -482,6 +489,26 @@ async def on_hypotheses(message: Message):
         return
     text = await asyncio.to_thread(hypotheses_now)
     await message.answer(text[:4000], parse_mode=None)
+
+
+@dp.message(F.text.func(lambda t: vscode_inbox.parse(t) is not None))
+async def on_vscode(message: Message):
+    """`VSCODE <текст>` — пошта власника до Claude у VSCode.
+
+    Тільки ЗАПИСУЄ повідомлення у скриньку й підтверджує прийом. Нічого не
+    виконує: Claude прочитає файл під час роботи й вирішить сам, як якби
+    власник написав це у вікні VSCode. Стоїть ПЕРЕД on_reply/on_text, бо
+    інакше цей текст перехопив би звичайний розбір команд бота.
+    """
+    if not allowed(message):
+        return
+    body = vscode_inbox.parse(message.text)
+    entry = await asyncio.to_thread(vscode_inbox.append, str(VSCODE_INBOX), body,
+                                    message.from_user.id if message.from_user else None)
+    waiting = len(await asyncio.to_thread(vscode_inbox.unread, str(VSCODE_INBOX)))
+    await message.answer(f'📥 Записав у скриньку Claude ({entry["ts"]} UTC).\n'
+                         f'Чекає на прочитання: {waiting}.\n\n'
+                         f'<i>{body[:300]}</i>', reply_markup=KEYBOARD)
 
 
 @dp.message(F.reply_to_message, F.text)
