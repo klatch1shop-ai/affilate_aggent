@@ -49,7 +49,7 @@ def login(session):
     session.headers['Authorization'] = f"Bearer {r.json()['token']['auth']}"
 
 
-def ask(name, attr, allowed, photo_url=None):
+def ask(name, attr, allowed, photo_url=None, description=None):
     """Один із `allowed` або None. Список у питанні — щоб не було що вигадувати.
 
     `photo_url` потрібен там, де характеристики в назві немає взагалі: 27.09
@@ -58,7 +58,11 @@ def ask(name, attr, allowed, photo_url=None):
     кольору не існує — він лише на зображенні.
     """
     source = 'назви та фото' if photo_url else 'назви'
-    q = (f'Товар: «{name}»\n\n'
+    if description:
+        source = 'назви, опису' + (' та фото' if photo_url else '')
+    plain = re.sub(r'&lt;[^&]*?&gt;|<[^>]+>', ' ', description or '')[:1200]
+    q = (f'Товар: «{name}»\n'
+         + (f'Опис: {plain}\n' if plain.strip() else '') + '\n'
          f'Характеристика «{attr}». Дозволені значення, інших не існує:\n'
          f'{json.dumps(allowed, ensure_ascii=False)}\n\n'
          f'Обери РІВНО ОДНЕ зі списку на основі {source}. Якщо визначити '
@@ -89,6 +93,7 @@ def main():
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--workers', type=int, default=6)
+    ap.add_argument('--use-description', action='store_true', help='додати опис товару в запит')
     ap.add_argument('--use-photo', action='store_true', help='показати моделі головне фото картки')
     ap.add_argument('--options-from', help='файл зразків: звузити довідник до значень, що реально вживають опубліковані картки')
     a = ap.parse_args()
@@ -159,7 +164,13 @@ def main():
             media = [m for m in (data.get('media') or []) if m.get('source')]
             main = next((m for m in media if m.get('isMain')), media[0] if media else None)
             photo = (main or {}).get('source')
-        answer = ask(product.get('name') or '', a.attr, list(options), photo)
+        desc = None
+        if a.use_description:
+            for t in (data.get('translations') or []):
+                if t.get('languageCode') == 'ua' and t.get('description'):
+                    desc = t['description']
+                    break
+        answer = ask(product.get('name') or '', a.attr, list(options), photo, desc)
         if not answer:
             return product['sku'], 'модель не визначила', None, None
         if not a.apply:
@@ -173,6 +184,15 @@ def main():
                 'companyId': data.get('companyId'), 'sku': data.get('sku'),
                 'translations': data.get('translations')}
         r2 = session.put(f"{API}/v4/pim/products/common/{product['id']}", json=body, timeout=60)
+        # Частина атрибутів БАГАТОЗНАЧНІ: рядок дає 400, список — 200. Наперед
+        # це не видно ні з форми, ні з довідника (знайдено 27.09 на наборі
+        # 8960, де відхилялись геть усі 8 характеристик).
+        if r2.status_code == 400 and code in set(re.findall(r'attributeValues\[(\d+)\]', r2.text)):
+            body['attributeValues'] = [dict(v, value=[v['value']])
+                                       if str(v['code']) == code else v
+                                       for v in body['attributeValues']]
+            r2 = session.put(f"{API}/v4/pim/products/common/{product['id']}",
+                             json=body, timeout=60)
         tries = 0
         while r2.status_code == 400 and tries < 2:
             bad = set(re.findall(r'attributeValues\[(\d+)\]', r2.text))
