@@ -37,10 +37,44 @@ PRODUCTS = os.path.join(BASE, 'data', 'epicentr_products.json')
 # Числові й текстові характеристики: у них немає довідника, значення йде як є.
 PLAIN = {'measure', 'ratio', 'brand', 'country_of_origin', 'weight', 'width',
          'height', 'length', 'description'}
-# Зі звіту реального імпорту 27.09: саме ці значення майданчик не прийняв.
-BROKEN_ATTRS = {'Матеріал'}
-BAD_CODES = {'de9da78728b8771e050b3332f862fc94', '8c64e0f6c6e6e47cddf4249588d6e260',
-             '35d73f60d46d4a4871e86947088e318c', '063a479f96ed369ac655b2d6e90f216b'}
+# Атрибути, чиїм кодам у файлі не можна вірити взагалі — їх ЗАВЖДИ переписуємо
+# з опублікованих карток. «Матеріал» потрапив сюди після двох імпортів поспіль:
+# перелічувати конкретні хеші марно, їх щоразу виявлялись нові
+# (de9da787…, 063a479f…, df250c82…, 8b5e660f…, 7f2e25e7…).
+ALWAYS_REMAP = {'Матеріал'}
+
+# Генератор кладе СИРИЙ матеріал постачальника («нейлон», «поліестер»,
+# «80% поліамід, 20% еластан»), а довідник Єпіцентру знає лише узагальнені
+# категорії. Без цього зведення 189 карток лишались без обовʼязкового поля.
+MATERIAL_TO_DICT = {
+    'нейлон': 'тканина', 'поліестер': 'тканина', 'поліамід': 'тканина',
+    'еластан': 'тканина', 'спандекс': 'тканина', 'бавовн': 'тканина',
+    'віскоз': 'тканина', 'мереж': 'тканина', 'сітк': 'тканина',
+    'мікрофібр': 'тканина', 'атлас': 'тканина', 'сатин': 'тканина',
+    'синтетичне волокно': 'тканина', 'текстиль': 'тканина', 'шифон': 'тканина',
+    'пліс': 'тканина', 'велюр': 'тканина', 'шовк': 'тканина', 'льон': 'тканина',
+    'pvc': 'АБС-пластик', 'полівінілхлорид': 'АБС-пластик',
+    'пластик': 'АБС-пластик', 'абс': 'АБС-пластик', 'акрил': 'АБС-пластик',
+    'tpe': 'TPE (термопластичний еластомер)', 'термопластич': 'TPE (термопластичний еластомер)',
+    'tpr': 'TPE (термопластичний еластомер)', 'еластомер': 'TPE (термопластичний еластомер)',
+    'латекс': 'латекс', 'гума': 'латекс',
+    # Для білизни «силікон», «метал», «АБС-пластик» із довідника ВИДАЛЕНІ.
+    # Виріб із такими вставками — комбінований, це найближче чесне значення.
+    'силікон': 'комбінований', 'сталь': 'комбінований', 'метал': 'комбінований',
+    'алюміні': 'комбінований', 'цинк': 'комбінований', 'стразі': 'комбінований',
+    'шкіра натуральна': 'натуральна шкіра', 'натуральна шкіра': 'натуральна шкіра',
+    'екошкір': 'екошкіра', 'штучна шкіра': 'екошкіра', 'шкірзам': 'екошкіра',
+    'картон': 'картон', 'папер': 'картон',
+}
+
+
+def to_dictionary_value(raw, options):
+    """Сире значення постачальника → назва з довідника, або None."""
+    lowered = (raw or '').casefold()
+    hits = sorted((lowered.find(word), target)
+                  for word, target in MATERIAL_TO_DICT.items()
+                  if lowered.find(word) >= 0 and target.casefold() in options)
+    return hits[0][1] if hits else None
 
 
 def login(session):
@@ -74,10 +108,34 @@ def learn(session, products, set_code, sample):
         for data in pool_ex.map(fetch, pool):
             for v in ((data or {}).get('attributeValues') or []):
                 for option in (v.get('options') or []):
+                    # ГОЛОВНЕ (27.09): опубліковані картки зберігають ВИДАЛЕНІ
+                    # значення за інерцією — `deleted: true` / `outOfMapping:
+                    # true`. Для нового імпорту майданчик їх уже не приймає,
+                    # і саме на них я вчився два імпорти поспіль.
+                    if option.get('deleted') or option.get('outOfMapping'):
+                        continue
                     name = ua(option)
                     if name:
                         table[str(v['code'])][name.strip().casefold()] = option['code']
     return table
+
+
+def live_options(set_code, attr_code, _cache={}):
+    """Чинний довідник майданчика — запасне джерело, коли серед опублікованих
+    карток лишились самі видалені значення."""
+    key = (set_code, attr_code)
+    if key not in _cache:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            'afm', os.path.join(BASE, 'tools', 'epicentr_attr_fill_multi.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        try:
+            _cache[key] = {k.strip().casefold(): v
+                           for k, v in module.options(set_code, attr_code).items() if k}
+        except Exception:
+            _cache[key] = {}
+    return _cache[key]
 
 
 def main():
@@ -120,12 +178,30 @@ def main():
             # кодами, тож переписувати все підряд означало б зламати те, що
             # працює. Чіпаємо лише те, що звіт імпорту назвав помилковим:
             # valuecode, рівний коду характеристики, і перелічені матеріали.
-            broken = (current == code) or (name in BROKEN_ATTRS and current in BAD_CODES)
+            broken = (current == code) or (name in ALWAYS_REMAP)
             if not broken:
                 stats['не чіпаємо (працює)'] += 1
                 return whole
-            options = table.get(code)
+            # Для ALWAYS_REMAP джерело істини — ЧИННИЙ довідник майданчика.
+            # 27.09: у «Матеріалі» наборів 7216/9464 лишилось 5 значень, а
+            # «силікон», «метал», «АБС-пластик» видалено. Опубліковані картки
+            # їх досі показують, і навчання на них давало відхилені коди.
+            if name in ALWAYS_REMAP:
+                options = live_options(set_code.group(1) if set_code else '', code)
+                stats['довідник із /options'] += 1
+            else:
+                options = table.get(code) or {}
+                if not options:
+                    options = live_options(set_code.group(1) if set_code else '', code)
             correct = options.get((value or '').strip().casefold()) if options else None
+            if not correct and options and name in ALWAYS_REMAP:
+                mapped = to_dictionary_value(value, options)
+                if mapped:
+                    correct = options.get(mapped.casefold())
+                    if correct:
+                        stats['зведено до довідника'] += 1
+                        return (f'<param name="{name}" paramcode="{code}" '
+                                f'valuecode="{correct}">{mapped}</param>')
             if correct:
                 stats['виправлено'] += 1
                 return (f'<param name="{name}" paramcode="{code}" '
