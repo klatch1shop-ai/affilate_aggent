@@ -1,0 +1,48 @@
+{
+  "generated": "2026-09-27",
+  "supplier": "SMTM (косметичний прайс, 446 позицій, 22 розділи)",
+  "sources": {
+    "official_open": "exports/eva_categories_20260925.json — 769 відкритих категорій від менеджера EVA (btk_id)",
+    "live_site": "exports/eva_categories_live.json — 1813 живих категорій із публічного sitemap eva.ua (eva_id)"
+  },
+  "warning": "btk_id і eva_id — різні нумерації. У фід іде btk_id. Для 18+ гілки btk_id НЕВІДОМИЙ: цих категорій немає в надісланому переліку 769.",
+  "map": [
+    {"section": "Масажні олії та лосьйони/Класичні олії на масляній основі", "n": 123, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Масажні олії та лосьйони/Масажні свічки", "n": 74, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Масажні олії та лосьйони/Масажна косметика без олії та силікону", "n": 57, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Регулярний догляд за тілом/Для інтимної гігієни спреї, пінки, серветки", "n": 36, "eva_live": "15136 geli-intimnoj-gigieny; 024-113-124 sredstva-intimnoj-gigieny; 024-113-134 salfetki-intimnoj-gigieny", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Інтимна косметика/Косметика з феромонами", "n": 19, "eva_live": "15526 vozbuzhdajuschie-sredstva", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Масажні олії та лосьйони/Масажні пінки", "n": 18, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Романтична атмосфера/Подарункові набори косметики", "n": 17, "eva_live": "15529 nabory-seksa", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Романтична атмосфера/Фарба, пудра та карамель для тіла", "n": 14, "eva_live": "15520 intimnaja-kosmetika-tela", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Інтимна косметика/Парфуми, духи", "n": 11, "eva_live": "217-408 parfjumerija-uniseks", "btk_id": "106303 / 106304", "status": "відкрито, але поділ за статтю — треба рішення"},
+    {"section": "Регулярний догляд за тілом/Гелі для душу", "n": 11, "eva_live": "024-282-318 geli-dusha", "btk_id": "100222", "status": "ПІДТВЕРДЖЕНО відкрито"},
+    {"section": "Регулярний догляд за тілом/Для гоління та догляд після", "n": 9, "eva_live": "15502 odnorazovye-britvy-muzhskie; 15505 smennye-kartridzhi", "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Романтична атмосфера/Сіль та піна для ванни", "n": 9, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Масажні олії та лосьйони/NURU масаж", "n": 8, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Масажні олії та лосьйони/Набори косметики", "n": 8, "eva_live": "15529 nabory-seksa", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Масажні олії та лосьйони/Силіконові лосьйони", "n": 8, "eva_live": "15523 masla-geli-jeroticheskogo", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Регулярний догляд за тілом/Тример і засоби проти волосся", "n": 5, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Інтимна косметика/Спреї з блиском", "n": 5, "eva_live": "15520 intimnaja-kosmetika-tela", "btk_id": null, "status": "потребує відкриття"},
+    {"section": "Романтична атмосфера/Освіжувачі повітря та білизни", "n": 4, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Романтична атмосфера/Гель для ванної кімнати", "n": 3, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Регулярний догляд за тілом/Освітлювальні засоби", "n": 3, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Романтична атмосфера/Бомбочки для ванної", "n": 3, "eva_live": null, "btk_id": null, "status": "у переліку 769 не знайдено"},
+    {"section": "Масажні олії та лосьйони/Засоби для пенісу", "n": 1, "eva_live": "15520 intimnaja-kosmetika-tela", "btk_id": null, "status": "потребує відкриття"}
+  ],
+  "devices_branch_on_eva": [
+    "14478 seks-igrushki", "14481 vakuumnye-stimuljatory", "14484 vibratory",
+    "14487 masturbatory", "14490 vaginalnye-shariki", "14493 nasadki-jerekcionnye-kolca",
+    "14902 analnye-probki", "15511 bdsm", "15514 maski-povjazki-glaza",
+    "16011 naruchniki-verevki-lenty", "16014 jeroticheskoe-bele", "16017 jeroticheskie-bodi",
+    "16020 jeroticheskie-halaty", "16023 jeroticheskie-komplekty", "16026 jeroticheskie-platja",
+    "16029 jeroticheskie-kostjumy-rolevyh", "16032 jeroticheskie-nastolnye-igry",
+    "024-12712-12713 prezervativy", "024-12712-12714 intimnye-gel-smazki"
+  ],
+  "proof_marketplace_open": {
+    "category": "https://eva.ua/15523/masla-geli-jeroticheskogo/",
+    "product": "https://eva.ua/pr1044549/",
+    "seller": "EVA Partners",
+    "meaning": "у 18+ категорії продає сторонній продавець маркетплейсу, отже вона доступна не лише самій EVA"
+  }
+}
