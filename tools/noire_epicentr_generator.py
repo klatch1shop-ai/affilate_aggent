@@ -19,7 +19,7 @@ tools/noire_epicentr_generator.py
     python3 tools/noire_epicentr_generator.py --all-available
 """
 
-import argparse, math, os, re, sys
+import argparse, json, math, os, re, sys
 from html import unescape
 from datetime import datetime
 
@@ -1179,6 +1179,7 @@ def generate_xml(
     limit: int | None = None,
     all_available: bool = False,
     exclude_categories: list[str] | None = None,
+    only_skus: list[str] | None = None,
 ) -> int:
     conn = get_connection()
     cur = conn.cursor()
@@ -1232,6 +1233,14 @@ def generate_xml(
             return 0
         where_parts.append(f"category_id = ANY(%s)")
         params.append(sexopt_cat_ids)
+
+    if only_skus:
+        # Точковий відбір. Навіщо: для СТВОРЕННЯ карток потрібен файл лише з
+        # новими товарами. Імпорт повним фідом стирає категорії й
+        # характеристики карток у «Чернетці», «На розгляді» й «Наповненні»
+        # (SKILL-20 §5), а в нас там 710 карток живої роботи.
+        where_parts.append('upper(sku) = ANY(%s)')
+        params.append([s.upper() for s in only_skus])
 
     if exclude_categories:
         # Виключення по epicentr_category_code (напр. 7216, 9464)
@@ -1832,9 +1841,16 @@ def main():
     parser.add_argument('--only-available', dest='all_available',
                         action='store_true',
                         help='Лишити у фіді лише товари в наявності (старий режим)')
+    parser.add_argument('--skus', help='файл зі списком SKU (json-список/обʼєкт або текст)')
     parser.add_argument('--exclude-category', '-x', default='',
                         help='Виключити epicentr_category_code через кому (напр. 7216,9464)')
     args = parser.parse_args()
+
+    only_skus = None
+    if args.skus:
+        with open(args.skus, encoding='utf-8') as f:
+            data = json.load(f) if args.skus.endswith('.json') else f.read().split()
+        only_skus = list(data) if isinstance(data, (list, dict)) else list(data)
 
     cnt = generate_xml(
         output_file=args.output,
@@ -1843,6 +1859,7 @@ def main():
         all_available=args.all_available,
         exclude_categories=[c.strip() for c in args.exclude_category.split(',')
                             if c.strip()],
+        only_skus=only_skus,
     )
     exit(0 if cnt > 0 else 1)
 
