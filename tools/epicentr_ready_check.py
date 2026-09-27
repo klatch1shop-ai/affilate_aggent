@@ -26,6 +26,7 @@ load_dotenv(os.path.join(BASE, '.env'))
 API = 'https://core-api.epicentrm.com.ua'
 PRODUCTS = os.path.join(BASE, 'data', 'epicentr_products.json')
 SETS = os.path.join(BASE, 'data', 'epicentr_attribute_sets.json')
+MOVABLE = ('enrich', 'draft', 'new')
 
 
 def login(session):
@@ -104,13 +105,14 @@ def main():
                 by_missing.get(f'помилка читання: {type(e).__name__}', 0) + 1
             continue
         by_status[status] = by_status.get(status, 0) + 1
-        # Рухати можна лише те, що ще в наповненні: у `moderating` і
-        # `published` цей перехід або недоступний, або зайвий.
-        if ok and status == 'enrich':
+        # Рухати можна те, що ще редагується. «Чернетка» сюди теж належить:
+        # 27.09 після імпорту 653 наші картки опинились саме в ній, і
+        # жорсткий фільтр на `enrich` мовчки давав нуль готових.
+        if ok and status in MOVABLE:
             ready[sku] = products[sku]['id']
         else:
             not_ready += 1
-            for name in (missing or ['(статус не enrich)'])[:1]:
+            for name in (missing or [f'(статус {status})'])[:1]:
                 by_missing[name] = by_missing.get(name, 0) + 1
         if i % 100 == 0:
             print(f'  {i}/{len(skus)}', file=sys.stderr, flush=True)
