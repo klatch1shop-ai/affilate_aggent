@@ -174,3 +174,27 @@ def test_kimi_is_first_choice_for_photos():
     OpenRouter."""
     first, second = vp.pick_two(['openrouter', 'kimi', 'groq'])
     assert first == 'kimi' and second != 'kimi'
+
+
+def test_same_vendor_different_models_is_weak_agreement_not_full():
+    """27.09: коли з платних лишився лише Gemini, повноцінної перехресної
+    перевірки немає. Різні моделі однієї компанії — слабша перевірка, і вона
+    мусить мати ІНШУ назву, щоб не злитись із двома вендорами."""
+    out = vp.verdict('Гель', 'Гель', 'gemini', 'gemini',
+                     photo_model='gemini-flash-lite', text_model='gemini-3-flash')
+    assert out == vp.AGREE_WEAK and out != vp.AGREE
+
+
+def test_same_vendor_same_model_still_unverified():
+    assert vp.verdict('Гель', 'Гель', 'gemini', 'gemini',
+                      photo_model='gemini-flash-lite',
+                      text_model='gemini-flash-lite') == vp.UNVERIFIED
+
+
+def test_same_vendor_different_models_disagreeing():
+    assert vp.verdict('Гель', 'Крем', 'gemini', 'gemini',
+                      photo_model='a', text_model='b') == vp.DISAGREE
+
+
+def test_two_vendors_still_beat_two_models():
+    assert vp.verdict('Гель', 'Гель', 'gemini', 'openrouter') == vp.AGREE

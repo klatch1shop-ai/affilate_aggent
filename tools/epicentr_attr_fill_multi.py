@@ -17,7 +17,7 @@ tools/epicentr_attr_fill_multi.py
 
     python3 tools/epicentr_attr_fill_multi.py --map /tmp/fal_final.json --cat 9480 [--limit 3]
 """
-import os, sys, json, time, argparse
+import os, re, sys, json, time, argparse
 import requests
 from dotenv import load_dotenv
 
@@ -131,6 +131,19 @@ def main():
                 'companyId': d.get('companyId'), 'sku': d.get('sku'),
                 'translations': d.get('translations')}
         r2 = s.put(f'{API}/v4/pim/products/common/{pid}', json=body, timeout=60)
+        # 27.09: один непридатний атрибут валив УСЮ картку разом із рештою
+        # правильних значень. API називає його код прямо — прибираємо саме
+        # його й пробуємо ще раз, щоб не втрачати решту.
+        tries = 0
+        while r2.status_code == 400 and tries < 3:
+            bad = set(re.findall(r'attributeValues\[(\d+)\]', r2.text))
+            if not bad:
+                break
+            body['attributeValues'] = [v for v in body['attributeValues']
+                                       if str(v['code']) not in bad]
+            print(f'  {sku}: прибрав {sorted(bad)}, повторюю', file=sys.stderr)
+            tries += 1
+            r2 = s.put(f'{API}/v4/pim/products/common/{pid}', json=body, timeout=60)
         if r2.status_code in (200, 201, 204):
             ok += 1
         else:

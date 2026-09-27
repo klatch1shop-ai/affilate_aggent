@@ -36,9 +36,14 @@ QUEUE_DB = os.path.join(BASE, 'data', 'tasks', 'epicentr_reverify.db')
 PROGRESS = os.path.join(BASE, 'scratchpad', 'fill_gaps_all_progress.json')
 REPORT = os.path.join(BASE, 'exports', 'epicentr_reverify.csv')
 
-# Кого питати другим, якщо перший був таким. Gemini оплачений і без стелі, тому
-# він основний; для рядків, де вже був gemini, лишаються безкоштовні з квотою.
-SECOND = {'codex': ['gemini'], 'gemini': ['openrouter', 'codex'], None: ['gemini']}
+# Кого питати другим, якщо перший був таким.
+# 27.09: власник лишив із платних лише Gemini. Безкоштовні відпадають —
+# OpenRouter дає 50/добу, Codex не відповідає за 90 с. Тому для рядків, де
+# першим уже був Gemini, беремо ІНШУ МОДЕЛЬ Gemini: це слабша перевірка
+# (спільний тренувальний матеріал = спільні помилки), і вона отримує окрему
+# назву вердикту, щоб ніколи не злитись із перевіркою двома вендорами.
+SECOND = {'codex': ['gemini'], None: ['gemini']}
+GEMINI_SECOND_MODEL = os.getenv('GEMINI_SECOND_MODEL', 'gemini-flash-latest')
 
 
 def question(attr, name):
@@ -81,7 +86,9 @@ def run_one(task):
         candidates, question(payload['attr'], payload.get('sku') or ''),
         image_url=payload['url'], timeout=120, max_tokens=300)
     if not answer:
-        return task['key'], {'error': '; '.join(errors)[:200]}
+        # НЕ обрізаємо до першої помилки: 26.09 обрізання до 200 символів
+        # сховало, що другий кандидат теж упав, і виглядало, ніби його не питали
+        return task['key'], {'error': ' | '.join(e[:90] for e in errors)[:400]}
     first = (payload.get('photo') or payload.get('text') or '').strip()
     return task['key'], {
         'vendor_a': payload.get('used'), 'vendor_b': vendor,

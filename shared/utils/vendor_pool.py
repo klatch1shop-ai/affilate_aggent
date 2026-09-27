@@ -31,6 +31,11 @@ AGREE = 'ЗБІГ'
 DISAGREE = 'РОЗБІЖНІСТЬ'
 BOTH_UNKNOWN = 'обидва не знають'
 ONLY_ONE_KNOWS = 'лише одне джерело'
+# Слабша перевірка: та сама компанія, але ІНША модель і інший доказ (фото проти
+# тексту). Заведено 27.09.2026, коли з платних лишився тільки Gemini. Це НЕ те
+# саме, що два вендори, і окрема назва існує саме щоб ці випадки не злились:
+# спільний тренувальний матеріал означає спільні помилки.
+AGREE_WEAK = 'ЗБІГ (одна компанія, різні моделі)'
 FAILED = 'помилка запиту'
 
 _UNKNOWN_MARKERS = ('НЕ ВИДНО', 'НЕ ВКАЗАНО')
@@ -40,7 +45,8 @@ def is_unknown(answer):
     return bool(answer) and answer.strip().upper() in {m.upper() for m in _UNKNOWN_MARKERS}
 
 
-def verdict(photo_answer, text_answer, photo_vendor, text_vendor):
+def verdict(photo_answer, text_answer, photo_vendor, text_vendor,
+            photo_model=None, text_model=None):
     """Чесний вердикт. «ЗБІГ» — тільки коли це РІЗНІ вендори.
 
     Той самий вендор двічі — не перевірка, хай навіть відповіді збіглися:
@@ -58,6 +64,10 @@ def verdict(photo_answer, text_answer, photo_vendor, text_vendor):
         # означало б викидати єдину наявну відповідь.
         return ONLY_ONE_KNOWS
     if photo_vendor == text_vendor:
+        # Той самий вендор, але різні моделі — слабка, проте не порожня перевірка.
+        same_answer = photo_answer.strip().casefold() == text_answer.strip().casefold()
+        if photo_model and text_model and photo_model != text_model:
+            return AGREE_WEAK if same_answer else DISAGREE
         return UNVERIFIED
     if photo_answer.strip().casefold() == text_answer.strip().casefold():
         return AGREE
