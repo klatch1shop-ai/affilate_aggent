@@ -85,11 +85,69 @@ def parse(text):
         return {}
 
 
+def write_values(session, data, set_code, spec, values, dicts):
+    """Записує знайдені значення в картку й ПЕРЕВІРЯЄ читанням.
+
+    Три пастки, на яких уже наступили 27.09: код атрибута має бути рядком;
+    частина атрибутів багатозначні (рядок дає 400, список 200); відповідь
+    API про успіх нічого не означає, поки не перечитаєш картку.
+    """
+    pid = data['id']
+    by_name = {}
+    for attribute in spec.get('attributes', []):
+        name = ua(attribute)
+        if name:
+            by_name[name] = str(attribute['code'])
+    form = session.get(f'{API}/v2/pim/products/forms/attribute-set/by-code/{set_code}/attributes',
+                       timeout=40).json()
+    items = form.get('items', form if isinstance(form, list) else [])
+    field_id = {str(x['code']): x.get('id') for x in items}
+
+    current = [{'id': v['id'], 'code': v['code'], 'value': v['value']}
+               for v in (data.get('attributeValues') or [])]
+    added = []
+    for attr_name, value in values.items():
+        code = by_name.get(attr_name)
+        options = dicts.get(f'{set_code}|{code}') or {}
+        if not code or not field_id.get(code) or value not in options:
+            continue
+        current.append({'id': field_id[code], 'code': code, 'value': options[value]})
+        added.append(code)
+    if not added:
+        return 0
+
+    body = {'attributeValues': current, 'categories': data.get('categories'),
+            'isPrepayment': data.get('isPrepayment'), 'media': data.get('media'),
+            'productInPromotion': data.get('productInPromotion'),
+            'attributeSetCode': data.get('attributeSetCode'),
+            'companyId': data.get('companyId'), 'sku': data.get('sku'),
+            'translations': data.get('translations')}
+    r = session.put(f'{API}/v4/pim/products/common/{pid}', json=body, timeout=60)
+    if r.status_code == 400:
+        # Багатозначні атрибути приймають лише список.
+        bad = set(re.findall(r'attributeValues\[(\d+)\]', r.text))
+        if bad:
+            body['attributeValues'] = [dict(v, value=[v['value']])
+                                       if str(v['code']) in bad and not isinstance(v['value'], list)
+                                       else v for v in body['attributeValues']]
+            r = session.put(f'{API}/v4/pim/products/common/{pid}', json=body, timeout=60)
+    if r.status_code not in (200, 201, 204):
+        return 0
+    check = session.get(f'{API}/v2/pim/products/{pid}', timeout=45)
+    if check.status_code != 200:
+        return 0
+    now = {str(v['code']) for v in (check.json().get('attributeValues') or [])
+           if str(v.get('value') or '').strip()}
+    return sum(1 for code in added if code in now)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--limit', type=int, default=10)
     ap.add_argument('--codex', action='store_true', help='дублювати запит на Codex')
     ap.add_argument('--photos', type=int, default=3)
+    ap.add_argument('--apply', action='store_true', help='записувати знайдене в картки')
+    ap.add_argument('--workers', type=int, default=5)
     a = ap.parse_args()
 
     sets = json.load(open(os.path.join(BASE, 'data', 'epicentr_attribute_sets.json'),
@@ -103,7 +161,7 @@ def main():
                             'Accept-Language': 'uk-UA'})
     login(session)
 
-    pool = [p for p in products if p.get('status') in ('enrich', 'draft')
+    pool = [p for p in products if p.get('status') in ('enrich', 'draft', 'new')
             and (p.get('sku') or '').upper().startswith(('SO', 'SX', 'EL', 'PS', 'PJ'))]
     stats = collections.Counter()
     tokens = collections.Counter()
@@ -172,6 +230,10 @@ def main():
                 tokens['in'] += usage.get('in') or 0
                 tokens['out'] += usage.get('out') or 0
             print(f"    GEMINI: {len(got)}/{len(gaps)} · {json.dumps(got, ensure_ascii=False)[:150]}")
+            if a.apply and got:
+                written = write_values(session, data, set_code, spec, got, dicts)
+                stats['записано'] += written
+                print(f'    записано в картку: {written}')
             rows.append({'sku': product['sku'], 'вендор': 'gemini',
                          'прогалин': len(gaps), 'заповнено': len(got)})
         except Exception as e:
