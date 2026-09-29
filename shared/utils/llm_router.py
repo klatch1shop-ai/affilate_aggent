@@ -165,35 +165,9 @@ def call_ollama(prompt, timeout=120, model=None, task='default', max_tokens=None
 GROQ_MODEL = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
 CEREBRAS_MODEL = os.getenv('CEREBRAS_MODEL', 'gpt-oss-120b')
 OPENROUTER_MODEL = os.getenv('OPENROUTER_MODEL', 'nvidia/nemotron-3-super-120b-a12b:free')
-# Kimi (Moonshot): платний, але дешевий і БЕЗ добової стелі, на відміну від
-# безкоштовних. K2.6 уміє зображення й коштує втричі менше за K3 (офіційний
-# прайс platform.kimi.ai, 26.09.2026: 0.95/4.00 проти 3.00/15.00 за 1М токенів).
-# Точний ідентифікатор моделі звіряти через GET /v1/models — не вгадувати.
-KIMI_MODEL = os.getenv('KIMI_MODEL', 'kimi-k2.6')
-# Окрема модель для фото: 26.09 живий тест дав HTTP 404 «No endpoints found», бо
-# текстова модель просто не приймає зображень, а не бо ключ чи URL погані.
-OPENROUTER_VISION_MODEL = os.getenv('OPENROUTER_VISION_MODEL',
-                                    'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free')
 
 
-def _image_content(prompt, image_url=None, image_bytes=None, image_mime=None):
-    """Вміст повідомлення у форматі OpenAI: текст, і за потреби — зображення.
-
-    Посилання дешевше за base64 (провайдер завантажує сам), тому `image_url`
-    у пріоритеті; `image_bytes` йде data-URI, коли файл лише локально.
-    """
-    if not image_url and not image_bytes:
-        return prompt
-    if not image_url:
-        import base64
-        mime = image_mime or 'image/jpeg'
-        image_url = f'data:{mime};base64,{base64.b64encode(image_bytes).decode()}'
-    return [{'type': 'text', 'text': prompt},
-            {'type': 'image_url', 'image_url': {'url': image_url}}]
-
-
-def _call_openai_compat(url, key_env, model, prompt, timeout, max_tokens,
-                        image_url=None, image_bytes=None, image_mime=None):
+def _call_openai_compat(url, key_env, model, prompt, timeout, max_tokens):
     """Спільний виклик для Groq/Cerebras/OpenRouter — усі OpenAI-сумісні chat/completions.
 
     26.09.2026: gpt-oss/nemotron — reasoning-моделі, `reasoning`-токени йдуть у
@@ -204,8 +178,7 @@ def _call_openai_compat(url, key_env, model, prompt, timeout, max_tokens,
     key = os.getenv(key_env, '')
     if not key:
         raise RuntimeError(f'{key_env} не задано')
-    content = _image_content(prompt, image_url, image_bytes, image_mime)
-    body = {'model': model, 'messages': [{'role': 'user', 'content': content}],
+    body = {'model': model, 'messages': [{'role': 'user', 'content': prompt}],
             'max_tokens': max(max_tokens or 0, 200)}
     r = requests.post(url, timeout=timeout, headers={'Authorization': f'Bearer {key}'}, json=body)
     if r.status_code != 200:
@@ -232,36 +205,10 @@ def call_cerebras(prompt, timeout=120, model=None, max_tokens=None):
                                'CEREBRAS_API_KEY', model or CEREBRAS_MODEL, prompt, timeout, max_tokens)
 
 
-def call_kimi(prompt, timeout=120, model=None, max_tokens=None,
-              image_url=None, image_bytes=None, image_mime=None):
-    """Kimi (Moonshot) — API сумісний з OpenAI, тож той самий виклик.
-
-    Навіщо платний вендор у пулі безкоштовних: безкоштовні тарифи мають ДОБОВУ
-    стелю (заміряно 26.09: OpenRouter 50/добу, Gemini ~80), а невикористане не
-    накопичується. Партія на 4000 фото через них — 30 днів; через Kimi — години
-    за ~$7. Плюс це четвертий незалежний вендор для перехресної перевірки.
-    """
-    return _call_openai_compat('https://api.moonshot.ai/v1/chat/completions',
-                               'KIMI_API_KEY', model or KIMI_MODEL, prompt,
-                               timeout, max_tokens, image_url=image_url,
-                               image_bytes=image_bytes, image_mime=image_mime)
-
-
-def call_openrouter(prompt, timeout=120, model=None, max_tokens=None,
-                    image_url=None, image_bytes=None, image_mime=None):
-    """OpenRouter — пул безкоштовних моделей (`:free`) різних провайдерів під одним ключем.
-
-    Єдиний з трьох, що вміє ДИВИТИСЬ ФОТО: модель за замовчуванням
-    (`nemotron-3-nano-omni`) перевірена 26.09 на справжньому фото товару.
-    Це третій незалежний вендор (NVIDIA) — не OpenAI і не Google, тож годиться
-    як справжнє друге джерело там, де Codex і Gemini підтверджували б самі себе.
-    """
-    if not model:
-        model = OPENROUTER_VISION_MODEL if (image_url or image_bytes) else OPENROUTER_MODEL
+def call_openrouter(prompt, timeout=120, model=None, max_tokens=None):
+    """OpenRouter — пул безкоштовних моделей (`:free`) різних провайдерів під одним ключем."""
     return _call_openai_compat('https://openrouter.ai/api/v1/chat/completions',
-                               'OPENROUTER_API_KEY', model, prompt,
-                               timeout, max_tokens, image_url=image_url,
-                               image_bytes=image_bytes, image_mime=image_mime)
+                               'OPENROUTER_API_KEY', model or OPENROUTER_MODEL, prompt, timeout, max_tokens)
 
 
 class CodexLimitError(RuntimeError):
@@ -341,8 +288,6 @@ def ask(prompt, task='default', timeout=120, chain=None, max_tokens=None, min_le
                 text, model = call_cerebras(prompt, timeout, max_tokens=max_tokens)
             elif ch == 'openrouter':
                 text, model = call_openrouter(prompt, timeout, max_tokens=max_tokens)
-            elif ch == 'kimi':
-                text, model = call_kimi(prompt, timeout, max_tokens=max_tokens)
             else:
                 tried.append(f'{ch}:невідомий канал')
                 continue
