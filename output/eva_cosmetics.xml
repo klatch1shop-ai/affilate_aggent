@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<yml_catalog date="2026-09-27 20:57">
+<yml_catalog date="2026-09-29 05:41">
 <shop>
 <name>klatch1 shop</name>
 <company>3721108</company>
@@ -425,7 +425,7 @@
       </offer>
       <offer id="SO3214" available="true">
         <price>839</price>
-        <stock_quantity>5</stock_quantity>
+        <stock_quantity>4</stock_quantity>
         <currencyId>UAH</currencyId>
         <categoryId>15523</categoryId>
         <picture>https://sexopt.com.ua/content/images/4/so3214-18351984231799.jpg</picture>
@@ -476,35 +476,6 @@
 <p dir="ltr">Така олія дуже економічна завдяки супер-глайд формулі. Створено з натуральних інгредієнтів та ефірних олій, які зволожують та живлять шкіру, роблячи її шовковистою та пружною &mdash; навіть після того, як ви змиєте олію!</p>
 
 <p dir="ltr">Підходить і для чоловіків, і для жінок, так що ця олія стане вашим улюбленим засобом для інтимного проведення часу!</p>]]></description_ua>
-        <param name="Косметика: вид">Олія</param>
-        <param name="Косметика: дія">зволожуючий</param>
-        <param name="Обʼєм">125 мл</param>
-        <param name="Країна">США</param>
-      </offer>
-      <offer id="SO3216" available="true">
-        <price>839</price>
-        <stock_quantity>1</stock_quantity>
-        <currencyId>UAH</currencyId>
-        <categoryId>15523</categoryId>
-        <picture>https://sexopt.com.ua/content/images/5/so3216-47380498629244.jpg</picture>
-        <vendor>Sensuva</vendor>
-        <article>SO3216</article>
-        <name>Массажное масло Sensuva Me&amp;You Vanilla, Sugar &amp; Sweet Pea (125 мл) с феромонами</name>
-        <name_ua>Масажна олія Sensuva Me&amp;You Vanilla, Sugar &amp; Sweet Pea (125 мл) з феромонами</name_ua>
-        <description><![CDATA[<p style="text-align: justify;">Предлагаем купить массажное масло Sensuva - Me &amp; You Vanilla, Sugar &amp; Sweet Pea &mdash; роскошное масло с суперскользящим эффектом, который достигается за счет добавления силикона. Феромоны в составе оказывают возбуждающий эффект, а невероятный нежный аромат дарит игривое настроение. С этим маслом массаж будет максимально долгим, чувственным и волнующим! Подходит и для нее, и для него.</p>
-
-<p style="text-align: justify;">Подарите друг другу роскошный вечер с лакшери-массажем! Благодаря добавлению высококачественного силикона, масло будет скользить очень долго, буквально столько, сколько будет длиться массаж, наполняя тело сладостным ароматом. Феромоны настроят вас на нужный лад, чтобы продолжить массаж незабываемыми ласками.</p>
-
-<p style="text-align: justify;">Такое масло весьма экономично благодаря супер-глайд формуле. Создано из натуральных ингредиентов и эфирных масел, которые увлажняют и питают кожу, делая ее шелковистой и упругой &mdash; даже после того, как вы смоете масло!</p>
-
-<p style="text-align: justify;">Подходит и для мужчин, и для женщин, так что это масло станет вашим любимым средством для интимного времяпровождения!</p>]]></description>
-        <description_ua><![CDATA[<p style="text-align: justify;">Пропонуємо купити масажне масло Sensuva - Me &amp; You Vanilla, Sugar &amp; Sweet Pea &mdash; розкішне масло з суперскользящим ефектом, який досягається за рахунок додавання силікону. Феромони у складі справляють збуджуючий ефект, а неймовірний ніжний аромат дарує грайливий настрій. З цим маслом масаж буде максимально довгим, чуттєвим і хвилюючим! Підходить і для неї, і для нього.</p>
-
-<p style="text-align: justify;">Подаруйте один одному розкішний вечір з лакшері-масажем! Завдяки додаванню високоякісного силікону, масло буде ковзати дуже довго, буквально стільки, скільки буде тривати масаж, наповнюючи тіло солодким ароматом. Феромони налаштують вас на потрібний лад, щоб продовжити масаж незабутніми ласками.</p>
-
-<p style="text-align: justify;">Таке масло дуже економічно завдяки супер-глайд формулою. Створено з натуральних інгредієнтів і ефірних масел, які зволожують і живлять шкіру, роблячи її шовковистою і пружною &mdash; навіть після того, як ви змиєте масло!</p>
-
-<p style="text-align: justify;">Підходить і для чоловіків, і для жінок, так що це масло стане вашим улюбленим засобом для інтимного проведення часу!</p>]]></description_ua>
         <param name="Косметика: вид">Олія</param>
         <param name="Косметика: дія">зволожуючий</param>
         <param name="Обʼєм">125 мл</param>
@@ -5410,7 +5381,7 @@
       </offer>
       <offer id="SO6026" available="true">
         <price>339</price>
-        <stock_quantity>2</stock_quantity>
+        <stock_quantity>1</stock_quantity>
         <currencyId>UAH</currencyId>
         <categoryId>14971</categoryId>
         <picture>https://sexopt.com.ua/content/images/13/so6026-76281063532844.jpg</picture>
@@ -6304,7 +6275,7 @@
       </offer>
       <offer id="SO7830" available="true">
         <price>789</price>
-        <stock_quantity>5</stock_quantity>
+        <stock_quantity>4</stock_quantity>
         <currencyId>UAH</currencyId>
         <categoryId>15523</categoryId>
         <picture>https://sexopt.com.ua/content/images/33/so7830-65356307969786.jpg</picture>
@@ -7009,20 +6980,6 @@
 <p dir="ltr" style="text-align: justify;">Склад: prunus amygdalus dulcis oil, cocos nucifera oil, stearic acid, butyrospermum parkii butter, aroma, glycine soja oil, squalene, glyceryl stearate se,tocopherol, beta-sitosterol, benzyl alcohol, benzyl benzoate.</p>]]></description_ua>
         <param name="Косметика: вид">Олія</param>
         <param name="Країна">Китай</param>
-      </offer>
-      <offer id="SO9064" available="true">
-        <price>1199</price>
-        <stock_quantity>2</stock_quantity>
-        <currencyId>UAH</currencyId>
-        <categoryId>15526</categoryId>
-        <picture>https://sexopt.com.ua/content/images/45/so9064-13363589803658.jpg</picture>
-        <vendor>Obsessive</vendor>
-        <article>SO9064</article>
-        <name>Духи для мужчин с феромонами Obsessive Perfume for men 10 ml</name>
-        <name_ua>Парфуми для чоловіків з феромонами Obsessive Perfume for men 10 ml</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
-        <param name="Країна">Польща</param>
       </offer>
       <offer id="SO9340" available="true">
         <price>1579</price>
@@ -11110,9 +11067,93 @@
         <vendor>Intt</vendor>
         <article>SX2656</article>
         <name>Скраб для тела и интимных зон Intt SCRATCH ME ALLLL! (100 мл), унисекс</name>
-        <name_ua>Скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! (100 мл), унісекс</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
+        <name_ua>Скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! (100 мл)</name_ua>
+        <description><![CDATA[<p dir="ltr" style="text-align: justify;">Любите відчуття ідеально гладенької шкіри та свіжості? Тоді рекомендуємо купити скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! Цей гель-скраб із мікросферами підходить і жінкам, і чоловікам. Він допомагає м&rsquo;яко видалити зроговілі клітини, забруднення та надлишки себуму. У складі міститься рисова пудра, яка дуже ніжно, але ефективно відлущує верхній шар шкіри та дарує відчуття оновлення. Ідеально підходить для догляду за інтимною зоною перед депіляцією! Спокусливий ніжний аромат залишається на шкірі та доповнює приємні відчуття.</p>
+
+<p dir="ltr" style="text-align: justify;">Скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! не просто знімає верхній зроговілий шар, а й стимулює клітинне оновлення шкіри. Регулярне використання скрабу робить шкіру більш гладенькою та ніжною на дотик.</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики скрабу для тіла та інтимних зон Intt SCRATCH ME ALLLL:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;який ексфоліант &mdash; рисова пудра &mdash; працює як скраб і водночас не травмує навіть ніжну шкіру, на відміну від більш жорстких засобів;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">утримує вологу в шкірі, щоб гладкість зберігалася надовго;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для всього тіла, включно із зовнішніми інтимними зонами;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">продукт унісекс;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">залишає після себе легкий солодкуватий аромат, ніжний і спокусливий;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;яка гелева текстура забезпечує зручне нанесення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">дарує відчуття гладкості, свіжості та оновлення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">має накопичувальний ефект: за регулярного використання шкіра оновлюється й стає гладенькою та шовковистою;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для догляду за зоною бікіні перед депіляцією.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Використовувати скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! рекомендується до трьох разів на тиждень.</p>
+
+<p dir="ltr" style="text-align: justify;">Зверніть увагу! Скраб призначений тільки для зовнішнього застосування та зовнішніх інтимних зон! Не наносьте на слизові оболонки!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua, Glycerin, Oryza Sativa (Rice) Powder, Propylene Glycol, Parfum, Aroma, Sodium Saccharin, Sodium Benzoate, Potassium Sorbate, Cellulose Gum, Xanthan Gum, Citric Acid, Phenoxyethanol, Tetrasodium EDTA, CI 15985, CI 14700, Sodium Hyaluronate, Disodium Laureth Sulfosuccinate.</p>]]></description>
+        <description_ua><![CDATA[<p dir="ltr" style="text-align: justify;">Любите відчуття ідеально гладенької шкіри та свіжості? Тоді рекомендуємо купити скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! Цей гель-скраб із мікросферами підходить і жінкам, і чоловікам. Він допомагає м&rsquo;яко видалити зроговілі клітини, забруднення та надлишки себуму. У складі міститься рисова пудра, яка дуже ніжно, але ефективно відлущує верхній шар шкіри та дарує відчуття оновлення. Ідеально підходить для догляду за інтимною зоною перед депіляцією! Спокусливий ніжний аромат залишається на шкірі та доповнює приємні відчуття.</p>
+
+<p dir="ltr" style="text-align: justify;">Скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! не просто знімає верхній зроговілий шар, а й стимулює клітинне оновлення шкіри. Регулярне використання скрабу робить шкіру більш гладенькою та ніжною на дотик.</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики скрабу для тіла та інтимних зон Intt SCRATCH ME ALLLL:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;який ексфоліант &mdash; рисова пудра &mdash; працює як скраб і водночас не травмує навіть ніжну шкіру, на відміну від більш жорстких засобів;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">утримує вологу в шкірі, щоб гладкість зберігалася надовго;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для всього тіла, включно із зовнішніми інтимними зонами;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">продукт унісекс;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">залишає після себе легкий солодкуватий аромат, ніжний і спокусливий;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;яка гелева текстура забезпечує зручне нанесення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">дарує відчуття гладкості, свіжості та оновлення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">має накопичувальний ефект: за регулярного використання шкіра оновлюється й стає гладенькою та шовковистою;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для догляду за зоною бікіні перед депіляцією.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Використовувати скраб для тіла та інтимних зон Intt SCRATCH ME ALLLL! рекомендується до трьох разів на тиждень.</p>
+
+<p dir="ltr" style="text-align: justify;">Зверніть увагу! Скраб призначений тільки для зовнішнього застосування та зовнішніх інтимних зон! Не наносьте на слизові оболонки!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua, Glycerin, Oryza Sativa (Rice) Powder, Propylene Glycol, Parfum, Aroma, Sodium Saccharin, Sodium Benzoate, Potassium Sorbate, Cellulose Gum, Xanthan Gum, Citric Acid, Phenoxyethanol, Tetrasodium EDTA, CI 15985, CI 14700, Sodium Hyaluronate, Disodium Laureth Sulfosuccinate.</p>]]></description_ua>
         <param name="Обʼєм">100 мл</param>
       </offer>
       <offer id="SX2657" available="true">
@@ -11126,9 +11167,93 @@
         <vendor>Intt</vendor>
         <article>SX2657</article>
         <name>Пена для интимного ухода Intt Foam Seduction (50 мл), унисекс</name>
-        <name_ua>Піна для інтимного догляду Intt Foam Seduction (50 мл), унісекс</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
+        <name_ua>Піна для інтимного догляду Intt Foam Seduction (50 мл), ніацинамід + пантенол, спокусливий аромат</name_ua>
+        <description><![CDATA[<p dir="ltr" style="text-align: justify;">Пропонуємо купити піну для інтимного догляду Intt Foam Seduction &mdash; м&rsquo;який очищувальний засіб, який знімає подразнення, зволожує ніжну шкіру та допомагає запобігти сухості після очищення. У складі міститься пантенол, добре відомий своїми зволожувальними та заспокійливими властивостями, а також ніацинамід, який надає протизапальну дію, допомагає утримати вологу в шкірі та ефективний у боротьбі з пігментацією. Піна має чуттєвий аромат і після використання залишає відчуття свіжості без сухості та стягнутості!</p>
+
+<p dir="ltr" style="text-align: justify;">Піна для інтимного догляду Intt Foam Seduction підходить і жінкам, і чоловікам. Це чудовий варіант, щоб заспокоїти ніжну шкіру після депіляції!</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики піни для інтимного догляду Intt Foam Seduction:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;яка мийна база делікатно очищає зовнішню інтимну зону, не порушуючи цілісності шкіри;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">утримує вологу в шкірі, запобігаючи сухості та відчуттю стягнутості;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">пантенол у складі глибоко зволожує шкіру, знімає запалення та прискорює загоєння мікроушкоджень;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніацинамід знімає подразнення, зменшує почервоніння та нормалізує вироблення себуму;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для всіх типів шкіри;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">має чуттєвий і хвилювальний аромат із легкою ноткою апельсина;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">формула розроблена з урахуванням природного pH інтимної зони;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для щоденного застосування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">чудовий варіант для догляду за ніжною шкірою інтимних зон після депіляції.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Піна для інтимного догляду Intt Foam Seduction створює відчуття свіжості без сухості, доглядає за шкірою та дарує щоденний комфорт!</p>
+
+<p dir="ltr" style="text-align: justify;">Зверніть увагу: піна призначена для зовнішнього догляду. Не рекомендується наносити засіб на пошкоджену шкіру.</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Decyl Glucoside, Glycerin, Lauryl Glucoside, Parfum (Fragrance), Cocamidopropyl Betaine, Niacinamide, Panthenol, Acrylates Copolymer, 1,2-Hexanediol, Phenylpropanol, Tetramethyl Acetyloctahydronaphthalenes, Disodium EDTA, Hexamethylindanopyran, Linalool, Citrus Aurantium Dulcis Oil/Extract, Limonene, Benzyl Salicylate, Hexyl Cinnamal, Linalyl Acetate, Alpha-Isomethyl Ionone, Coumarin, Citric Acid.</p>]]></description>
+        <description_ua><![CDATA[<p dir="ltr" style="text-align: justify;">Пропонуємо купити піну для інтимного догляду Intt Foam Seduction &mdash; м&rsquo;який очищувальний засіб, який знімає подразнення, зволожує ніжну шкіру та допомагає запобігти сухості після очищення. У складі міститься пантенол, добре відомий своїми зволожувальними та заспокійливими властивостями, а також ніацинамід, який надає протизапальну дію, допомагає утримати вологу в шкірі та ефективний у боротьбі з пігментацією. Піна має чуттєвий аромат і після використання залишає відчуття свіжості без сухості та стягнутості!</p>
+
+<p dir="ltr" style="text-align: justify;">Піна для інтимного догляду Intt Foam Seduction підходить і жінкам, і чоловікам. Це чудовий варіант, щоб заспокоїти ніжну шкіру після депіляції!</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики піни для інтимного догляду Intt Foam Seduction:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;яка мийна база делікатно очищає зовнішню інтимну зону, не порушуючи цілісності шкіри;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">утримує вологу в шкірі, запобігаючи сухості та відчуттю стягнутості;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">пантенол у складі глибоко зволожує шкіру, знімає запалення та прискорює загоєння мікроушкоджень;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніацинамід знімає подразнення, зменшує почервоніння та нормалізує вироблення себуму;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для всіх типів шкіри;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">має чуттєвий і хвилювальний аромат із легкою ноткою апельсина;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">формула розроблена з урахуванням природного pH інтимної зони;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для щоденного застосування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">чудовий варіант для догляду за ніжною шкірою інтимних зон після депіляції.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Піна для інтимного догляду Intt Foam Seduction створює відчуття свіжості без сухості, доглядає за шкірою та дарує щоденний комфорт!</p>
+
+<p dir="ltr" style="text-align: justify;">Зверніть увагу: піна призначена для зовнішнього догляду. Не рекомендується наносити засіб на пошкоджену шкіру.</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Decyl Glucoside, Glycerin, Lauryl Glucoside, Parfum (Fragrance), Cocamidopropyl Betaine, Niacinamide, Panthenol, Acrylates Copolymer, 1,2-Hexanediol, Phenylpropanol, Tetramethyl Acetyloctahydronaphthalenes, Disodium EDTA, Hexamethylindanopyran, Linalool, Citrus Aurantium Dulcis Oil/Extract, Limonene, Benzyl Salicylate, Hexyl Cinnamal, Linalyl Acetate, Alpha-Isomethyl Ionone, Coumarin, Citric Acid.</p>]]></description_ua>
         <param name="Обʼєм">50 мл</param>
       </offer>
       <offer id="SX2658" available="true">
@@ -11142,9 +11267,87 @@
         <vendor>Intt</vendor>
         <article>SX2658</article>
         <name>Увлажняющий крем-гель 2в1 Intt Creamy Attraction Blackberry 100мл, вкус ежевики, унисекс</name>
-        <name_ua>Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry 100мл, смак ожини, унісекс</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
+        <name_ua>Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry 100 мл для всього тіла, смак ожини</name_ua>
+        <description><![CDATA[<p dir="ltr" style="text-align: justify;">Чи мріяли ви коли-небудь, щоб ваша шкіра була зволоженою, ароматною та привабливою? Пропонуємо купити зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry &mdash; це інноваційний продукт, що поєднує обволікальну текстуру крему й гелю з неймовірним ароматом ожини. Він ідеально підходить для нанесення на все тіло, включно із зовнішніми інтимними зонами. Після нанесення шкіру можна пестити, цілувати й облизувати, насолоджуючись спокусливим смаком та ароматом! Крім того, крем-гель глибоко живить і зволожує шкіру завдяки натуральним оліям (олія ши та олія солодкого мигдалю), швидко всотується й надовго залишає шкіру доглянутою та ароматною.</p>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry перетворює вашу шкіру на справжню спокусу! Поєднання крему й гелю забезпечує інтенсивне зволоження, швидке всотування та шовковистість без відчуття жирності. Шикарний догляд плюс хвилювальний аромат і смак!</p>
+
+<p dir="ltr" style="text-align: justify;">Особливості зволожувального крем-гелю 2в1 Intt Creamy Attraction Blackberry:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніжна та нелипка текстура крем-гелю для комфортного нанесення та швидкого всотування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">хвилювальний аромат солодкої ожини;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">аромат надовго залишається на шкірі, створюючи спокусливий шлейф;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">крем-гель робить шкіру не тільки ароматною, а й смачною &mdash; відчуйте легкий смак свіжої ожини!</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">забезпечує глибоке зволоження та живлення завдяки олії ши в складі;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">олія солодкого мигдалю підвищує еластичність шкіри та знімає лущення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить як для щоденного догляду, так і для масажу;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">можна використовувати на всіх зонах, включно із зовнішніми інтимними зонами.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry створений для того, щоб зробити моменти близькості ще більш чуттєвими! Він підкорить вас і вашого партнера своїм смаком та ароматом!</p>
+
+<p dir="ltr" style="text-align: justify;">Спосіб застосування: поверніть дозатор, щоб відкрити флакон, і нанесіть необхідну кількість засобу на будь-яку ділянку тіла. М&rsquo;яко розподіліть до повного всотування і&hellip; приготуйтеся до того, що вас захочуть спробувати на смак! Для максимально ефективного зволоження виробник рекомендує попередньо використати скраб Intt Scratch Me All.</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Prunus Amygdalus Dulcis (Sweet Almond) Oil, Aroma (Flavour), Caprylic/Capric Triglyceride, Cetearyl Alcohol, Hydroxyethylcellulose, Sodium Saccharin, Sodium Polyacrylate, Butyrospermum Parkii Butter, Hydrogenated Polydecene, Glyceryl Stearate, BHT, PEG-100 Stearate, Sodium Benzoate, 1,2-Hexanediol, Phenylpropanol, Trideceth-6, Disodium EDTA, CI 14700, CI 42090, Phenoxyethanol, Glyceryl Laurate.</p>]]></description>
+        <description_ua><![CDATA[<p dir="ltr" style="text-align: justify;">Чи мріяли ви коли-небудь, щоб ваша шкіра була зволоженою, ароматною та привабливою? Пропонуємо купити зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry &mdash; це інноваційний продукт, що поєднує обволікальну текстуру крему й гелю з неймовірним ароматом ожини. Він ідеально підходить для нанесення на все тіло, включно із зовнішніми інтимними зонами. Після нанесення шкіру можна пестити, цілувати й облизувати, насолоджуючись спокусливим смаком та ароматом! Крім того, крем-гель глибоко живить і зволожує шкіру завдяки натуральним оліям (олія ши та олія солодкого мигдалю), швидко всотується й надовго залишає шкіру доглянутою та ароматною.</p>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry перетворює вашу шкіру на справжню спокусу! Поєднання крему й гелю забезпечує інтенсивне зволоження, швидке всотування та шовковистість без відчуття жирності. Шикарний догляд плюс хвилювальний аромат і смак!</p>
+
+<p dir="ltr" style="text-align: justify;">Особливості зволожувального крем-гелю 2в1 Intt Creamy Attraction Blackberry:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніжна та нелипка текстура крем-гелю для комфортного нанесення та швидкого всотування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">хвилювальний аромат солодкої ожини;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">аромат надовго залишається на шкірі, створюючи спокусливий шлейф;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">крем-гель робить шкіру не тільки ароматною, а й смачною &mdash; відчуйте легкий смак свіжої ожини!</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">забезпечує глибоке зволоження та живлення завдяки олії ши в складі;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">олія солодкого мигдалю підвищує еластичність шкіри та знімає лущення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить як для щоденного догляду, так і для масажу;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">можна використовувати на всіх зонах, включно із зовнішніми інтимними зонами.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Blackberry створений для того, щоб зробити моменти близькості ще більш чуттєвими! Він підкорить вас і вашого партнера своїм смаком та ароматом!</p>
+
+<p dir="ltr" style="text-align: justify;">Спосіб застосування: поверніть дозатор, щоб відкрити флакон, і нанесіть необхідну кількість засобу на будь-яку ділянку тіла. М&rsquo;яко розподіліть до повного всотування і&hellip; приготуйтеся до того, що вас захочуть спробувати на смак! Для максимально ефективного зволоження виробник рекомендує попередньо використати скраб Intt Scratch Me All.</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Prunus Amygdalus Dulcis (Sweet Almond) Oil, Aroma (Flavour), Caprylic/Capric Triglyceride, Cetearyl Alcohol, Hydroxyethylcellulose, Sodium Saccharin, Sodium Polyacrylate, Butyrospermum Parkii Butter, Hydrogenated Polydecene, Glyceryl Stearate, BHT, PEG-100 Stearate, Sodium Benzoate, 1,2-Hexanediol, Phenylpropanol, Trideceth-6, Disodium EDTA, CI 14700, CI 42090, Phenoxyethanol, Glyceryl Laurate.</p>]]></description_ua>
       </offer>
       <offer id="SX2660" available="true">
         <price>549</price>
@@ -11157,9 +11360,75 @@
         <vendor>Intt</vendor>
         <article>SX2660</article>
         <name>Массажный гель Intt KISS AND TASTE! (55 мл) со вкусом ежевики</name>
-        <name_ua>Масажний гель Intt KISS AND TASTE! (55 мл) зі смаком ожини</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
+        <name_ua>Масажний гель Intt KISS AND TASTE! Blackberry (55 мл) зі смаком ожини, легкий зігрівальний ефект</name_ua>
+        <description><![CDATA[<p dir="ltr" style="text-align: justify;">Легкий гель &mdash; нелипкий, ковзний і неймовірно смачний! Пропонуємо купити масажний гель Intt KISS AND TASTE! Blackberry зі смаком ожини та м&rsquo;яким зігрівальним ефектом. Нанесіть гель на будь-яку зону, злегка подуйте &mdash; і насолоджуйтеся відчуттями! Ідеальний варіант для хвилювальної прелюдії, солодких поцілунків та оральних пестощів &mdash; усього, що підкаже фантазія. Завдяки водній основі гель легко змивається. Вам точно сподобається насичений смак ожини та приємна текстура гелю.</p>
+
+<p dir="ltr" style="text-align: justify;">Масажний гель Intt KISS AND TASTE! Blackberry &mdash; їстівний продукт із м&rsquo;яким зігрівальним ефектом і смаком стиглої ожини. Водна формула забезпечує легке ковзання, а під час контакту зі шкірою, диханням і дотиками створює відчуття приємного тепла.</p>
+
+<p dir="ltr" style="text-align: justify;">Особливості масажного гелю Intt KISS AND TASTE! Blackberry:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">завдяки водній основі легко змивається;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">нелипка та приємна гелева текстура;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">розкішний аромат і смак соковитої ожини;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;який зігрівальний ефект: щоб його активувати, нанесіть гель на вибрану зону та злегка подуйте або подихайте на нього;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для пестощів будь-яких зон у нього та в неї, а також чудово доповнює оральний секс, перетворюючи його на справжній феєрверк відчуттів для обох партнерів;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">зручний флакон із дозатором для економної витрати.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Як використовувати гель? Нанесіть необхідну кількість гелю на будь-яку ділянку тіла. Засіб можна використовувати як в інтимних зонах, так і на інших ерогенних ділянках. Злегка подуйте на гель, щоб активувати тепло, &mdash; і ваш партнер відчує неповторну хвилю задоволення. Ідеально для збуджувальної прелюдії!</p>
+
+<p dir="ltr" style="text-align: justify;">Неповторний оральний секс, чуттєві пестощі та поцілунки всього тіла, стимуляція будь-яких ерогенних зон, хвилювальний масаж &mdash; усе це можливо з масажним гелем Intt KISS AND TASTE! Blackberry, і водночас ви будете насолоджуватися насиченим ожиновим смаком!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Propylene Glycol, Aroma, Sodium Benzoate, Sodium Saccharin, Phenoxyethanol, Disodium EDTA, Glyceryl Laurate, CI 14700, CI 42090.</p>]]></description>
+        <description_ua><![CDATA[<p dir="ltr" style="text-align: justify;">Легкий гель &mdash; нелипкий, ковзний і неймовірно смачний! Пропонуємо купити масажний гель Intt KISS AND TASTE! Blackberry зі смаком ожини та м&rsquo;яким зігрівальним ефектом. Нанесіть гель на будь-яку зону, злегка подуйте &mdash; і насолоджуйтеся відчуттями! Ідеальний варіант для хвилювальної прелюдії, солодких поцілунків та оральних пестощів &mdash; усього, що підкаже фантазія. Завдяки водній основі гель легко змивається. Вам точно сподобається насичений смак ожини та приємна текстура гелю.</p>
+
+<p dir="ltr" style="text-align: justify;">Масажний гель Intt KISS AND TASTE! Blackberry &mdash; їстівний продукт із м&rsquo;яким зігрівальним ефектом і смаком стиглої ожини. Водна формула забезпечує легке ковзання, а під час контакту зі шкірою, диханням і дотиками створює відчуття приємного тепла.</p>
+
+<p dir="ltr" style="text-align: justify;">Особливості масажного гелю Intt KISS AND TASTE! Blackberry:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">завдяки водній основі легко змивається;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">нелипка та приємна гелева текстура;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">розкішний аромат і смак соковитої ожини;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">м&rsquo;який зігрівальний ефект: щоб його активувати, нанесіть гель на вибрану зону та злегка подуйте або подихайте на нього;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить для пестощів будь-яких зон у нього та в неї, а також чудово доповнює оральний секс, перетворюючи його на справжній феєрверк відчуттів для обох партнерів;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">зручний флакон із дозатором для економної витрати.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Як використовувати гель? Нанесіть необхідну кількість гелю на будь-яку ділянку тіла. Засіб можна використовувати як в інтимних зонах, так і на інших ерогенних ділянках. Злегка подуйте на гель, щоб активувати тепло, &mdash; і ваш партнер відчує неповторну хвилю задоволення. Ідеально для збуджувальної прелюдії!</p>
+
+<p dir="ltr" style="text-align: justify;">Неповторний оральний секс, чуттєві пестощі та поцілунки всього тіла, стимуляція будь-яких ерогенних зон, хвилювальний масаж &mdash; усе це можливо з масажним гелем Intt KISS AND TASTE! Blackberry, і водночас ви будете насолоджуватися насиченим ожиновим смаком!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Propylene Glycol, Aroma, Sodium Benzoate, Sodium Saccharin, Phenoxyethanol, Disodium EDTA, Glyceryl Laurate, CI 14700, CI 42090.</p>]]></description_ua>
         <param name="Обʼєм">55 мл</param>
       </offer>
       <offer id="SX2803" available="true">
@@ -11173,9 +11442,87 @@
         <vendor>Intt</vendor>
         <article>SX2803</article>
         <name>Увлажняющий крем-гель 2в1 Intt Creamy Attraction Seduction 100мл с афродизиаком, унисекс</name>
-        <name_ua>Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction 100мл з афродизіаком, унісекс</name_ua>
-        <description><![CDATA[]]></description>
-        <description_ua><![CDATA[]]></description_ua>
+        <name_ua>Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction 100 мл з ароматом-афродизіаком, унісекс</name_ua>
+        <description><![CDATA[<p dir="ltr" style="text-align: justify;">Пропонуємо купити зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction &mdash; розкішний доглядальний засіб як на кожен день, так і для особливих моментів! Унікальна текстура, що поєднує властивості гелю та крему, забезпечує легке нанесення, а розкішний аромат залишається на шкірі тривалий час. Парфумерна композиція крем-гелю була ретельно розроблена з використанням нот афродизіаків, які пробуджують почуття та підвищують самооцінку. Цей теплий, солодкувато-квітковий аромат із цитрусовою ноткою сподобається і жінкам, і чоловікам. У складі міститься олія ши, яка глибоко живить, пом&rsquo;якшує та захищає шкіру, утримуючи вологу до 8 годин &mdash; те, що потрібно для по-справжньому шовковистої шкіри! Підходить для масажу та може наноситися на зовнішню інтимну зону. Зручний флакон із дозатором дає можливість витрачати засіб акуратно та економно.</p>
+
+<p dir="ltr" style="text-align: justify;">Подаруйте своїй шкірі неймовірне відчуття м&rsquo;якості та гладкості, а також розкішний, збуджувальний аромат! Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction не тільки глибоко доглядає за шкірою, а й працює як афродизіак завдяки особливій парфумерній композиції.</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики зволожувального крем-гелю 2в1 Intt Creamy Attraction Seduction:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніжна та нелипка текстура крем-гелю для комфортного нанесення та швидкого всотування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">розкішний аромат-афродизіак допомагає розкрити чуттєвість і підвищити сексуальну привабливість;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">парфумерна композиція тепла, солодкувата, з квітковими та цитрусовими нотами;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">аромат надовго залишається на шкірі, створюючи спокусливий шлейф;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">забезпечує глибоке зволоження та живлення завдяки олії ши в складі;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">рицинова олія робить шкіру більш еластичною та знімає можливі запалення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить як для щоденного догляду, так і для масажу;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">можна використовувати на всіх ділянках, включно із зовнішніми інтимними зонами.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Спосіб застосування: поверніть дозатор, щоб відкрити флакон, і нанесіть необхідну кількість засобу на будь-яку ділянку тіла. Розподіліть м&rsquo;якими рухами до повного всотування. Для максимально ефективного зволоження виробник рекомендує попередньо використати скраб Intt Scratch Me All.</p>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction &mdash; це шовковиста шкіра, неперевершений аромат і незабутні моменти близькості!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Parfum (Fragrance), Cetearyl Alcohol, Ricinus Communis (Castor) Seed Oil, Hydroxyethylcellulose, Butyrospermum Parkii Butter, Caprylic/Capric Triglyceride, C15&ndash;19 Alkane, Limonene, Sodium Polyacrylate, Sodium Saccharin, BHT, Glyceryl Laurate, Hydrogenated Polydecene, PEG-100 Stearate, Sodium Benzoate, Coco-Caprylate/Caprate, Tetramethyl Acetyloctahydronaphthalenes, Hexamethylindanopyran, Linalool, Citrus Aurantium Dulcis Oil/Extract, Trideceth-6, Benzyl Salicylate, Hexyl Cinnamal, Linalyl Acetate, 1,2-Hexanediol, Alpha-Isomethyl Ionone, Coumarin, Phenylpropanol, Geranyl Acetate, Citral, Citronellol, Vanillin, Dimethyl Phenethyl Acetate, Terpineol, CI 45100, Geraniol, Rose Ketones, Phenoxyethanol, Disodium EDTA.</p>]]></description>
+        <description_ua><![CDATA[<p dir="ltr" style="text-align: justify;">Пропонуємо купити зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction &mdash; розкішний доглядальний засіб як на кожен день, так і для особливих моментів! Унікальна текстура, що поєднує властивості гелю та крему, забезпечує легке нанесення, а розкішний аромат залишається на шкірі тривалий час. Парфумерна композиція крем-гелю була ретельно розроблена з використанням нот афродизіаків, які пробуджують почуття та підвищують самооцінку. Цей теплий, солодкувато-квітковий аромат із цитрусовою ноткою сподобається і жінкам, і чоловікам. У складі міститься олія ши, яка глибоко живить, пом&rsquo;якшує та захищає шкіру, утримуючи вологу до 8 годин &mdash; те, що потрібно для по-справжньому шовковистої шкіри! Підходить для масажу та може наноситися на зовнішню інтимну зону. Зручний флакон із дозатором дає можливість витрачати засіб акуратно та економно.</p>
+
+<p dir="ltr" style="text-align: justify;">Подаруйте своїй шкірі неймовірне відчуття м&rsquo;якості та гладкості, а також розкішний, збуджувальний аромат! Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction не тільки глибоко доглядає за шкірою, а й працює як афродизіак завдяки особливій парфумерній композиції.</p>
+
+<p dir="ltr" style="text-align: justify;">Характеристики зволожувального крем-гелю 2в1 Intt Creamy Attraction Seduction:</p>
+
+<ul>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">ніжна та нелипка текстура крем-гелю для комфортного нанесення та швидкого всотування;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">розкішний аромат-афродизіак допомагає розкрити чуттєвість і підвищити сексуальну привабливість;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">парфумерна композиція тепла, солодкувата, з квітковими та цитрусовими нотами;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">аромат надовго залишається на шкірі, створюючи спокусливий шлейф;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">забезпечує глибоке зволоження та живлення завдяки олії ши в складі;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">рицинова олія робить шкіру більш еластичною та знімає можливі запалення;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">підходить як для щоденного догляду, так і для масажу;</p>
+    </li>
+    <li aria-level="1" dir="ltr">
+    <p dir="ltr" role="presentation" style="text-align: justify;">можна використовувати на всіх ділянках, включно із зовнішніми інтимними зонами.</p>
+    </li>
+</ul>
+
+<p dir="ltr" style="text-align: justify;">Спосіб застосування: поверніть дозатор, щоб відкрити флакон, і нанесіть необхідну кількість засобу на будь-яку ділянку тіла. Розподіліть м&rsquo;якими рухами до повного всотування. Для максимально ефективного зволоження виробник рекомендує попередньо використати скраб Intt Scratch Me All.</p>
+
+<p dir="ltr" style="text-align: justify;">Зволожувальний крем-гель 2в1 Intt Creamy Attraction Seduction &mdash; це шовковиста шкіра, неперевершений аромат і незабутні моменти близькості!</p>
+
+
+
+<p dir="ltr" style="text-align: justify;">Склад: Aqua (Water), Glycerin, Parfum (Fragrance), Cetearyl Alcohol, Ricinus Communis (Castor) Seed Oil, Hydroxyethylcellulose, Butyrospermum Parkii Butter, Caprylic/Capric Triglyceride, C15&ndash;19 Alkane, Limonene, Sodium Polyacrylate, Sodium Saccharin, BHT, Glyceryl Laurate, Hydrogenated Polydecene, PEG-100 Stearate, Sodium Benzoate, Coco-Caprylate/Caprate, Tetramethyl Acetyloctahydronaphthalenes, Hexamethylindanopyran, Linalool, Citrus Aurantium Dulcis Oil/Extract, Trideceth-6, Benzyl Salicylate, Hexyl Cinnamal, Linalyl Acetate, 1,2-Hexanediol, Alpha-Isomethyl Ionone, Coumarin, Phenylpropanol, Geranyl Acetate, Citral, Citronellol, Vanillin, Dimethyl Phenethyl Acetate, Terpineol, CI 45100, Geraniol, Rose Ketones, Phenoxyethanol, Disodium EDTA.</p>]]></description_ua>
       </offer>
       <offer id="SX2878" available="true">
         <price>1229</price>
@@ -12576,7 +12923,7 @@
       </offer>
       <offer id="SO1205" available="true">
         <price>49</price>
-        <stock_quantity>5</stock_quantity>
+        <stock_quantity>4</stock_quantity>
         <currencyId>UAH</currencyId>
         <categoryId>15523</categoryId>
         <picture>https://sexopt.com.ua/content/images/25/so1205-32977420424297.jpg</picture>
