@@ -113,7 +113,16 @@ def sync(profile, write=False, publish=False):
     for o in offers:
         st = src.get(o.get('id'))
         if st is None:
+            # Зник із фіду постачальника = знятий з продажу (рішення власника
+            # 02.10). Раніше такі позиції лишались у продажу й давали
+            # замовлення, які нема чим виконати.
             missing += 1
+            if o.get('available', 'true').lower() != 'false':
+                o.set('available', 'false')
+                off += 1
+                sq = o.find('stock_quantity')
+                if sq is not None:
+                    sq.text = '0'
             continue
         avail, raw = st
         if (o.get('available', 'true').lower() != 'false') != avail:
@@ -132,7 +141,7 @@ def sync(profile, write=False, publish=False):
     print(f'  знято з продажу (нема в постачальника): {off}')
     print(f'  повернуто у продаж:                     {on}')
     print(f'  виправлено цін:                         {price_fix}')
-    print(f'  немає у фіді постачальника:             {missing}')
+    print(f'  зникли з фіду постачальника (знято):    {missing}')
     if not write:
         print('  --dry: нічого не записано')
         return
@@ -157,10 +166,13 @@ def audit():
         src = supplier_state(cfg['source'])
         sell_gone = gone_sell = 0
         for o in ET.parse(base).getroot().iter('offer'):
+            cur = o.get('available', 'true').lower() != 'false'
             st = src.get(o.get('id'))
             if st is None:
+                # зник у постачальника, а ми досі продаємо — та сама біда
+                if cur:
+                    sell_gone += 1
                 continue
-            cur = o.get('available', 'true').lower() != 'false'
             if cur and not st[0]:
                 sell_gone += 1
             elif not cur and st[0]:
