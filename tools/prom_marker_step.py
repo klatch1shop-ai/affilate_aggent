@@ -26,7 +26,8 @@ import xml.etree.ElementTree as ET
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FEED = os.environ.get('STEP_SRC') or os.path.join(BASE, 'output', 'noire_prom.xml')
 CONFS = [os.path.join(BASE, 'data', 'prom', f)
-         for f in ('marker_experiment.json', 'price_marker_experiment.json')]
+         for f in ('marker_experiment.json', 'marker_experiment_v2.json',
+           'price_marker_experiment.json')]
 
 
 def main():

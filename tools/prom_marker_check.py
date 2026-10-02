@@ -28,7 +28,8 @@ import urllib.parse
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'tools'))
 CONFS = [os.path.join(BASE_DIR, 'data', 'prom', f)
-         for f in ('marker_experiment.json', 'price_marker_experiment.json')]
+         for f in ('marker_experiment.json', 'marker_experiment_v2.json',
+           'price_marker_experiment.json')]
 LOG = os.path.join(BASE_DIR, 'docs', 'prom_marker_experiment_log.tsv')
 
 
