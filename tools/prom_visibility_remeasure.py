@@ -17,6 +17,13 @@
 
     python3 tools/prom_visibility_remeasure.py --base docs/prom_visibility_20260912.tsv \
         --out docs/prom_visibility_20260915.tsv [--limit 5]
+
+
+УВАГА, СЛІПА ПЛЯМА вимірювача: `prom_search_browser.search_both()` читає
+ЛИШЕ ПЕРШУ СТОРІНКУ видачі. Будь-яке ЧИСЛО знайдених карток звідси
+занижене. 02-03.10 це дало хибні висновки «поріг 8 карток» і «13 %
+видимих» — справжнє число, заміряне людиною, 87 із 195 (45 %).
+Крім того, `*/search` закрито в robots.txt Prom: автоматично не ходимо.
 """
 import argparse
 import csv

@@ -22,6 +22,13 @@
 Запуск:
     python3 tools/prom_visibility_check.py --n 8
     python3 tools/prom_visibility_check.py --sku SO2795,EGG-001L
+
+
+УВАГА, СЛІПА ПЛЯМА вимірювача: `prom_search_browser.search_both()` читає
+ЛИШЕ ПЕРШУ СТОРІНКУ видачі. Будь-яке ЧИСЛО знайдених карток звідси
+занижене. 02-03.10 це дало хибні висновки «поріг 8 карток» і «13 %
+видимих» — справжнє число, заміряне людиною, 87 із 195 (45 %).
+Крім того, `*/search` закрито в robots.txt Prom: автоматично не ходимо.
 """
 import argparse
 import os
