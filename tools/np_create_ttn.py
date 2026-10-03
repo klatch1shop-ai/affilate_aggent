@@ -7,9 +7,10 @@
   * посилка — опція «до 2 кг»; оголошена вартість = сума замовлення;
   * опис вантажу — коротка назва товару (15.09; спершу було «нейтрально»);
   * оплачене замовлення — БЕЗ післяплати; оплата при отриманні — З
-    післяплатою на суму замовлення (на карту власника, NP_COD_CARD). Поки НП
-    блокує переказ на карту через API (20000201794) — ТТН без післяплати, а в
-    Telegram — «додайте післяплату N грн» (власник додає в кабінеті);
+    контролем оплати на суму замовлення. Картка НЕ вказується (власник,
+    03.10.2026): це звичайний грошовий переказ, а не переказ на карту.
+    Код 20000201794 виникав саме через поле `PaymentCard` і не означав, що
+    НП блокує післяплату взагалі;
   * після створення — зберегти наклейку 100×100 (PDF) і надіслати в Telegram;
   * якщо щось не так — власник видалить ТТН у кабінеті, пробуємо знову;
   * (13.09, пізніше) після створення — ТТН у замовлення Rozetka і статус
@@ -223,8 +224,6 @@ def main():
           f"оголошена {amount} | вартість доставки {price.get('data')}")
     if not a.create:
         return
-    if cod and not COD_CARD:
-        sys.exit('післяплата: у .env немає NP_COD_CARD — без карти не створюємо')
 
     r = np('Counterparty', 'save', {'CounterpartyType': 'PrivatePerson', 'CounterpartyProperty': 'Recipient', **rcp})
     if not r.get('success'):
@@ -240,19 +239,29 @@ def main():
         'OptionsSeat': [{**BOX, 'volumetricVolume': VOLUME, 'weight': PARCEL_WEIGHT}],
     }
     if cod:
-        # післяплата на карту власника — як у його ручних ТТН; поле PaymentCard
-        # (інші назви НП мовчки ігнорує, README «Перевірено справжньою ТТН»)
-        params['BackwardDeliveryData'] = [{'PayerType': 'Recipient', 'CargoType': 'Money',
-                                           'RedeliveryString': cod, 'PaymentCard': COD_CARD}]
+        # Контроль оплати — звичайний грошовий переказ, КАРТА НЕ ПОТРІБНА
+        # (власник, 03.10.2026). Довідник НП `Common.getBackwardDeliveryCargoTypes`
+        # знає лише два типи: «Документи» і «Грошовий переказ».
+        #
+        # Раніше тут стояло поле `PaymentCard` з картою власника, і саме переказ
+        # НА КАРТУ Нова Пошта блокувала кодом 20000201794 — звідси пішов хибний
+        # висновок «НП блокує післяплату через API» і півтора місяця ручного
+        # додавання післяплати в кабінеті.
+        params['BackwardDeliveryData'] = [{'PayerType': 'Recipient',
+                                           'CargoType': 'Money',
+                                           'RedeliveryString': cod}]
     doc = np('InternetDocument', 'save', params, retries=1)
     if not doc.get('success') and any('escription' in str(e) for e in doc.get('errors') or []):
         print(f'НП не прийняла опис «{desc}»: {doc.get("errors")} — повтор з «{DESCRIPTION}»')
         params['Description'] = DESCRIPTION
         doc = np('InternetDocument', 'save', params, retries=1)
-    cod_todo = None   # післяплату власник додає вручну в кабінеті НП
+    # Запасний шлях лишаємо, але він більше не має спрацьовувати: 20000201794
+    # виникав через поле `PaymentCard`, якого тепер немає. Якщо код усе ж
+    # зʼявиться — це НОВА причина, і її треба розібрати, а не глушити мовчки.
+    cod_todo = None
     if not doc.get('success') and cod and '20000201794' in (doc.get('errorCodes') or []):
-        # власник 13.09: поки НП блокує переказ на карту через API — створювати без
-        # післяплати й писати в Telegram, на яку суму її додати
+        print('УВАГА: 20000201794 без PaymentCard — причина інша, ніж вважалось. '
+              f'Помилки: {doc.get("errors")}')
         params.pop('BackwardDeliveryData')
         doc = np('InternetDocument', 'save', params, retries=1)
         cod_todo = cod
@@ -263,10 +272,10 @@ def main():
     ttn, ref = t['IntDocNumber'], t['Ref']
     print(f"СТВОРЕНО ТТН {ttn} (Ref {ref}), вартість {t.get('CostOnSite')} грн, доставка {t.get('EstimatedDeliveryDate')}")
     if cod_todo:
-        cod_line = (f'⚠️ <b>ДОДАЙТЕ ПІСЛЯПЛАТУ {cod_todo} грн</b> у кабінеті НП до відправки '
-                    f'(через API на карту заблоковано) і роздрукуйте наклейку звідти')
+        cod_line = (f'⚠️ <b>ДОДАЙТЕ КОНТРОЛЬ ОПЛАТИ {cod_todo} грн</b> у кабінеті НП '
+                    f'до відправки і роздрукуйте наклейку звідти')
     elif cod:
-        cod_line = f'Післяплата: {cod} грн на карту *{COD_CARD[-4:]}'
+        cod_line = f'Контроль оплати: {cod} грн'
     else:
         cod_line = 'Післяплата: немає (оплачено)'
     if cod_todo:
