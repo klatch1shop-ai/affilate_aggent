@@ -29,6 +29,9 @@ STEPS = [
     ('назви, описи, ключі', 'tools/prom_content_fix.py'),
     # маркер-експеримент (15.09, docs/prom_marker_experiment_20260915.md); вимикається в data/prom/marker_experiment.json
     ('маркер-експеримент ключів', 'tools/prom_marker_step.py'),
+    # Ключі, перевірені ДВОМА різними вендорами, + видалення доведених
+    # помилок. Протокол: docs/research/PROM_CARD_REWORK_PROTOCOL.md
+    ('перевірені ключі та виправлення помилок', 'tools/prom_kw_apply.py'),
 ]
 
 
