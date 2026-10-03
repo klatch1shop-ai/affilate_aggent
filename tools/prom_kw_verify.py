@@ -110,13 +110,37 @@ def ask_batch(cards, vendor, timeout=180):
     return out, numbers
 
 
+def ask_both_orders(cards, vendor):
+    """Питаємо той самий набір у ПРЯМОМУ і ЗВОРОТНОМУ порядку.
+
+    Судді віддають перевагу тому, що стоїть першим. Заміряно на НАШИХ даних
+    03.10.2026: вердикт змінюється від порядку в 12,5 % випадків у groq і
+    8,3 % у cerebras (52 вердикти). Менше за 15-30 % із літератури, але не
+    нуль — і це чисті помилки, бо зміст ключа від порядку не залежить.
+
+    Зараховуємо лише ті вердикти, що збіглися в обох порядках.
+    """
+    rev = [(name, list(reversed(keys))) for name, keys in cards]
+    fwd_ans, numbers = ask_batch(cards, vendor)
+    rev_ans, _ = ask_batch(rev, vendor)
+    agreed = {}
+    for i, (_name, keys) in enumerate(cards):
+        row = numbers[i]
+        n = len(row)
+        for j, _k in enumerate(keys):
+            va, vb = fwd_ans.get(row[j]), rev_ans.get(row[n - 1 - j])
+            if va and vb and va[0] == vb[0]:
+                agreed[row[j]] = va
+    return agreed, numbers
+
+
 def verify_batch(ids, plan):
     cards = []
     for pid in ids:
         p = plan[pid]
         cards.append((p['name'], [k for ks in p['add'].values() for k in ks]))
-    a, numbers = ask_batch(cards, 'groq')
-    b, _ = ask_batch(cards, 'cerebras')
+    a, numbers = ask_both_orders(cards, 'groq')
+    b, _ = ask_both_orders(cards, 'cerebras')
     want = {n for row in numbers for n in row}
     if not (want <= set(a)) or not (want <= set(b)):
         # пачку обрізало — добираємо Gemini, він тягне й короткі відповіді
