@@ -37,7 +37,16 @@ EXPECTED = {
 
 
 def check():
+    """→ (рядки, застояли). Якщо теки фідів тут немає — це НЕ застій.
+
+    Фіди лежать на сервері (`~/noire-feed`). На ноутбуці теки немає, і перша
+    версія цієї перевірки оголошувала всі пʼять фідів застояними — хибна
+    тривога, яка на демонстрації виглядала б як пʼять справжніх проблем.
+    """
     now = datetime.datetime.now()
+    if not os.path.isdir(REPO):
+        return ([(n, None, r, 'перевірка лише на сервері')
+                 for n, r in EXPECTED.items()], [])
     rows, stale = [], []
     for name, rule in EXPECTED.items():
         path = os.path.join(REPO, name)
