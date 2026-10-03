@@ -167,21 +167,53 @@ def get_new_orders() -> list:
         logger.error(f'Prom API помилка: {e}')
         return []
 
-def confirm_order(order_id: int) -> bool:
-    """Підтверджуємо замовлення на Prom"""
+# Prom приймає лише ці значення — перевірено перебором 03.10.2026:
+# усе інше («accepted», «pending», «canceled», «sent», «new», …) дає
+# {"error": "This status value is not allowed"}.
+PROM_ALLOWED_STATUSES = ('received', 'delivered', 'paid')
+
+
+def confirm_order(order_id: int, status: str = 'received') -> bool:
+    """Підтверджуємо замовлення на Prom.
+
+    ДВІ ПАСТКИ, на яких цей код стояв зламаним:
+
+    1. Слався статус `accepted`, якого Prom НЕ ПРИЙМАЄ. Дозволені лише
+       `received`, `delivered`, `paid` (перевірено перебором 03.10.2026).
+    2. Успіх визначався через `status_code == 200`, а Prom віддає **200 і на
+       помилку**: тіло містить `{"error": ...}` або порожній `processed_ids`.
+       Через це в журнал писалось «замовлення підтверджено», хоча API його
+       відхилив.
+
+    Справжня ознака успіху — наш `order_id` у `processed_ids` відповіді.
+    """
+    if status not in PROM_ALLOWED_STATUSES:
+        logger.error(f'Prom не приймає статус «{status}»; дозволені: '
+                     f'{", ".join(PROM_ALLOWED_STATUSES)}')
+        return False
     try:
         resp = requests.post(
             f'{PROM_BASE}/orders/set_status',
             headers=PROM_HEADERS,
-            json={'ids': [order_id], 'status': 'accepted'},
+            json={'ids': [order_id], 'status': status},
             timeout=30
         )
-        ok = resp.status_code == 200
-        if ok:
-            logger.success(f'Замовлення #{order_id} підтверджено на Prom')
-        else:
-            logger.error(f'Помилка підтвердження #{order_id}: {resp.text}')
-        return ok
+        try:
+            data = resp.json()
+        except ValueError:
+            logger.error(f'Prom відповів не JSON на #{order_id}: {resp.text[:200]}')
+            return False
+        if data.get('error'):
+            logger.error(f'Prom відхилив #{order_id}: {data["error"]}')
+            return False
+        processed = data.get('processed_ids') or []
+        if order_id not in processed:
+            logger.error(f'Prom НЕ змінив статус #{order_id}: '
+                         f'processed_ids={processed} '
+                         f'warning={data.get("warning_message", "")}')
+            return False
+        logger.success(f'Замовлення #{order_id} → статус «{status}» на Prom')
+        return True
     except Exception as e:
         logger.error(f'Помилка: {e}')
         return False

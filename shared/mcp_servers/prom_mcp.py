@@ -143,8 +143,11 @@ async def list_tools():
             name='prom_set_order_status',
             description=(
                 'Змінити статус замовлення. '
-                'Типовий flow: pending → accepted → delivered. '
-                'Можна скасувати: cancelled або declined.'
+                'ЗАПИС приймає лише received | delivered | paid '
+                '(перевірено перебором 03.10.2026; accepted, pending, '
+                'canceled, new та інші дають "This status value is not '
+                'allowed"). Prom відповідає 200 і на помилку — успіх це '
+                'наявність id у processed_ids, а не код відповіді.'
             ),
             inputSchema={
                 'type': 'object',
@@ -423,7 +426,18 @@ async def call_tool(name: str, arguments: dict):
         if arguments.get('cancellation_reason'):
             payload['cancellation_reason'] = arguments['cancellation_reason']
 
+        if arguments['status'] not in ('received', 'delivered', 'paid'):
+            return [types.TextContent(
+                type='text',
+                text=f"❌ Prom не приймає статус «{arguments['status']}». "
+                     f'Дозволені: received, delivered, paid')]
+
         data = prom_post('orders/set_status', payload)
+
+        if not data.get('processed_ids') and 'error' not in data:
+            return [types.TextContent(
+                type='text',
+                text=f'❌ Статус не змінено: {data.get("warning_message", data)}')]
 
         if 'error' in data:
             return [types.TextContent(type='text', text=f'❌ Помилка: {data["error"]}')]

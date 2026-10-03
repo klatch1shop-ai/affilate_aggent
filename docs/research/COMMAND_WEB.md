@@ -71,6 +71,7 @@ BackwardDeliveryCargoType = ''
 | `GET /goods/all` | працює |
 | `GET /goods/prices` | працює |
 | `GET /messages/search` | працює |
+| `PATCH /orders/{id}` | **працює** — `{status, ttn}`; на порожньому тілі дає `1005 check_correctness_of_data`, а не `not_found` |
 | `GET /messages` | **існує, але `1010 access_denied`** — токену бракує прав |
 | `GET /promotions` | існує, доступ заборонено |
 | решта 25 (`/categories`, `/comments`, `/orders/statuses`, `/goods/getstocks`, …) | `5404 not_found`, як у вигаданого шляху |
@@ -92,7 +93,24 @@ BackwardDeliveryCargoType = ''
 
 Версія шляху — не дрібниця: `/v2/oms/orders` не існує, `/v3` і `/v4` існують.
 
-## Prom — 7 методів
+## Prom — 8 методів
+
+### `POST /orders/set_status` — пастка, що мовчки ламала обробку замовлень
+
+ЗАПИС приймає **лише** `received`, `delivered`, `paid` (перевірено перебором
+14 значень 03.10.2026). `accepted`, `pending`, `canceled`, `new`, `sent` та
+інші дають `{"error": "This status value is not allowed"}`.
+
+Це НЕ той самий набір, що приходить при читанні замовлень — там бувають
+`new`, `accepted`, `canceled`. Читані й записувані статуси різні, і наша ж
+база знань їх плутала.
+
+**Prom віддає HTTP 200 і на помилку.** Успіх — це наш id у `processed_ids`,
+а не код відповіді. `agents/orders/order_agent.py` перевіряв
+`status_code == 200` і слав `accepted`: у журнал писалось «замовлення
+підтверджено», хоча API його відхиляв. Виправлено 03.10.
+
+
 
 `/products/list`, `/groups/list`, `/orders/list`, `/messages/list`,
 `/clients/list`, `/delivery_options/list`, `/payment_options/list`.
@@ -122,7 +140,8 @@ Rozetka, у довіднику НП їх немає.
 | дія | Prom | Rozetka | Єпіцентр | НП |
 |---|---|---|---|---|
 | прочитати замовлення | `/orders/list` | `/orders/search` | `/v3/oms/orders` | — |
-| змінити статус замовлення | не знайдено | не знайдено | `change-status/to/{status}` | — |
+| змінити статус замовлення | `POST /orders/set_status` | `PATCH /orders/{id}` | `change-status/to/{status}` | — |
+| записати ТТН у замовлення | не знайдено | `PATCH /orders/{id}` `{status:61, ttn}` | `/v2/oms/orders/{id}/ttn` | — |
 | прочитати чати покупців | `/messages/list` | `/messages/search` | — | — |
 | оновити залишки | лише фідом | лише фідом | лише фідом | — |
 | створити ТТН | — | — | — | `InternetDocument.save` |
@@ -136,5 +155,8 @@ Rozetka, у довіднику НП їх немає.
 ## Що лишилось
 
 - [ ] токен ФОП Нової Пошти від власника → перевірити контроль оплати справжньою ТТН
-- [ ] підтвердити методи зміни статусу замовлень на Prom і Rozetka
+- [x] Rozetka: `PATCH /orders/{id}` — підтверджено кодом помилки 1005 проти 5404 у вигаданого шляху
+- [x] Prom: `POST /orders/set_status` ІСНУЄ. Мій перший зонд дав «404» хибно —
+      HTML-сторінки сусідніх шляхів залили вивід, і потрібний рядок не потрапив
+      у хвіст, який я читав. Інструмент спрацював, читання — ні.
 - [ ] схема бекенду: один шар дій над каналами

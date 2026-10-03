@@ -30,8 +30,20 @@ GET /orders/list — замовлення (polling 15-30 хв, webhook нема�
 POST /orders/set_status — зміна статусу
 POST /delivery/save_declaration_id — ТТН
 
-## Статуси
-new | accepted | paid | delivered | canceled
+## Статуси — ЧИТАННЯ і ЗАПИС це РІЗНІ набори (перевірено перебором 03.10.2026)
+
+ЧИТАННЯ (приходять у /orders/list): new, accepted, paid, delivered, canceled, …
+ЗАПИС через POST /orders/set_status: ЛИШЕ received | delivered | paid
+
+Усе інше («accepted», «pending», «canceled», «sent», «new», «processing», …)
+дає {"error": "This status value is not allowed"}.
+
+УВАГА: Prom віддає HTTP 200 І НА ПОМИЛКУ. Перевіряти треба тіло:
+  {"error": ...}                — відхилено
+  {"processed_ids": []}         — не змінено (є ще warning_message)
+  {"processed_ids": [id, …]}    — успіх
+Перевірка `status_code == 200` НЕ працює: через неї order_agent.py з цим
+записом у журналі «замовлення підтверджено» насправді нічого не змінював.
 
 ## TecDoc
 type="vendor.model", vendor + model обов'язкові
