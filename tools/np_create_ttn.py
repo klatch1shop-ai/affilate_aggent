@@ -167,6 +167,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('order_id', type=int)
     ap.add_argument('--create', action='store_true', help='створити ТТН (без прапорця — лише розрахунок)')
+    ap.add_argument('--dry-params', action='store_true',
+                    help='показати ПАРАМЕТРИ майбутньої ТТН і вийти; працює '
+                         'навіть якщо ТТН уже є — для перевірки логіки')
     a = ap.parse_args()
 
     d = RZ.get_order_details(a.order_id)
@@ -177,7 +180,7 @@ def main():
     if not kind:
         sys.exit(f"доставка не Нова Пошта (delivery_service_id={dl.get('delivery_service_id')}, "
                  f"назва «{dl.get('delivery_service_name')}»). Відомі: {NP_SERVICES}")
-    if d.get('ttn') or RZ._ttn_of(d):
+    if (d.get('ttn') or RZ._ttn_of(d)) and not a.dry_params:
         sys.exit(f'у замовленні вже є ТТН: {d.get("ttn") or RZ._ttn_of(d)}')
 
     paid = RZ.payment_paid(d)
@@ -189,6 +192,18 @@ def main():
         cod = amount
     else:
         sys.exit(f'оплата «{ptype}» (paid={paid}) — правило післяплати не визначене, зупиняюсь')
+
+    if a.dry_params:
+        print(f'замовлення {a.order_id}: оплата «{ptype}», paid={paid}, сума {amount}')
+        print(f'  → контроль оплати: '
+              f'{"AfterpaymentOnGoodsCost=" + str(cod) if cod else "НЕ потрібен (оплачено)"}')
+        print(f'  → відділення НП за ref_id {dl.get("ref_id")}')
+        w0 = np('Address', 'getWarehouses', {'Ref': dl.get('ref_id') or ''})
+        d0 = (w0.get('data') or [{}])[0]
+        print(f'  → {d0.get("Description", "НЕ ЗНАЙДЕНО")}')
+        print(f'  → одержувач: {dl.get("recipient_last_name")} '
+              f'{dl.get("recipient_first_name")}, {dl.get("recipient_phone")}')
+        return
 
     wh = np('Address', 'getWarehouses', {'Ref': dl.get('ref_id') or ''})
     if not wh.get('data'):

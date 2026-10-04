@@ -55,13 +55,37 @@ class Crm:
         self.pg.wait_for_timeout(1500)
 
     def login(self):
+        """Вхід із ВВОДОМ З КЛАВІАТУРИ, а не fill().
+
+        04.10.2026: сесія протермінувалась, і вхід упав — кнопка submit
+        лишалась неактивною 30 секунд. Причина та сама, що записана в скілі
+        для кошика: сайт на React НЕ ПОМІЧАЄ `fill()`. У полі значення
+        видно, а форма вважає його порожнім і не вмикає кнопку. У кошику ми
+        це вже обходили, у вході — ні.
+
+        Кнопок submit на сторінці дві; беремо ту, що справді активна.
+        """
         pg = self.pg
         if '/login' not in pg.url:
             pg.goto(f'{BASE}/uk/login', wait_until='networkidle', timeout=60000)
-        pg.fill('input[type=text]', os.getenv('SMTM_LOGIN', ''))
-        pg.fill('input[type=password]', os.getenv('SMTM_PASSWORD', ''))
-        pg.click('button[type=submit]')
-        pg.wait_for_url(lambda u: '/login' not in u, timeout=30000)
+        email = pg.locator('input[type=text]').first
+        email.click()
+        email.type(os.getenv('SMTM_LOGIN', ''), delay=50)
+        pwd = pg.locator('input[type=password]').first
+        pwd.click()
+        pwd.type(os.getenv('SMTM_PASSWORD', ''), delay=50)
+        pg.wait_for_timeout(800)
+        btns = pg.locator('button[type=submit]')
+        clicked = False
+        for i in range(btns.count()):
+            b = btns.nth(i)
+            if b.is_enabled():
+                b.click()
+                clicked = True
+                break
+        if not clicked:
+            pwd.press('Enter')       # запасний шлях, якщо кнопка лишилась неактивною
+        pg.wait_for_url(lambda u: '/login' not in u, timeout=40000)
         self.save()
 
     def save(self):
@@ -140,6 +164,99 @@ class Crm:
         got = items.get(sku, (0,))[0]
         print(f'{sku}: у кошику {got:g} шт (потрібно {qty})' + ('' if got == qty else ' — НЕ ЗБІГАЄТЬСЯ'))
         return got == qty
+
+    # ── оформлення й ТТН ──────────────────────────────────────────────
+    #
+    # КОШИК ОДИН НА ВЕСЬ АКАУНТ. Два замовлення, що обробляються одночасно,
+    # змішають свої позиції в одному кошику, і постачальник отримає кашу.
+    # Тому: обробка строго по одному (замок у виклику), кошик має бути
+    # ПОРОЖНІЙ перед початком, а перед оформленням його склад звіряється з
+    # очікуваним ТОЧНО — і за артикулами, і за кількостями.
+
+    def cart_is_empty(self):
+        return not self.cart_items()
+
+    def clear_cart(self):
+        """Прибрати все з кошика: ставимо 0 кожному рядку."""
+        for sku in list(self.cart_items()):
+            try:
+                self.set_cart_qty(sku, 0)
+            except Exception as exc:
+                print(f'{sku}: не вдалось прибрати — {type(exc).__name__}')
+        return self.cart_is_empty()
+
+    def cart_matches(self, expected):
+        """expected: {артикул: кількість}. Точний збіг складу й кількостей."""
+        got = {k: v[0] for k, v in self.cart_items().items()}
+        want = {k: float(v) for k, v in expected.items()}
+        if got == want:
+            return True, 'склад кошика збігається'
+        return False, f'кошик {got} ≠ очікуване {want}'
+
+    def checkout_open(self):
+        """Кнопка «Оформити» в кошику → сторінка /uk/checkout/<id>.
+
+        Нічого не замовляє: це лише перехід. Спосіб доставки «Нова пошта»
+        там обраний за замовчуванням, і ми його НЕ чіпаємо.
+        """
+        self.open('/uk/cart')
+        btn = self.pg.get_by_role('button', name='Оформити', exact=True)
+        if not btn.count():
+            btn = self.pg.locator('button:has-text("Оформити")').first
+        btn.first.click()
+        self.pg.wait_for_url('**/checkout/**', timeout=30000)
+        return self.pg.url.rstrip('/').split('/')[-1]
+
+    def place_order(self):
+        """НЕЗВОРОТНЕ: натискає «Оформити замовлення». → ID замовлення в CRM."""
+        btn = self.pg.locator('button:has-text("Оформити замовлення")').first
+        btn.click()
+        self.pg.wait_for_timeout(6000)
+        import re as _re
+        text = self.pg.locator('body').inner_text()
+        m = _re.search(r'ID\s*(\d{6,})', text)
+        if not m:
+            raise RuntimeError(f'ID замовлення не знайдено. Сторінка: {text[:300]}')
+        return m.group(1)
+
+    def attach_ttn(self, ttn, pdf_path):
+        """Прикріпити номер ТТН і PDF 100×100 до оформленого замовлення.
+
+        Порядок із перевірених кроків 15.09: радіо «Прикріпити файл» →
+        поле «Номер ТТН» з клавіатури (fill() React не помічає) →
+        set_input_files → кнопка «Прикріпити».
+        """
+        pg = self.pg
+        pg.locator('text=Прикріпити файл').first.click()
+        pg.wait_for_timeout(2000)
+        # Будова сторінки, зчитана 04.10: три radio name=ttnOrigin, ОДНЕ
+        # текстове поле без placeholder (номер ТТН) і невидиме input[type=file].
+        # Перше текстове поле на сторінці — це пошук по каталогу
+        # (placeholder «Пошук по каталогу...»), його брати не можна.
+        num = pg.locator('input[type=text]:not([placeholder])').first
+        if not num.count():
+            num = pg.locator('input[type=text]').nth(1)
+        num.click()
+        num.type(str(ttn), delay=60)          # fill() React не помічає
+        # Поле файлу НЕВИДИМЕ — це норма, set_input_files із ним працює.
+        pg.locator('input[type=file]').first.set_input_files(pdf_path)
+        pg.wait_for_timeout(2500)
+        btn = pg.locator('button:has-text("Прикріпити")').first
+        if not btn.is_enabled():
+            return False, 'кнопка «Прикріпити» лишилась неактивною — номер або файл не прийнялись'
+        btn.click()
+        pg.wait_for_timeout(5000)
+        body = pg.locator('body').inner_text()
+        ok = ('успішно прикріплений' in body) or (str(ttn) in body and 'надіслана' in body)
+        return ok, body[:200]
+
+    def order_info(self, crm_id):
+        """Сума до сплати й стан замовлення з /inner/checkout/<id>."""
+        d = self.api(f'/uk/inner/checkout/{crm_id}')
+        if not isinstance(d, dict):
+            return {}
+        return {'сума': d.get('totalSum'), 'ттн': d.get('ttnNumber'),
+                'джерело_ттн': d.get('ttnOrigin'), 'чекає_ттн': d.get('waitForTtn')}
 
     def close(self):
         self.save()

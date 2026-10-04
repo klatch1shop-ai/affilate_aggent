@@ -42,6 +42,17 @@ import requests
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
+
+# Ознаки ВИЧЕРПАНОГО КАНАЛУ, а не дефекту картки. Перелік один на всі
+# інструменти: 03.10 він розʼїхався між `ask()` і відновлюваним прогоном, і
+# CodexLimitError («You've hit your usage limit») не впізнався — прогін
+# крутився по колу, щоразу позначаючи ті самі 48 карток «немає JSON».
+EXHAUSTED_SIGNS = ('402', '429', 'depleted', 'resource_exhausted', 'usage limit',
+                   'rate limit', 'quota', 'codexlimiterror', 'too many requests')
+
+
+def is_exhausted(exc):
+    return any(s in f'{type(exc).__name__} {exc}'.lower() for s in EXHAUSTED_SIGNS)
 from shared.utils.llm_router import call_gemini  # noqa: E402
 from shared.utils.vendor_pool import call as vendor_call  # noqa: E402
 
@@ -152,8 +163,8 @@ def ask(o, cat, vendor='gemini'):
         # 402 (скінчились кошти) і 429 — не дефект картки, зупиняємо прогін,
         # а не палимо чергу: 03.10 усі 968 карток БДСМ позначились збоєм,
         # хоча причиною були вичерпані кошти Gemini.
-        if any(c in str(exc) for c in ('402', '429', 'depleted', 'RESOURCE_EXHAUSTED')):
-            raise RuntimeError(f'КАНАЛ ВИЧЕРПАНО: {str(exc)[:120]}')
+        if is_exhausted(exc):
+            raise RuntimeError(f'КАНАЛ ВИЧЕРПАНО: {str(exc)[:160]}')
         if img is None:
             return None
         try:
