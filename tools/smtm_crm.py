@@ -66,8 +66,12 @@ class Crm:
         Кнопок submit на сторінці дві; беремо ту, що справді активна.
         """
         pg = self.pg
+        # Якщо сесія ще жива — входити не треба. 04.10 виклик login() при
+        # дійсній сесії падав: сторінки входу немає, полів теж.
         if '/login' not in pg.url:
-            pg.goto(f'{BASE}/uk/login', wait_until='networkidle', timeout=60000)
+            pg.goto(f'{BASE}/uk/profile', wait_until='networkidle', timeout=60000)
+            if '/login' not in pg.url:
+                return
         email = pg.locator('input[type=text]').first
         email.click()
         email.type(os.getenv('SMTM_LOGIN', ''), delay=50)
@@ -174,15 +178,37 @@ class Crm:
     # очікуваним ТОЧНО — і за артикулами, і за кількостями.
 
     def cart_is_empty(self):
-        return not self.cart_items()
+        """Рядки з нульовою кількістю за товар не рахуємо.
+
+        04.10: `set_cart_qty(sku, 0)` лишає рядок у кошику з amount 0, і
+        кошик виглядав «не порожнім», хоча товару в ньому немає.
+        """
+        return not {k: v for k, v in self.cart_items().items() if v[0] > 0}
 
     def clear_cart(self):
-        """Прибрати все з кошика: ставимо 0 кожному рядку."""
-        for sku in list(self.cart_items()):
-            try:
-                self.set_cart_qty(sku, 0)
-            except Exception as exc:
-                print(f'{sku}: не вдалось прибрати — {type(exc).__name__}')
+        """Справді ВИДАЛИТИ все з кошика кнопкою «Очистити всі корзини».
+
+        Нулювання кількості не прибирає рядок — перевірено 04.10. На
+        сторінці кошика є кнопка, яка чистить усе; нею й користуємось.
+        """
+        self.open('/uk/cart')
+        btn = self.pg.locator('button:has-text("Очистити всі корзини")').first
+        if btn.count():
+            btn.click()
+            self.pg.wait_for_timeout(1500)
+            # підтвердження, якщо воно зʼявиться
+            for name in ('Так', 'Підтвердити', 'Очистити', 'OK'):
+                c = self.pg.locator(f'button:has-text("{name}")')
+                if c.count() and c.first.is_visible():
+                    c.first.click()
+                    break
+            self.pg.wait_for_timeout(2500)
+        else:
+            for sku in list(self.cart_items()):
+                try:
+                    self.set_cart_qty(sku, 0)
+                except Exception as exc:
+                    print(f'{sku}: не вдалось прибрати — {type(exc).__name__}')
         return self.cart_is_empty()
 
     def cart_matches(self, expected):

@@ -83,7 +83,7 @@ def order_items(details):
     return out
 
 
-def run(order_id, create_ttn, place):
+def run(order_id, create_ttn, place, check_only=False):
     import rozetka_order_agent as RZ
     import np_label as LBL
 
@@ -148,28 +148,54 @@ def run(order_id, create_ttn, place):
         crm = CRM.Crm(p)
         try:
             crm.login()
-            if not crm.cart_is_empty():
-                left = crm.cart_items()
-                tg(f'⚠️ Замовлення {order_id}: кошик CRM НЕ порожній — там {left}. '
-                   'Зупиняюсь, щоб не змішати замовлення.')
-                sys.exit(f'кошик не порожній: {left}')
-            for sku, qty in items.items():
-                if not crm.add(sku, qty):
-                    sys.exit(f'{sku}: кількість у кошику не збіглась')
-            same, why2 = crm.cart_matches(items)
-            print('звірка кошика:', why2)
-            if not same:
-                tg(f'❌ Замовлення {order_id}: {why2}. Нічого не оформлено.')
-                sys.exit(why2)
+
+            # ── Порядок перевірок має значення ────────────────────────
+            # 04.10: кошик наповнювався ДО перевірки «чи вже оформлено», і
+            # повторний запуск лишав товар висіти в кошику — наступне
+            # замовлення стартувало б із чужою позицією.
+            # --check-only: проходимо шлях НОВОГО замовлення (очищення
+            # кошика, наповнення, звірка) і зупиняємось ДО оформлення.
+            # Потрібен, щоб перевірити очищення, не створюючи зобовʼязань.
+            already = None if check_only else done.get('crm_id')
+
+            if not already:
+                # Кошик мусить бути порожній. Залишки прибираємо самі:
+                # інакше одна недороблена спроба блокує всю роботу.
+                if not crm.cart_is_empty():
+                    left = crm.cart_items()
+                    print(f'кошик не порожній: {left} — прибираю')
+                    if not crm.clear_cart():
+                        tg(f'⚠️ Замовлення {order_id}: кошик CRM не вдалось '
+                           f'очистити, там лишилось {crm.cart_items()}. '
+                           'Зупиняюсь, щоб не змішати замовлення.')
+                        sys.exit('кошик не очистився')
+                    tg(f'ℹ️ Перед замовленням {order_id} прибрано залишки '
+                       f'з кошика CRM: {left}')
+                for sku, qty in items.items():
+                    if not crm.add(sku, qty):
+                        sys.exit(f'{sku}: кількість у кошику не збіглась')
+                same, why2 = crm.cart_matches(items)
+                print('звірка кошика:', why2)
+                if not same:
+                    tg(f'❌ Замовлення {order_id}: {why2}. Нічого не оформлено.')
+                    sys.exit(why2)
 
             # ── СТРАХУВАННЯ 1: не оформлювати двічі ──────────────────
             # Якщо замовлення вже створене (обрив на пізнішому кроці),
             # беремо збережений ID і йдемо одразу до ТТН. 04.10 прогін
             # упав на прикріпленні ПІСЛЯ оформлення — без цього повторний
             # запуск створив би друге замовлення в постачальника.
-            crm_id = done.get('crm_id')
+            if check_only:
+                print('\n[перевірка] кошик наповнено й звірено, '
+                      'оформлення НЕ виконується')
+                print('  у кошику:', crm.cart_items())
+                crm.clear_cart()
+                print('  кошик після прибирання:', crm.cart_items())
+                return
+
+            crm_id = already
             if crm_id:
-                print(f'замовлення вже оформлене раніше: {crm_id} — не повторюю')
+                print(f'замовлення вже оформлене раніше: {crm_id} — кошик не чіпав')
                 crm.open(f'/uk/checkout/{crm_id}')
             else:
                 crm.checkout_open()
@@ -178,6 +204,11 @@ def run(order_id, create_ttn, place):
                 st[key] = done
                 save_state(st)        # фіксуємо ОДРАЗУ після незворотного
                 print('оформлено в CRM:', crm_id)
+                # Після оформлення кошик має спорожніти сам. Якщо ні —
+                # прибираємо, щоб не отруїти наступне замовлення.
+                if not crm.cart_is_empty():
+                    print('кошик не спорожнів після оформлення — прибираю')
+                    crm.clear_cart()
 
             # ── СТРАХУВАННЯ 2: збій прикріплення не лишає нас мовчки ──
             attached, note = False, ''
@@ -239,6 +270,8 @@ if __name__ == '__main__':
     ap.add_argument('--order', type=int, required=True)
     ap.add_argument('--create-ttn', action='store_true')
     ap.add_argument('--place', action='store_true')
+    ap.add_argument('--check-only', action='store_true',
+                    help='перевірити очищення й наповнення кошика без оформлення')
     a = ap.parse_args()
     os.makedirs(os.path.dirname(LOCK), exist_ok=True)
     with open(LOCK, 'w') as lk:
@@ -246,4 +279,4 @@ if __name__ == '__main__':
             fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             sys.exit('інший прогін уже працює — кошик CRM один на акаунт, чекаємо')
-        run(a.order, a.create_ttn, a.place)
+        run(a.order, a.create_ttn, a.place or a.check_only, a.check_only)
