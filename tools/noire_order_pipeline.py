@@ -265,9 +265,79 @@ def run(order_id, create_ttn, place, check_only=False):
           .replace('<code>', '').replace('</code>', ''))
 
 
+def find_orders():
+    """Нові замовлення NOIRE, готові до обробки.
+
+    Умови — усі обовʼязкові, бо кожна колись була причиною помилки:
+      * статус 2 «підтверджено» (у 4 покупець ще може передумати);
+      * доставка Нова Пошта (інші служби наш ланцюг не вміє);
+      * ТТН ще немає;
+      * УСІ артикули належать NOIRE — замовлення зі змішаними
+        постачальниками йде людині, бо Carvol і TOPTUL мають інший шлях;
+      * замовлення ще не в нашому стані.
+    """
+    import rozetka_order_agent as RZ
+    st = load_state()
+    noire = RZ.get_noire_articles()
+    # Порожній перелік артикулів — це «не змогли прочитати фід», а НЕ
+    # «замовлень немає». Без цієї перевірки автоматика мовчки нічого не
+    # робить і ніхто не знає чому: фід лежить на сервері, і на іншій
+    # машині шлях не існує.
+    if len(noire) < 100:
+        tg(f'❌ <b>Автообробка зупинена</b>\nПерелік артикулів NOIRE має лише '
+           f'{len(noire)} позицій — фід не прочитано. Замовлення НЕ оброблялись.')
+        raise SystemExit(f'перелік артикулів NOIRE порожній ({len(noire)}) — '
+                         'фід не прочитано, зупиняюсь')
+    out = []
+    for status in (2,):
+        for o in RZ.get_orders_by_status(status):
+            oid = str(o.get('id'))
+            if oid in st:
+                continue
+            d = RZ.get_order_details(int(oid))
+            if not d or d.get('ttn') or RZ._ttn_of(d):
+                continue
+            dl = d.get('delivery') or {}
+            if dl.get('delivery_service_id') not in (5,):      # 5 = Нова Пошта
+                continue
+            arts = set(order_items(d))
+            if not arts or not arts <= noire:
+                continue
+            out.append(int(oid))
+    return out
+
+
+def auto():
+    """Знайти й обробити всі готові замовлення. Один за одним: кошик CRM
+    один на акаунт, паралельно не можна."""
+    ids = find_orders()
+    print(f'готових замовлень NOIRE: {len(ids)} → {ids}')
+    if not ids:
+        return
+    done_ok, failed = [], []
+    for oid in ids:
+        print(f'\n{"="*60}\nЗАМОВЛЕННЯ {oid}')
+        try:
+            run(oid, create_ttn=True, place=True)
+            done_ok.append(oid)
+        except SystemExit as exc:
+            print(f'зупинено: {exc}')
+            failed.append((oid, str(exc)))
+        except Exception as exc:
+            print(f'збій: {type(exc).__name__}: {exc}')
+            failed.append((oid, f'{type(exc).__name__}: {exc}'))
+    if failed:
+        tg('⚠️ <b>Автообробка замовлень</b>\n'
+           f'Оброблено: {len(done_ok)}\n'
+           'Потребують уваги:\n' +
+           '\n'.join(f'• {o}: {w[:120]}' for o, w in failed))
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('--order', type=int, required=True)
+    ap.add_argument('--order', type=int)
+    ap.add_argument('--auto', action='store_true',
+                    help='знайти й обробити всі готові замовлення NOIRE')
     ap.add_argument('--create-ttn', action='store_true')
     ap.add_argument('--place', action='store_true')
     ap.add_argument('--check-only', action='store_true',
@@ -279,4 +349,9 @@ if __name__ == '__main__':
             fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             sys.exit('інший прогін уже працює — кошик CRM один на акаунт, чекаємо')
-        run(a.order, a.create_ttn, a.place or a.check_only, a.check_only)
+        if a.auto:
+            auto()
+        elif a.order:
+            run(a.order, a.create_ttn, a.place or a.check_only, a.check_only)
+        else:
+            ap.error('потрібен --order або --auto')
