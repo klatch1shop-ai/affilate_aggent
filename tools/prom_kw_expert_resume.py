@@ -36,12 +36,14 @@ WAIT_MINUTES = 20
 # крутився по колу на тих самих 48 картках, бо `todo` рахувався лише за
 # зробленими, а невдалі лишались у черзі вічно.
 MAX_RETRIES = 2
+VARIANT = ['a']        # заповнюється з --variant; черга окрема на варіант
 
 
 def qpath(category):
     os.makedirs(QUEUE_DIR, exist_ok=True)
     safe = category.replace(' ', '_').replace('/', '_')
-    return os.path.join(QUEUE_DIR, f'{safe}.json')
+    suffix = f'_{VARIANT[0]}' if VARIANT[0] != 'a' else ''
+    return os.path.join(QUEUE_DIR, f'{safe}{suffix}.json')
 
 
 def load_queue(category):
@@ -57,8 +59,21 @@ def save_queue(category, q):
     os.replace(tmp, qpath(category))      # атомарно: обрив не псує файл
 
 
-def main(category, vendor, workers, feed):
+def main(category, vendor, workers, feed, variant='a'):
+    VARIANT[0] = variant
+    """Замок НА КАТЕГОРІЮ: два прогони різними вендорами на одній категорії
+    пишуть у ту саму чергу й затирають один одного. 04.10 Codex і DeepSeek
+    зійшлись на БДСМ-іграшках — помітили вчасно, але випадково."""
     import collections
+    import fcntl
+    os.makedirs(QUEUE_DIR, exist_ok=True)
+    lock_path = qpath(category) + '.lock'
+    lock = open(lock_path, 'w')
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        raise SystemExit(f'категорію «{category}» уже обробляє інший прогін — '
+                         f'замок {lock_path}')
     offers = list(ET.parse(feed).getroot().iter('offer'))
     cats = json.load(open('/tmp/prom_cats.json', encoding='utf-8'))
     freq = {t: collections.Counter(
@@ -88,7 +103,7 @@ def main(category, vendor, workers, feed):
         if stop['exhausted']:
             return o.get('id'), None, None
         try:
-            data = ask(o, category, vendor)
+            data = ask(o, category, vendor, variant)
         except Exception as exc:
             if is_exhausted(exc):
                 stop['exhausted'] = True
@@ -138,8 +153,12 @@ def main(category, vendor, workers, feed):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--category', required=True)
-    ap.add_argument('--vendor', choices=['gemini', 'codex'], default='codex')
+    ap.add_argument('--vendor', choices=['gemini', 'codex', 'deepseek'],
+                    default='codex')
     ap.add_argument('--workers', type=int, default=3)
     ap.add_argument('--feed', default='/tmp/prom_live.xml')
+    ap.add_argument('--variant', choices=['a', 'b', 'c'], default='a',
+                    help='c — агресивна заміна + фото в ключі + різноманітність '
+                         '(переміг у досліді 04.10)')
     a = ap.parse_args()
-    main(a.category, a.vendor, a.workers, a.feed)
+    main(a.category, a.vendor, a.workers, a.feed, a.variant)

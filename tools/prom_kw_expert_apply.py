@@ -23,16 +23,43 @@ import argparse
 import glob
 import json
 import os
+import re
 import xml.etree.ElementTree as ET
+
+# Останній фільтр перед фідом. Ті самі правила, що й у перевірці, але
+# застосовані до ВЖЕ ЗБЕРЕЖЕНИХ черг: 04.10 сім ключів зі словами «ціна» і
+# «купити» вже лежали в черзі, коли фільтр додали в перевірку.
+BANNED = re.compile(r'\b(купити|купить|замовити|заказать|недорого|ціна|цена|'
+                    r'київ|киев|україна|украина|доставка)\b', re.I)
+
+
+def clean(k):
+    """Ключ придатний? Кома ламає ліміт слотів, заборонені слова з'їдають їх."""
+    return (',' not in k and ';' not in k and not BANNED.search(k)
+            and 2 <= len(k.split()) <= 6)
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIMIT = 9
 PILOT = os.path.join(BASE, 'data', 'prom', 'kw_expert_pilot.json')
 
 
-def load_all():
-    """Усі результати експертних прогонів по категоріях."""
+def load_all(variant='c'):
+    """Результати прогонів. За замовчуванням варіант В — він переміг у
+    досліді 04.10 на тих самих 25 картках: більше ключів, краща
+    різноманітність (3.0 проти 3.9 фраз з однаковою основою), на чверть
+    більше прибраного сміття, втричі більше транслітерацій бренду.
+    Варіант А лишається в окремих чергах як запасний.
+    """
     cards = {}
+    suffix = f'_{variant}.json' if variant != 'a' else '.json'
+    for path in glob.glob(os.path.join(BASE, 'data', 'kw_queue', '*')):
+        if not path.endswith(suffix) or path.endswith('.lock'):
+            continue
+        d = json.load(open(path, encoding='utf-8'))
+        for pid, row in (d.get('cards') or {}).items():
+            cards[pid] = row
+    if cards:
+        return cards
     for path in glob.glob(os.path.join(BASE, 'exports', 'prom_kw_expert_*.json')):
         d = json.load(open(path, encoding='utf-8'))
         for pid, row in (d.get('cards') or {}).items():
@@ -60,8 +87,14 @@ def main(src, out, write):
             low = {k.lower() for k in kept}
             free = LIMIT - len(kept)
             take = [a['k'] for a in row['add'][tag]
-                    if a['k'].lower() not in low][:max(0, free)]
+                    if a['k'].lower() not in low and clean(a['k'])][:max(0, free)]
             added += len(take)
+            # Останній запобіжник: ліміт рахуємо ПІСЛЯ складання рядка,
+            # бо ключ із комою при читанні розпадається на кілька.
+            final = [k for k in (kept + take) if ',' not in k and ';' not in k]
+            final = final[:LIMIT]
+            take = final[len(kept):] if len(kept) < len(final) else []
+            kept = final[:min(len(kept), len(final))]
             if kept + take != have:
                 if el is None:
                     el = ET.SubElement(o, tag)
