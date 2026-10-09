@@ -2,7 +2,7 @@
 rozetka_order_agent.py v4
 =========================
 v4:
-- set_ttn: POST /orders/add-ttn (primary) з fallback на PATCH /orders/{id}
+- set_ttn: PATCH /orders/{id} з {status: 61, ttn}
 - process_order: confirm(2) → Excel Carvol → save 'accepted'; TTN окремо через бот
 - save_to_db: зберігає phone/recipient/city для match_order_by_ttn_data
 - get_orders_by_status: новий хелпер для пошуку за статусом
@@ -263,48 +263,41 @@ def change_status(order_id: int, status: int) -> bool:
 
 def set_ttn(order_id: int, ttn: str) -> bool:
     """
-    Встановити ТТН для замовлення.
-    Після успіху статус автоматично стає 61 (TTN додано).
-    Потім викликати change_status(3) для передачі в доставку.
+    Встановити ТТН для замовлення: `PATCH /orders/{id}` з {status: 61, ttn}.
+    Після успіху статус 61 («ТТН додано»), далі change_status(3).
 
-    Пробує:
-      1. POST /orders/add-ttn  {"order_id", "ttn", "delivery_service_id": 1}
-      2. Fallback: PATCH /orders/{id} {"ttn": ttn}
+    09.10.2026: прибрано першу спробу `POST /orders/add-ttn`. Такого методу
+    НЕ ІСНУЄ — Rozetka віддає `5404 not_found`, той самий код, що на
+    вигаданий шлях, і його немає в офіційній доці (340 шляхів). У логах
+    1 спроба, 0 успіхів: щоразу падало сюди, в PATCH. Тобто кожен запис ТТН
+    починався з завідомо провального запиту й попередження в логах.
     """
-    # Спроба 1: POST /orders/add-ttn
-    try:
-        r = requests.post(
-            f'{ROZETKA_BASE}/orders/add-ttn',
-            headers=rz_headers(),
-            verify=False,
-            json={'order_id': order_id, 'ttn': ttn, 'delivery_service_id': 1},
-            timeout=15
-        )
-        data = r.json()
-        if data.get('success'):
-            logger.success(f'ТТН {ttn} додано до #{order_id} (POST add-ttn → статус 61)')
-            return True
-        logger.warning(f'set_ttn POST add-ttn failed ({data}), trying PATCH fallback...')
-    except Exception as e:
-        logger.warning(f'set_ttn POST add-ttn exception ({e}), trying PATCH fallback...')
-
-    # Fallback: PATCH /orders/{id}
     try:
         r = requests.patch(
             f'{ROZETKA_BASE}/orders/{order_id}',
             headers=rz_headers(),
             verify=False,
-            json={'ttn': ttn},
+            # ТТН приймається РАЗОМ зі статусом 61. 07.10: з тілом лише
+            # {'ttn': ...} Rozetka віддавала success=true, а читання
+            # показувало, що ТТН не з'явилась і статус не змінився —
+            # «успіх» був уявний. Замовлення 908076533 лишилось без ТТН.
+            json={'status': 61, 'ttn': ttn},
             timeout=15
         )
         data = r.json()
         if data.get('success'):
-            logger.success(f'ТТН {ttn} додано до #{order_id} (PATCH fallback)')
-            return True
-        logger.warning(f'set_ttn PATCH fallback failed: {data}')
+            # Перевіряємо ЧИТАННЯМ, а не вірою у відповідь.
+            check = get_order_details(order_id) or {}
+            if (check.get('ttn') or _ttn_of(check)) == ttn:
+                logger.success(f'ТТН {ttn} додано до #{order_id} (PATCH + статус 61)')
+                return True
+            logger.error(f'PATCH сказав success, але ТТН {ttn} у #{order_id} '
+                         f'НЕ з\'явилась — читання спростувало запис')
+            return False
+        logger.warning(f'set_ttn PATCH failed: {data}')
         return False
     except Exception as e:
-        logger.error(f'set_ttn PATCH fallback: {e}')
+        logger.error(f'set_ttn PATCH: {e}')
         return False
 
 
@@ -646,12 +639,28 @@ def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_
            f'Замовлення НЕ скасовано, постачальнику НЕ надіслано — розберіться вручну.')
         return
     paid = payment_paid(details)
-    if is_prepaid and paid is not True and not skip_payment_check:
+    # ТРИ стани оплати, не два:
+    #   True  — Rozetka підтвердила: шлемо постачальнику як оплачене
+    #   None  — «на рахунок продавця»: Rozetka НЕ бачить цю оплату НІКОЛИ.
+    #           Рішення власника 07.10.2026: такі замовлення ВСЕ ОДНО йдуть
+    #           постачальнику як оплачені, з проханням виставити рахунок, а
+    #           контроль надходження коштів — окремим нагадуванням власнику.
+    #           Раніше вони чекали вічно, бо умова «оплата підтверджена» не
+    #           могла стати істинною в принципі.
+    #   False — онлайн-оплата ще не надійшла: чекаємо, не шлемо
+    if is_prepaid and paid is False and not skip_payment_check:
         moved = move_to_processing(order_id)
         save_to_db(details, 'waiting_payment')
+        # Для «на рахунок продавця» (paid is None) Rozetka оплату НЕ бачить
+        # ніколи, тож обіцянка «агент підтвердить сам» була б неправдою:
+        # умова не стане істинною, доки власник не змінить статус у кабінеті.
+        tail = ('Оплата на рахунок продавця — Rozetka її не бачить. '
+                'Виставте рахунок і, коли гроші прийдуть, змініть статус '
+                'у кабінеті Rozetka: агент одразу надішле постачальнику.'
+                if paid is None else
+                'Після оплати агент підтвердить і надішле постачальнику сам.')
         tg(f'⏳ <b>{head} — наявність є, чекаємо оплату</b>\n{who}\n{stock_txt}\n'
-           f'Статус: {"обробляється менеджером" if moved else "НЕ змінено"}. '
-           f'Після оплати агент підтвердить і надішле постачальнику сам.')
+           f'Статус: {"обробляється менеджером" if moved else "НЕ змінено"}. ' + tail)
         return
     res = confirm_order(order_id)
     if not res:
@@ -661,8 +670,10 @@ def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_
         return
     # «ОПЛАЧЕНО» пишемо лише коли Rozetka підтвердила оплату (або статус уже
     # змінився після оплати) — інакше постачальник відправив би без післяплати неоплачене.
-    paid_now = is_prepaid and (paid is True or skip_payment_check)
-    if is_prepaid and not paid_now:
+    # None передаємо далі ЯК Є: `payment_line()` зробить із нього припис
+    # «ОПЛАТА НА НАШ РАХУНОК, ВИШЛІТЬ РАХУНОК ТА ВІДПРАВЛЯЙТЕ БЕЗ ПІСЛЯПЛАТИ».
+    paid_now = None if paid is None else (is_prepaid and (paid is True or skip_payment_check))
+    if is_prepaid and paid_now is False:
         save_to_db(details, 'manual_review')
         tg(f'⚠️ <b>{head} — передоплата, але оплату не підтверджено</b>\n{who}\n'
            f'Постачальнику НЕ надіслано — перевірте оплату в кабінеті.')
@@ -676,6 +687,32 @@ def _process_toptul(order_id, details, items_info, ri, is_prepaid, skip_payment_
         tg(f'🚨 <b>{head} підтверджено, але лист постачальнику НЕ надіслано</b>\n{who}\n'
            f'Помилка: {str(e)[:150]}\nНадішліть замовлення в «Гранд Інструмент» вручну.')
         return
+    # Окреме нагадування: гроші за це замовлення отримуємо МИ, і ніхто,
+    # крім власника, не побачить, чи вони прийшли. Товар уже замовлений.
+    if paid is None:
+        tg(f'💳 <b>ПОТРІБЕН КОНТРОЛЬ ОПЛАТИ</b>\n'
+           f'Замовлення Rozetka <b>{order_id}</b> на <b>{ri["total"]:.0f} грн</b>\n'
+           f'Оплата на наш рахунок — Rozetka її НЕ відстежує.\n'
+           f'Клієнт: {ri["customer"]} {ri["phone"]}\n\n'
+           f'❗ Товар уже замовлено в постачальника. Виставте рахунок покупцю '
+           f'і простежте, щоб гроші прийшли.')
+        # Позначаємо в тому ж файлі, що й розкладовий сторож
+        # `tools/orders_need_invoice.py`, інакше він о 10:05 надішле друге
+        # таке саме нагадування про це замовлення.
+        try:
+            _root = os.path.dirname(os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))))
+            _st = os.path.join(_root, 'logs', 'invoice_notified.json')
+            _d = {}
+            if os.path.exists(_st):
+                with open(_st, encoding='utf-8') as _f:
+                    _d = json.load(_f)
+            _d[str(order_id)] = True
+            os.makedirs(os.path.dirname(_st), exist_ok=True)
+            with open(_st, 'w', encoding='utf-8') as _f:
+                json.dump(_d, _f, ensure_ascii=False, indent=1)
+        except Exception as _e:
+            logger.warning(f'#{order_id}: позначку про нагадування не збережено: {_e}')
     save_to_db(details, 'accepted')
     where = {'live': f'постачальнику ({to})',
              'test': f'⚠️ ТЕСТОВИЙ РЕЖИМ — лист лише на нашу скриньку ({to}). '
@@ -1186,9 +1223,14 @@ def process_order(order: dict, feed: dict):
             res = confirm_order(order_id)
             if res:
                 save_to_db(details, 'accepted')
+                # Раніше тут просили оформити в SexOpt вручну. З 04.10 це
+                # робить `tools/noire_order_pipeline.py --auto` кожні 20 хв:
+                # ТТН, наклейка, замовлення в CRM постачальника, прикріплення.
+                # Прохання робити вручну тепер лише плутало б.
                 tg(f'✅ <b>{MARKETPLACE} NOIRE #{order_id} підтверджено</b>\n'
                    f'Клієнт: {ri["customer"]} {ri["phone"]} | 💰 {ri["total"]:.0f} грн\n{stock_txt}\n'
-                   f'Оформіть замовлення в SexOpt.')
+                   f'Далі автоматично: ТТН, наклейка і замовлення в постачальника '
+                   f'(протягом 20 хв). Втручання не потрібне.')
                 logger.info(f'#{order_id} NOIRE: наявність є, підтверджено')
                 return
             save_to_db(details, 'pending_manual' if res is None else 'manual_review')

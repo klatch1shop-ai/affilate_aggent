@@ -84,6 +84,24 @@ def rozetka_get(endpoint: str, params: dict = None) -> dict:
         return {'error': str(e)}
 
 
+def rozetka_patch(endpoint: str, data) -> dict:
+    """PATCH — саме ним Rozetka приймає ТТН (разом зі статусом 61)."""
+    token = get_rozetka_token()
+    if not token:
+        return {'error': 'Не вдалось отримати токен авторизації'}
+    try:
+        resp = requests.patch(
+            f'{ROZETKA_BASE}/{endpoint.lstrip("/")}',
+            headers={'Authorization': f'Bearer {token}'},
+            json=data,
+            timeout=30
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        return {'error': str(e)}
+
+
 def rozetka_post(endpoint: str, data) -> dict:
     token = get_rozetka_token()
     if not token:
@@ -229,7 +247,9 @@ async def call_tool(name: str, arguments: dict):
         if arguments.get('status'):
             params['status'] = arguments['status']
 
-        data = rozetka_get('orders', params)
+        # `orders` існує, але нашому токену віддає access_denied 1010.
+        # Робочий — `orders/search` (перевірено 09.10).
+        data = rozetka_get('orders/search', params)
 
         if 'error' in data:
             return [types.TextContent(type='text', text=f'❌ {data["error"]}')]
@@ -260,13 +280,17 @@ async def call_tool(name: str, arguments: dict):
         return [types.TextContent(type='text', text=fmt(data.get('content', data)))]
 
     elif name == 'rozetka_set_order_status':
+        # 09.10: було POST orders/{id}/status — такого методу немає.
+        # Rozetka приймає статус і ТТН через PATCH orders/{id}, причому ТТН
+        # ЛИШЕ разом зі статусом 61, і полем `ttn`, а не `declaration_id`.
         payload = {'status': arguments['status']}
         if arguments.get('ttn'):
-            payload['declaration_id'] = arguments['ttn']
+            payload['ttn'] = arguments['ttn']
+            payload['status'] = 61
         if arguments.get('cancellation_reason'):
             payload['cancellation_reason'] = arguments['cancellation_reason']
 
-        data = rozetka_post(f'orders/{arguments["order_id"]}/status', payload)
+        data = rozetka_patch(f'orders/{arguments["order_id"]}', payload)
 
         if 'error' in data:
             return [types.TextContent(type='text', text=f'❌ {data["error"]}')]
@@ -277,7 +301,8 @@ async def call_tool(name: str, arguments: dict):
         )]
 
     elif name == 'rozetka_get_xml_status':
-        data = rozetka_get('prices')
+        # `prices` не існує (5404). Прайси — `price-markets/price`.
+        data = rozetka_get('price-markets/price')
 
         if 'error' in data:
             return [types.TextContent(type='text', text=f'❌ {data["error"]}')]
@@ -299,7 +324,9 @@ async def call_tool(name: str, arguments: dict):
             return [types.TextContent(type='text', text=f'❌ Помилка валідації: {e}')]
 
     elif name == 'rozetka_get_shop_info':
-        data = rozetka_get('sites/current')
+        # `sites/current` не існує (5404). Джерела магазину разом із
+        # seller_id віддає `markets/sources-list`.
+        data = rozetka_get('markets/sources-list')
 
         if 'error' in data:
             return [types.TextContent(type='text', text=f'❌ {data["error"]}')]
