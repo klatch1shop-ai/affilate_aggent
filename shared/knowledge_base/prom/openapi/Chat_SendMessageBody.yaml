@@ -1,0 +1,35 @@
+type: object
+properties:
+  user_id:
+    type: string
+    description: User id of message receiver (buyer). Can be used instead of `room_ident`. Has lower priority than `room_ident`.
+    x-description-i18n:
+      uk: Ідентифікатор користувача отримувача повідомлення (покупця). Може використовуватися замість `room_ident`. Має нижчий пріоритет, ніж `room_ident`.
+      en: User id of message receiver (buyer). Can be used instead of `room_ident`. Has lower priority than `room_ident`.
+      ru: Идентификатор пользователя получателя сообщения (покупца). Может использоваться вместо `room_ident`. Имеет более низкий приоритет, чем `room_ident`.
+    example: '3213123'
+  room_ident:
+    type: string
+    description: Chat room ident in format {user_id}_{company_id}_buyer. Can be used instead of `user_id`. Has higher priority than `user_id`.
+    x-description-i18n:
+      uk: Ідент кімнати чату в форматі {user_id}_{company_id}_buyer. Може використовуватися замість `user_id`. Має вищий пріорітет ніж `user_id`.
+      en: Chat room ident in format {user_id}_{company_id}_buyer. Can be used instead of `user_id`. Has higher priority than `user_id`.
+      ru: Идент комнати чата в формате {user_id}_{company_id}_buyer. Может использоваться вместо `user_id`. Имеет более высокий приоритет, чем `user_id`.
+    example: 32131_21321_buyer
+  body:
+    type: string
+    maxLength: 2000
+    description: Content of the message.
+    x-description-i18n:
+      uk: Текст повідомлення.
+      en: Content of the message.
+      ru: Текст сообщения.
+    example: hello
+  project:
+    type: string
+    description: Project name (promua or biglua).
+    x-description-i18n:
+      uk: Назва проєкту (promua чи biglua).
+      en: Project name (promua or biglua).
+      ru: Название проекта (promua или biglua).
+    example: promua

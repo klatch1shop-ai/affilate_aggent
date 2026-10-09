@@ -1,0 +1,402 @@
+openapi: 3.0.4
+info:
+  version: 1.0.0
+  title: '{{DOMAIN}} Public API'
+  contact:
+    name: Public API documentation
+  description: |
+    The public API allows companies registered on the portal to receive
+    remote access to data management in the company's Cabinet through its
+    own software interface.
+    
+    
+    ## API version
+    Public API documentation {{DOMAIN}} version 1.0 (closed beta test for
+    a limited number of companies). We will be glad to receive from companies
+    using this API, feedback with notes on its use, and wishes to improve functionality.
+    Please send feedback to email api@{{DOMAIN}}.
+    
+    
+    ## What can the public API do?
+    Using the public API tools, you can:
+    * Upload information about your orders to your system and change statuses
+      orders in the company's Cabinet.
+    * Upload information about messages and change the status of messages in the
+      company's Cabinet, as well as send the buyer a response to his message.
+    * Get customer information.
+    * Get information about your products, as well as change product information
+      in the Cabinet of the company.
+    
+    
+    ## How to get access to the API?
+    To start working through the public API, you need to get your own unique
+    key (token) from portal employee. All requests through APIs are executed
+    using this unique key, which is your company identifier. Keep it safe.
+    
+    
+    ## API request format
+    To send or receive information through the public API, you must
+    form the appropriate HTTP header, which should be transmitted through
+    every API request.\
+    An example of such a header:
+    ```yaml
+    Authorization: Bearer 19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c
+    ```
+    where `19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c` is your authorization
+    unique key (token).
+    
+    Request example:
+    ```http request
+    https://my.{{DOMAIN}}/api/v1/products/list?limit=5
+    ```
+    
+    
+    ## Testing (sandbox)
+    We recommend you before start working with the API on a real company,
+    preliminary testing. For this
+    [register a new company on the portal](https://{{DOMAIN}}/reg/7361)
+    and tell the manager of your company its ID, after which we will send you
+    a unique key to access the Cabinet of this company via the API. You can
+    test the API on this company during the trial ({{TRIAL}} days of trial
+    is automatically activated).
+    
+    
+    ## Security questions
+      * Work through the API takes place in the secure https connection mode.
+      * Do not share your API access key with anyone. To cancel the key,
+        it is necessary to change the password of the owner of the company's Cabinet
+        and ask portal employee new authorization unique key (token).
+        In this case, the old key (all old keys) will become invalid.
+      * All actions through the API are automatically logged, which ensures
+        high level of security of your information.
+    
+    ## Date and time format
+    
+    All date and time fields expect to receive a time value in the UTC time zone.
+    
+    # API usage examples:
+    [Python2.7](https://github.com/evo-company/company-api-example/blob/master/python/api_python2-7_example.py)\
+    [Python3.5](https://github.com/evo-company/company-api-example/blob/master/python/api_python3-5_example.py)\
+    [Node.js](https://github.com/evo-company/company-api-example/blob/master/node.js/EvoExampleAPI.js)\
+    [PHP](https://github.com/evo-company/company-api-example/blob/master/php/api_php_example.php)\
+    [Java](https://github.com/evo-company/company-api-example/blob/master/java/EvoClientExample.java)
+    
+    
+    # Available API methods:
+  x-description-i18n:
+    uk: |
+      Публічне API дозволяє компаніям, зареєстрованим на порталі, отримувати
+      віддалений доступ до управління даними в Кабінеті компанії через свій
+      власний програмний інтерфейс.
+      
+      
+      ## Версія API
+      Документація публічного API {{DOMAIN}} версії 1.0 (закритий бета-тест для
+      обмеженої кількості компаній). Ми будемо раді отримати від компаній,
+      що використовують це API, зворотний зв'язок із зауваженнями щодо його використання та
+      побажаннями щодо покращення функціональності. Прохання надсилати зворотний зв'язок
+      на email api@{{DOMAIN}}.
+      
+      
+      ## Що може публічне API?
+      Скориставшись інструментами публічного API, ви зможете:
+        * Вивантажувати в свою систему інформацію про свої замовлення та змінювати статуси
+          замовлень у Кабінеті компанії.
+        * Вивантажувати інформацію про повідомлення та змінювати статуси повідомлень у Кабінеті
+          компанії, а також надсилати покупцеві відповідь на його повідомлення через
+          Кабінет компанії.
+        * Отримувати інформацію про клієнтів.
+        * Отримувати інформацію про свої товари, а також змінювати інформацію про товари
+          у Кабінеті компанії.
+      
+      
+      ## Як отримати доступ до роботи з API?
+      Для того, щоб почати працювати через публічне API, вам необхідно отримати
+      у співробітника порталу власний унікальний ключ (токен). Всі запити через
+      API виконуються за допомогою цього унікального ключа, який є ідентифікатором
+      вашої компанії. Зберігайте його у безпеці.
+      
+      
+      ## Формат відправки запиту до API
+      Для відправлення або отримання інформації через публічне API необхідно
+      сформувати відповідний HTTP-заголовок, який повинен передаватися при
+      кожному запиту до API.\
+      Приклад такого заголовка:
+      ```yaml
+      Authorization: Bearer 19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c
+      ```
+      де `19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c` - ваш унікальний ключ (токен)
+      авторизації.
+      
+      Приклад запиту:
+      ```http request
+      https://my.{{DOMAIN}}/api/v1/products/list?limit=5
+      ```
+
+
+      ## Тестування (пісочниця)
+      Рекомендуємо вам перед початком роботи з API на реальній компанії провести
+      попереднє тестування. Для цього
+      [зареєструйте на порталі нову компанію](https://{{DOMAIN}}/reg/7361)
+      та повідомте менеджеру вашої компанії її ID, після чого ми надішлемо вам
+      унікальний ключ для доступу до Кабінету цієї компанії через API. Ви зможете
+      протестувати роботу з API на цій компанії протягом терміну дії
+      тестового періоду (тестовий період автоматично активується на {{TRIAL}}
+      днів).
+      
+      
+      ## Питання безпеки
+        * Робота через API відбувається в режимі безпечного з'єднання https.
+        * Не передавайте нікому ваш ключ доступу до API. Щоб анулювати ключ,
+          необхідно змінити пароль власника Кабінету компанії та запросити у
+          співробітника порталу новий ключ. У цьому випадку старий ключ (всі
+          старі ключі) стане недійсним.
+        * Всі дії через API автоматично логуються, що забезпечує високий
+          рівень безпеки вашої інформації.
+      
+      ## Формат дати й часу
+    
+      Усі поля дати й часу очікують отримання значення часу в часовому поясі UTC
+      
+      # Приклади використання API:
+      [Python2.7](https://github.com/evo-company/company-api-example/blob/master/python/api_python2-7_example.py)\
+      [Python3.5](https://github.com/evo-company/company-api-example/blob/master/python/api_python3-5_example.py)\
+      [Node.js](https://github.com/evo-company/company-api-example/blob/master/node.js/EvoExampleAPI.js)\
+      [PHP](https://github.com/evo-company/company-api-example/blob/master/php/api_php_example.php)\
+      [Java](https://github.com/evo-company/company-api-example/blob/master/java/EvoClientExample.java)
+
+
+      # Доступні методи API:
+    en:
+    ru: |
+      Публичное API позволяет компаниям, зарегистрированным на портале получать
+      удаленный доступ к управлению данными в Кабинете компании через свой
+      собственный программный интерфейс.
+
+
+      ## Версия API
+      Документация публичного API {{DOMAIN}} версии 1.0 (закрытый бета-тест для
+      ограниченного количества компаний). Мы будем рады получить от компаний,
+      использующих это API, обратную связь с замечаниями по его использованию и
+      пожеланиями по улучшению функциональности. Просьба отправлять обратную связь
+      на email api@{{DOMAIN}}.
+
+
+      ## Что может публичное API?
+      Воспользовавшись инструментами публичного API вы сможете:
+        * Выгружать в свою систему информацию о своих заказах и менять статусы
+          заказов в Кабинете компании.
+        * Выгружать информацию о сообщениях и менять статусы сообщений в Кабинете
+          компании, а также отправлять покупателю ответ на его сообщение через
+          Кабинет компании.
+        * Получать информацию о клиентах.
+        * Получать информацию о своих товарах, а также менять информацию о товарах
+          в Кабинете компании.
+
+
+      ## Как получить доступ к работе с API?
+      Для того, чтобы начать работать через публичное API вам необходимо получить
+      у сотрудника портала собственный уникальный ключ (токен). Все запросы через
+      API выполняются с использованием этого уникального ключа, который является
+      идентификатором вашей компании. Храните его в безопасности.
+  
+
+      ## Формат отправки запроса к API
+      Для отправки или получения информации через публичное API необходимо
+      сформировать соответствующий HTTP-заголовок, который должен передаваться при
+      каждом запросе к API.\
+      Пример такого заголовка:
+      ```yaml
+      Authorization: Bearer 19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c
+      ```
+      где `19efbdc8ee723b7eb9e6dae1f7a20ca4378b288c` - ваш уникальный ключ (токен)
+      авторизации.
+
+      Пример запроса:
+      ```http request
+      https://my.{{DOMAIN}}/api/v1/products/list?limit=5
+      ```
+
+
+      ## Тестирование (песочница)
+      Рекомендуем вам перед началом работы с API на реальной компании провести
+      предварительное тестирование. Для этого
+      [зарегистрируйте на портале новую компанию](https://{{DOMAIN}}/reg/7361)
+      и сообщите менеджеру вашей компании ее ID, после чего мы вышлем вам
+      уникальный ключ для доступа к Кабинету этой компании через API. Вы сможете
+      протестировать работу с API на данной компании в течение срока действия
+      тестового периода(тестовый период автоматически активируется на {{TRIAL}}
+      дней).
+
+
+      ## Вопросы безопасности
+      * Работа через API происходит в режиме безопасного соединения https.
+      * Не передавайте никому ваш ключ доступа к API. Чтобы аннулировать ключ,
+        необходимо изменить пароль владельца Кабинета компании и запросить у
+        сотрудника портала новый ключ. В этом случае случае старый ключ (все
+        старые ключи) станет недействительным.
+      * Все действия через API автоматически логируются, что обеспечивает
+        высокий уровень сохранности вашей информации.
+
+      ## Формат даты и времени
+    
+      Все поля даты и времени ожидают получить значение времени в часовом поясе UTC.
+    
+      # Примеры использования API:
+      [Python2.7](https://github.com/evo-company/company-api-example/blob/master/python/api_python2-7_example.py)\
+      [Python3.5](https://github.com/evo-company/company-api-example/blob/master/python/api_python3-5_example.py)\
+      [Node.js](https://github.com/evo-company/company-api-example/blob/master/node.js/EvoExampleAPI.js)\
+      [PHP](https://github.com/evo-company/company-api-example/blob/master/php/api_php_example.php)\
+      [Java](https://github.com/evo-company/company-api-example/blob/master/java/EvoClientExample.java)
+
+
+      # Доступные методы API:
+servers:
+  - url: https://my.{domain}/api/v1
+    description: Public API server URL
+    x-description-i18n:
+      uk: URL-адреса сервера публічного API
+      en: Public API server URL
+      ru: URL-адрес публичного API-сервера
+    variables:
+      domain:
+        # note! no enum here means it is an open value
+        default: trunk.uaprom
+        description: Each domain needs an appropriate unique authorization key (Bearer)
+        x-description-i18n:
+          uk: Кожен домен потребує відповідного унікального ключа авторизації (Bearer).
+          en: Each domain needs an appropriate unique authorization key (Bearer)
+          ru: Каждому домену необходим соответствующий уникальный ключ авторизации (Bearer).
+tags:
+  - name: Orders
+    description: (operations with orders)
+    x-description-i18n:
+      uk: (операції із замовленнями)
+      en: (order operations)
+      ru: (операции с заказами)
+  - name: Products
+    description: (operations with products)
+    x-description-i18n:
+      uk: (операції з продуктами)
+      en: (operations with products)
+      ru: (операции с продуктами)
+  - name: Clients
+    description: (operations with customers)
+    x-description-i18n:
+      uk: (операції з клієнтами)
+      en: (operations with customers)
+      ru: (операции с клиентами)
+  - name: Messages
+    description: (operations with messages)
+    x-description-i18n:
+      uk: (операції з повідомленнями)
+      en: (operations with messages)
+      ru: (операции c сообщениями)
+  - name: Groups
+    description: (operations with groups)
+    x-description-i18n:
+      uk: (операції з групами)
+      en: (operations with groups)
+      ru: (операции c группами)
+  - name: Payment
+    description: (operations with payment methods)
+    x-description-i18n:
+      uk: (операції зі способами оплати)
+      en: (operations with payment methods)
+      ru: (операции со способами оплат)
+  - name: Delivery
+    description: (operations with delivery methods)
+    x-description-i18n:
+      uk: (операції зі способами доставки)
+      en: (operations with delivery methods)
+      ru: (операции со способами доставок)
+  - name: OrderStatus
+    description: (operations with order statuses)
+    x-description-i18n:
+      uk: (операції зі статусами замовлення)
+      en: (operations with order statuses)
+      ru: (операции со статусами заказа)
+  - name: Chat
+    description: (operations with chat)
+    x-description-i18n:
+      uk: (операції з чатом)
+      en: (operations with chat)
+      ru: (операции с чатом)
+paths:
+  /orders/list:
+    $ref: Orders/paths/GetOrderList.yaml
+  /orders/{id}:
+    $ref: Orders/paths/GetOrder.yaml
+  /orders/set_status:
+    $ref: Orders/paths/PostOrdersStatus.yaml
+  /orders/refund:
+    $ref: Orders/paths/PostOrdersRefund.yaml
+  /orders/{id}/attach_receipt:
+    $ref: Orders/paths/PostOrdersAttachReceipt.yaml
+  /messages/list:
+    $ref: Messages/paths/GetMessageList.yaml
+  /messages/{id}:
+    $ref: Messages/paths/GetMessage.yaml
+  /messages/set_status:
+    $ref: Messages/paths/PostMessagesStatus.yaml
+  /messages/reply:
+    $ref: Messages/paths/PostMessageReply.yaml
+  /clients/list:
+    $ref: Clients/paths/GetClientList.yaml
+  /clients/{id}:
+    $ref: Clients/paths/GetClient.yaml
+  /products/list:
+    $ref: Products/paths/GetProductList.yaml
+  /products/{id}:
+    $ref: Products/paths/GetProduct.yaml
+  /products/by_external_id/{id}:
+    $ref: Products/paths/GetProductByExternalId.yaml
+  /products/edit:
+    $ref: Products/paths/PostProduct.yaml
+  /products/edit_by_external_id:
+    $ref: Products/paths/PostProductByExternalId.yaml
+  /products/import_url:
+    $ref: Products/paths/PostProductsImportUrl.yaml
+  /products/import_file:
+    $ref: Products/paths/PostProductsImportFile.yaml
+  /products/import/status/{id}:
+    $ref: Products/paths/GetProductImportStatus.yaml
+  /products/translation/{id}:
+    $ref: Products/paths/GetProductTranslation.yaml
+  /products/translation:
+    $ref: Products/paths/PutProductTranslation.yaml
+  /groups/list:
+    $ref: Groups/paths/GetGroupList.yaml
+  /groups/translation/{id}:
+    $ref: Groups/paths/GetGroupTranslation.yaml
+  /groups/translation:
+    $ref: Groups/paths/PutGroupTranslation.yaml
+  /payment_options/list:
+    $ref: Payment/paths/GetPaymentOptionList.yaml
+  /delivery_options/list:
+    $ref: Delivery/paths/GetDeliveryOptionList.yaml
+  /delivery/save_declaration_id:
+    $ref: Delivery/paths/PostDeliveryDeclaration.yaml
+  /order_status_options/list:
+    $ref: OrderStatus/paths/GetOrderStatusList.yaml
+  /chat/rooms:
+    $ref: Chat/paths/GetRooms.yaml
+  /chat/messages_history:
+    $ref: Chat/paths/GetMessagesHistory.yaml
+  /chat/send_message:
+    $ref: Chat/paths/PostSendMessage.yaml
+  /chat/send_file:
+    $ref: Chat/paths/PostSendFile.yaml
+  /chat/send_attachments:
+    $ref: Chat/paths/PostSendAttachments.yaml
+  /chat/mark_message_read:
+    $ref: Chat/paths/PostMarkMessageRead.yaml
+  /chat/send_order_context:
+    $ref: 'Chat/paths/PostSendOrderContext.yaml'
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,76 @@
+# path: `/chat/send_file`
+post:
+  operationId: postChatFile
+  tags:
+    - Chat
+  deprecated: true
+  summary: Send file to the chat room
+  x-summary-i18n:
+    uk: Відправити файл в кімнату чату
+    en: Send file to the chat room
+    ru: Отправить файл в комнату чата
+  description: |
+    **Deprecated.** Use [send_attachments](#/Chat/postChatAttachments) instead.
+
+    Send file to the chat room.
+  x-description-i18n:
+    uk: |
+      **Застарілий.** Використовуйте [send_attachments](#/Chat/postChatAttachments) натомість.
+
+      Відправити файл в кімнату чату.
+    en: |
+      **Deprecated.** Use [send_attachments](#/Chat/postChatAttachments) instead.
+
+      Send file to the chat room.
+    ru: |
+      **Устаревший.** Используйте [send_attachments](#/Chat/postChatAttachments) вместо этого.
+
+      Отправить файл в комнату чата.
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../schemas/PostSendFileRequestBody.yaml
+  responses:
+    '200':
+      description: Id of the sent message.
+      x-description-i18n:
+        uk: Ідентифікатор відправленого повідомлення.
+        en: Id of the sent message.
+        ru: Идентификатор отправленного сообщения.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    format: int64
+          examples:
+            Success:
+              value:
+                status: ok
+                message_id: 321312
+            Failure:
+              value:
+                status: error
+                message: file field should be file

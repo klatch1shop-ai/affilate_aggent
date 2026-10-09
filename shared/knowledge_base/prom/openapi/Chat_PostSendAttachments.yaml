@@ -1,0 +1,123 @@
+# path: `/chat/send_attachments`
+post:
+  operationId: postChatAttachments
+  tags:
+    - Chat
+  summary: Send attachments to the chat room
+  x-summary-i18n:
+    uk: Відправити вкладення в кімнату чату
+    en: Send attachments to the chat room
+    ru: Отправить вложения в комнату чата
+  description: |
+    Send attachments to the chat room.
+
+    Example request (`attachments_type=IMAGE`, two images):
+
+    ```
+    POST /chat/send_attachments
+    Content-Type: multipart/form-data
+
+    room_ident: 32131_21321_buyer
+    attachments_type: IMAGE
+    attachments: (binary — photo1.jpg)
+    attachments: (binary — photo2.png)
+    project: promua
+    ```
+  x-description-i18n:
+    uk: |
+      Відправити вкладення в кімнату чату.
+
+      Приклад запиту (`attachments_type=IMAGE`, два зображення):
+
+      ```
+      POST /chat/send_attachments
+      Content-Type: multipart/form-data
+
+      room_ident: 32131_21321_buyer
+      attachments_type: IMAGE
+      attachments: (binary — photo1.jpg)
+      attachments: (binary — photo2.png)
+      project: promua
+      ```
+    en: |
+      Send attachments to the chat room.
+
+      Example request (`attachments_type=IMAGE`, two images):
+
+      ```
+      POST /chat/send_attachments
+      Content-Type: multipart/form-data
+
+      room_ident: 32131_21321_buyer
+      attachments_type: IMAGE
+      attachments: (binary — photo1.jpg)
+      attachments: (binary — photo2.png)
+      project: promua
+      ```
+    ru: |
+      Отправить вложения в комнату чата.
+
+      Пример запроса (`attachments_type=IMAGE`, два изображения):
+
+      ```
+      POST /chat/send_attachments
+      Content-Type: multipart/form-data
+
+      room_ident: 32131_21321_buyer
+      attachments_type: IMAGE
+      attachments: (binary — photo1.jpg)
+      attachments: (binary — photo2.png)
+      project: promua
+      ```
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../schemas/PostSendAttachmentsRequestBody.yaml
+        encoding:
+          attachments:
+            contentType: application/octet-stream
+  responses:
+    '200':
+      description: Id of the sent message.
+      x-description-i18n:
+        uk: Ідентифікатор відправленого повідомлення.
+        en: Id of the sent message.
+        ru: Идентификатор отправленного сообщения.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    format: int64
+          examples:
+            Success:
+              value:
+                status: ok
+                data:
+                  message_id: 321312
+            Failure:
+              value:
+                status: error
+                message: "Not allowed Content-Type: text/plain for attachments type: IMAGE"

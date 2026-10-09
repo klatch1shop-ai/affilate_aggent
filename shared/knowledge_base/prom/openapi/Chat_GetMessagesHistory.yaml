@@ -1,0 +1,226 @@
+# path: `/chat/messages_history`
+get:
+  operationId: getChatMessages
+  tags:
+    - Chat
+  summary: Get list of company chat messages
+  x-summary-i18n:
+    uk: Отримати список повідомлень в чаті компанії.
+    en: Get list of company chat messages.
+    ru: Получить список сообщений в чате компании.
+  description: Get list of company chat messages
+  x-description-i18n:
+    uk: Отримати список повідомлень в чаті компанії.
+    en: Get list of company chat messages.
+    ru: Получить список сообщений в чате компании.
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+    - name: status
+      in: query
+      description: Message status.
+      x-description-i18n:
+        uk: Статус повідомлення.
+        en: Message status.
+        ru: Статус заказа.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ new, read ]
+    - name: date_from
+      in: query
+      description: |
+        Get chat messages sent after the specified date. The time zone is UTC+0.
+        Example - `2023-08-22T12:50:34`.
+      x-description-i18n:
+        uk: |
+          Запит повідомлень в чаті, відправлених після вказаної дати. Часовий пояс UTC+0.
+          Приклад - `2023-08-22T12:50:34`.
+        en: |
+          Get chat messages sent after the specified date. The time zone is UTC+0.
+          Example - `2023-08-22T12:50:34`.
+        ru: |
+          Запрос сообщений в чате, отправленных после указанной даты. Часовой пояс UTC+0.
+          Пример - `2023-08-22T12:50:34`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    - name: date_to
+      in: query
+      description: |
+        Get chat messages sent before the specified date. The time zone is UTC+0.
+        Example - `2023-08-22T12:50:34`.
+      x-description-i18n:
+        uk: |
+          Запит повідомлень в чаті, відправлених до вказаної дати. Часовий пояс UTC+0.
+          Приклад - `2023-08-22T12:50:34`.
+        en: |
+          Get chat messages sent before the specified date. The time zone is UTC+0.
+          Example - `2023-08-22T12:50:34`.
+        ru: |
+          Запрос сообщений в чате, отправленных до указанной даты. Часовой пояс UTC+0.
+          Пример - `2023-08-22T12:50:34`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    - name: limit
+      in: query
+      description: Limiting the number of chat messages. Default limit is 20 messages. Maximum limit is 100 messages.
+      x-description-i18n:
+        uk: Обмеження кількості повідомлень в чаті. Обмеження за замовчуванням становить 20 повідомлень. Максимальний ліміт – 100 повідомлень
+        en: Limiting the number of chat messages. Default limit is 20 messages. Maximum limit is 100 messages.
+        ru: Ограничение количества сообщений. Ограничение по умолчанию — 20 сообщений. Максимальный лимит — 100 сообщений.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    - name: offset
+      in: query
+      description: Number of messages that will be skipped.
+      x-description-i18n:
+        uk: Кількість повідомлень, які будуть пропущені.
+        en: Number of messages that will be skipped.
+        ru: Количество сообщений, которые будут пропущены.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    - name: sort
+      in: query
+      description: Change chat messages sort from asc (default) to desc.
+      x-description-i18n:
+        uk: Змінити порядок сортування повідомлень в чаті від старих до нових (по стандартну) і навпаки.
+        en: Change chat messages sort from asc (default) to desc.
+        ru: Изменить порядок сортировки сообщений в чате от старых к новым (по стандартному) и наоборот.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ asc, desc ]
+    - name: user_id
+      in: query
+      description: The ID of the user (buyer) with whom the chat was created.
+      x-description-i18n:
+        uk: Ідентифікатор користувача (покупця) з яким був створений чат.
+        en: The ID of the user (buyer) with whom the chat was created.
+        ru: Идентификатор пользователя (покупателя), с которым был создан чат.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    - name: room_ident
+      in: query
+      description: The ID of the chat you want to receive messages from.
+      x-description-i18n:
+        uk: Ідентифікатор чату, з якого ви хочете отримати повідомлення.
+        en: The ID of the chat you want to receive messages from.
+        ru: Идентификатор чата, из которого вы хотите получить сообщения.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    - name: project
+      in: query
+      description: Project name.
+      x-description-i18n:
+        uk: Назва проєкту.
+        en: Project name.
+        ru: Название проекта.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ promua, biglua, all ]
+  responses:
+    '200':
+      description: List of company chat messages.
+      x-description-i18n:
+        uk: Список повідомлень в чаті компанії.
+        en: List of company chat messages.
+        ru: Список сообщений в чате компании.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: ../schemas/Message.yaml
+          examples:
+            Success:
+              value:
+                status: "ok"
+                data:
+                  messages:
+                    - id: 123321
+                      room_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                      room_ident: "12332_321321_buyer"
+                      body: "hello"
+                      date_sent: "2026-01-15T10:30:00"
+                      date_edited: "2026-01-15T10:32:00"
+                      type: message
+                      status: new
+                      context_item_id: null
+                      context_item_image_url: null
+                      context_item_type: null
+                      attachments: null
+                      user_name: "John Wick"
+                      user_ident: "1233213"
+                      user_phone: "+380665066444"
+                      buyer_client_id: 312321
+                      is_sender: true
+                    - id: 123322
+                      room_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                      room_ident: "12332_321321_buyer"
+                      body: null
+                      date_sent: "2026-01-15T10:31:00"
+                      date_edited: null
+                      type: attachment
+                      status: new
+                      context_item_id: null
+                      context_item_image_url: null
+                      context_item_type: null
+                      attachments:
+                        - attachment_uid: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                          attachment_name: "document.pdf"
+                          attachment_type: FILE
+                          attachment_mime_type: "application/pdf"
+                          attachment_size: 102400
+                          attachment_url: "https://example.com/files/document.pdf"
+                      user_name: "John Wick"
+                      user_ident: "1233213"
+                      user_phone: "+380665066444"
+                      buyer_client_id: 312321
+                      is_sender: true

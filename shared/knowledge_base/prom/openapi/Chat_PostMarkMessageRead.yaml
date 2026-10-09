@@ -1,0 +1,56 @@
+# path: `/chat/mark_message_read`
+post:
+  operationId: postMarkMessageRead
+  tags:
+    - Chat
+  summary: Change message status to read in the chat room
+  x-summary-i18n:
+    uk: Змінити статус повідомлення на прочитане в чаті
+    en: Change message status to read in the chat room
+    ru: Изменить статус сообщения на прочитанное в чате
+  description: Change message status to read in the chat room
+  x-description-i18n:
+    uk: Змінити статус повідомлення на прочитане в чаті
+    en: Change message status to read in the chat room
+    ru: Изменить статус сообщения на прочитанное в чате
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/PostMarkMessageReadRequestBody.yaml
+  responses:
+    '200':
+      description: The result of changing message status
+      x-description-i18n:
+        uk: Результат зміни статусу повідомлення.
+        en: The result of changing message status.
+        ru: Результат изменения статуса сообщения.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: [ok, error]
+              message:
+                type: string
+          examples:
+            Success:
+              value:
+                status: ok
+            Failure:
+              value:
+                status: error
+                message: No such room_id

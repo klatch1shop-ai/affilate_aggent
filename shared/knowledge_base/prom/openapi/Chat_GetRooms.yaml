@@ -1,0 +1,156 @@
+# path: `/chat/rooms`
+get:
+  operationId: getChatRooms
+  tags:
+    - Chat
+  summary: Get list of company chat rooms
+  x-summary-i18n:
+    uk: Отримати список кімнат чату компанії.
+    en: Get list of company chat rooms.
+    ru: Получить список комнат чата компании.
+  description: Get list of company chat rooms
+  x-description-i18n:
+    uk: Отримати список кімнат чату компанії.
+    en: Get list of company chat rooms.
+    ru: Получить список комнат чата компании.
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+    - name: status
+      in: query
+      description: Room status. Default status is "active".
+      x-description-i18n:
+        uk: Статус кімнати. Статус за замовчуванням "active".
+        en: Room status. Default status is "active".
+        ru: Статус комнати. Статус по умолчанию "active".
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ active, archived, banned ]
+    - name: date_from
+      in: query
+      description: |
+        Get chat rooms with last message sent after the specified date. The time zone is UTC+0.
+        Example - `2023-08-22T12:50:34`.
+      x-description-i18n:
+        uk: |
+          Запит кімнат в чаті з останнім повідомленням відправленим після вказаної дати. Часовий пояс UTC+0.
+          Приклад - `2023-08-22T12:50:34`.
+        en: |
+          Get chat rooms with last message sent after the specified date. The time zone is UTC+0.
+          Example - `2023-08-22T12:50:34`.
+        ru: |
+          Запрос комнат в чате с последним сообщением отправленным после указанной даты. Часовой пояс UTC+0.
+          Пример - `2023-08-22T12:50:34`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    - name: date_to
+      in: query
+      description: |
+        Get chat rooms with last message sent before the specified date. The time zone is UTC+0.
+        Example - `2023-08-22T12:50:34`.
+      x-description-i18n:
+        uk: |
+          Запит кімнат в чаті з останнім повідомленням відправленим до вказаної дати. Часовий пояс UTC+0.
+          Приклад - `2023-08-22T12:50:34`.
+        en: |
+          Get chat rooms with last message sent before the specified date. The time zone is UTC+0.
+          Example - `2023-08-22T12:50:34`.
+        ru: |
+          Запрос комнат в чате с последним сообщением отправленным до указанной даты. Часовой пояс UTC+0.
+          Пример - `2023-08-22T12:50:34`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+    - name: limit
+      in: query
+      description: Limiting the number of chat rooms. Default limit is 20 chat rooms. Maximum limit is 20 chat rooms.
+      x-description-i18n:
+        uk: Обмеження кількості чатів. Обмеження за замовчуванням становить 20 чатів. Максимальний ліміт – 20 чатів.
+        en: Limiting the number of chat rooms. Default limit is 20 chat rooms. Maximum limit is 20 chat rooms.
+        ru: Ограничение количества чатов. Ограничение по умолчанию — 20 чатов. Максимальный лимит — 20 чатов.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    - name: offset
+      in: query
+      description: Number of rooms that will be skipped.
+      x-description-i18n:
+        uk: Кількість кімнат, які будуть пропущені.
+        en: Number of rooms that will be skipped.
+        ru: Количество комнат, которые будут пропущены.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+    - name: sort
+      in: query
+      description: Changing the sorting of rooms by the date of the last message from ascending (default) to descending.
+      x-description-i18n:
+        uk: Зміна сортування кімнат за датою останнього повідомлення від старих до нових (по стандартну) і навпаки.
+        en: Changing the sorting of rooms by the date of the last message from ascending (default) to descending.
+        ru: Изменение сортировки комнат по дате последнего сообщения от старых к новым (по стандартному) и наоборот.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ asc, desc ]
+    - name: project
+      in: query
+      description: Project name.
+      x-description-i18n:
+        uk: Назва проєкту.
+        en: Project name.
+        ru: Название проекта.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        enum: [ promua, biglua, all ]
+  responses:
+    '200':
+      description: List of company chat rooms.
+      x-description-i18n:
+        uk: Список кімнат чату компанії.
+        en: List of company chat rooms.
+        ru: Список комнат чата компании.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: ok
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  rooms:
+                    type: array
+                    items:
+                      $ref: ../schemas/Room.yaml

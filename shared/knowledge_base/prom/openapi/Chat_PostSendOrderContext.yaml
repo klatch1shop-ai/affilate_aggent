@@ -1,0 +1,71 @@
+# path: `/chat/send_order_context`
+post:
+  operationId: postSendOrderContext
+  tags:
+    - Chat
+  summary: Send order context with message to the chat room
+  x-summary-i18n:
+    uk: Відправити контекст по замовленю з текстовим повідомленням в кімнату чату
+    en: Send order context with message to the chat room
+    ru: Отправить контекст по заказу с текстовым сообщением в комнату чата
+  description: Send order context with message to the chat room
+  x-description-i18n:
+    uk: Відправити контекст по замовленю з текстовим повідомленням в кімнату чату
+    en: Send order context with message to the chat room
+    ru: Отправить контекст по заказу с текстовым сообщением в комнату чата
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../schemas/PostSendOrderContextRequestBody.yaml
+  responses:
+    '200':
+      description: Id of the sent message.
+      x-description-i18n:
+        uk: Ідентифікатор відправленого повідомлення.
+        en: Id of the sent message.
+        ru: Идентификатор отправленного сообщения.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  context_message_id:
+                    type: integer
+                    format: int64
+                  message_id:
+                    type: integer
+                    format: int64
+                  room_ident:
+                    type: string
+          examples:
+            Success:
+              value:
+                status: ok
+                context_message_id: 321311
+                message_id: 321312
+                room_ident: 321321_12312_buyer
+            Failure:
+              value:
+                status: error
+                message: Order not found

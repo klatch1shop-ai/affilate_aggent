@@ -1,0 +1,74 @@
+# path: `/chat/send_message`
+post:
+  operationId: postChatMessage
+  tags:
+    - Chat
+  summary: Send message to the chat room
+  x-summary-i18n:
+    uk: Відправити повідомлення в кімнату чату
+    en: Send message to the chat room
+    ru: Отправить сообщение в комнату чата
+  description: Send message to the chat room
+  x-description-i18n:
+    uk: Відправити повідомлення в кімнату чату
+    en: Send message to the chat room
+    ru: Отправить сообщение в комнату чата
+  parameters:
+    - name: X-LANGUAGE
+      in: header
+      description: Locale of the request response.
+      x-description-i18n:
+        uk: Локаль відповіді на запит.
+        en: Locale of the request response.
+        ru: Локаль ответа на запрос.
+      required: false
+      schema:
+        $ref: ../../common/schemas/Language.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/PostSendMessageRequestBody.yaml
+        examples:
+          WithUserId:
+            value:
+              user_id: '321321'
+              body: hello
+              project: promua
+          WithRoomIdent:
+            value:
+              room_ident: 321321_12312_buyer
+              body: hello
+              project: biglua
+  responses:
+    '200':
+      description: Id of the sent message.
+      x-description-i18n:
+        uk: Ідентифікатор відправленого повідомлення.
+        en: Id of the sent message.
+        ru: Идентификатор отправленного сообщения.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - error
+              data:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    format: int64
+          examples:
+            Success:
+              value:
+                status: ok
+                message_id: 321312
+            Failure:
+              value:
+                status: error
+                message: Chat is disabled
