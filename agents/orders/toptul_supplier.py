@@ -42,11 +42,31 @@ CUTOFF_HOUR = 14                     # відправлене до 14:00 пос�
 # Власник 18.09.2026, дослівно: оплачене на Rozetka замовлення постачальник має
 # відправити БЕЗ післяплати й виставити нам рахунок.
 PAID_NOTE = 'ОПЛАЧЕНО ЗАМОВНИКОМ, ВИШЛІТЬ РАХУНОК ТА ВІДПРАВЛЯЙТЕ БЕЗ ПІСЛЯПЛАТИ'
+# Оплата на рахунок продавця: гроші отримуємо ми, тому післяплати бути НЕ
+# повинно. Rozetka таку оплату не відстежує — підтверджує лише власник.
+ACCOUNT_NOTE = ('ОПЛАТА НА НАШ РАХУНОК, ВИШЛІТЬ РАХУНОК ТА '
+                'ВІДПРАВЛЯЙТЕ БЕЗ ПІСЛЯПЛАТИ')
 
 
 def payment_line(total, paid):
-    """Рядок оплати для постачальника: оплачене — без післяплати, інакше — накладений платіж на суму."""
-    return PAID_NOTE if paid else f'Наложенным платежом {total:.0f} грн'
+    """Рядок оплати для постачальника. ТРИ випадки, не два.
+
+    07.10.2026: було два. `payment_paid()` повертає True / False / **None**,
+    і None («Оплата на рахунок продавця» — покупець платить НАМ переказом)
+    потрапляв у ту саму гілку, що й неоплачене. Постачальнику пішло б
+    «Наложенным платежом 2226 грн» — покупець заплатив би двічі або не
+    забрав би посилку. Знайдено на замовленні 908076533.
+
+      True  — оплачено на Rozetka: без післяплати
+      None  — оплата на наш рахунок: теж БЕЗ післяплати, бо гроші
+              отримуємо ми; рахунок покупцю виставляє власник
+      False — післяплата на суму замовлення
+    """
+    if paid is True:
+        return PAID_NOTE
+    if paid is None:
+        return ACCOUNT_NOTE
+    return f'Наложенным платежом {total:.0f} грн'
 SMTP_USER = os.getenv('SMTP_USER')
 SMTP_PASS = os.getenv('SMTP_PASS')
 SMTP_HOST = os.getenv('SMTP_HOST', 'smtp.gmail.com')
@@ -265,7 +285,13 @@ def reconcile(today=None, write_ttn=False):
     import supplier_ttn_mail as M
     today = today or date.today()
     conn = _db(); cur = conn.cursor()
-    cur.execute("""select * from toptul_supplier_orders where ttn is null and status in ('sent','alert')""")
+    # Беремо все, що ще НЕ записане в Rozetka, а не лише «ttn is null».
+    # 07.10: звітний прогін знаходив ТТН і ставив статус 'ttn_found' із
+    # заповненим ttn — після чого умова `ttn is null` назавжди викидала
+    # замовлення з відбору, і прогін із --write уже не мав що писати.
+    # Замовлення 908074507 так і лишилось без ТТН у Rozetka.
+    cur.execute("""select * from toptul_supplier_orders
+                   where status in ('sent','alert','ttn_found')""")
     open_rows = cur.fetchall()
     mails = M.fetch_ttn_mails(today - timedelta(days=3))
     recs = [r for _, body in mails for r in M.parse(body)]
@@ -283,12 +309,32 @@ def reconcile(today=None, write_ttn=False):
     written = 0
     for o in open_rows:
         oid = o['rozetka_order_id']
+        # ТТН уже відома з попереднього прогону — беремо її, а не шукаємо
+        # в пошті заново: лист міг уже вийти за вікно трьох днів.
+        if oid not in matched and o.get('ttn'):
+            matched[oid] = ({'ttn': o['ttn'], 'name': o['customer_name']},
+                            '✅ з попереднього прогону')
         if oid in matched:
             rec, why = matched[oid]
             state = 'знайдено'
             if write_ttn and '✅' in why:
                 sys.path.insert(0, os.path.join(BASE, 'agents', 'orders'))
                 import rozetka_order_agent as RZ
+                # Спершу ЧИТАЄМО: якщо ТТН уже там, писати не треба.
+                # 08.10 повторний запис у замовлення, що пішло далі по
+                # статусах, Rozetka відхиляла — і звірка щовечора звітувала
+                # «НЕ записано — вручну», хоча номер стояв на місці.
+                have = (RZ.get_order_details(oid) or {})
+                if (have.get('ttn') or RZ._ttn_of(have)) == rec['ttn']:
+                    state = 'уже в Rozetka ✅'
+                    written += 1
+                    cur.execute("""update toptul_supplier_orders set ttn=%s,
+                                   ttn_at=now(), ttn_source='email',
+                                   status='ttn_written', note=%s, updated_at=now()
+                                   where rozetka_order_id=%s""",
+                                (rec['ttn'], why, oid))
+                    lines.append(f"✅ #{oid} → ТТН {rec['ttn']} ({state})")
+                    continue
                 ok = RZ.set_ttn(oid, rec['ttn'])
                 d = RZ.get_order_details(oid) or {}
                 ok = ok and RZ._ttn_of(d) == rec['ttn']
@@ -310,9 +356,24 @@ def reconcile(today=None, write_ttn=False):
                          f"(надіслано {o['sent_at']:%d.%m %H:%M})")
         else:
             lines.append(f"⏳ #{oid} — ТТН чекаємо {o['expected_ttn_date']:%d.%m} (надіслано після {CUTOFF_HOUR}:00)")
+    # 09.10: лист «Рассылка ТТН» живе в вікні трьох днів і тому повертається
+    # у звірку ще кілька вечорів після того, як ТТН уже записана. Відбір вище
+    # бере лише незакриті статуси, тож закритого замовлення серед кандидатів
+    # немає — і власник щовечора отримував «імені немає серед відкритих
+    # замовлень» на три номери, що давно стоять у Rozetka. Перед тим як
+    # турбувати людину, питаємо власну таблицю: цю ТТН ми вже внесли?
+    cur.execute('select ttn, rozetka_order_id from toptul_supplier_orders where ttn is not null')
+    done = {r['ttn']: r['rozetka_order_id'] for r in cur.fetchall()}
+    closed = [rec['ttn'] for rec, _ in unmatched if rec['ttn'] in done]
     for rec, why in unmatched:
+        if rec['ttn'] in done:
+            continue
         lines.append(f"❓ ТТН {rec['ttn']} ({rec['name']}) — не зіставлено: {why}")
-    if len(lines) == 1:
-        lines.append('Відкритих замовлень TOPTUL немає, листів з ТТН теж.')
+    if closed:
+        lines.append(f"✔️ ще {len(closed)} ТТН з листа — вже закриті замовлення "
+                     f"({', '.join('#' + str(done[t]) for t in closed)})")
+    if not open_rows and not [r for r, _ in unmatched if r['ttn'] not in done]:
+        lines.append('Нічого не чекає: відкритих замовлень TOPTUL немає, '
+                     'усі ТТН з листа вже внесені.')
     conn.commit(); cur.close(); conn.close()
     return '\n'.join(lines)
