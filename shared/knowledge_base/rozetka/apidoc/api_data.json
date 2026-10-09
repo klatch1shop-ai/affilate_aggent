@@ -39414,6 +39414,271 @@
   },
   {
     "type": "get",
+    "url": "/item-return/ticket/history/{ticket_id}",
+    "title": "Історія заявок на повернення товарів",
+    "name": "GetItemReturnTicketHistory",
+    "group": "ItemReturnModule",
+    "description": "<p>Повна історія змін заявок на повернення товарів: об'єднані події по самій заявці та по її товарах, відсортовані за часом запису в хронологічному порядку.</p>",
+    "permission": [
+      {
+        "name": "order_edit"
+      }
+    ],
+    "version": "0.0.0",
+    "parameter": {
+      "fields": {
+        "Request Url Parameters": [
+          {
+            "group": "Request Url Parameters",
+            "type": "Integer",
+            "optional": false,
+            "field": "ticket_id",
+            "description": "<p>ID заявки</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example",
+          "content": "/item-return/ticket/history/10",
+          "type": "String"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "ticket_id",
+            "description": "<p>ID заявки</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "market_id",
+            "description": "<p>ID магазину</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>ID замовлення</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "events",
+            "description": "<p>Список подій історії (по заявці та товарах), відсортований за <code>log_created_at</code> за спаданням</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "ticket",
+              "item"
+            ],
+            "optional": false,
+            "field": "events.entity",
+            "description": "<p>Тип сутності події (<code>ticket</code> — подія заявки, <code>item</code> — подія товару)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "events.seller_id",
+            "description": "<p>ID продавця</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "events.seller_fio",
+            "description": "<p>ПІБ продавця</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "nova_poshta",
+              "ukr_poshta",
+              "meest",
+              "self_pickup"
+            ],
+            "optional": true,
+            "field": "events.carrier",
+            "description": "<p>Перевізник (лише для <code>entity=ticket</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "events.ttn",
+            "description": "<p>ТТН відправлення (лише для <code>entity=ticket</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": true,
+            "field": "events.purchase_id",
+            "description": "<p>ID покупки (лише для <code>entity=item</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": true,
+            "field": "events.item_id",
+            "description": "<p>ID товару (лише для <code>entity=item</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": true,
+            "field": "events.qty_expected",
+            "description": "<p>Очікувана кількість до повернення (лише для <code>entity=item</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": true,
+            "field": "events.qty_received",
+            "description": "<p>Фактично прийнята кількість (лише для <code>entity=item</code>)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "events.status",
+            "description": "<p>Статус сутності на момент події</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "events.created_at",
+            "description": "<p>Дата створення сутності, формат <code>Y-m-d\\TH:i:s</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "events.updated_at",
+            "description": "<p>Дата оновлення сутності, формат <code>Y-m-d\\TH:i:s</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "created",
+              "updated",
+              "deleted"
+            ],
+            "optional": false,
+            "field": "events.event",
+            "description": "<p>Тип події</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "events.admin_id",
+            "description": "<p>ID адміністратора (<code>null</code>, якщо дію виконав продавець)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "events.is_console",
+            "description": "<p>Ознака, чи виконано подію через консоль</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "events.changed_attributes",
+            "description": "<p>Перелік атрибутів, що змінились у цій події</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "events.log_created_at",
+            "description": "<p>Дата запису події в історію, формат <code>Y-m-d\\TH:i:s</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "events.log_updated_at",
+            "description": "<p>Дата оновлення запису історії, формат <code>Y-m-d\\TH:i:s</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\": true,\n    \"content\": {\n        \"ticket_id\": 10,\n        \"market_id\": 1194,\n        \"order_id\": 863559139,\n        \"events\": [\n            {\n                \"entity\": \"ticket\",\n                \"seller_id\": 108433,\n                \"seller_fio\": \"Іваненко Іван Іванович\",\n                \"carrier\": \"self_pickup\",\n                \"ttn\": \"23456789\",\n                \"status\": 1,\n                \"created_at\": \"2026-08-27T13:53:38\",\n                \"updated_at\": \"2026-08-27T13:53:38\",\n                \"event\": \"created\",\n                \"admin_id\": null,\n                \"is_console\": false,\n                \"changed_attributes\": [\"order_id\", \"market_id\", \"carrier\", \"ttn\", \"status\", \"created_at\", \"updated_at\"],\n                \"log_created_at\": \"2026-08-27T13:53:38\",\n                \"log_updated_at\": null\n            },\n            {\n                \"entity\": \"item\",\n                \"seller_id\": 108433,\n                \"seller_fio\": \"Іваненко Іван Іванович\",\n                \"purchase_id\": 241040660,\n                \"item_id\": 533305534,\n                \"qty_expected\": 1,\n                \"qty_received\": 1,\n                \"status\": 0,\n                \"created_at\": \"2026-08-27T13:53:38\",\n                \"updated_at\": \"2026-08-27T13:53:38\",\n                \"event\": \"created\",\n                \"admin_id\": null,\n                \"is_console\": false,\n                \"changed_attributes\": [\"purchase_id\", \"item_id\", \"qty_expected\", \"qty_received\", \"status\", \"created_at\", \"updated_at\"],\n                \"log_created_at\": \"2026-08-27T13:53:38\",\n                \"log_updated_at\": null\n            },\n            {\n                \"entity\": \"item\",\n                \"seller_id\": 108433,\n                \"seller_fio\": \"Іваненко Іван Іванович\",\n                \"purchase_id\": 241040659,\n                \"item_id\": 533305519,\n                \"qty_expected\": 1,\n                \"qty_received\": 1,\n                \"status\": 2,\n                \"created_at\": \"2026-08-27T13:57:15\",\n                \"updated_at\": \"2026-08-27T13:57:19\",\n                \"event\": \"updated\",\n                \"admin_id\": null,\n                \"is_console\": false,\n                \"changed_attributes\": [\"status\", \"updated_at\"],\n                \"log_created_at\": \"2026-08-27T13:57:19\",\n                \"log_updated_at\": null\n            }\n        ]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "modules/itemReturn/apidoc/uk/TicketController.js",
+    "groupTitle": "Модуль ручних повернень товарів",
+    "header": {
+      "fields": {
+        "Request headers": [
+          {
+            "group": "Request headers",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer {token}\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>authorization header<br></p>"
+          },
+          {
+            "group": "Request headers",
+            "type": "String",
+            "allowedValues": [
+              "ru",
+              "uk",
+              "en"
+            ],
+            "optional": false,
+            "field": "Content-Language",
+            "description": "<p>Мова</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Internal error",
+          "content": "HTTP/1.1 200 Error\n{\n   \"success\":false,\n   \"errors\":{\n         \"message\":\"server_error\",\n         \"code\":0,\n    }\n }",
+          "type": "json"
+        },
+        {
+          "title": "Incorrect data format",
+          "content": "HTTP/1.1 200 Error\n{\n   \"success\":false,\n   \"errors\":{\n         \"message\":\"incorrect_data_format\",\n         \"code\":1002,\n    }\n }",
+          "type": "json"
+        },
+        {
+          "title": "Access Denied",
+          "content": "HTTP/1.1 200 Error\n{\n   \"success\":false,\n   \"errors\":{\n         \"message\":\"access_denied\",\n         \"code\":1010,\n    }\n }",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
     "url": "/item-return/ticket/search",
     "title": "Пошук заявок на повернення товарів",
     "name": "GetItemReturnTicketSearch",
@@ -40506,6 +40771,13 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "title_en",
+            "description": "<p>Назва характеристики англійською</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "unit",
             "description": "<p>Одиниця виміру на мові інтерфейсу</p>"
           },
@@ -40522,6 +40794,13 @@
             "optional": false,
             "field": "unit_ru",
             "description": "<p>Одиниця виміру російською</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "unit_en",
+            "description": "<p>Одиниця виміру англійською</p>"
           },
           {
             "group": "Success 200",
@@ -40642,7 +40921,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"attributes\": [\n            {\n                \"id\": 23397,\n                \"title_ua\": \"Діагональ РК-дисплея\",\n                \"title_ru\": \"Диагональ ЖК-дисплея\",\n                \"title\": \"Диагональ ЖК-дисплея\",\n                \"unit_ua\": \"т2\",\n                \"unit_ru\": \"т1\",\n                \"unit\": \"т2\",\n                \"type\": \"ComboBox\",\n                \"category_id\": 80001,\n                \"parent_id\": 0,\n                \"option_record_comparable\": null,\n                \"is_filter\": false,\n                \"grouping_option\": true,\n                \"need_translation\": false,\n                \"grouping_option\": true,\n                \"validating\": [\n                    {\n                        \"category_id\": 80001,\n                        \"min\": 0.5,\n                        \"max\": 100,\n                    }\n                ]\n            },\n            {\n                \"id\": 21733,\n                \"title_ua\": \"Колір\",\n                \"title_ru\": \"Цвет\",\n                \"title\": \"Цвет\",\n                \"unit_ua\": \"т2\",\n                \"unit_ru\": \"т1\",\n                \"unit\": \"т2\",\n                \"type\": \"ComboBox\",\n                \"category_id\": 80001,\n                \"parent_id\": 0,\n                \"option_record_comparable\": null,\n                \"is_filter\": false,\n                \"grouping_option\": true,\n                \"need_translation\": true,\n                \"grouping_option\": true,\n                \"validating\": [\n                    {\n                        \"category_id\": 80001,\n                        \"min\": 0.5,\n                        \"max\": 100,\n                    }\n                ]\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 5\n        }\n    }\n}",
+          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"attributes\": [\n            {\n                \"id\": 23397,\n                \"title_ua\": \"Діагональ РК-дисплея\",\n                \"title_ru\": \"Диагональ ЖК-дисплея\",\n                \"title_en\": \"Diagonal LCD display\",\n                \"title\": \"Диагональ ЖК-дисплея\",\n                \"unit_ua\": \"т2\",\n                \"unit_ru\": \"т1\",\n                \"unit_en\": \"т3\",\n                \"unit\": \"т2\",\n                \"type\": \"ComboBox\",\n                \"category_id\": 80001,\n                \"parent_id\": 0,\n                \"option_record_comparable\": null,\n                \"is_filter\": false,\n                \"grouping_option\": true,\n                \"need_translation\": false,\n                \"grouping_option\": true,\n                \"validating\": [\n                    {\n                        \"category_id\": 80001,\n                        \"min\": 0.5,\n                        \"max\": 100,\n                    }\n                ]\n            },\n            {\n                \"id\": 21733,\n                \"title_ua\": \"Колір\",\n                \"title_ru\": \"Цвет\",\n                \"title_en\": \"Color\",\n                \"title\": \"Цвет\",\n                \"unit_ua\": \"т2\",\n                \"unit_ru\": \"т1\",\n                \"unit_en\": \"т3\",\n                \"unit\": \"т2\",\n                \"type\": \"ComboBox\",\n                \"category_id\": 80001,\n                \"parent_id\": 0,\n                \"option_record_comparable\": null,\n                \"is_filter\": false,\n                \"grouping_option\": true,\n                \"need_translation\": true,\n                \"grouping_option\": true,\n                \"validating\": [\n                    {\n                        \"category_id\": 80001,\n                        \"min\": 0.5,\n                        \"max\": 100,\n                    }\n                ]\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 5\n        }\n    }\n}",
           "type": "json"
         }
       ]
@@ -40804,6 +41083,13 @@
           },
           {
             "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "title_en",
+            "description": "<p>Назва категорії англійською</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Integer",
             "optional": false,
             "field": "parent_id",
@@ -40876,7 +41162,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"categories\": [\n            {\n                \"id\": 80001,\n                \"title_ua\": \"Фотоапарати\",\n                \"title_ru\": \"Фотоаппараты\",\n                \"title\": \"Фотоаппараты\",\n                \"parent_id\": 4628124,\n                \"level\": 3,\n                \"mpath\": \".4627949.4628124.80001.\",\n                \"is_vendor_required\": 1\n            },\n            {\n                \"id\": 80178,\n                \"title_ua\": \"Інша вбудована техніка\",\n                \"title_ru\": \"Прочая встраиваемая техника\",\n                \"title\": \"Прочая встраиваемая техника\",\n                \"parent_id\": 80078,\n                \"level\": 3,\n                \"mpath\": \".80025.80078.80178.\",\n                \"is_vendor_required\": 0\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 100\n        }\n    }\n}",
+          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"categories\": [\n            {\n                \"id\": 80001,\n                \"title_ua\": \"Фотоапарати\",\n                \"title_ru\": \"Фотоаппараты\",\n                \"title_en\": \"Cameras\",\n                \"title\": \"Фотоаппараты\",\n                \"parent_id\": 4628124,\n                \"level\": 3,\n                \"mpath\": \".4627949.4628124.80001.\",\n                \"is_vendor_required\": 1\n            },\n            {\n                \"id\": 80178,\n                \"title_ua\": \"Інша вбудована техніка\",\n                \"title_ru\": \"Прочая встраиваемая техника\",\n                \"title_en\": \"Other embedded technology\",\n                \"title\": \"Прочая встраиваемая техника\",\n                \"parent_id\": 80078,\n                \"level\": 3,\n                \"mpath\": \".80025.80078.80178.\",\n                \"is_vendor_required\": 0\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 100\n        }\n    }\n}",
           "type": "json"
         }
       ]
@@ -42169,6 +42455,13 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "title_en",
+            "description": "<p>Назва значення англійською</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "link",
             "description": "<p>Посилання</p>"
           }
@@ -42214,7 +42507,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"attributeValues\": [\n            {\n                \"id\": 11890,\n                \"title_ua\": \"Знімання в RAW і JPEG\",\n                \"title_ru\": \"Съемка в RAW и JPEG\",\n                \"title\": \"Съемка в RAW и JPEG\",\n                \"link\": null\n            },\n            {\n                \"id\": 11891,\n                \"title_ua\": \"Знімання тільки в JPEG\",\n                \"title_ru\": \"Съемка только в JPEG\",\n                \"title\": \"Съемка только в JPEG\",\n                \"link\": null\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 100\n        }\n    }\n}",
+          "content": " {\n    \"success\": true,\n    \"content\": {\n        \"attributeValues\": [\n            {\n                \"id\": 11890,\n                \"title_ua\": \"Знімання в RAW і JPEG\",\n                \"title_ru\": \"Съемка в RAW и JPEG\",\n                \"title_en\": \"Shooting in RAW and JPEG\",\n                \"title\": \"Съемка в RAW и JPEG\",\n                \"link\": null\n            },\n            {\n                \"id\": 11891,\n                \"title_ua\": \"Знімання тільки в JPEG\",\n                \"title_ru\": \"Съемка только в JPEG\",\n                \"title_en\": \"Shooting only in JPEG\",\n                \"title\": \"Съемка только в JPEG\",\n                \"link\": null\n            }\n        ],\n        \"_meta\": {\n            \"totalCount\": 2,\n            \"pageCount\": 1,\n            \"currentPage\": 1,\n            \"perPage\": 100\n        }\n    }\n}",
           "type": "json"
         }
       ]
@@ -75822,7 +76115,7 @@
     "title": "12.7 Отримання списку ТТН, доступних для додавання в реєстри",
     "name": "OctopusRegistryTrackList",
     "group": "Octopus",
-    "description": "<p>Отримання списку ТТН, доступних для додавання в реєстри</p>",
+    "description": "<p>Отримання списку ТТН, доступних для додавання в реєстри.<br> <small>У видачу потрапляють ТТН продавця, які одночасно:</p> <ul>   <li>належать до RZ Delivery (1) і не є ТТН Fulfilment</li>   <li>мають статус 10010 (Заплановано), 10020 (Створено рахунок) або 10029</li>   <li>ще не входять до жодного реєстру продавця - виняток становлять ТТН у статусі 10029   з уже прийнятого (<code>accepted</code>) реєстру, їх можна додати в новий</li>   <li>для перевізника Meest - відправляються з відділення Розетки</li> </ul></small>",
     "permission": [
       {
         "name": "rz_delivery_reception"
@@ -75852,6 +76145,13 @@
             "optional": false,
             "field": "sender_department_id",
             "description": "<p>UUID відділення відправки</p>"
+          },
+          {
+            "group": "Request Url Parameters",
+            "type": "Integer",
+            "optional": true,
+            "field": "registry_id",
+            "description": "<p>ID реєстру, до якого додаються ТТН<br> <small>Відділення відправки береться з самого реєстру й перекриває <code>sender_department_id</code>.<br> Якщо реєстр не знайдено, або він має статус, відмінний від <code>new</code> - список ТТН буде порожнім. </small></p>"
           }
         ],
         "Request Meta Parameters": [
@@ -78056,7 +78356,7 @@
             "type": "Boolean",
             "optional": false,
             "field": "isReturnMoneyAllowed",
-            "description": "<p>Ознака чи доступне у відділенні повернення коштів <small>(false, якщо відділення не визначено)</small></p>"
+            "description": "<p>Ознака чи доступне у відділенні повернення коштів</p>"
           },
           {
             "group": "Response Body Parameters",

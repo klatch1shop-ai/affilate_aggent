@@ -566,3 +566,13 @@
 |---|---|---|
 | POST | `/item-price-updates/create` | 1 Завантажити файл |
 | GET | `/item-price-updates/search` | 2 Список завантажених прайсів |
+
+## 09.10.2026
+Жива копія з https://api-seller.rozetka.com.ua/apidoc/api_data.json
+356 унікальних метод+шлях (було 355 станом на 19.09; додався
+GET /item-return/ticket/history/{ticket_id}).
+
+`POST /orders/add-ttn`, який пробує `rozetka_order_agent.set_ttn`, у доці
+відсутній І НЕ ІСНУЄ: Rozetka віддає `5404 not_found`, як на вигаданий
+шлях. У логах 1 спроба, 0 успіхів — щоразу падає на fallback
+`PATCH /orders/{id}` з тілом `{status: 61, ttn}`, який і працює.
