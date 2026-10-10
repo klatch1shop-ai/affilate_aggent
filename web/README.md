@@ -37,3 +37,33 @@ hero з розчиненням у фон. Палітра своя — чужу �
 cd web && python3 -m http.server 8777     # подивитись локально
 node ../scripts/web_render_check.mjs      # усі сторінки малюються без undefined
 ```
+
+---
+
+## Жива частина (panel/)
+
+`panel/server.py` — FastAPI на адресі Tailscale ноутбука
+`http://100.126.131.55:8600`. Служба `systemd --user`:
+
+```bash
+systemctl --user status panel      # стан
+systemctl --user restart panel     # перезапуск
+journalctl --user -u panel -n 30   # журнал
+```
+
+Назовні не видно (перевірено). Доступ — cookie `SameSite=Strict`, яку
+видає корінь сторінки; запит із чужим Origin відхиляється.
+
+### Правило, яке не можна змінювати мовчки
+**Панель пропонує, але не підтверджує.** R0 виконується одразу; R2 і R3
+йдуть у Telegram як прохання. Причина — `confirm.db` один, і захист від
+подвійної накладної діє лише в межах однієї бази. Деталі:
+[рішення 002](../docs/рішення/002-жива-панель.md).
+
+### Мій бік дошки
+```bash
+venv/bin/python tools/panel.py нове              # що власник додав
+venv/bin/python tools/panel.py відповісти "..."  # відповідь у чат + Telegram
+venv/bin/python tools/panel.py завдання "назва"  # додати від себе
+venv/bin/python tools/panel.py стан 3 "зроблено"
+```

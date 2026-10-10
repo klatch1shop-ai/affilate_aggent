@@ -12,6 +12,9 @@ const NAV = [
   { id: 'kartky',      t: 'Картки товарів' },
   { id: 'klyuchi',     t: 'Ключові слова' },
   { g: 'Керування' },
+  { id: 'pult',        t: 'Пульт' },
+  { id: 'zavdannya',   t: 'Дошка завдань' },
+  { id: 'chat',        t: 'Чат' },
   { id: 'komandy',     t: 'Команди API' },
   { g: 'Система' },
   { id: 'audyt',       t: 'Аудит коду' },
@@ -283,6 +286,22 @@ async function boot() {
   D = d; C = c;
   drawHero(); drawMarkets(); drawOrders(); drawCards();
   drawKeys(); drawCommands(); drawAudit(); drawBoard();
+  drawPult(); drawTasks(); drawChat();
+
+  // Чи є бекенд. Статичні сторінки мають працювати й без нього, тому
+  // це не помилка, а стан — показуємо його в підвалі панелі.
+  try {
+    const st = await API.get('/status');
+    LIVE = true;
+    document.getElementById('stamp').textContent =
+      `живе · ${st.команд} команд`;
+    const n = (st.дошка || {}).усього || 0;
+    const el2 = document.querySelector('[data-n="zavdannya"]');
+    if (el2) el2.textContent = n || '';
+  } catch (e) {
+    LIVE = false;
+    document.getElementById('stamp').textContent += ' · офлайн';
+  }
 
   document.querySelector('[data-n="komandy"]').textContent = C.команди.length;
   document.querySelector('[data-n="majdanchyky"]').textContent = D.майданчики.length;
@@ -298,3 +317,236 @@ async function boot() {
   }
 }
 boot();
+
+/* ══ Інтерактивна частина ══════════════════════════════════════
+   Панель звертається до бекенда (panel/server.py) на тій самій
+   адресі. Якщо бекенда немає — статичні сторінки працюють далі,
+   а інтерактивні чесно кажуть, що офлайн, замість тиші.      */
+
+const API = {
+  async call(path, opts = {}) {
+    const r = await fetch('/api' + path, {
+      headers: { 'content-type': 'application/json' }, ...opts,
+    });
+    if (!r.ok) throw new Error(`${r.status} ${await r.text().catch(() => '')}`.slice(0, 200));
+    return r.json();
+  },
+  get: (p) => API.call(p),
+  post: (p, body) => API.call(p, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (p, body) => API.call(p, { method: 'PATCH', body: JSON.stringify(body) }),
+};
+
+let LIVE = false;
+const offline = (what) => `<div class="note"><b>Бекенд не відповідає.</b>
+  ${esc(what)} працює лише коли запущено <code>panel/server.py</code> на ноутбуці.
+  Решта сторінок — статичні, вони показуються й без нього.</div>`;
+
+/* ── Пульт ─────────────────────────────────────────────────── */
+function drawPult() {
+  const v = document.querySelector('#v-pult .sec');
+  v.innerHTML = head('Пульт', 'Виконати команду',
+    'Напишіть фразу так, як сказали б у Telegram, або виберіть команду зі списку. Читання виконується одразу. Ризиковані дії панель лише ПРОПОНУЄ — підтвердження приходить у бот.')
+    + `<div class="card" style="margin-bottom:16px">
+         <div style="display:flex;gap:8px;flex-wrap:wrap">
+           <input id="p-say" placeholder="наприклад: відгуки розетки"
+             style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--line-2);
+                    border-radius:8px;background:var(--surface);color:var(--ink);font:inherit">
+           <button class="tab is-on" id="p-go" style="padding:10px 20px">Виконати</button>
+         </div>
+         <div id="p-hint" style="margin-top:10px;font-size:13.5px;color:var(--ink-3)"></div>
+       </div>
+       <div id="p-out"></div>
+       <div class="sec"><div class="eyebrow">Швидкі команди</div><div id="p-quick" class="grid g3" style="margin-top:16px"></div></div>
+       <div class="sec"><div class="eyebrow">Останні запуски</div><div id="p-runs" style="margin-top:16px"></div></div>`;
+
+  const out = document.getElementById('p-out');
+  const hint = document.getElementById('p-hint');
+  const say = document.getElementById('p-say');
+
+  const show = (html) => { out.innerHTML = html; };
+  const pretty = (o) => esc(JSON.stringify(o, null, 1)).slice(0, 4000);
+
+  async function runCommand(command, params = {}) {
+    show(`<div class="card">виконую <code>${esc(command)}</code>…</div>`);
+    try {
+      const r = await API.post('/run', { command, params });
+      if (r.передано_в_telegram) {
+        show(`<div class="card"><h3>Потрібне підтвердження</h3>
+          <p>Команда <code>${esc(r.команда)}</code> має рівень <b>${esc(r.ризик)}</b>,
+             тому панель її не виконує. Прохання вже у вашому Telegram — підтвердьте там.</p>
+          <div class="note" style="margin-bottom:0">${esc(r.пояснення)}</div></div>`);
+      } else if (r.збій) {
+        show(`<div class="card"><h3>Збій</h3><pre class="mono" style="white-space:pre-wrap;color:var(--bad)">${esc(r.збій)}</pre></div>`);
+      } else {
+        show(`<div class="card"><h3>Готово</h3>
+          <pre class="mono" style="white-space:pre-wrap;max-height:420px;overflow:auto">${pretty(r.результат)}</pre>
+          <div style="margin-top:10px;font-size:13px;color:var(--ink-3)">те саме надіслано в Telegram</div></div>`);
+      }
+      loadRuns();
+    } catch (e) { show(`<div class="card">${offline('Виконання команд')}</div>`); }
+  }
+
+  async function go() {
+    const text = say.value.trim();
+    if (!text) return;
+    try {
+      const p = await API.post('/parse', { text });
+      if (!p.command) {
+        hint.innerHTML = 'Не розпізнав. Спробуйте фразу зі списку нижче.';
+        return;
+      }
+      hint.innerHTML = `розпізнано: <code>${esc(p.command)}</code>`;
+      if ((p.брак || []).length) {
+        hint.innerHTML += ` · бракує: ${esc((p.брак || []).join(', '))}`;
+        return;
+      }
+      runCommand(p.command, p.params || {});
+    } catch (e) { show(`<div class="card">${offline('Розбір фрази')}</div>`); }
+  }
+  document.getElementById('p-go').onclick = go;
+  say.onkeydown = (e) => { if (e.key === 'Enter') go(); };
+
+  const quick = (C.команди || []).filter(c => c.ризик === 'R0');
+  document.getElementById('p-quick').innerHTML = quick.map(c => `
+    <div class="card" style="cursor:pointer" data-cmd="${esc(c.команда)}">
+      <div class="cmd__n">${esc(c.команда)}</div>
+      <div style="margin-top:6px;font-size:14px;color:var(--ink-2)">${esc(c.що)}</div>
+      <span class="pill cool" style="margin-top:10px">${esc(c.майданчик)}</span>
+    </div>`).join('');
+  document.getElementById('p-quick').onclick = (e) => {
+    const card = e.target.closest('[data-cmd]');
+    if (card) runCommand(card.dataset.cmd, {});
+  };
+
+  async function loadRuns() {
+    try {
+      const rows = await API.get('/runs?limit=12');
+      document.getElementById('p-runs').innerHTML = rows.length
+        ? `<div class="tablewrap"><table><thead><tr><th>Коли</th><th>Команда</th><th>Стан</th></tr></thead><tbody>`
+          + rows.map(r => `<tr><td class="mono">${new Date(r.created * 1000).toLocaleTimeString('uk-UA')}</td>
+              <td><code>${esc(r.command)}</code></td>
+              <td><span class="pill ${r.state === 'виконано' ? 'ok' : r.state === 'збій' ? 'bad' : 'warn'}">${esc(r.state)}</span></td></tr>`).join('')
+          + `</tbody></table></div>`
+        : '<p>Поки нічого не запускали.</p>';
+    } catch (e) { document.getElementById('p-runs').innerHTML = offline('Журнал запусків'); }
+  }
+  loadRuns();
+}
+
+/* ── Дошка завдань ─────────────────────────────────────────── */
+const STATUSES = ['нове', 'в роботі', 'чекає рішення', 'зроблено', 'відкинуто'];
+
+function drawTasks() {
+  const v = document.querySelector('#v-zavdannya .sec');
+  v.innerHTML = head('Дошка', 'Живі завдання та ідеї',
+    'Сюди ви додаєте ідеї з телефона чи ноутбука, я їх забираю на обговорення й повертаю з висновком. Статичні напрями в docs/ лишаються окремо — тут лише те, що в роботі зараз.')
+    + `<div class="card" style="margin-bottom:20px">
+         <div style="display:flex;gap:8px;flex-wrap:wrap">
+           <input id="b-title" placeholder="нова ідея або завдання"
+             style="flex:1;min-width:220px;padding:10px 14px;border:1px solid var(--line-2);
+                    border-radius:8px;background:var(--surface);color:var(--ink);font:inherit">
+           <select id="b-kind" style="padding:10px 12px;border:1px solid var(--line-2);
+                    border-radius:8px;background:var(--surface);color:var(--ink);font:inherit">
+             <option>ідея</option><option>завдання</option><option>рішення</option>
+           </select>
+           <button class="tab is-on" id="b-add" style="padding:10px 20px">Додати</button>
+         </div>
+         <textarea id="b-body" rows="2" placeholder="подробиці, якщо потрібні"
+           style="width:100%;margin-top:8px;padding:10px 14px;border:1px solid var(--line-2);
+                  border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;resize:vertical"></textarea>
+       </div>
+       <div class="tabs" id="b-tabs">
+         <button class="tab is-on" data-s="всі">усі</button>
+         ${STATUSES.map(s => `<button class="tab" data-s="${esc(s)}">${esc(s)}</button>`).join('')}
+       </div>
+       <div id="b-list"></div>`;
+
+  let filter = 'всі';
+  async function load() {
+    try {
+      const rows = await API.get('/board');
+      const show = rows.filter(r => filter === 'всі' || r.status === filter);
+      document.getElementById('b-list').innerHTML = show.length ? show.map(r => `
+        <div class="cmd">
+          <div class="cmd__h">
+            <span class="pill cool">${esc(r.kind)}</span>
+            <span style="font-weight:500">${esc(r.title)}</span>
+            <span class="pill ${r.status === 'зроблено' ? 'ok' : r.status === 'чекає рішення' ? 'warn' : ''}">${esc(r.status)}</span>
+            ${r.author === 'claude' ? '<span class="pill">від Claude</span>' : ''}
+            ${r.обговорено ? '<span class="pill ok">забрано на обговорення</span>' : ''}
+          </div>
+          <div class="cmd__b">
+            ${r.body ? `<div style="margin-bottom:10px">${esc(r.body)}</div>` : ''}
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              ${STATUSES.filter(s => s !== r.status).map(s =>
+                `<button class="tab" data-id="${r.id}" data-st="${esc(s)}" style="font-size:13px;padding:5px 11px">${esc(s)}</button>`).join('')}
+            </div>
+          </div>
+        </div>`).join('') : '<p>Порожньо.</p>';
+    } catch (e) { document.getElementById('b-list').innerHTML = offline('Дошка'); }
+  }
+
+  document.getElementById('b-add').onclick = async () => {
+    const title = document.getElementById('b-title').value.trim();
+    if (!title) return;
+    try {
+      await API.post('/board', { title, kind: document.getElementById('b-kind').value,
+                                 body: document.getElementById('b-body').value.trim() });
+      document.getElementById('b-title').value = '';
+      document.getElementById('b-body').value = '';
+      load();
+    } catch (e) { alert('Бекенд не відповідає — ідею не збережено'); }
+  };
+  document.getElementById('b-tabs').onclick = (e) => {
+    const b = e.target.closest('.tab'); if (!b) return;
+    document.querySelectorAll('#b-tabs .tab').forEach(t => t.classList.toggle('is-on', t === b));
+    filter = b.dataset.s; load();
+  };
+  document.getElementById('b-list').onclick = async (e) => {
+    const b = e.target.closest('[data-st]'); if (!b) return;
+    try { await API.patch('/board/' + b.dataset.id, { status: b.dataset.st }); load(); }
+    catch (err) { alert('Не вдалось оновити'); }
+  };
+  load();
+}
+
+/* ── Чат ───────────────────────────────────────────────────── */
+function drawChat() {
+  const v = document.querySelector('#v-chat .sec');
+  v.innerHTML = head('Чат', 'Листування зі мною',
+    'Повідомлення лягає в базу й одразу дублюється вам у Telegram. Я читаю його, коли працюю, і відповідаю сюди ж.')
+    + `<div class="note"><b>Чесно про затримку.</b> Це не миттєвий чат: із сесією, що відкрита
+         в терміналі, веб говорити не може — це різні процеси. Тому відповідь приходить тоді,
+         коли я працюю. Миттєвий варіант можливий окремо, але він коштує грошей за токени —
+         рішення за вами.</div>
+       <div id="c-list" style="margin:20px 0;max-height:52vh;overflow:auto"></div>
+       <div style="display:flex;gap:8px;flex-wrap:wrap">
+         <textarea id="c-text" rows="2" placeholder="напишіть повідомлення"
+           style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--line-2);
+                  border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;resize:vertical"></textarea>
+         <button class="tab is-on" id="c-send" style="padding:10px 20px">Надіслати</button>
+       </div>`;
+
+  async function load() {
+    try {
+      const rows = await API.get('/chat?limit=60');
+      document.getElementById('c-list').innerHTML = rows.length ? rows.map(m => `
+        <div style="margin-bottom:14px;${m.role === 'claude' ? '' : 'padding-left:0'}">
+          <div style="font-size:12px;color:var(--ink-3);margin-bottom:4px">
+            ${m.role === 'claude' ? 'Claude' : 'ви'} · ${new Date(m.created * 1000).toLocaleString('uk-UA')}
+          </div>
+          <div style="background:${m.role === 'claude' ? 'var(--brand-wash)' : 'var(--surface-2)'};
+               border-radius:12px;padding:12px 14px;white-space:pre-wrap">${esc(m.text)}</div>
+        </div>`).join('') : '<p>Поки порожньо.</p>';
+      const l = document.getElementById('c-list'); l.scrollTop = l.scrollHeight;
+    } catch (e) { document.getElementById('c-list').innerHTML = offline('Чат'); }
+  }
+  document.getElementById('c-send').onclick = async () => {
+    const t = document.getElementById('c-text');
+    if (!t.value.trim()) return;
+    try { await API.post('/chat', { text: t.value.trim() }); t.value = ''; load(); }
+    catch (e) { alert('Бекенд не відповідає — повідомлення не надіслано'); }
+  };
+  load();
+  setInterval(() => { if (location.hash === '#chat') load(); }, 15000);
+}
