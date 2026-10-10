@@ -214,6 +214,30 @@ def chat_send(body: dict):
     return {'id': i}
 
 
+@app.get('/api/ask/state')
+def ask_state():
+    sys.path.insert(0, os.path.join(BASE, 'panel'))
+    import ask as A
+    return {'увімкнено': A.ключ_є(), 'модель': A.MODEL, 'зусилля': A.EFFORT}
+
+
+@app.post('/api/ask')
+def ask(body: dict):
+    """Миттєве питання через API. Платне, тому окремо від листування."""
+    текст = (body.get('text') or '').strip()
+    if not текст:
+        raise HTTPException(400, 'порожнє питання')
+    sys.path.insert(0, os.path.join(BASE, 'panel'))
+    import ask as A
+    історія = [m for m in DB.chat_tail(12)]
+    DB.chat_add('власник', текст)
+    r = A.спитати(текст, історія)
+    if r.get('вимкнено'):
+        return r
+    DB.chat_add('claude', r['текст'])
+    return r
+
+
 # ── стан ─────────────────────────────────────────────────────────
 @app.get('/api/status')
 def status():

@@ -526,8 +526,12 @@ function drawChat() {
          <textarea id="c-text" rows="2" placeholder="напишіть повідомлення"
            style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--line-2);
                   border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;resize:vertical"></textarea>
-         <button class="tab is-on" id="c-send" style="padding:10px 20px">Надіслати</button>
-       </div>`;
+         <div style="display:flex;flex-direction:column;gap:6px">
+           <button class="tab is-on" id="c-send" style="padding:10px 20px">Лист мені</button>
+           <button class="tab" id="c-ask" style="padding:10px 20px" title="платно за токени">Спитати зараз</button>
+         </div>
+       </div>
+       <div id="c-askstate" style="margin-top:10px;font-size:13px;color:var(--ink-3)"></div>`;
 
   async function load() {
     try {
@@ -552,6 +556,35 @@ function drawChat() {
       const l = document.getElementById('c-list'); l.scrollTop = l.scrollHeight;
     } catch (e) { document.getElementById('c-list').innerHTML = offline('Чат'); }
   }
+  // Друга кнопка — миттєва відповідь через API. Окремо, бо це інша річ:
+  // платить за токени і не має ні памʼяті проєкту, ні моїх інструментів
+  // понад те, що ми їй дали.
+  (async () => {
+    try {
+      const st = await API.get('/ask/state');
+      const b = document.getElementById('c-ask');
+      document.getElementById('c-askstate').innerHTML = st.увімкнено
+        ? `«Спитати зараз» відповідає за секунди через ${esc(st.модель)}, платно за токени. «Лист мені» — безкоштовно, відповідь коли я працюю.`
+        : '«Спитати зараз» вимкнено: у .env немає справжнього ANTHROPIC_API_KEY. Миттєвий чат платний — додайте ключ, і кнопка запрацює.';
+      if (!st.увімкнено) { b.disabled = true; b.style.opacity = .45; b.style.cursor = 'not-allowed'; }
+    } catch (e) { /* бекенд офлайн */ }
+  })();
+
+  document.getElementById('c-ask').onclick = async () => {
+    const t = document.getElementById('c-text');
+    const q = t.value.trim(); if (!q) return;
+    const b = document.getElementById('c-ask');
+    b.disabled = true; b.textContent = 'думає…'; t.value = '';
+    try {
+      const r = await API.post('/ask', { text: q });
+      if (r.вимкнено) alert(r.вимкнено);
+      else document.getElementById('c-askstate').textContent =
+        `відповідь коштувала $${r.вартість} · токенів: ${r.токени.вхід} вхід, ${r.токени.вихід} вихід, ${r.токени.з_кешу} з кешу`;
+      load();
+    } catch (e) { alert('Не вдалось: ' + e.message); }
+    finally { b.disabled = false; b.textContent = 'Спитати зараз'; }
+  };
+
   document.getElementById('c-send').onclick = async () => {
     const t = document.getElementById('c-text');
     if (!t.value.trim()) return;
