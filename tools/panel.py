@@ -93,13 +93,19 @@ def main():
         for m in DB.chat_tail(10):
             хто = 'Claude ' if m['role'] == 'claude' else 'власник'
             print(f'  [{дата(m["created"])}] {хто} {m["text"][:110]}')
+        # Звітуємо ФАКТОМ доставки, а не наміром: мовчазний збій
+        # Telegram виглядав би як успіх, і власник чекав би дарма.
+        у_бот = None
         if os.getenv('PANEL_TG_ECHO', '0') == '1':
             try:
                 from tools.notify_owner import notify
-                notify(f'💬 Відповідь у панелі:\n{a.текст[:900]}')
-            except Exception:
-                pass
-        print(f'надіслано (#{i}) — видно в панелі')
+                у_бот = bool(notify(f'💬 Відповідь у панелі:\n{a.текст[:900]}'))
+            except Exception as e:
+                у_бот = False
+                print(f'  Telegram: {type(e).__name__}')
+        хвіст = ('' if у_бот is None
+                 else ' і в боті' if у_бот else ', але в бот НЕ дійшло')
+        print(f'надіслано (#{i}) — видно в панелі{хвіст}')
 
     elif a.cmd == 'завдання':
         i = DB.board_add(a.вид, a.назва, a.тіло, author='claude', напрям=a.напрям)
