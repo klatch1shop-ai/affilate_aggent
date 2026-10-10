@@ -238,6 +238,52 @@ def ask(body: dict):
     return r
 
 
+# ── міст до живої сесії ──────────────────────────────────────────
+@app.post('/api/bridge/ask')
+def bridge_ask(body: dict):
+    """Питання → у чат (це будить сесію) → назад мітка часу для очікування."""
+    текст = (body.get('text') or '').strip()
+    if not текст:
+        raise HTTPException(400, 'порожнє питання')
+    from datetime import datetime, timezone
+    мітка = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    i = DB.chat_add('власник', текст)
+    tg(f'💬 Через панель (міст): {текст[:900]}')
+    return {'id': i, 'мітка': мітка,
+            'підказка': 'Monitor побачить повідомлення протягом ~20 с і '
+                        'розбудить сесію; відповідь зʼявиться, щойно Claude '
+                        'завершить хід.'}
+
+
+@app.get('/api/bridge/poll')
+def bridge_poll(мітка: str):
+    sys.path.insert(0, os.path.join(BASE, 'panel'))
+    import bridge as B
+    r = B.відповідь_після(мітка)
+    if not r:
+        return {'чекаємо': True}
+    # Кладемо в чат РІВНО ОДИН раз: повторне опитування не має дублювати.
+    останні = DB.chat_tail(6)
+    якщо_вже = any(m['role'] == 'claude' and m['text'][:80] == r['текст'][:80]
+                   for m in останні)
+    if not якщо_вже:
+        DB.chat_add('claude', r['текст'])
+    return {'готово': True, 'текст': r['текст'], 'час': r['час']}
+
+
+@app.get('/api/bridge/state')
+def bridge_state():
+    sys.path.insert(0, os.path.join(BASE, 'panel'))
+    import bridge as B
+    ф = B.транскрипт()
+    if not ф:
+        return {'доступно': False, 'чому': 'файл сесії не знайдено'}
+    вік = time.time() - os.path.getmtime(ф)
+    return {'доступно': True, 'файл': os.path.basename(ф),
+            'останній_запис_сек_тому': round(вік),
+            'сесія_схоже_жива': вік < 300}
+
+
 # ── стан ─────────────────────────────────────────────────────────
 @app.get('/api/status')
 def status():

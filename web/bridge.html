@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Міст до сесії</title>
+<meta name="theme-color" content="#FAF7F2">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+<style>
+  .canvas { margin-left: 0; }
+  .lane { max-width: 760px; margin: 0 auto; padding: var(--s9) var(--s5); }
+  .msg { border-radius: 12px; padding: 12px 14px; white-space: pre-wrap;
+         margin-bottom: 14px; }
+  .msg.me { background: var(--surface-2); }
+  .msg.cl { background: var(--brand-wash); }
+  .meta { font-size: 12px; color: var(--ink-3); margin-bottom: 4px; }
+  .dots::after { content: '…'; animation: d 1.4s steps(4, end) infinite; }
+  @keyframes d { 0% { content: '' } 25% { content: '.' } 50% { content: '..' } 75% { content: '...' } }
+</style>
+</head>
+<body>
+<main class="canvas"><div class="lane">
+  <div class="eyebrow">Дослід</div>
+  <h1 style="margin-bottom:var(--s4)">Міст до живої сесії</h1>
+  <p>Ця сторінка кладе ваше питання в чат, будить сесію Claude Code у
+     терміналі й забирає звідти <b>рівно одну</b> фінальну відповідь.
+     Проміжні репліки між викликами інструментів сюди не потрапляють —
+     відбираємо тільки ті, що завершують хід.</p>
+
+  <div class="note" id="state">перевіряю стан сесії…</div>
+
+  <div id="log" style="margin:var(--s6) 0"></div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <textarea id="q" rows="3" placeholder="напишіть питання"
+      style="flex:1;min-width:260px;padding:12px 14px;border:1px solid var(--line-2);
+             border-radius:8px;background:var(--surface);color:var(--ink);
+             font:inherit;resize:vertical"></textarea>
+    <button class="tab is-on" id="go" style="padding:12px 24px;align-self:flex-start">Надіслати</button>
+  </div>
+  <div id="hint" style="margin-top:10px;font-size:13px;color:var(--ink-3)"></div>
+
+  <p style="margin-top:var(--s9);font-size:13px;color:var(--ink-3)">
+    <a href="index.html">← до панелі</a>
+  </p>
+</div></main>
+
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const log = document.getElementById('log');
+const hint = document.getElementById('hint');
+
+function add(cls, who, text) {
+  const d = document.createElement('div');
+  d.innerHTML = `<div class="meta">${esc(who)}</div><div class="msg ${cls}">${esc(text)}</div>`;
+  log.append(d);
+  d.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  return d;
+}
+
+(async () => {
+  try {
+    const st = await (await fetch('/api/bridge/state')).json();
+    document.getElementById('state').innerHTML = st.доступно
+      ? (st.сесія_схоже_жива
+          ? `<b>Сесія жива.</b> Останній запис ${st.останній_запис_сек_тому} с тому. Відповідь прийде, щойно Claude завершить хід.`
+          : `<b>Сесія схоже не працює</b> — останній запис ${st.останній_запис_сек_тому} с тому. Питання збережеться, але відповіді зараз не буде.`)
+      : `<b>Недоступно:</b> ${esc(st.чому)}`;
+  } catch (e) { document.getElementById('state').innerHTML = '<b>Бекенд не відповідає.</b>'; }
+})();
+
+document.getElementById('go').onclick = async () => {
+  const q = document.getElementById('q');
+  const text = q.value.trim(); if (!text) return;
+  const b = document.getElementById('go');
+  b.disabled = true; q.value = '';
+  add('me', 'ви', text);
+  const wait = add('cl', 'Claude', 'чекаю на відповідь');
+  wait.querySelector('.msg').classList.add('dots');
+  try {
+    const r = await (await fetch('/api/bridge/ask', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text }) })).json();
+    hint.textContent = r.підказка || '';
+    const кінець = Date.now() + 1000 * 60 * 10;
+    while (Date.now() < кінець) {
+      await new Promise(s => setTimeout(s, 4000));
+      const p = await (await fetch('/api/bridge/poll?%D0%BC%D1%96%D1%82%D0%BA%D0%B0=' + encodeURIComponent(r.мітка))).json();
+      if (p.готово) {
+        wait.querySelector('.meta').textContent = 'Claude · ' + new Date(p.час).toLocaleTimeString('uk-UA');
+        const m = wait.querySelector('.msg');
+        m.classList.remove('dots'); m.textContent = p.текст;
+        hint.textContent = 'відповідь забрано з живої сесії';
+        b.disabled = false; return;
+      }
+    }
+    wait.querySelector('.msg').classList.remove('dots');
+    wait.querySelector('.msg').textContent =
+      'Не дочекався за 10 хвилин. Питання збережене — відповідь зʼявиться у чаті панелі.';
+  } catch (e) {
+    wait.querySelector('.msg').classList.remove('dots');
+    wait.querySelector('.msg').textContent = 'Збій: ' + e.message;
+  }
+  b.disabled = false;
+};
+</script>
+</body>
+</html>
