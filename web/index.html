@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Операційна панель торгових майданчиків</title>
+<meta name="description" content="Карта системи: майданчики, конвеєри замовлень, картки товарів, команди API">
+<meta name="theme-color" content="#FAF7F2">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<button class="burger" id="burger" aria-label="Меню">☰</button>
+
+<aside class="rail" id="rail">
+  <div class="rail__brand">
+    <div class="rail__mark"><span><i></i><i></i><i></i></span></div>
+    <div>
+      <div class="rail__title">Операційна панель</div>
+      <div class="rail__sub">торгові майданчики</div>
+    </div>
+  </div>
+  <nav class="rail__nav" id="nav"></nav>
+  <div class="rail__foot">
+    <span id="stamp">—</span>
+    <button class="tbtn" id="theme">тема</button>
+  </div>
+</aside>
+
+<main class="canvas">
+  <section class="view is-on" id="v-oglyad">
+    <div class="hero">
+      <div class="mesh"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+      <div class="wrap hero__in">
+        <span class="badge">Аудит від <b id="b-date">10.10.2026</b> · перевірено запуском</span>
+        <h1>Один склад, чотири майданчики,<br>нуль ручної роботи на замовлення</h1>
+        <p class="lede">Система сама веде замовлення від появи до накладної: перевіряє наявність
+          у постачальника, створює ТТН з контролем оплати, оформлює закупівлю, вносить номер
+          назад у майданчик і звітує власнику. Нижче — те, що справді запущено, з числами з
+          останнього аудиту.</p>
+        <div class="figs" id="hero-figs"></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="sec">
+        <div class="sec__head">
+          <div class="eyebrow">Що це взагалі</div>
+          <h2>Три речі, які система робить без людини</h2>
+        </div>
+        <div class="grid g3">
+          <div class="card">
+            <h3>Веде замовлення</h3>
+            <p>Три конвеєри за розкладом. Наявність → накладна → закупівля в постачальника →
+              номер назад у майданчик → Telegram власнику. Кожен незворотний крок фіксується
+              одразу, щоб обрив посеред ланцюга не загубив замовлення.</p>
+          </div>
+          <div class="card">
+            <h3>Тримає фіди живими</h3>
+            <p>Ціна й наявність оновлюються за розкладом майданчика, а сторож свіжості
+              б'є на сполох, щойно фід застоявся. Правило просте: фід, поданий на валідацію,
+              мусить жити, інакше приходить замовлення на товар, якого немає.</p>
+          </div>
+          <div class="card">
+            <h3>Слухається голосом власника</h3>
+            <p>Вісімнадцять команд через Telegram: від «покажи замовлення» до «зроби ТТН».
+              Читання виконується одразу, зміна даних і витрата грошей — тільки після
+              підтвердження з показом параметрів.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec__head">
+          <div class="eyebrow">Чесно</div>
+          <h2>Що аудит знайшов зламаним</h2>
+          <p>Наведено без прикрас — це корисніше за вітрину.</p>
+        </div>
+        <div class="tablewrap"><table id="t-audit"></table></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="view" id="v-majdanchyky"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-zamovlennya"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-kartky"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-klyuchi"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-komandy"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-audyt"><div class="wrap"><div class="sec"></div></div></section>
+  <section class="view" id="v-doshka"><div class="wrap"><div class="sec"></div></div></section>
+
+  <div class="wrap foot">
+    Дані зібрані інструментом <code>tools/system_audit.py</code> і зрізом кабінету
+    <code>tools/epicentr_products_dump.py</code>. Жодне число тут не введене руками.
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

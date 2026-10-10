@@ -19,14 +19,18 @@
        {"error": "Incorrect message id"}, а не 404).
        Успіх = у відповіді НЕМАЄ ключа `error`.
 
-  ЧОГО В PROM НЕМАЄ (перевірено 8 варіантів шляху, усі дали 404 так само, як
-  контроль): методу записати ТТН у замовлення. set_declaration, set_ttn,
-  orders/edit, declarations/save — нічого. Номер ТТН у замовлення Prom
-  вноситься лише руками в кабінеті.
+  ВИПРАВЛЕНО 10.10.2026 — тут стояли два хибні твердження. Обидва я зробив,
+  перебравши назви шляхів замість прочитати офіційну специфікацію (вона тепер
+  лежить у `shared/knowledge_base/prom/openapi/`).
 
-  У замовленні Prom НЕМА id чату — лише телефон. Отже написати покупцю першим
-  через API неможливо; можна тільки відповісти в гілку, яку створив він.
-  Команда `messages.reply` саме про це.
+  ТТН у замовлення Prom ЗАПИСУЄТЬСЯ: `POST /delivery/save_declaration_id`
+  {delivery_type, order_id, declaration_id}. Див. `tools/prom_order_pipeline.py`.
+
+  Покупцю МОЖНА написати першим: родина `chat/*`, метод
+  `POST /chat/send_message` приймає `room_ident` ({user_id}_{company_id}_buyer,
+  вищий пріоритет) або `user_id`, плюс `body` до 2000 знаків і `project`.
+  Команда `chat.send`. `messages.reply` лишається для відповіді в гілку,
+  яку створив покупець.
 
   `delivery_provider_data.recipient_warehouse_id` у замовленні Prom — це
   справжній Ref відділення Нової Пошти. Перевірено: Address.getWarehouses за
@@ -39,9 +43,15 @@ R3 — витрачає гроші або створює зобовʼязанн�
 """
 import os
 import re
+import sys
 from datetime import datetime, timezone
 
 import requests
+import urllib3
+
+# Rozetka віддає сертифікат, якому requests не вірить; агент замовлень ходить
+# туди з verify=False, і ми робимо так само, але без шуму в журналі.
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROM_BASE = 'https://my.prom.ua/api/v1'
@@ -275,6 +285,132 @@ def ttn_create(order_id=None, dry_run=False, **kw):
                     tag=order_id)
 
 
+
+# ─── Prom: чат із покупцем ───────────────────────────────────────
+# Родину chat/* знайдено 09.10.2026 в офіційній специфікації
+# (shared/knowledge_base/prom/openapi/). До того я двічі записував у
+# пам'ять, що «покупцю першим написати неможливо» — бо перебирав назви
+# шляхів замість прочитати доку. Відповідь тут інша за старі методи:
+# {"status": "ok", "data": {...}}.
+
+def chat_rooms(limit=10, **kw):
+    d = _prom('GET', 'chat/rooms', params={'limit': int(limit)})
+    return {'кімнати': ((d.get('data') or {}).get('rooms') or [])}
+
+
+def chat_history(limit=20, status=None, **kw):
+    pr = {'limit': int(limit)}
+    if status in ('new', 'read'):
+        pr['status'] = status
+    d = _prom('GET', 'chat/messages_history', params=pr)
+    return {'повідомлення': ((d.get('data') or {}).get('messages') or [])}
+
+
+def chat_send(room_ident=None, user_id=None, text=None, dry_run=False, **kw):
+    """Написати покупцю ПЕРШИМ. Приймає room_ident або user_id."""
+    if not text:
+        return {'відмова': 'немає тексту повідомлення'}
+    if len(text) > 2000:
+        return {'відмова': f'Prom приймає до 2000 знаків, а тут {len(text)}'}
+    if not (room_ident or user_id):
+        return {'відмова': 'потрібен room_ident або user_id покупця'}
+    body = {'body': text, 'project': 'promua'}
+    # room_ident має вищий пріоритет — так написано в специфікації.
+    if room_ident:
+        body['room_ident'] = str(room_ident)
+    else:
+        body['user_id'] = str(user_id)
+    if dry_run:
+        return {'холостий': f'покупцю {room_ident or user_id}: «{text[:80]}»'}
+    d = _prom('POST', 'chat/send_message', body=body)
+    if (d.get('status') or '').lower() != 'ok':
+        raise RuntimeError(f'Prom не надіслав: {str(d)[:160]}')
+    return {'надіслано': d.get('data') or d}
+
+
+# ─── Єпіцентр: довідник атрибутів ────────────────────────────────
+# Лежить на core-api, доступний нашою сесією. Токен merchant-api для
+# цього НЕ потрібен, як я помилково вважав 09.10.
+
+def epicentr_attributes(code=None, limit=20, **kw):
+    from core.actions import _epicentr_session
+    s, api = _epicentr_session()
+    if code:
+        r = s.get(f'{api}/v2/pim/attributes/by-code/{code}/options',
+                  params={'limit': int(limit)}, timeout=60)
+        if r.status_code == 404:
+            return {'відмова': f'атрибута з кодом «{code}» немає'}
+        r.raise_for_status()
+        return {'значення': (r.json() or {}).get('items') or r.json()}
+    r = s.get(f'{api}/v2/pim/attribute-sets', params={'limit': int(limit)},
+              timeout=60)
+    r.raise_for_status()
+    d = r.json() or {}
+    return {'усього_наборів': d.get('total'), 'набори': d.get('items') or []}
+
+
+def epicentr_cards(**kw):
+    """Скільки карток за статусом — із останнього зрізу кабінету."""
+    import json as _json
+    path = os.path.join(BASE, 'data', 'epicentr_products.json')
+    if not os.path.exists(path):
+        return {'відмова': 'зрізу немає, запустіть tools/epicentr_products_dump.py'}
+    with open(path, encoding='utf-8') as f:
+        cards = _json.load(f)
+    by = {}
+    for c in cards:
+        by[c.get('status')] = by.get(c.get('status'), 0) + 1
+    return {'усього': len(cards),
+            'за_статусом': dict(sorted(by.items(), key=lambda x: -x[1])),
+            'зріз_від': datetime.fromtimestamp(os.path.getmtime(path)).strftime('%d.%m %H:%M')}
+
+
+# ─── Rozetka: відгуки про магазин ────────────────────────────────
+
+def _rz():
+    sys.path.insert(0, os.path.join(BASE, 'agents', 'orders'))
+    import rozetka_order_agent as RZ
+    return RZ
+
+
+def rozetka_reviews(limit=10, **kw):
+    RZ = _rz()
+    r = requests.get(f'{RZ.ROZETKA_BASE}/market-reviews/search',
+                     headers=RZ.rz_headers(), verify=False, timeout=TIMEOUT,
+                     params={'limit': int(limit)})
+    d = r.json()
+    if not d.get('success'):
+        raise RuntimeError(f'Rozetka: {str(d.get("errors"))[:140]}')
+    c = d.get('content') or {}
+    return {'відгуки': c.get('reviews') or c}
+
+
+def rozetka_review_reply(review_id=None, text=None, dry_run=False, **kw):
+    if not (review_id and text):
+        return {'відмова': 'потрібні номер відгуку і текст'}
+    if dry_run:
+        return {'холостий': f'відгук {review_id}: «{text[:80]}»'}
+    RZ = _rz()
+    r = requests.post(f'{RZ.ROZETKA_BASE}/market-review-replies/reply',
+                      headers=RZ.rz_headers(), verify=False, timeout=TIMEOUT,
+                      json={'review_id': int(review_id), 'text': text})
+    d = r.json()
+    if not d.get('success'):
+        raise RuntimeError(f'Rozetka не прийняла відповідь: {str(d)[:160]}')
+    return {'відповідь_додано': review_id}
+
+
+def rozetka_orders(limit=10, **kw):
+    RZ = _rz()
+    r = requests.get(f'{RZ.ROZETKA_BASE}/orders/search',
+                     headers=RZ.rz_headers(), verify=False, timeout=TIMEOUT,
+                     params={'types': 'all', 'limit': int(limit)})
+    d = r.json()
+    if not d.get('success'):
+        raise RuntimeError(f'Rozetka: {str(d.get("errors"))[:140]}')
+    return {'замовлення': (d.get('content') or {}).get('orders') or []}
+
+
 COMMANDS = {
     'orders.list': {'fn': orders_list, 'params': ['limit'], 'risk': 'R0',
                     'about': 'останні замовлення Prom'},
@@ -300,6 +436,26 @@ COMMANDS = {
                    'params': ['last', 'first', 'phone', 'city', 'warehouse',
                               'amount', 'cod'], 'risk': 'R3',
                    'about': 'накладна за даними, введеними руками'},
+    # ── додано 10.10.2026 за підсумком аудиту API ──
+    'chat.rooms': {'fn': chat_rooms, 'params': ['limit'], 'risk': 'R0',
+                   'about': 'Prom: кімнати чату з покупцями'},
+    'chat.history': {'fn': chat_history, 'params': ['limit', 'status'],
+                     'risk': 'R0', 'about': 'Prom: історія листування'},
+    'chat.send': {'fn': chat_send,
+                  'params': ['room_ident', 'user_id', 'text'], 'risk': 'R3',
+                  'about': 'Prom: написати покупцю ПЕРШИМ (до 2000 знаків)'},
+    'epicentr.attributes': {'fn': epicentr_attributes,
+                            'params': ['code', 'limit'], 'risk': 'R0',
+                            'about': 'Єпіцентр: довідник атрибутів і значень'},
+    'epicentr.cards': {'fn': epicentr_cards, 'params': [], 'risk': 'R0',
+                       'about': 'Єпіцентр: картки за статусом'},
+    'rozetka.orders': {'fn': rozetka_orders, 'params': ['limit'], 'risk': 'R0',
+                       'about': 'Rozetka: останні замовлення'},
+    'rozetka.reviews': {'fn': rozetka_reviews, 'params': ['limit'],
+                        'risk': 'R0', 'about': 'Rozetka: відгуки про магазин'},
+    'rozetka.review_reply': {'fn': rozetka_review_reply,
+                             'params': ['review_id', 'text'], 'risk': 'R2',
+                             'about': 'Rozetka: відповісти на відгук'},
 }
 
 
@@ -313,6 +469,64 @@ def parse(text):
     t = (text or '').strip()
     low = t.lower()
     nums = [int(n) for n in re.findall(r'\d+', t)]
+
+    # ── нові родини, додані 10.10.2026 ────────────────────────────
+    # Порядок має значення: гілка «епіцентр» нижче перехоплює БУДЬ-ЯКУ
+    # фразу про Єпіцентр, а гілка «чат» — вела б на messages.list.
+    # Тому вузьке перевіряємо першим, широке — потім.
+
+    if any(w in low for w in ('атрибут', 'характеристик', 'довідник')):
+        code = re.search(r'\b([a-z][a-z0-9_-]{2,})\b', low.split('атрибут')[-1])
+        p = {}
+        if code and code.group(1) not in ('епіцентр', 'епицентр'):
+            p['code'] = code.group(1)
+        return {'command': 'epicentr.attributes', 'params': p}
+
+    if 'картк' in low and ('епіцентр' in low or 'епицентр' in low
+                           or 'статус' in low or 'скільки' in low):
+        return {'command': 'epicentr.cards', 'params': {}}
+
+    if any(w in low for w in ('відгук', 'отзыв', 'рейтинг')):
+        # «відповісти на відгук 123 текст» — запис; просто «відгуки» — читання.
+        if any(w in low for w in ('відпов', 'відпиши', 'відкаж')) and nums:
+            rid = nums[0]
+            tail = t[t.find(str(rid)) + len(str(rid)):].strip(' :,—-')
+            if not tail:
+                return {'command': 'rozetka.review_reply', 'params': {'review_id': rid},
+                        'брак': ['текст відповіді']}
+            return {'command': 'rozetka.review_reply',
+                    'params': {'review_id': rid, 'text': tail}}
+        return {'command': 'rozetka.reviews', 'params': {'limit': 10}}
+
+    if 'розетк' in low or 'rozetka' in low:
+        return {'command': 'rozetka.orders', 'params': {'limit': 10}}
+
+    if 'кімнат' in low or 'чати' in low or 'листуванн' in low:
+        return {'command': 'chat.rooms' if 'кімнат' in low or 'чати' in low
+                else 'chat.history', 'params': {'limit': 20}}
+
+    if 'напиши покупц' in low or 'повідом покупц' in low:
+        # Адресат: room_ident виду 44332113_4053918_buyer або голий id.
+        # Текст беремо ЛИШЕ ПІСЛЯ адресата — та сама пастка, що з артикулом:
+        # інакше слово-тригер зараховує саме себе.
+        p, key = {}, None
+        ident = re.search(r'\b(\d+_\d+_buyer)\b', t)
+        uid = None if ident else re.search(r'покупц\w*\s+(\d{4,})', low)
+        if ident:
+            p['room_ident'], key = ident.group(1), ident.group(1)
+        elif uid:
+            p['user_id'], key = uid.group(1), uid.group(1)
+        after = t[t.find(key) + len(key):] if key else ''
+        body = after.strip(' :,—-')
+        if body:
+            p['text'] = body
+        брак = []
+        if not key:
+            брак.append('кімната виду 44332113_4053918_buyer або id покупця')
+        if not body:
+            брак.append('текст повідомлення')
+        return ({'command': 'chat.send', 'params': p, 'брак': брак} if брак
+                else {'command': 'chat.send', 'params': p})
 
     if 'епіцентр' in low or 'епицентр' in low or 'epicentr' in low:
         if nums and nums[0] > 1000:
@@ -367,7 +581,10 @@ def parse(text):
             return {'command': 'ttn.create', 'params': {}, 'брак': ['order_id']}
         return {'command': 'ttn.create', 'params': {'order_id': nums[0]}}
 
-    if any(w in low for w in ('відповід', 'відпиши', 'напиши покупц', 'відкаж')):
+    # «відповід» НЕ міститься у «відповісти» (там «відповіс») — 10.10 через
+    # це найприродніша фраза «відповісти 123 текст» не розпізнавалась
+    # узагалі. Спільна основа — «відпов».
+    if any(w in low for w in ('відпов', 'відпиши', 'напиши покупц', 'відкаж')):
         # Текст відповіді — усе після номера гілки.
         if not nums:
             return {'command': 'messages.reply', 'params': {},
@@ -392,6 +609,13 @@ def parse(text):
 
     if any(w in low for w in ('питанн', 'запитанн', 'повідомленн', 'чат')):
         return {'command': 'messages.list', 'params': {'limit': 20}}
+
+    # Статус названо прямо — «замовлення 123 отримано». Доти працювало лише
+    # зі словом «статус» чи «познач», а це не те, як говорять.
+    if nums and nums[0] > 1000 and any(k in low for k in STATUS_WORDS):
+        st = next(v for k, v in STATUS_WORDS.items() if k in low)
+        return {'command': 'orders.set_status',
+                'params': {'order_id': nums[0], 'status': st}}
 
     if any(w in low for w in ('замовл', 'заказ', 'продаж')):
         if nums and nums[0] > 1000:      # номер замовлення, а не «покажи 5»
