@@ -1,6 +1,6 @@
 // Офлайн-оболонка. Версію піднімати при зміні будь-якого файлу зі списку,
 // інакше браузер віддасть старе з кешу.
-const V = 'mp-panel-v5';
+const V = 'mp-panel-v6';
 const SHELL = [
   './', './index.html', './bridge.html', './app.css', './app.js', './data.json',
   './commands.json', './manifest.webmanifest'

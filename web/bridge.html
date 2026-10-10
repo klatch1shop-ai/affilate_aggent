@@ -27,6 +27,9 @@
      терміналі й забирає звідти <b>рівно одну</b> фінальну відповідь.
      Проміжні репліки між викликами інструментів сюди не потрапляють —
      відбираємо тільки ті, що завершують хід.</p>
+  <div class="note"><b>Що сюди потрапляє.</b> Текст, який я написав вам у
+     терміналі. Прив'язка — за номером вашого питання, а не за годинником:
+     інакше, якщо сесія зайнята, у веб прийшла б відповідь на чужу задачу.</div>
 
   <div class="note" id="state">перевіряю стан сесії…</div>
 
@@ -86,7 +89,7 @@ document.getElementById('go').onclick = async () => {
     const кінець = Date.now() + 1000 * 60 * 10;
     while (Date.now() < кінець) {
       await new Promise(s => setTimeout(s, 4000));
-      const p = await (await fetch('/api/bridge/poll?%D0%BC%D1%96%D1%82%D0%BA%D0%B0=' + encodeURIComponent(r.мітка))).json();
+      const p = await (await fetch('/api/bridge/poll?id=' + encodeURIComponent(r.id))).json();
       if (p.готово) {
         wait.querySelector('.meta').textContent = 'Claude · ' + new Date(p.час).toLocaleTimeString('uk-UA');
         const m = wait.querySelector('.msg');
