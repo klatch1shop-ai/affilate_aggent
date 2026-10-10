@@ -62,7 +62,13 @@ def main():
     if a.cmd == 'нове':
         rows = DB.board_new_for_claude()
         unread = DB.chat_unread('власник')
-        print(f'НОВІ ІДЕЇ ВЛАСНИКА ({len(rows)}):')
+        # Останні 10 — завжди перед очима. Прохання власника 10.10: без
+        # попередніх реплік відповідь виходить відірваною від розмови.
+        print('ОСТАННІ 10 РЕПЛІК:')
+        for m in DB.chat_tail(10):
+            хто = 'Claude ' if m['role'] == 'claude' else 'власник'
+            print(f'  [{дата(m["created"])}] {хто} {m["text"][:150]}')
+        print(f'\nНОВІ ІДЕЇ ВЛАСНИКА ({len(rows)}):')
         show_board(rows)
         print(f'\nНЕПРОЧИТАНІ ПОВІДОМЛЕННЯ ({len(unread)}):')
         for m in unread:
@@ -81,6 +87,10 @@ def main():
 
     elif a.cmd == 'відповісти':
         i = DB.chat_add('claude', a.текст)
+        print('контекст (останні 10):')
+        for m in DB.chat_tail(10):
+            хто = 'Claude ' if m['role'] == 'claude' else 'власник'
+            print(f'  [{дата(m["created"])}] {хто} {m["text"][:110]}')
         try:
             from tools.notify_owner import notify
             notify(f'💬 Відповідь у панелі:\n{a.текст[:900]}')

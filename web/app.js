@@ -298,6 +298,8 @@ async function boot() {
     const n = (st.дошка || {}).усього || 0;
     const el2 = document.querySelector('[data-n="zavdannya"]');
     if (el2) el2.textContent = n || '';
+    chatBadge();
+    setInterval(chatBadge, 20000);
   } catch (e) {
     LIVE = false;
     document.getElementById('stamp').textContent += ' · офлайн';
@@ -530,14 +532,23 @@ function drawChat() {
   async function load() {
     try {
       const rows = await API.get('/chat?limit=60');
-      document.getElementById('c-list').innerHTML = rows.length ? rows.map(m => `
-        <div style="margin-bottom:14px;${m.role === 'claude' ? '' : 'padding-left:0'}">
-          <div style="font-size:12px;color:var(--ink-3);margin-bottom:4px">
-            ${m.role === 'claude' ? 'Claude' : 'ви'} · ${new Date(m.created * 1000).toLocaleString('uk-UA')}
+      // Стан повідомлення показуємо завжди. 10.10 власник написав і
+      // лишився ні з чим: відповіді не було, а сторінка про це мовчала.
+      // Мовчання гірше за «чекає» — людина не знає, чи дійшло взагалі.
+      document.getElementById('c-list').innerHTML = rows.length ? rows.map(m => {
+        const мій = m.role !== 'claude';
+        const стан = !мій ? ''
+          : m.прочитано ? '<span class="pill ok" style="font-size:11px;padding:1px 8px">я прочитав</span>'
+                        : '<span class="pill warn" style="font-size:11px;padding:1px 8px">доставлено, чекає на мене</span>';
+        return `
+        <div style="margin-bottom:14px">
+          <div style="font-size:12px;color:var(--ink-3);margin-bottom:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span>${m.role === 'claude' ? 'Claude' : 'ви'} · ${new Date(m.created * 1000).toLocaleString('uk-UA')}</span>
+            ${стан}
           </div>
           <div style="background:${m.role === 'claude' ? 'var(--brand-wash)' : 'var(--surface-2)'};
                border-radius:12px;padding:12px 14px;white-space:pre-wrap">${esc(m.text)}</div>
-        </div>`).join('') : '<p>Поки порожньо.</p>';
+        </div>`; }).join('') : '<p>Поки порожньо.</p>';
       const l = document.getElementById('c-list'); l.scrollTop = l.scrollHeight;
     } catch (e) { document.getElementById('c-list').innerHTML = offline('Чат'); }
   }
@@ -548,5 +559,20 @@ function drawChat() {
     catch (e) { alert('Бекенд не відповідає — повідомлення не надіслано'); }
   };
   load();
-  setInterval(() => { if (location.hash === '#chat') load(); }, 15000);
+  setInterval(load, 12000);
+}
+
+/* Значок у панелі навігації: скільки відповідей Claude ви ще не бачили.
+   Працює на будь-якому розділі, щоб нова відповідь не чекала, доки
+   хтось відкриє саме чат. */
+let SEEN_CHAT = 0;
+async function chatBadge() {
+  try {
+    const rows = await API.get('/chat?limit=40');
+    const last = rows.length ? rows[rows.length - 1].id : 0;
+    const нових = rows.filter(m => m.role === 'claude' && m.id > SEEN_CHAT).length;
+    const el = document.querySelector('[data-n="chat"]');
+    if (el) el.textContent = нових ? '●' : '';
+    if (location.hash === '#chat') SEEN_CHAT = last;
+  } catch (e) { /* бекенд офлайн — значок просто не оновиться */ }
 }
