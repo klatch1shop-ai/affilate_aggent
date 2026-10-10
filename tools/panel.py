@@ -87,16 +87,19 @@ def main():
 
     elif a.cmd == 'відповісти':
         i = DB.chat_add('claude', a.текст)
+        # У помічника не дублюємо — рішення власника 10.10: взаємодію
+        # відпрацьовуємо через веб. Увімкнути назад: PANEL_TG_ECHO=1.
         print('контекст (останні 10):')
         for m in DB.chat_tail(10):
             хто = 'Claude ' if m['role'] == 'claude' else 'власник'
             print(f'  [{дата(m["created"])}] {хто} {m["text"][:110]}')
-        try:
-            from tools.notify_owner import notify
-            notify(f'💬 Відповідь у панелі:\n{a.текст[:900]}')
-        except Exception:
-            pass
-        print(f'надіслано (#{i}) — видно в панелі й у Telegram')
+        if os.getenv('PANEL_TG_ECHO', '0') == '1':
+            try:
+                from tools.notify_owner import notify
+                notify(f'💬 Відповідь у панелі:\n{a.текст[:900]}')
+            except Exception:
+                pass
+        print(f'надіслано (#{i}) — видно в панелі')
 
     elif a.cmd == 'завдання':
         i = DB.board_add(a.вид, a.назва, a.тіло, author='claude', напрям=a.напрям)

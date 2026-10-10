@@ -347,7 +347,7 @@ const offline = (what) => `<div class="note"><b>Бекенд не відпові
 function drawPult() {
   const v = document.querySelector('#v-pult .sec');
   v.innerHTML = head('Пульт', 'Виконати команду',
-    'Напишіть фразу так, як сказали б у Telegram, або виберіть команду зі списку. Читання виконується одразу. Ризиковані дії панель лише ПРОПОНУЄ — підтвердження приходить у бот.')
+    'Напишіть фразу або виберіть команду зі списку. Читання виконується одразу, тут же. Ризиковані дії панель лише ПРОПОНУЄ — підтвердження навмисно приходить у бот, щоб згода йшла іншим каналом, ніж прохання.')
     + `<div class="card" style="margin-bottom:16px">
          <div style="display:flex;gap:8px;flex-wrap:wrap">
            <input id="p-say" placeholder="наприклад: відгуки розетки"
@@ -382,7 +382,7 @@ function drawPult() {
       } else {
         show(`<div class="card"><h3>Готово</h3>
           <pre class="mono" style="white-space:pre-wrap;max-height:420px;overflow:auto">${pretty(r.результат)}</pre>
-          <div style="margin-top:10px;font-size:13px;color:var(--ink-3)">те саме надіслано в Telegram</div></div>`);
+          <div style="margin-top:10px;font-size:13px;color:var(--ink-3)">виконано тут; у помічника не дублюється</div></div>`);
       }
       loadRuns();
     } catch (e) { show(`<div class="card">${offline('Виконання команд')}</div>`); }
@@ -516,7 +516,7 @@ function drawTasks() {
 function drawChat() {
   const v = document.querySelector('#v-chat .sec');
   v.innerHTML = head('Чат', 'Листування зі мною',
-    'Повідомлення лягає в базу й одразу дублюється вам у Telegram. Я читаю його, коли працюю, і відповідаю сюди ж.')
+    'Усе листування живе тут, у помічника не дублюється. Я читаю ваше повідомлення, коли працюю, і відповідаю сюди ж.')
     + `<div class="note"><b>Чесно про затримку.</b> Це не миттєвий чат: із сесією, що відкрита
          в терміналі, веб говорити не може — це різні процеси. Тому відповідь приходить тоді,
          коли я працюю. Миттєвий варіант можливий окремо, але він коштує грошей за токени —
