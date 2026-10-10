@@ -29,8 +29,12 @@ import xml.etree.ElementTree as ET
 # Останній фільтр перед фідом. Ті самі правила, що й у перевірці, але
 # застосовані до ВЖЕ ЗБЕРЕЖЕНИХ черг: 04.10 сім ключів зі словами «ціна» і
 # «купити» вже лежали в черзі, коли фільтр додали в перевірку.
-BANNED = re.compile(r'\b(купити|купить|замовити|заказать|недорого|ціна|цена|'
-                    r'київ|киев|україна|украина|доставка)\b', re.I)
+# Межа слова тільки НА ПОЧАТКУ. 04.10: з \b і в кінці фільтр пропускав
+# «недорогой», «украинская» — після стему йде літера, межі там немає, і
+# 14 таких ключів дійшли до фіду. Межа в кінці ще й шкідлива: без неї на
+# початку «цена» знаходиться всередині «сценариями».
+BANNED = re.compile(r'\b(купит|купувати|купити|замовит|заказат|недорог|дешев|'
+                    r'цін|цена|київ|киев|україн|украин|доставк)', re.I)
 
 
 def clean(k):
@@ -43,21 +47,38 @@ LIMIT = 9
 PILOT = os.path.join(BASE, 'data', 'prom', 'kw_expert_pilot.json')
 
 
-def load_all(variant='c'):
-    """Результати прогонів. За замовчуванням варіант В — він переміг у
-    досліді 04.10 на тих самих 25 картках: більше ключів, краща
-    різноманітність (3.0 проти 3.9 фраз з однаковою основою), на чверть
-    більше прибраного сміття, втричі більше транслітерацій бренду.
-    Варіант А лишається в окремих чергах як запасний.
+def load_all(variants=('c', 'a'), a_only=('БДСМ-игрушки',)):
+    """Результати прогонів, кілька варіантів разом.
+
+    Варіант C — перевірений метод. Варіант A лишився від прогонів Codex
+    (категорія БДСМ, 436 карток) і теж іде у фід, щоб робота не пропала.
+    Якщо картка є в обох, перемагає C — він вигравав у досліді 04.10.
+
+    04.10: тут був дефект. Для варіанта A суфікс ставав просто «.json» і
+    збігався З УСІМА файлами, зокрема «_c.json», тобто варіанти тихо
+    змішувались. Тепер «a» — це явно файл БЕЗ літерного суфікса.
     """
+    if isinstance(variants, str):
+        variants = (variants,)
     cards = {}
-    suffix = f'_{variant}.json' if variant != 'a' else '.json'
-    for path in glob.glob(os.path.join(BASE, 'data', 'kw_queue', '*')):
-        if not path.endswith(suffix) or path.endswith('.lock'):
-            continue
-        d = json.load(open(path, encoding='utf-8'))
-        for pid, row in (d.get('cards') or {}).items():
-            cards[pid] = row
+    # Зворотний порядок: перший у списку має перемагати, тому кладемо його
+    # останнім і він перезаписує попередні.
+    for variant in reversed(list(variants)):
+        for path in sorted(glob.glob(os.path.join(BASE, 'data', 'kw_queue', '*.json'))):
+            base = os.path.basename(path)[:-len('.json')]
+            tail = re.search(r'_([a-z])$', base)
+            got = tail.group(1) if tail else 'a'
+            if got != variant:
+                continue
+            # Варіант A беремо ВИБІРКОВО. У чергах варіанта A лежить 4349
+            # карток зі старих прогонів, і вносити їх гуртом — це інша,
+            # ширша зміна, якої ніхто не просив. Сюди пускаємо лише ті
+            # категорії, які свідомо доробили.
+            if variant == 'a' and a_only is not None and base not in a_only:
+                continue
+            d = json.load(open(path, encoding='utf-8'))
+            for pid, row in (d.get('cards') or {}).items():
+                cards[pid] = row
     if cards:
         return cards
     for path in glob.glob(os.path.join(BASE, 'exports', 'prom_kw_expert_*.json')):
@@ -67,10 +88,46 @@ def load_all(variant='c'):
     return cards
 
 
+def shared_and_name_keys(tree):
+    """Ключі, які МОЖНА прибрати, пораховані на самому фіді.
+
+    04.10: перелік на видалення зберігався текстом ключа, але фід
+    перезбирається з нуля при кожній публікації, і генератор видає трохи
+    інші фрази — «вакуумный стимулятор сатисфайер» замість «вакуумный
+    клиторальный стимулятор satisfyer». Жоден збережений ключ не збігався,
+    і внесення мовчки робило нуль.
+
+    Критерій той самий, що й був, але рахується ТУТ І ЗАРАЗ:
+      * ключ стоїть на 50+ картках — внутрішня конкуренція;
+      * усі слова ключа вже є в назві — назва важить більше, а за правилом
+        Prom часткова відповідність у назві + часткова в ключах виводить
+        товар із видачі.
+    """
+    offers = list(tree.getroot().iter('offer'))
+    freq = {t: {} for t in ('keywords', 'keywords_ua')}
+    for o in offers:
+        for t in freq:
+            for k in (o.findtext(t) or '').split(','):
+                k = k.strip().lower()
+                if k:
+                    freq[t][k] = freq[t].get(k, 0) + 1
+    return freq
+
+
+def removable_now(o, key, tag, freq):
+    k = key.strip().lower()
+    if freq[tag].get(k, 0) >= 50:
+        return True
+    name = (o.findtext('name' if tag == 'keywords' else 'name_ua') or '').lower()
+    words = set(re.findall(r'\w+', k))
+    return bool(words) and words <= set(re.findall(r'\w+', name))
+
+
 def main(src, out, write):
     cards = load_all()
     print(f'карток із експертними ключами: {len(cards)}')
     tree = ET.parse(src)
+    freq = shared_and_name_keys(tree)
     removed = added = touched = 0
     for o in tree.getroot().iter('offer'):
         row = cards.get(o.get('id'))
@@ -81,7 +138,19 @@ def main(src, out, write):
             el = o.find(tag)
             have = [k.strip() for k in ((el.text or '') if el is not None else '').split(',')
                     if k.strip()]
-            drop = {d['k'] for d in row['remove'] if d['tag'] == tag}
+            # Скільки місця потрібно під нові ключі — стільки й звільняємо,
+            # починаючи з найгірших (найчастіших у каталозі).
+            # Звільняти РІВНО стільки, скільки реально зайдемо. Дубль із
+            # наявним ключем теж відкидається, інакше 04.10 на 258 картках
+            # слот звільнявся під пропозицію, яка потім не проходила, і
+            # картка лишалась БІДНІШОЮ, ніж була.
+            have_low = {k.lower() for k in have}
+            want = len([a for a in row['add'][tag]
+                        if clean(a['k']) and a['k'].lower() not in have_low])
+            cand = [k for k in have if removable_now(o, k, tag, freq)]
+            cand.sort(key=lambda k: -freq[tag].get(k.strip().lower(), 0))
+            need = max(0, want - (LIMIT - len(have)))
+            drop = {k.lower() for k in cand[:need]}
             kept = [k for k in have if k.lower() not in drop]
             removed += len(have) - len(kept)
             low = {k.lower() for k in kept}

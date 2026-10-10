@@ -35,17 +35,44 @@ class Crm:
         self.ctx = self.b.new_context(viewport={'width': 1600, 'height': 1000}, locale='uk-UA', **kw)
         self.pg = self.ctx.new_page()
 
-    def api(self, path):
+    def api(self, path, _retry=True):
         """GET внутрішнього API сайту. Потрібен заголовок x-auth-token = localStorage['token']
-        (без нього сервер віддає HTML). Перехоплення відповідей було ненадійним (15.09)."""
+        (без нього сервер віддає HTML). Перехоплення відповідей було ненадійним (15.09).
+
+        06.10.2026: токен у профілі браузера пережив техроботи постачальника,
+        але сервер його вже не приймав — 403 «Invalid credentials.». Вхід при
+        цьому «проходив», бо login() бачив позначку `logged` і не входив
+        наново. Замовлення 908008800 застрягло з готовою ТТН, і дооформити
+        його довелось руками. Тому: 403 → чистимо сховище, входимо наново,
+        пробуємо ОДИН раз.
+        """
         if not self.pg.url.startswith(BASE):
             self.open('/uk/catalog')
-        return self.pg.evaluate("""async (path) => {
+        res = self.pg.evaluate("""async (path) => {
           const r = await fetch(path, {headers: {'x-auth-token': localStorage.getItem('token') || '',
                                                  'accept': 'application/json, text/plain, */*'}});
-          if (!(r.headers.get('content-type') || '').includes('json')) return {__error: r.status};
-          return await r.json();
+          const ct = r.headers.get('content-type') || '';
+          if (!ct.includes('json')) return {__error: r.status};
+          const body = await r.json();
+          return {__status: r.status, __body: body};
         }""", path)
+        if isinstance(res, dict) and '__error' in res:
+            return res
+        status = res.get('__status') if isinstance(res, dict) else None
+        body = res.get('__body') if isinstance(res, dict) else res
+        # Повторюємо на БУДЬ-ЯКІЙ невдалій відповіді, а не лише 401/403:
+        # 06.10 на протухлий токен сервер віддав 403 «Invalid credentials»,
+        # а на поламаний — 500 «Internal Server Error». Вгадувати код марно,
+        # тому один повтор зі свіжим входом покриває обидва. Рівно один —
+        # зациклитись не можна.
+        if (status is None or status >= 400) and _retry:
+            self.pg.evaluate("()=>localStorage.clear()")
+            self.pg.goto(f'{BASE}/uk/catalog', wait_until='domcontentloaded', timeout=60000)
+            self.pg.wait_for_timeout(2000)
+            self.login()
+            self.pg.wait_for_timeout(1500)
+            return self.api(path, _retry=False)
+        return body
 
     def open(self, path):
         self.pg.goto(f'{BASE}{path}', wait_until='networkidle', timeout=60000)
@@ -104,7 +131,19 @@ class Crm:
         Суму до сплати брати з «Історії замовлень» / листа."""
         data = self.api('/uk/inner/cart?id=0&{}')
         if not isinstance(data, dict) or '__error' in data or 'cart' not in data:
-            sys.exit(f'кошик не прочитано: {data if isinstance(data, dict) else type(data)}')
+            # 06.10: під час технічних робіт API постачальника віддає
+            # «Invalid credentials.» — це НЕ про наш пароль, і повідомлення
+            # повело діагностику хибним слідом на годину. Тому дивимось на
+            # сторінку: якщо там банер техробіт, так і кажемо.
+            hint = ''
+            try:
+                body = self.pg.inner_text('body')[:600]
+                if 'технічн' in body.lower() or 'недоступн' in body.lower():
+                    hint = ' — САЙТ ПОСТАЧАЛЬНИКА НА ТЕХНІЧНИХ РОБОТАХ'
+            except Exception:
+                pass
+            sys.exit(f'кошик не прочитано: '
+                     f'{data if isinstance(data, dict) else type(data)}{hint}')
         out = {}
         for c in data['cart']:
             for it in c.get('cartItems') or []:

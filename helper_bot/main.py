@@ -37,7 +37,9 @@ load_dotenv(BASE / '.env')
 from helper.access import is_allowed, parse_ids                     # noqa: E402
 from helper.ack import AckStore                                     # noqa: E402
 from helper.digest import build_digest, due                         # noqa: E402
-from helper.keyboards import MENU, to_query                         # noqa: E402
+from helper.keyboards import MENU, SUPERBOT, to_query                # noqa: E402
+from helper.supervisor import Supervisor                            # noqa: E402
+from helper.confirm import ConfirmStore                             # noqa: E402
 from tg_dispatcher.ai_brain import commands                         # noqa: E402
 from helper.feeds import feeds_status                               # noqa: E402
 from helper.inbox_cycle import DeliveryQueue, InboxCycle            # noqa: E402
@@ -58,6 +60,14 @@ TOKEN = os.getenv('HELPER_BOT_TOKEN', '')
 ADMIN_ID = int(os.getenv('TELEGRAM_ADMIN_ID', '0') or 0)
 ALLOWED = parse_ids(os.getenv('HELPER_ALLOWED_IDS') or str(ADMIN_ID or ''))
 REPLY_MODE = os.getenv('HELPER_REPLY_MODE', 'draft')
+
+# Режими виконання команд «СУПЕРБОТА». `confirm.gate()` за замовчуванням дає
+# 'off' → дія пропускається; на презентації це виглядало б як поломка, тому
+# режими задані явно. Кожна з цих дій усе одно проходить через підтвердження
+# власника, тому 'live' тут означає «виконати ПІСЛЯ натискання», а не «само».
+# HELPER_SUPER_MODE=test переводить усі три в холостий прогін.
+_SM = os.getenv('HELPER_SUPER_MODE', 'live')
+SUPER_MODES = {'orders.set_status': _SM, 'messages.reply': _SM, 'ttn.create': _SM}
 POLL_SEC = int(os.getenv('HELPER_POLL_SEC', '300'))
 # Бази — поза репозиторієм: data/ у git не ігнорується, а тут дані покупців.
 DATA = Path(os.getenv('HELPER_DATA_DIR', str(Path.home() / 'helper_data')))
@@ -418,6 +428,11 @@ class RozetkaChats:
 
 
 def _init_db():
+    # Сховище підтверджень для режиму керування — у файлі, а не в памʼяті:
+    # підтвердження мусить переживати перезапуск бота, інакше власник
+    # натисне «виконати» на дію, якої вже немає.
+    STATE['confirm'] = ConfirmStore(str(DATA / 'confirm.db'))
+    STATE['super'] = Supervisor(store=STATE['confirm'], modes=SUPER_MODES)
     STATE['store'] = InboxStore(str(DATA / 'inbox.db'))
     STATE['queue'] = DeliveryQueue(str(DATA / 'queue.db'))
     STATE['ack'] = AckStore(str(DATA / 'ack.db'))
@@ -511,6 +526,46 @@ async def on_vscode(message: Message):
                          f'<i>{body[:300]}</i>', reply_markup=KEYBOARD)
 
 
+@dp.message(F.text == SUPERBOT)
+async def on_superbot(message: Message):
+    """Кнопка «СУПЕРБОТ» — вхід у режим керування.
+
+    Стоїть ПЕРЕД on_reply і on_text: інакше натискання розібралось би як
+    звичайне питання до бота.
+    """
+    if not allowed(message):
+        return
+    await message.answer(STATE['super'].on(), reply_markup=KEYBOARD)
+
+
+@dp.callback_query(F.data.startswith('do:'))
+async def on_super_do(call: CallbackQuery):
+    """«Виконати» під пропозицією дії."""
+    if not call.from_user or not is_allowed(call.from_user.id, ALLOWED):
+        return await call.answer('Немає доступу')
+    action_id = call.data.split(':', 1)[1]
+    now = datetime.now(timezone.utc)
+    def do():
+        STATE['confirm'].approve(action_id, user_id=call.from_user.id, now=now)
+        return STATE['super'].execute(action_id, user_id=call.from_user.id, now=now)
+    try:
+        text = await in_db(do)
+    except Exception as exc:
+        text = f'збій: {type(exc).__name__}: {exc}'
+    await call.message.answer(text[:4000], parse_mode=None)
+    await call.answer()
+
+
+@dp.callback_query(F.data.startswith('no:'))
+async def on_super_no(call: CallbackQuery):
+    if not call.from_user or not is_allowed(call.from_user.id, ALLOWED):
+        return await call.answer('Немає доступу')
+    action_id = call.data.split(':', 1)[1]
+    await in_db(lambda: STATE['confirm'].reject(
+        action_id, user_id=call.from_user.id, now=datetime.now(timezone.utc)))
+    await call.answer('Скасовано')
+
+
 @dp.message(F.reply_to_message, F.text)
 async def on_reply(message: Message):
     if not allowed(message):
@@ -529,6 +584,20 @@ async def on_reply(message: Message):
 async def on_text(message: Message):
     if not allowed(message):
         return
+    # Режим керування має пріоритет: доки він увімкнений, текст власника —
+    # це команда, а не питання. Поза режимом handle() повертає None.
+    out = await in_db(lambda: STATE['super'].handle(
+        message.text, user_id=message.from_user.id if message.from_user else None))
+    if out is not None:
+        kb = None
+        if out.startswith(('❓', '⚠️')):
+            act = STATE['confirm'].pending(datetime.now(timezone.utc))
+            if act:
+                aid = act[-1]['id']
+                kb = InlineKeyboardMarkup(inline_keyboard=[[
+                    InlineKeyboardButton(text='✅ Виконати', callback_data=f'do:{aid}'),
+                    InlineKeyboardButton(text='✖️ Скасувати', callback_data=f'no:{aid}')]])
+        return await message.answer(out[:4000], parse_mode=None, reply_markup=kb or KEYBOARD)
     query = to_query(message.text)
     if intents_help(query):
         text = help_text()

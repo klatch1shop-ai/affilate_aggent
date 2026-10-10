@@ -205,6 +205,82 @@ def call_cerebras(prompt, timeout=120, model=None, max_tokens=None):
                                'CEREBRAS_API_KEY', model or CEREBRAS_MODEL, prompt, timeout, max_tokens)
 
 
+DEEPSEEK_MODEL = os.getenv('DEEPSEEK_MODEL', 'deepseek-flash')
+
+
+# Два рівні сили. Перевірено викликом /models 04.10.2026: обидві моделі
+# приймають effort low/high/max, типовий — high.
+DEEPSEEK_PRO = 'deepseek-v4-pro'      # найсильніша; для коду й складних задач
+DEEPSEEK_FAST = 'deepseek-flash'      # для масових дешевих прогонів
+
+
+def call_deepseek(prompt, timeout=180, model=None, max_tokens=None,
+                  image_bytes=None, image_mime=None, thinking=False,
+                  effort=None, system=None):
+    """DeepSeek (OpenAI-сумісний). Повертає (текст, модель, usage).
+
+    ВАЖЛИВО ПРО ГРОШІ (з відповідей підтримки, 04.10.2026):
+
+    * МІРКУВАННЯ ВИМКНЕНЕ за замовчуванням. Типовий рівень у DeepSeek —
+      `high`, і токени роздумів рахуються як ВИХІДНІ, а вихід коштує
+      вчетверо дорожче за вхід. Для простих задач роздуми дають у 5-10
+      разів більше токенів, ніж видима відповідь, і всі оплачуються. На
+      Gemini ми на цьому вже обпеклись: відповідь обривалась посеред
+      слова, і я підняв ліміт замість того, щоб вимкнути роздуми.
+    * КЕШ вхідних токенів автоматичний, але лише на БАЙТОВО ТОЧНОМУ
+      префіксі від нульового токена, мінімум 64 токени. Тому незмінну
+      частину запиту тримати ПЕРШОЮ й не міняти жодного пробілу.
+      Влучання: $0.003/1M проти $0.15/1M промаху — у 50 разів.
+    * ЗНИЖКА поза піком — удвічі, і визначається за часом ПОЧАТКУ запиту.
+      Пік: 01:00-04:00 і 06:00-10:00 UTC, пн-пт. Решта — дешево.
+    * ФОТО коштує максимум 384 токени незалежно від розміру; стискати
+      перед надсиланням сенсу немає, API зменшує сам.
+
+    МЕЖА ДАНИХ (рішення власника 04.10): сюди можна дані ТОВАРІВ — вони
+    публічні. Дані замовлень і покупців — НІКОЛИ: навчання на даних
+    увімкнене за замовчуванням і вимкнути його на рівні API не можна.
+    """
+    key = os.getenv('DEEPSEEK_API_KEY')
+    if not key:
+        raise RuntimeError('DEEPSEEK_API_KEY не заданий')
+    content = [{'type': 'text', 'text': prompt}]
+    if image_bytes:
+        import base64
+        b64 = base64.b64encode(image_bytes).decode()
+        content.append({'type': 'image_url', 'image_url': {
+            'url': f"data:{image_mime or 'image/jpeg'};base64,{b64}"}})
+    msgs = []
+    if system:
+        # Незмінна частина — ПЕРШОЮ: кеш префікса байтово точний від нульового
+        # токена, і влучання дешевше за промах у 50 разів.
+        msgs.append({'role': 'system', 'content': system})
+    msgs.append({'role': 'user', 'content': content})
+    body = {'model': model or DEEPSEEK_MODEL, 'messages': msgs,
+            'max_tokens': max_tokens or 4096}
+    if effort:
+        # Для коду потрібен саме max; на масових прогонах він надто дорогий,
+        # бо токени роздумів рахуються як вихідні (вчетверо дорожче за вхід).
+        body['effort'] = effort
+        thinking = True
+    if not thinking:
+        body['thinking'] = {'type': 'disabled'}
+    r = requests.post('https://api.deepseek.com/chat/completions', timeout=timeout,
+                      headers={'Authorization': f'Bearer {key}',
+                               'Content-Type': 'application/json'}, json=body)
+    if r.status_code != 200:
+        raise RuntimeError(f'DeepSeek HTTP {r.status_code}: {r.text[:200]}')
+    d = r.json()
+    text = ((d.get('choices') or [{}])[0].get('message') or {}).get('content') or ''
+    u = d.get('usage') or {}
+    usage = {'вхід': u.get('prompt_tokens'), 'вихід': u.get('completion_tokens'),
+             'кеш_влучань': u.get('prompt_cache_hit_tokens'),
+             'кеш_промахів': u.get('prompt_cache_miss_tokens')}
+    if not text:
+        raise RuntimeError(f'DeepSeek: порожня відповідь, причина '
+                           f'{(d.get("choices") or [{}])[0].get("finish_reason")}')
+    return text, (model or DEEPSEEK_MODEL), usage
+
+
 def call_openrouter(prompt, timeout=120, model=None, max_tokens=None):
     """OpenRouter — пул безкоштовних моделей (`:free`) різних провайдерів під одним ключем."""
     return _call_openai_compat('https://openrouter.ai/api/v1/chat/completions',
