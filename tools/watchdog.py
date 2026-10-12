@@ -464,7 +464,10 @@ def check_noire_feed() -> dict:
         problems.append(bad)
 
     if problems:
-        key = "; ".join(problems)[:200]
+        # Кожна проблема — або рядок, або пара (стала частина, змінна).
+        сталі = [p[0] if isinstance(p, tuple) else p for p in problems]
+        повні = [(p[0] + p[1]) if isinstance(p, tuple) else p for p in problems]
+        key = "; ".join(сталі)[:200]
         last = ""
         if os.path.exists(NOIRE_FLAG):
             try:
@@ -475,7 +478,7 @@ def check_noire_feed() -> dict:
             tg(f"🚨 <b>Watchdog NOIRE</b>: {key}")
             Path(NOIRE_FLAG).write_text(key)
         log(f"[noire] ПРОБЛЕМА: {key}")
-        return {"ok": False, "msg": key[:80]}
+        return {"ok": False, "msg": "; ".join(повні)[:80]}
 
     if os.path.exists(NOIRE_FLAG):
         os.remove(NOIRE_FLAG)
@@ -611,6 +614,38 @@ def check_rozetka_messages() -> dict:
         return {"ok": False, "msg": f"нових повідомлень: {len(fresh)}"}
     return {"ok": True, "msg": f"нових немає (всього {len(items)})"}
 
+def check_git_rebase() -> dict:
+    """Чи не застряг репозиторій посеред rebase.
+
+    12.10.2026: сервер простояв у стані `(no branch, rebasing main)` півтори
+    доби. Наслідок непомітний і дорогий — гілка `main` лишається на старому
+    коміті, тому КОЖЕН push відхиляється, і жоден фід не доїжджає до
+    GitHub. Rozetka при цьому бачила позавчорашні ціни й наявність.
+
+    Перевірка дешева: якщо є `.git/rebase-merge` або `.git/rebase-apply`,
+    rebase не завершено.
+    """
+    import subprocess
+    for тека in ('rebase-merge', 'rebase-apply'):
+        if os.path.isdir(os.path.join(REPO_DIR, '.git', тека)):
+            гілка = subprocess.run(['git', '-C', REPO_DIR, 'branch', '--show-current'],
+                                   capture_output=True, text=True).stdout.strip()
+            msg = (f'репозиторій застряг посеред rebase (.git/{тека}), '
+                   f'гілка «{гілка or "немає"}» — push НЕ пройде, '
+                   f'фіди не публікуються')
+            flag = CARVOL_RZ_FLAG + '.rebase'
+            last = Path(flag).read_text().strip() if os.path.exists(flag) else ''
+            if msg != last:
+                tg(f'🚨 <b>Watchdog git</b>: {msg}')
+                Path(flag).write_text(msg)
+            log(f'[git-rebase] ПРОБЛЕМА: {msg}')
+            return {'ok': False, 'msg': msg[:80]}
+    f = CARVOL_RZ_FLAG + '.rebase'
+    if os.path.exists(f):
+        os.remove(f)
+    return {'ok': True, 'msg': 'rebase не триває'}
+
+
 def check_carvol_rozetka_feed() -> dict:
     """Фід Carvol для Rozetka: свіжість, розмір і те, чи публікація доїхала.
 
@@ -640,8 +675,12 @@ def check_carvol_rozetka_feed() -> dict:
 
     pub_h = published_age_h(CARVOL_RZ_API_URL)
     if pub_h > CARVOL_RZ_MAX_AGE_H:
-        problems.append(f"опублікована версія Carvol старша за "
-                        f"{CARVOL_RZ_MAX_AGE_H} год ({pub_h:.0f}) — push не доїхав")
+        # Число годин у ПОВІДОМЛЕННЯ, але НЕ в ключ порівняння: з ним ключ
+        # мінявся щогодини і та сама проблема приходила як нова. 12.10
+        # власник отримав дев'ять однакових тривог поспіль (39…47 год).
+        problems.append(("push не доїхав: опублікована версія Carvol старша "
+                         f"за {CARVOL_RZ_MAX_AGE_H} год",
+                         f" (зараз {pub_h:.0f})"))
 
     if problems:
         key = "; ".join(problems)[:200]
@@ -652,9 +691,10 @@ def check_carvol_rozetka_feed() -> dict:
             except Exception:
                 pass
         if key != last:
-            tg(f"🚨 <b>Watchdog Carvol Rozetka</b>: {key}")
+            tg("🚨 <b>Watchdog Carvol Rozetka</b>: "
+               + "; ".join(повні)[:300])
             Path(CARVOL_RZ_FLAG).write_text(key)
-        log(f"[carvol-rz] ПРОБЛЕМА: {key}")
+        log("[carvol-rz] ПРОБЛЕМА: " + "; ".join(повні)[:200])
         return {"ok": False, "msg": key[:80]}
 
     if os.path.exists(CARVOL_RZ_FLAG):
@@ -789,6 +829,7 @@ def main():
     noire_rz = check_noire_rozetka_feed()
     noire_prom = check_noire_prom_feed()
     carvol_rz = check_carvol_rozetka_feed()
+    rebase_r = check_git_rebase()
     rz_msg    = check_rozetka_messages()
 
     log(f"[git]  ok={git_r['ok']}  {git_r['msg']}")
@@ -799,6 +840,7 @@ def main():
     log(f"[noire-rz] ok={noire_rz['ok']} {noire_rz['msg']}")
     log(f"[noire-prom] ok={noire_prom['ok']} {noire_prom['msg']}")
     log(f"[carvol-rz] ok={carvol_rz['ok']} {carvol_rz['msg']}")
+    log(f"[git-rebase] ok={rebase_r['ok']} {rebase_r['msg']}")
     log(f"[rz-msg] ok={rz_msg['ok']} {rz_msg['msg']}")
 
     if should_report():
