@@ -41,7 +41,7 @@ venv/bin/python tools/system_audit.py --runtime   # що запущено
 | `tg-dispatcher` | `tg_dispatcher/main.py` | канал VSCODE ↔ Telegram |
 | `noire-notifier` | `agents/orders/noire_order_notifier.py` | сповіщення по замовленнях Єпіцентру |
 | `feed-server` | `python -m http.server 8080` у `shared/feeds` | **віддає файли НАЗОВНІ** через tailscale funnel |
-| `epicentr-order-agent` | `agents/orders/epicentr_order_agent.py` | **спірна** — дропшипінг TOPTUL на Єпіцентрі |
+| ~~`epicentr-order-agent`~~ | `agents/orders/epicentr_order_agent.py` | **зупинено 12.10** — дропшипінг TOPTUL на Єпіцентрі, якого там немає |
 
 `epicentr-mcp.service` існує, але не запущена.
 
@@ -57,13 +57,18 @@ venv/bin/python tools/system_audit.py --runtime   # що запущено
 зник, прямі посилання для Carvol працюють (перевірено: 200).
 **Лишається відкритим:** назви файлів угадувані (`rozetka_order_<id>_<дата>`).
 
-### Про `epicentr-order-agent`
-Працює 53 доби, кожні 5 хвилин: «OMS віддав 13 замовлень, справді нових 0».
-Написаний під **дропшипінг TOPTUL на Єпіцентрі**, а TOPTUL там цього року не
-активується і живе лише на Rozetka. Замовлення Єпіцентру веде
-`tools/epicentr_order_pipeline.py` з cron. Тобто служба або нічого не
-робить, або зробить не те. Такий самий випадок уже був на Prom
-(`order_agent_daemon.py`, зупинено 07.10). **Чекає рішення власника.**
+### Про `epicentr-order-agent` — зупинено 12.10
+Пропрацював 53 доби вхолосту: «OMS віддав 13 замовлень, справді нових 0».
+Написаний під **дропшипінг TOPTUL на Єпіцентрі**, а там лише NOIRE — решта
+постачальників прихована статусом «немає в наявності» (уточнення власника
+12.10). Зупинено й вимкнено з автозапуску.
+
+Повернути, якщо знадобиться:
+`systemctl --user enable --now epicentr-order-agent`.
+
+Замовлення Єпіцентру веде `tools/epicentr_order_pipeline.py` з cron, і він
+тепер **явно** бере лише артикули з фіду Єпіцентру (13054 позиції). Чуже
+замовлення не обробляється мовчки, а відкладається людині.
 
 ## 3. Розклад (cron, 21 запис)
 **Замовлення**

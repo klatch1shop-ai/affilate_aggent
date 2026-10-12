@@ -189,6 +189,33 @@ def needs_cod(o):
     raise RuntimeError(f'невідомий стан оплати «{ps}» — потрібне рішення власника')
 
 
+_NOIRE_EP = None
+
+
+def noire_articles_epicentr():
+    """Артикули, які ми продаємо на Єпіцентрі. Джерело — ФІД ЄПІЦЕНТРУ.
+
+    Саме його, а не фід Rozetka: це різні сукупності (13054 проти 4147), і
+    звірка карток Єпіцентру з фідом Rozetka 10.10 дала втричі меншу
+    картину. Порожній або куций перелік — це «не прочитали», а НЕ «нічого
+    немає»: у такому разі зупиняємось, бо інакше відкинули б геть усе.
+    """
+    global _NOIRE_EP
+    if _NOIRE_EP is not None:
+        return _NOIRE_EP
+    import re
+    шлях = os.path.join(BASE, 'output', 'noire_epicentr_stock.xml')
+    if not os.path.exists(шлях):
+        raise SystemExit(f'немає {шлях} — перелік артикулів NOIRE не прочитано')
+    with open(шлях, encoding='utf-8') as f:
+        ids = set(re.findall(r'<offer[^>]*\bid="([^"]+)"', f.read()))
+    if len(ids) < 1000:
+        raise SystemExit(f'у фіді Єпіцентру лише {len(ids)} позицій — '
+                         'схоже, він не прочитаний; зупиняюсь')
+    _NOIRE_EP = ids
+    return ids
+
+
 def plan(ep, number_or_id, st):
     o = None
     for row in ep.orders(100):
@@ -210,6 +237,17 @@ def plan(ep, number_or_id, st):
     if sh.get('number'):
         return {'пропуск': f'ТТН вже записана: {sh["number"]}',
                 'замовлення': o['number']}
+
+    # Рішення власника 12.10: на Єпіцентрі лишається ЛИШЕ NOIRE, решта
+    # постачальників прихована статусом «немає в наявності». Тому чуже
+    # замовлення сюди дійти не має — а якщо дійшло, це привід для людини,
+    # а не для автоматики. Доти конвеєр казав би «товару немає у
+    # постачальника», що неправда й збиває з пантелику.
+    арт = {i.get('sku') for i in (o.get('items') or []) if i.get('sku')}
+    чужі = sorted(арт - noire_articles_epicentr())
+    if чужі:
+        return {'пропуск': 'не всі артикули з NOIRE — потрібна людина',
+                'замовлення': o['number'], 'чужі': чужі}
 
     cod_needed, why = needs_cod(o)
     amount = o.get('subtotal') or 0
