@@ -41,7 +41,14 @@ CHAT_ID   = (
     or os.getenv("TG_CHAT_ID")
 )
 
-SERVICES        = ["rozetka-order-agent", "tg-dispatcher", "noire-notifier"]
+# 12.10: після знеструмлення всі шість служб піднялись самі, але сторож
+# стежив лише за трьома. Якби не встав helper-bot, власник лишився б без
+# бота й нічого б про це не дізнався. feed-server віддає Carvol бланки
+# замовлень — без нього постачальник не отримає посилання.
+# epicentr-order-agent свідомо НЕ тут: він працює вхолосту й чекає
+# рішення власника, чи потрібен узагалі.
+SERVICES        = ["rozetka-order-agent", "tg-dispatcher", "noire-notifier",
+                   "helper-bot", "feed-server"]
 REPORT_INTERVAL = timedelta(hours=24)   # було 6 год — «Watchdog OK» 4 рази на добу
 REPORT_HOUR     = int(os.getenv("WATCHDOG_REPORT_HOUR", "21"))   # одне зведення на добу, після 19:40
 STATE_FILE      = "/tmp/watchdog_last_report.txt"
