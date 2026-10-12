@@ -225,6 +225,26 @@ def _git(*args) -> subprocess.CompletedProcess:
                           capture_output=True, text=True)
 
 
+def _rebase_cleanup() -> None:
+    """Не лишати репозиторій посеред rebase — це найдорожчий зі збоїв.
+
+    10-12.10.2026 сервер простояв у стані `(no branch, rebasing main)`
+    півтори доби. Наслідок непомітний: гілка `main` лишається на старому
+    коміті, тому КОЖЕН push відхиляється, і жоден фід не доїжджає до
+    GitHub. Rozetka весь той час показувала позавчорашні ціни.
+
+    Обірваний rebase гірший за невдалу публікацію: невдала публікація
+    повториться завтра сама, а застряглий rebase не полагодиться ніколи.
+    Тому краще відкотитись і спробувати наступного разу.
+    """
+    for тека in ('rebase-merge', 'rebase-apply'):
+        if os.path.isdir(os.path.join(REPO_PATH, '.git', тека)):
+            logger.warning(f'rebase обірвався (.git/{тека}) — відкочую, '
+                           f'щоб не заблокувати всі наступні публікації')
+            _git('rebase', '--abort')
+            return
+
+
 def git_push() -> bool:
     """Публікує прайс у GitHub. True означає, що вміст справді доїхав.
 
@@ -271,6 +291,7 @@ def git_push() -> bool:
             r = _git('pull', '--rebase', '--autostash')
             if r.returncode != 0:
                 logger.error(f'pull: {(r.stderr or r.stdout)[:200]}')
+                _rebase_cleanup()
                 return False
             r = _git('push')
             if r.returncode != 0:
