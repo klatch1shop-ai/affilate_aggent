@@ -986,6 +986,30 @@ def _stuck_candidates():
         return []
 
 
+_DROPOFFICE = None
+
+
+def get_dropoffice_articles():
+    """Артикули dropoffice із нашого фіду. Порожньо = «не прочитали»."""
+    global _DROPOFFICE
+    if _DROPOFFICE is not None:
+        return _DROPOFFICE
+    import re
+    шлях = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)))), 'output', 'dropoffice_rozetka.xml')
+    if not os.path.exists(шлях):
+        logger.warning('фіду dropoffice немає — постачальник не впізнаватиметься')
+        return set()
+    with open(шлях, encoding='utf-8') as f:
+        arts = set(re.findall(r'<article>([^<]+)</article>', f.read()))
+    if len(arts) < 100:
+        logger.warning(f'у фіді dropoffice лише {len(arts)} артикулів — '
+                       'схоже, не прочитано')
+        return set()
+    _DROPOFFICE = arts
+    return arts
+
+
 def _supplier_of(order_id: int, feed: dict) -> str:
     """Постачальник за артикулами замовлення. Порожні джерела → «невідомий»."""
     try:
@@ -1001,6 +1025,8 @@ def _supplier_of(order_id: int, feed: dict) -> str:
                 srcs.add('NOIRE')
             elif feed and art in feed:
                 srcs.add('Carvol')
+            elif art in get_dropoffice_articles():
+                srcs.add('dropoffice')
             else:
                 srcs.add('невідомий')
         return ', '.join(sorted(srcs)) if srcs else 'невідомий'
@@ -1060,32 +1086,116 @@ def check_stuck_orders(feed: dict):
 CARVOL_PAID_TTN = os.getenv('CARVOL_PAID_TTN', '1') == '1'
 
 
-def _carvol_tg(text, pdf=None):
-    """Повідомлення в чат Carvol. True — доставлено."""
-    if not (CARVOL_TG_CHAT_ID and TG_BOT_TOKEN):
+def _supplier_chat(постачальник):
+    """Чат постачальника. Порожньо — бот туди писати не може."""
+    return {'Carvol': CARVOL_TG_CHAT_ID,
+            'dropoffice': DROPOFFICE_TG_CHAT_ID}.get(постачальник, '')
+
+
+def _carvol_tg(text, pdf=None, постачальник='Carvol'):
+    """Повідомлення в чат постачальника. True — доставлено."""
+    CARVOL_TG_CHAT_ID_ = _supplier_chat(постачальник)
+    if not (CARVOL_TG_CHAT_ID_ and TG_BOT_TOKEN):
         return False
     try:
         if pdf and os.path.exists(pdf):
             with open(pdf, 'rb') as f:
                 r = requests.post(
                     f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendDocument',
-                    data={'chat_id': CARVOL_TG_CHAT_ID, 'caption': text[:1000]},
+                    data={'chat_id': CARVOL_TG_CHAT_ID_, 'caption': text[:1000]},
                     files={'document': (os.path.basename(pdf), f,
                                         'application/pdf')}, timeout=90)
         else:
             r = requests.post(
                 f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
-                data={'chat_id': CARVOL_TG_CHAT_ID, 'text': text[:4000]},
+                data={'chat_id': CARVOL_TG_CHAT_ID_, 'text': text[:4000]},
                 timeout=40)
         return bool(r.json().get('ok'))
     except Exception as e:
-        logger.error(f'Carvol Telegram: {e}')
+        logger.error(f'{постачальник} Telegram: {e}')
         return False
 
 
-def carvol_paid_ttn(order_id: int, details: dict, items_info: list,
-                    dry_run: bool = False):
-    """Оплачене замовлення Carvol → наша ТТН → у Rozetka → номер постачальнику.
+# dropoffice: той самий лад, що й Carvol, але замовлення йде ПРОСТИМ
+# ТЕКСТОМ, а не бланком Excel — так власник надсилав його вручну, і так
+# звик його читати постачальник. ТТН поки забираємо не через бота, а з
+# гугл-таблиці; це окремий крок, іще не зроблений.
+DROPOFFICE_TG_CHAT_ID = os.getenv('DROPOFFICE_TG_CHAT_ID', '')
+DROPOFFICE_TG_USER = os.getenv('DROPOFFICE_TG_USER', '@SWDiana')
+
+
+def dropoffice_order_text(order_id: int, details: dict) -> str:
+    """Замовлення у форматі, яким власник надсилав його вручну:
+
+        Шевченко Ігор Ігорович
+        Столик приставний овальний Sticker Wall 45х28х59см (SW-00003367)
+        +380500544865
+        Дніпро відділення Нової Пошти 86
+        440 грн
+    """
+    dl = details.get('delivery') or {}
+    ri = _order_recipient_info(details)
+    піб = ' '.join(x for x in (dl.get('recipient_last_name'),
+                               dl.get('recipient_first_name'),
+                               dl.get('recipient_second_name')) if x) \
+        or ri.get('customer') or ''
+    тел = phone_plus(dl.get('recipient_phone') or ri.get('phone') or '')
+    місто = ((dl.get('city') or {}).get('name_ua')
+             or (dl.get('city') or {}).get('city_name') or ri.get('city') or '')
+    номер = dl.get('place_number') or ''
+    куди = (f'{місто} відділення Нової Пошти {номер}'.strip()
+            if номер else f'{місто} {ri.get("warehouse") or ""}'.strip())
+    товари = [str((p.get('item') or {}).get('name') or p.get('item_name') or '')
+              for p in (details.get('purchases') or [])]
+    товари = [t for t in товари if t.strip()]
+    рядки = [піб] + товари + [тел, куди, f'{ri.get("total", 0):.0f} грн']
+    return '\n'.join(r for r in рядки if r)
+
+
+def phone_plus(p: str) -> str:
+    """380… → +380…  Постачальник читає номер очима, не кодом."""
+    d = ''.join(ch for ch in str(p or '') if ch.isdigit())
+    if len(d) == 12 and d.startswith('380'):
+        return '+' + d
+    if len(d) == 10 and d.startswith('0'):
+        return '+38' + d
+    return str(p or '')
+
+
+def send_to_dropoffice(order_id: int, details: dict):
+    """Надіслати замовлення dropoffice. → {'пішло', 'куди', 'текст'}.
+
+    Бот НЕ МОЖЕ написати користувачу першим: Telegram дозволяє це лише
+    тим, хто сам до нього звернувся. Доки @SWDiana не напише боту, її
+    числового id не існує, і автоматична відправка неможлива. Тому текст
+    іде власнику — переслати вручну, як він робив досі. Це свідома
+    поведінка, а не збій: мовчати й робити вигляд, що відправлено, гірше.
+    """
+    текст = dropoffice_order_text(order_id, details)
+    if DROPOFFICE_TG_CHAT_ID:
+        try:
+            r = requests.post(
+                f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
+                data={'chat_id': DROPOFFICE_TG_CHAT_ID, 'text': текст},
+                timeout=40)
+            if r.json().get('ok'):
+                return {'пішло': True, 'куди': 'dropoffice', 'текст': текст}
+            logger.error(f'dropoffice Telegram: {str(r.text)[:160]}')
+        except Exception as e:
+            logger.error(f'dropoffice Telegram: {e}')
+    tg(f'📋 <b>{MARKETPLACE} #{order_id} → dropoffice</b>\n'
+       f'Бот не може написати {DROPOFFICE_TG_USER} першим — перешліть їй '
+       f'цей текст:\n\n<code>{текст}</code>')
+    return {'пішло': False, 'куди': 'власнику', 'текст': текст}
+
+
+def paid_supplier_ttn(order_id: int, details: dict, items_info: list,
+                      постачальник: str = 'Carvol', dry_run: bool = False):
+    """Оплачене замовлення → наша ТТН → у Rozetka → номер постачальнику.
+
+    Однаково для Carvol і dropoffice: якщо гроші вже наші, то й накладна
+    наша, а постачальнику лишається відвантажити. Різниця лише в тому,
+    у який чат іде номер.
 
     ЛИШЕ для оплачених. Неоплачене їде за старою схемою: ТТН робить Carvol,
     бо саме він збирає післяплату. Змішувати не можна — вийшов би подвійний
@@ -1099,7 +1209,7 @@ def carvol_paid_ttn(order_id: int, details: dict, items_info: list,
     if not CARVOL_PAID_TTN:
         return {'пропуск': 'CARVOL_PAID_TTN вимкнено'}
     if payment_paid(details) is not True:
-        return {'пропуск': 'замовлення не оплачене — ТТН робить Carvol'}
+        return {'пропуск': f'замовлення не оплачене — ТТН робить {постачальник}'}
 
     # Ідемпотентність: ТТН могла зʼявитись поза агентом.
     live = get_order_details(order_id) or details
@@ -1155,7 +1265,12 @@ def carvol_paid_ttn(order_id: int, details: dict, items_info: list,
              f'🏙 {w.get("CityDescription")} {w.get("Description")}\n'
              f'💰 {сума:.0f} грн — оплачено, післяплати НЕМАЄ\n'
              f'Накладна наша, вам лишається відвантажити.')
-    пішло = _carvol_tg(текст, res.get('наклейка'))
+    пішло = _carvol_tg(текст, res.get('наклейка'), постачальник)
+    if not пішло:
+        # Бот не має доступу в чат постачальника — віддаємо власнику,
+        # щоб номер не загубився між нами й постачальником.
+        tg(f'📋 <b>{MARKETPLACE} #{order_id} → {постачальник}</b>\n'
+           f'Бот не може туди написати. Перешліть:\n\n<code>{текст}</code>')
 
     try:
         conn = get_connection(); cur = conn.cursor()
@@ -1168,7 +1283,7 @@ def carvol_paid_ttn(order_id: int, details: dict, items_info: list,
     tg(f'🚚 <b>{MARKETPLACE} #{order_id} — наша ТТН</b>\n'
        f'<code>{ttn_num}</code>\n'
        f'У Rozetka: {"записано" if записано else "❗ВРУЧНУ"}\n'
-       f'Carvol: {"повідомлено" if пішло else "❗НЕ повідомлено"}')
+       f'{постачальник}: {"повідомлено" if пішло else "переслано вам"}')
     return {'ттн': ttn_num, 'у_rozetka': записано, 'carvol_повідомлено': пішло}
 
 
@@ -1416,40 +1531,51 @@ def process_order(order: dict, feed: dict):
         logger.error(f'Не вдалось підтвердити #{order_id}')
         return
 
-    # Відправляємо Excel Carvol (Telegram → fallback email)
-    excel      = create_order_excel(details, items_info)
-    tg_sent    = send_excel_to_carvol_telegram(excel, order_id, items_info, details)
-    email_sent = send_to_supplier(details, excel, items_info) if not tg_sent else False
+    # ── Маршрут за постачальником ────────────────────────────────
+    # Carvol    — бланк Excel у Telegram (так склалось історично);
+    # dropoffice — простий текст, як власник надсилав вручну.
+    # Далі обидва однаково: оплачене → накладна НАША, неоплачене →
+    # накладну робить постачальник, бо саме він збирає післяплату.
+    постачальник = _supplier_of(order_id, feed)
+
+    if постачальник == 'dropoffice':
+        відпр = send_to_dropoffice(order_id, details)
+        tg_sent, email_sent = відпр['пішло'], False
+        sent_icon = '📲 Telegram' if відпр['пішло'] else '📨 переслати вручну'
+    else:
+        excel = create_order_excel(details, items_info)
+        tg_sent = send_excel_to_carvol_telegram(excel, order_id, items_info, details)
+        email_sent = send_to_supplier(details, excel, items_info) if not tg_sent else False
+        sent_icon = '📲 Telegram' if tg_sent else ('📧 Email' if email_sent else '❌')
 
     # Зберігаємо з phone/recipient/city для подальшого TTN-матчингу
     save_to_db(details, 'accepted')
 
-    sent_icon = '📲 Telegram' if tg_sent else ('📧 Email' if email_sent else '❌')
-
-    # Оплачене замовлення Carvol — накладну робимо МИ, і номер віддаємо
-    # постачальнику. Неоплачене йде старим шляхом: ТТН робить Carvol, бо
-    # післяплату збирає він.
     ttn_res = None
-    if _supplier_of(order_id, feed) == 'Carvol':
+    if постачальник in ('Carvol', 'dropoffice'):
         try:
-            ttn_res = carvol_paid_ttn(order_id, details, items_info)
+            ttn_res = paid_supplier_ttn(order_id, details, items_info, постачальник)
         except Exception as e:
-            logger.error(f'#{order_id} ТТН Carvol: {e}')
+            logger.error(f'#{order_id} ТТН {постачальник}: {e}')
             tg(f'❌ <b>{MARKETPLACE} #{order_id}</b>: не вдалось створити нашу '
                f'ТТН — {type(e).__name__}: {str(e)[:200]}\n'
                f'Замовлення прийнято, але накладної немає.')
 
-    хвіст = '⏳ Чекаємо PDF з ТТН від Carvol'
+    # Звідки чекати ТТН, якщо замовлення неоплачене: у Carvol вона приходить
+    # у Telegram, у dropoffice — з гугл-таблиці (забирання ще не зроблено).
+    чекаємо = {'Carvol': '⏳ Чекаємо PDF з ТТН від Carvol',
+               'dropoffice': '⏳ ТТН забрати з гугл-таблиці dropoffice'}
+    хвіст = чекаємо.get(постачальник, '⏳ Чекаємо ТТН')
     if ttn_res and ttn_res.get('ттн'):
         хвіст = (f'🚚 Наша ТТН: <code>{ttn_res["ттн"]}</code> '
                  f'(оплачене, післяплати немає)')
-    elif ttn_res and ttn_res.get('пропуск'):
-        хвіст = f'⏳ {ttn_res["пропуск"]}'
+    elif ttn_res and ttn_res.get('відмова'):
+        хвіст = f'❗ {ttn_res["відмова"]}'
 
     tg(f'📦 <b>{MARKETPLACE} #{order_id} прийнято!</b>\n'
        f'Клієнт: {ri["customer"]}\nТелефон: {ri["phone"]}\n'
        f'Товарів: {len(items_info)} | 💰 {ri["total"]:.0f} грн\n'
-       f'Carvol: {sent_icon}\n'
+       f'{постачальник}: {sent_icon}\n'
        f'{хвіст}')
 
 
