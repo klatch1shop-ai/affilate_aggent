@@ -284,19 +284,36 @@ def git_push() -> bool:
                 logger.error(f'commit: {(r.stderr or r.stdout)[:200]}')
                 return False
 
-        r = _git('push')
-        if r.returncode != 0:
-            logger.warning(f'push відкинуто, пробуємо pull --rebase --autostash: '
-                           f'{(r.stderr or r.stdout)[:200]}')
+        # Кілька спроб «push → підтягнути → push», а не одна.
+        # 14.10: сервер пушить щогодини, і коли в ту саму хвилину пушить
+        # ноутбук, його запис відхиляється. Одного повтору мало — поки
+        # ми підтягуємо, може прилетіти ще один чужий коміт, і друга
+        # спроба падає так само. Гонка не помилка, це нормальний стан
+        # двох вузлів; на неї треба чекати, а не здаватись.
+        #
+        # ПОРЯДОК НЕ МІНЯЄМО: спершу push, і лише на відмову — pull.
+        # 25.08 беззастережний pull перед push відмовився через
+        # незакомічені файли («cannot pull with rebase: You have unstaged
+        # changes»), і публікація не виконалась узагалі. О 07:15
+        # незакомічені файли — це норма: watchdog комітить о :10 і :20,
+        # генератори пишуть між ними.
+        СПРОБ = 3
+        for спроба in range(1, СПРОБ + 1):
+            r = _git('push')
+            if r.returncode == 0:
+                break
+            if спроба == СПРОБ:
+                logger.error(f'push не пройшов за {СПРОБ} спроби: '
+                             f'{(r.stderr or r.stdout)[:200]}')
+                return False
+            logger.warning(f'push відкинуто ({спроба}/{СПРОБ}), підтягую: '
+                           f'{(r.stderr or r.stdout)[:160]}')
             r = _git('pull', '--rebase', '--autostash')
             if r.returncode != 0:
                 logger.error(f'pull: {(r.stderr or r.stdout)[:200]}')
                 _rebase_cleanup()
                 return False
-            r = _git('push')
-            if r.returncode != 0:
-                logger.error(f'push: {(r.stderr or r.stdout)[:200]}')
-                return False
+            time.sleep(3 * спроба)   # хай чужий запис устигне лягти
 
         local_blob = _git('hash-object', FEED_IN_REPO).stdout.strip()
         published  = ''
