@@ -1053,6 +1053,125 @@ def check_stuck_orders(feed: dict):
             logger.warning(f'#{oid} accepted без ТТН {int(age)} год — нагадано')
 
 
+# Наша накладна для ОПЛАЧЕНИХ замовлень Carvol (рішення власника 14.10.2026).
+# Доти Carvol сам робив ТТН і надсилав її нам. Для оплачених замовлень
+# логіка інша: гроші вже наші, тому й накладну робимо ми, а постачальнику
+# віддаємо готовий номер — йому лишається тільки відвантажити.
+CARVOL_PAID_TTN = os.getenv('CARVOL_PAID_TTN', '1') == '1'
+
+
+def _carvol_tg(text, pdf=None):
+    """Повідомлення в чат Carvol. True — доставлено."""
+    if not (CARVOL_TG_CHAT_ID and TG_BOT_TOKEN):
+        return False
+    try:
+        if pdf and os.path.exists(pdf):
+            with open(pdf, 'rb') as f:
+                r = requests.post(
+                    f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendDocument',
+                    data={'chat_id': CARVOL_TG_CHAT_ID, 'caption': text[:1000]},
+                    files={'document': (os.path.basename(pdf), f,
+                                        'application/pdf')}, timeout=90)
+        else:
+            r = requests.post(
+                f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
+                data={'chat_id': CARVOL_TG_CHAT_ID, 'text': text[:4000]},
+                timeout=40)
+        return bool(r.json().get('ok'))
+    except Exception as e:
+        logger.error(f'Carvol Telegram: {e}')
+        return False
+
+
+def carvol_paid_ttn(order_id: int, details: dict, items_info: list,
+                    dry_run: bool = False):
+    """Оплачене замовлення Carvol → наша ТТН → у Rozetka → номер постачальнику.
+
+    ЛИШЕ для оплачених. Неоплачене їде за старою схемою: ТТН робить Carvol,
+    бо саме він збирає післяплату. Змішувати не можна — вийшов би подвійний
+    платіж або посилка без оплати.
+
+    Відділення беремо за `delivery.ref_id` із замовлення, а НЕ шукаємо за
+    назвою міста. 14.10 перевірено: ref дає «Відділення №1, Савинці
+    Харківської обл.», а пошук за назвою знайшов інші Савинці —
+    Балаклійського району. Міст-тезок в Україні вистачає.
+    """
+    if not CARVOL_PAID_TTN:
+        return {'пропуск': 'CARVOL_PAID_TTN вимкнено'}
+    if payment_paid(details) is not True:
+        return {'пропуск': 'замовлення не оплачене — ТТН робить Carvol'}
+
+    # Ідемпотентність: ТТН могла зʼявитись поза агентом.
+    live = get_order_details(order_id) or details
+    вже = live.get('ttn') or _ttn_of(live)
+    if вже:
+        return {'пропуск': f'ТТН уже є: {вже}'}
+
+    dl = live.get('delivery') or {}
+    ref = dl.get('ref_id')
+    if not ref:
+        return {'відмова': 'у замовленні немає ref відділення Нової Пошти'}
+    import sys as _s
+    _s.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))))))
+    from helper import ttn as T
+    w = T.warehouse_by_ref(ref)
+    if not w:
+        return {'відмова': f'Нова Пошта не знає відділення {ref}'}
+
+    ri = _order_recipient_info(live)
+    recipient = {'first': dl.get('recipient_first_name'),
+                 'last': dl.get('recipient_last_name'),
+                 'middle': dl.get('recipient_second_name'),
+                 'phone': dl.get('recipient_phone') or ri.get('phone')}
+    сума = float(ri.get('total') or 0)
+    # Опис для НП — з назви товару, а не з артикула: «22-336» нічого не
+    # каже ні кур'єру, ні одержувачу. Межа НП — 60 знаків.
+    назви = [str((p.get('item') or {}).get('name') or p.get('item_name') or '')
+             for p in (live.get('purchases') or [])]
+    назви = [n for n in назви if n.strip()]
+    опис = (', '.join(назви) if назви
+            else ', '.join(str(i.get('sku') or '') for i in items_info))[:60] or 'Товар'
+
+    if dry_run:
+        return {'холостий': {'відділення': w.get('Description'),
+                             'місто': w.get('CityDescription'),
+                             'одержувач': recipient, 'сума': сума,
+                             'післяплата': 0, 'опис': опис}}
+
+    # cod=0 — замовлення оплачене, контроль оплати НЕ потрібен.
+    res = T.create(recipient, w, сума, cod=0, description=опис, tag=order_id)
+    ttn_num = res['ттн']
+    logger.success(f'#{order_id} створено ТТН {ttn_num}')
+
+    записано = set_ttn(order_id, ttn_num)
+    if not записано:
+        tg(f'⚠️ <b>{MARKETPLACE} #{order_id}</b>: ТТН <code>{ttn_num}</code> '
+           f'створена, але в Rozetka НЕ записалась. Внесіть вручну.')
+
+    текст = (f'📦 Замовлення {MARKETPLACE} #{order_id} — ОПЛАЧЕНЕ\n'
+             f'ТТН: {ttn_num}\n'
+             f'👤 {ri["customer"]} {ri["phone"]}\n'
+             f'🏙 {w.get("CityDescription")} {w.get("Description")}\n'
+             f'💰 {сума:.0f} грн — оплачено, післяплати НЕМАЄ\n'
+             f'Накладна наша, вам лишається відвантажити.')
+    пішло = _carvol_tg(текст, res.get('наклейка'))
+
+    try:
+        conn = get_connection(); cur = conn.cursor()
+        cur.execute('UPDATE rozetka_processed_orders SET ttn=%s WHERE order_id=%s',
+                    (ttn_num, order_id))
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        logger.error(f'запис ТТН у БД: {e}')
+
+    tg(f'🚚 <b>{MARKETPLACE} #{order_id} — наша ТТН</b>\n'
+       f'<code>{ttn_num}</code>\n'
+       f'У Rozetka: {"записано" if записано else "❗ВРУЧНУ"}\n'
+       f'Carvol: {"повідомлено" if пішло else "❗НЕ повідомлено"}')
+    return {'ттн': ttn_num, 'у_rozetka': записано, 'carvol_повідомлено': пішло}
+
+
 def process_order(order: dict, feed: dict):
     """
     Послідовність:
@@ -1306,11 +1425,32 @@ def process_order(order: dict, feed: dict):
     save_to_db(details, 'accepted')
 
     sent_icon = '📲 Telegram' if tg_sent else ('📧 Email' if email_sent else '❌')
+
+    # Оплачене замовлення Carvol — накладну робимо МИ, і номер віддаємо
+    # постачальнику. Неоплачене йде старим шляхом: ТТН робить Carvol, бо
+    # післяплату збирає він.
+    ttn_res = None
+    if _supplier_of(order_id, feed) == 'Carvol':
+        try:
+            ttn_res = carvol_paid_ttn(order_id, details, items_info)
+        except Exception as e:
+            logger.error(f'#{order_id} ТТН Carvol: {e}')
+            tg(f'❌ <b>{MARKETPLACE} #{order_id}</b>: не вдалось створити нашу '
+               f'ТТН — {type(e).__name__}: {str(e)[:200]}\n'
+               f'Замовлення прийнято, але накладної немає.')
+
+    хвіст = '⏳ Чекаємо PDF з ТТН від Carvol'
+    if ttn_res and ttn_res.get('ттн'):
+        хвіст = (f'🚚 Наша ТТН: <code>{ttn_res["ттн"]}</code> '
+                 f'(оплачене, післяплати немає)')
+    elif ttn_res and ttn_res.get('пропуск'):
+        хвіст = f'⏳ {ttn_res["пропуск"]}'
+
     tg(f'📦 <b>{MARKETPLACE} #{order_id} прийнято!</b>\n'
        f'Клієнт: {ri["customer"]}\nТелефон: {ri["phone"]}\n'
        f'Товарів: {len(items_info)} | 💰 {ri["total"]:.0f} грн\n'
        f'Carvol: {sent_icon}\n'
-       f'⏳ Чекаємо PDF з ТТН від Carvol')
+       f'{хвіст}')
 
 
 # === ГОЛОВНИЙ ЦИКЛ ===
