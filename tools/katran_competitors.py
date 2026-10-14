@@ -72,6 +72,8 @@ def main():
     sub = ap.add_subparsers(dest='cmd', required=True)
     q = sub.add_parser('черга'); q.add_argument('--скільки', type=int, default=10)
     q.add_argument('--категорія')
+    q.add_argument('--кандидати', action='store_true',
+                   help='лише позиції зі списку старту, за спаданням маржі')
     v = sub.add_parser('внести'); v.add_argument('article')
     v.add_argument('--ціни', default='',
                    help='"8377 hotline; 8999 foxtrot" — ціна і джерело через ;')
@@ -86,6 +88,20 @@ def main():
         лишилось = [x for x in t if x['article'] not in d]
         if a.категорія:
             лишилось = [x for x in лишилось if x['cat'] == a.категорія]
+        if a.кандидати:
+            # Перебирати 695 позицій підряд немає сенсу: рішення про старт
+            # залежить від тих, що взагалі можуть бути прибутковими. Беремо
+            # перетин зі списком кандидатів і йдемо за спаданням маржі.
+            import csv as _csv
+            шлях = os.path.join(BASE, 'exports', 'katran_кандидати_старт.csv')
+            if not os.path.exists(шлях):
+                sys.exit('немає exports/katran_кандидати_старт.csv — '
+                         'спершу tools/katran_start_candidates.py')
+            with open(шлях, encoding='utf-8') as f:
+                маржа = {r['артикул']: float(r['маржа'])
+                         for r in _csv.DictReader(f)}
+            лишилось = [x for x in лишилось if x['article'] in маржа]
+            лишилось.sort(key=lambda x: -маржа[x['article']])
         print(f'досліджено {len(d)} з {len(t)} · у черзі {len(лишилось)}')
         for x in лишилось[:a.скільки]:
             print(f"  {x['article'][:18]:18} {x['price']:8.0f}  "
