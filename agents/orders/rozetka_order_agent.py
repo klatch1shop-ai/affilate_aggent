@@ -1178,6 +1178,42 @@ def phone_plus(p: str) -> str:
     return str(p or '')
 
 
+def _надіслати_в_чат(чат, текст, постачальник):
+    """Надіслати текст у чат постачальника. True, якщо дійшло.
+
+    Окремо обробляємо `migrate_to_chat_id`: звичайна група стає
+    супергрупою і міняє id. Без цього відправка почала б падати, а
+    виглядало б як «постачальник не відповідає».
+    """
+    r = requests.post(
+        f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
+        data={'chat_id': чат, 'text': текст}, timeout=40)
+    д = r.json()
+    if д.get('ok'):
+        return True
+    новий = (д.get('parameters') or {}).get('migrate_to_chat_id')
+    if новий:
+        logger.warning(f'{постачальник}: група стала супергрупою, '
+                       f'{чат} → {новий}')
+        try:
+            import sys as _s
+            _s.path.insert(0, os.path.dirname(os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__)))))
+            from helper import supplier_contacts as _C
+            _C.перепривʼязати(постачальник, новий)
+        except Exception:
+            logger.exception('перепривʼязка групи не вдалась')
+        r2 = requests.post(
+            f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
+            data={'chat_id': новий, 'text': текст}, timeout=40)
+        if r2.json().get('ok'):
+            return True
+        logger.error(f'{постачальник} Telegram: {str(r2.text)[:160]}')
+        return False
+    logger.error(f'{постачальник} Telegram: {str(r.text)[:160]}')
+    return False
+
+
 def send_to_dropoffice(order_id: int, details: dict):
     """Надіслати замовлення dropoffice. → {'пішло', 'куди', 'текст'}.
 
@@ -1191,13 +1227,8 @@ def send_to_dropoffice(order_id: int, details: dict):
     чат = _supplier_chat('dropoffice')
     if чат:
         try:
-            r = requests.post(
-                f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
-                data={'chat_id': чат, 'text': текст},
-                timeout=40)
-            if r.json().get('ok'):
+            if _надіслати_в_чат(чат, текст, 'dropoffice'):
                 return {'пішло': True, 'куди': 'dropoffice', 'текст': текст}
-            logger.error(f'dropoffice Telegram: {str(r.text)[:160]}')
         except Exception as e:
             logger.error(f'dropoffice Telegram: {e}')
     tg(f'📋 <b>{MARKETPLACE} #{order_id} → dropoffice</b>\n'
