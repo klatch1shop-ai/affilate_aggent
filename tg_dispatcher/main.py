@@ -22,7 +22,7 @@ Telegram ШІ-Диспетчер — головна точка входу.
 import os, sys, asyncio, logging
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message, Voice
+from aiogram.types import Message, Voice, ChatMemberUpdated
 from aiogram.filters import CommandStart, Command
 from aiogram.utils.markdown import bold, italic
 
@@ -79,6 +79,60 @@ async def security_middleware(handler, event, data):
                        f'замість документа — проігноровано')
         return
     logger.warning(f'Відхилено доступ від ID: {user_id} (@{event.from_user.username})')
+
+
+# =============================================
+# БОТА ДОДАЛИ В ГРУПУ ПОСТАЧАЛЬНИКА
+# =============================================
+
+@dp.my_chat_member()
+async def бота_додали_в_групу(подія: ChatMemberUpdated):
+    """Бот потрапив у групу — перевірити, чи це група постачальника.
+
+    14.10.2026 Діана (dropoffice) дозволила додати бота в їхню групу:
+    «можете бота сюди додати, якщо буде так замовлення передавати то э
+    ок». Тому userbot від особистого акаунта не потрібен.
+
+    Групу впізнаємо не за назвою, а за тим, що серед її адміністраторів є
+    очікуваний @нік. Привʼязка до першої-ліпшої групи означала б, що
+    замовлення з іменами й телефонами покупців підуть туди, куди бота
+    додав хто завгодно.
+    """
+    новий_статус = подія.new_chat_member.status
+    if новий_статус not in ('member', 'administrator'):
+        return
+    if подія.chat.type not in ('group', 'supergroup'):
+        return
+    ніки = []
+    try:
+        for a in await bot.get_chat_administrators(подія.chat.id):
+            if a.user.username:
+                ніки.append(a.user.username)
+    except Exception as e:
+        logger.warning(f'група {подія.chat.id}: адміністратори недоступні: {e}')
+    try:
+        sys.path.insert(0, '/home/tek/agent-system')
+        from helper import supplier_contacts as C
+        знайшли = C.впізнати_групу(подія.chat.id, подія.chat.title, ніки)
+    except Exception:
+        знайшли = None
+        logger.exception('привʼязка групи не вдалась')
+    хто = подія.from_user.username or подія.from_user.id
+    if знайшли:
+        await bot.send_message(
+            ADMIN_ID,
+            f'✅ <b>Групу постачальника підключено</b>\n'
+            f'{знайшли["постачальник"]} → {подія.chat.title}\n'
+            f'id <code>{подія.chat.id}</code>, за @{знайшли["нік"]}\n'
+            f'Замовлення тепер ідуть у цю групу.', parse_mode='HTML')
+        return
+    await bot.send_message(
+        ADMIN_ID,
+        f'❓ <b>Бота додали в групу</b> «{подія.chat.title}»\n'
+        f'id <code>{подія.chat.id}</code>, додав @{хто}\n'
+        f'Серед адміністраторів немає нікого, кого ми чекали '
+        f'({", ".join("@" + n for n in ніки) or "ніків не видно"}).\n'
+        f'Нічого не привʼязав.', parse_mode='HTML')
 
 
 # =============================================
