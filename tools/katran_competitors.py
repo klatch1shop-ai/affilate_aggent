@@ -73,8 +73,10 @@ def main():
     q = sub.add_parser('черга'); q.add_argument('--скільки', type=int, default=10)
     q.add_argument('--категорія')
     v = sub.add_parser('внести'); v.add_argument('article')
-    v.add_argument('--ціни', required=True,
+    v.add_argument('--ціни', default='',
                    help='"8377 hotline; 8999 foxtrot" — ціна і джерело через ;')
+    v.add_argument('--ненайдено', default='',
+                   help='чому конкурента не знайшли; замість --ціни')
     v.add_argument('--висновок', default='')
     sub.add_parser('звіт')
     a = ap.parse_args()
@@ -93,6 +95,20 @@ def main():
         наш = next((x for x in t if x['article'] == a.article), None)
         if not наш:
             sys.exit(f'{a.article} немає у фіді (або це стоп-категорія)')
+        if a.ненайдено and not a.ціни:
+            # Без цього стану позиція вічно висить у черзі, і наступний
+            # прохід шукає те саме. «Не знайшли» — теж результат, але він
+            # НЕ йде в статистику різниці цін: там нічого порівнювати.
+            d[a.article] = {'наша': наш['price'], 'назва': наш['name'],
+                            'категорія': наш['cat'], 'конкуренти': [],
+                            'мін_конкурент': None, 'різниця_%': None,
+                            'не_знайдено': a.ненайдено,
+                            'висновок': a.висновок,
+                            'коли': time.strftime('%Y-%m-%d')}
+            зберегти(d)
+            print(f"{a.article}: конкурента не знайдено — {a.ненайдено}")
+            return
+
         ціни = []
         for шм in a.ціни.split(';'):
             m = re.match(r'\s*([\d\s]+)\s*(.*)', шм)
@@ -115,15 +131,19 @@ def main():
     elif a.cmd == 'звіт':
         if not d:
             sys.exit('ще нічого не досліджено')
-        дорожчі = [v for v in d.values() if v['різниця_%'] > 0]
-        print(f'досліджено: {len(d)} з {len(t)}')
+        порівняні = {k: v for k, v in d.items() if v.get('різниця_%') is not None}
+        без_цін = len(d) - len(порівняні)
+        дорожчі = [v for v in порівняні.values() if v['різниця_%'] > 0]
+        print(f'досліджено: {len(d)} з {len(t)}'
+              + (f' (з них {без_цін} без знайденого конкурента)' if без_цін else ''))
         print(f'ми ДОРОЖЧІ за найдешевшого конкурента: {len(дорожчі)} '
-              f'({len(дорожчі) / len(d) * 100:.0f}%)')
+              f'({len(дорожчі) / max(len(порівняні), 1) * 100:.0f}% '
+              f'з {len(порівняні)} порівняних)')
         if дорожчі:
             сер = sum(v['різниця_%'] for v in дорожчі) / len(дорожчі)
             print(f'  у середньому на {сер:.0f}%')
         print()
-        for k, v in sorted(d.items(), key=lambda x: -x[1]['різниця_%']):
+        for k, v in sorted(порівняні.items(), key=lambda x: -x[1]['різниця_%']):
             знак = '+' if v['різниця_%'] > 0 else ''
             print(f"  {k[:18]:18} наша {v['наша']:8.0f} · конкурент {v['мін_конкурент']:8} "
                   f"· {знак}{v['різниця_%']:6.1f}%  {v['категорія'][:16]}")
