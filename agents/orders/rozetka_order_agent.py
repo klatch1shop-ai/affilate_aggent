@@ -1087,7 +1087,23 @@ CARVOL_PAID_TTN = os.getenv('CARVOL_PAID_TTN', '1') == '1'
 
 
 def _supplier_chat(постачальник):
-    """Чат постачальника. Порожньо — бот туди писати не може."""
+    """Чат постачальника. Порожньо — бот туди писати не може.
+
+    Спершу дивимось у привʼязки (`data/supplier_contacts.json`): їх
+    робить бот у ту ж секунду, коли постачальник до нього звернувся, і
+    чекати перезапуску служби не треба. `.env` лишається запасним шляхом
+    для того, що прописано руками.
+    """
+    try:
+        import sys as _s
+        _s.path.insert(0, os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__)))))
+        from helper import supplier_contacts as _C
+        з_привʼязки = _C.chat_id(постачальник)
+        if з_привʼязки:
+            return str(з_привʼязки)
+    except Exception as e:
+        logger.warning(f'привʼязки постачальників недоступні: {e}')
     return {'Carvol': CARVOL_TG_CHAT_ID,
             'dropoffice': DROPOFFICE_TG_CHAT_ID}.get(постачальник, '')
 
@@ -1172,11 +1188,12 @@ def send_to_dropoffice(order_id: int, details: dict):
     поведінка, а не збій: мовчати й робити вигляд, що відправлено, гірше.
     """
     текст = dropoffice_order_text(order_id, details)
-    if DROPOFFICE_TG_CHAT_ID:
+    чат = _supplier_chat('dropoffice')
+    if чат:
         try:
             r = requests.post(
                 f'https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage',
-                data={'chat_id': DROPOFFICE_TG_CHAT_ID, 'text': текст},
+                data={'chat_id': чат, 'text': текст},
                 timeout=40)
             if r.json().get('ok'):
                 return {'пішло': True, 'куди': 'dropoffice', 'текст': текст}

@@ -1,0 +1,92 @@
+"""Контакти постачальників у Telegram: очікування, прив'язка, пошук.
+
+ЗАДАЧА. Бот не може написати людині першим — вона мусить звернутись
+сама. Момент звернення це єдина нагода дізнатись її числовий id. Доти
+замовлення dropoffice йдуть власнику «перешліть вручну».
+
+ЧОМУ ПРИВʼЯЗУЄМО ЗА НІКОМ, А НЕ «ХТО ПЕРШИЙ НАПИСАВ». Прив'язка до
+першого-ліпшого незнайомця означала б, що випадкова людина, яка знайшла
+бота у ту саму годину, почне отримувати наші замовлення з іменами й
+телефонами покупців. Тому звіряємо @нік, який назвав власник.
+
+ЧОМУ ФАЙЛ, А НЕ .env. Зміна .env потребує перезапуску служби; тут
+прив'язка має спрацювати в ту ж секунду, коли людина написала.
+"""
+import json
+import os
+import time
+
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ФАЙЛ = os.path.join(BASE, 'data', 'supplier_contacts.json')
+
+
+def _читати():
+    if not os.path.exists(ФАЙЛ):
+        return {'очікуємо': {}, 'привʼязані': {}}
+    try:
+        with open(ФАЙЛ, encoding='utf-8') as f:
+            d = json.load(f)
+    except (OSError, ValueError):
+        return {'очікуємо': {}, 'привʼязані': {}}
+    d.setdefault('очікуємо', {})
+    d.setdefault('привʼязані', {})
+    return d
+
+
+def _писати(d):
+    os.makedirs(os.path.dirname(ФАЙЛ), exist_ok=True)
+    tmp = ФАЙЛ + '.tmp'
+    with open(tmp, 'w', encoding='utf-8') as f:
+        json.dump(d, f, ensure_ascii=False, indent=1)
+    os.replace(tmp, ФАЙЛ)
+
+
+def _нік(s):
+    return (s or '').strip().lstrip('@').lower()
+
+
+def чекати_на(нік, постачальник):
+    """Записати, чийого звернення чекаємо."""
+    d = _читати()
+    d['очікуємо'][_нік(нік)] = {'постачальник': постачальник,
+                                'коли': time.time()}
+    _писати(d)
+    return d['очікуємо']
+
+
+def впізнати(user) -> dict | None:
+    """Користувач написав боту. Якщо його чекали — привʼязати.
+
+    → {'постачальник', 'chat_id', 'нік'} або None.
+    """
+    нік = _нік(getattr(user, 'username', None))
+    uid = getattr(user, 'id', None)
+    if not нік or uid is None:
+        return None
+    d = _читати()
+    чек = d['очікуємо'].get(нік)
+    if not чек:
+        return None
+    d['привʼязані'][чек['постачальник']] = {
+        'chat_id': uid, 'нік': нік,
+        'імʼя': ' '.join(x for x in (getattr(user, 'first_name', ''),
+                                     getattr(user, 'last_name', '')) if x),
+        'привʼязано': time.time()}
+    d['очікуємо'].pop(нік, None)
+    _писати(d)
+    return {'постачальник': чек['постачальник'], 'chat_id': uid, 'нік': нік}
+
+
+def chat_id(постачальник) -> int:
+    """Чат постачальника: спершу привʼязка, далі .env як запасний шлях."""
+    d = _читати()
+    з_файлу = (d['привʼязані'].get(постачальник) or {}).get('chat_id')
+    if з_файлу:
+        return int(з_файлу)
+    ключ = {'Carvol': 'CARVOL_TG_CHAT_ID',
+            'dropoffice': 'DROPOFFICE_TG_CHAT_ID'}.get(постачальник)
+    return int(os.getenv(ключ, '0') or 0) if ключ else 0
+
+
+def стан() -> dict:
+    return _читати()

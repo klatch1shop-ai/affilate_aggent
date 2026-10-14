@@ -465,6 +465,28 @@ def _повідомити_про_чужого(u, текст: str) -> None:
     if uid is None or uid in _ЧУЖІ_ВІДОМІ:
         return
     _ЧУЖІ_ВІДОМІ.add(uid)
+
+    # Якщо саме цього ніка ми чекали — привʼязуємо постачальника САМІ,
+    # без жодної дії власника. Звіряємо @нік, а не «хто перший написав»:
+    # інакше випадкова людина, яка знайшла бота в ту саму годину, почала б
+    # отримувати наші замовлення з іменами й телефонами покупців.
+    try:
+        import sys as _s2
+        _s2.path.insert(0, str(BASE))
+        from helper import supplier_contacts as _C
+        знайшли = _C.впізнати(u)
+    except Exception:
+        знайшли = None
+        log.exception('привʼязка постачальника не вдалась')
+    if знайшли:
+        try:
+            tg_send(f'✅ <b>Постачальника підключено</b>\n'
+                    f'{знайшли["постачальник"]} → @{знайшли["нік"]} '
+                    f'(id <code>{знайшли["chat_id"]}</code>)\n'
+                    f'Замовлення тепер ідуть йому напряму.')
+        except Exception:
+            pass
+        return
     нік = f'@{u.username}' if getattr(u, 'username', None) else '(без ніка)'
     імʼя = ' '.join(x for x in (getattr(u, 'first_name', ''),
                                 getattr(u, 'last_name', '')) if x)
