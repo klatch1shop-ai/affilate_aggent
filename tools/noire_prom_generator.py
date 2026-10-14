@@ -844,6 +844,28 @@ def stable_group_id(key) -> int:
     return int(digest[:12], 16) % 999_999_000 + 1
 
 
+def load_phase2_release() -> set:
+    """Артикули Фази 2, які свідомо випускаємо попри позначку excluded.
+
+    Фаза 2 — еротична білизна й одяг (2869 позицій): їх притримали, бо
+    вимоги Prom до таких карток суворіші. Випускати всю фазу одразу не
+    можна: у магазину ліміт 6000 позицій, а у фіді вже 5410.
+
+    Тому випуск ЧАСТКОВИЙ і керований списком, а не зняттям позначки з
+    цілої категорії. Список складає `tools/prom_phase2_pick.py` —
+    найповніші картки спершу.
+    """
+    шлях = os.path.join(BASE_DIR, 'data', 'prom_phase2_release.json')
+    if not os.path.exists(шлях):
+        return set()
+    with open(шлях, encoding='utf-8') as f:
+        d = json.load(f)
+    return set(d.get('skus') or [])
+
+
+PHASE2_RELEASE = load_phase2_release()
+
+
 def load_mapping(cur) -> dict:
     """epicentr_code → [(prom_id, name_rule, excluded)], правила спершу."""
     # Серед рядків без правила виграє вища впевненість, а не менший id: для
@@ -1411,9 +1433,11 @@ def generate(out_file=OUT, limit=None):
         if not pid:
             st['без мапінгу'] += len(items)
             continue
-        if excluded:
+        if excluded and head['sku'] not in PHASE2_RELEASE:
             st['виключено (Фаза 2)'] += len(items)
             continue
+        if excluded:
+            st['Фаза 2 — випущено за списком'] += len(items)
         # ворота якості: опис і фото — вимоги Prom, не наші побажання
         if not any((x['description_html'] or '').strip() for x in items):
             st['без опису'] += len(items)
@@ -1769,7 +1793,7 @@ def generate(out_file=OUT, limit=None):
     logger.success(f"Згенеровано офферів: {st['офферів']} → {out_file}")
     logger.info(f"  категорій             : {len(used_cats)}")
     logger.info(f"  груп із різновидами   : {st['груп із різновидами']}")
-    for k in ('виключено (Фаза 2)', 'без опису', 'менше 2 фото', 'без мапінгу',
+    for k in ('виключено (Фаза 2)', 'Фаза 2 — випущено за списком', 'без опису', 'менше 2 фото', 'без мапінгу',
               'фото обрізано', 'назву вкорочено', 'менше 2 характеристик',
               'опис узято з різновиду', 'ознаку різновиду додано',
               'дублі — розгруповано', 'бренд замінено на «Без бренда»',

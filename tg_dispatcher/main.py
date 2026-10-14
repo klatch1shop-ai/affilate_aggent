@@ -338,10 +338,49 @@ def html_escape(s):
     return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
+DROPOFFICE_TG_CHAT_ID = int(os.getenv('DROPOFFICE_TG_CHAT_ID', '0') or 0)
+
+
+def _свій(message: Message) -> bool:
+    """Чи цей PDF взагалі від нас або від постачальника.
+
+    14.10.2026: у цьому файлі НЕ БУЛО жодної перевірки доступу —
+    `@dp.message(F.document)` обробляв накладну від кого завгодно, ще й
+    відповідав надсилачу. Тобто будь-хто, знайшовши бота, міг підсунути
+    PDF і дістати відповідь про наші замовлення.
+
+    Звіряємо і чат, і особу: у приватному чаті вони збігаються, у групі
+    chat_id відʼємний і не дорівнює user_id.
+    """
+    свої = {x for x in (ADMIN_ID, CARVOL_TG_CHAT_ID, DROPOFFICE_TG_CHAT_ID) if x}
+    chat = getattr(message.chat, 'id', None)
+    user = getattr(message.from_user, 'id', None)
+    return chat in свої or user in свої
+
+
 @dp.message(F.document)
 async def handle_document(message: Message):
-    """PDF накладна НП від Carvol або адміна — автоматичне встановлення ТТН."""
-    from_carvol    = CARVOL_TG_CHAT_ID and message.from_user.id == CARVOL_TG_CHAT_ID
+    """PDF накладна НП від постачальника або адміна — встановлення ТТН."""
+    if not _свій(message):
+        logger.warning('TTN-IN: документ від чужого chat=%s user=%s — відхилено',
+                       getattr(message.chat, 'id', None),
+                       getattr(message.from_user, 'id', None))
+        try:
+            await bot.send_message(
+                ADMIN_ID,
+                f'⚠️ Боту надіслали PDF із чужого чату\n'
+                f'chat: <code>{getattr(message.chat, "id", "?")}</code> · '
+                f'user: <code>{getattr(message.from_user, "id", "?")}</code>\n'
+                f'Оброблено НЕ було.', parse_mode='HTML')
+        except Exception:
+            pass
+        return
+
+    # Порівнюємо ЧАТ, а не особу: у групі chat_id відʼємний і ніколи не
+    # дорівнює user_id, тому стара умова `from_user.id == CARVOL_TG_CHAT_ID`
+    # мовчки перестала б упізнавати Carvol одразу після переїзду в групу.
+    chat_id = getattr(message.chat, 'id', None)
+    from_carvol = bool(CARVOL_TG_CHAT_ID) and chat_id == CARVOL_TG_CHAT_ID
     target_chat_id = ADMIN_ID if from_carvol else message.chat.id
 
     doc = message.document

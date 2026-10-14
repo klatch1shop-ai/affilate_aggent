@@ -445,10 +445,57 @@ async def in_db(fn, *args):
     return await asyncio.get_running_loop().run_in_executor(DB_EXEC, fn, *args)
 
 
+_ЧУЖІ_ВІДОМІ: set = set()
+
+
+def _повідомити_про_чужого(u, текст: str) -> None:
+    """Незнайомець написав боту — підняти власника І Claude.
+
+    Навіщо. Telegram не дозволяє боту писати людині першим, тому
+    постачальник (напр. @SWDiana) мусить звернутись сам. Момент цього
+    звернення — єдина нагода дізнатись його числовий id; у логах він
+    лежав би мертвим вантажем. Пишемо і власнику в Telegram, і в чат
+    панелі: звідти Claude підхоплює повідомлення своїм спостерігачем і
+    може одразу прописати id у налаштування.
+
+    Один раз на користувача за життя процесу: повторні спроби того
+    самого незнайомця — шум.
+    """
+    uid = getattr(u, 'id', None)
+    if uid is None or uid in _ЧУЖІ_ВІДОМІ:
+        return
+    _ЧУЖІ_ВІДОМІ.add(uid)
+    нік = f'@{u.username}' if getattr(u, 'username', None) else '(без ніка)'
+    імʼя = ' '.join(x for x in (getattr(u, 'first_name', ''),
+                                getattr(u, 'last_name', '')) if x)
+    підпис = (f'👤 <b>Боту написав незнайомець</b>\n'
+              f'{нік} {імʼя}\n'
+              f'id: <code>{uid}</code>\n'
+              f'Текст: {(текст or "")[:200]}\n\n'
+              f'Якщо це постачальник — скажіть, і я пропишу цей id, '
+              f'щоб замовлення йшли йому напряму.')
+    try:
+        tg_send(підпис)
+    except Exception:
+        log.exception('не вдалось сповістити власника про чужого')
+    try:
+        import sys as _s
+        _s.path.insert(0, str(BASE))
+        from helper import panel_db as _DB
+        _DB.chat_add('власник',
+                     f'Боту написав {нік} {імʼя}, id {uid}. Текст: '
+                     f'{(текст or "")[:200]}')
+    except Exception:
+        log.exception('не вдалось записати в панель')
+
+
 def allowed(message: Message) -> bool:
     ok = message.from_user is not None and is_allowed(message.from_user.id, ALLOWED)
     if not ok:
-        log.warning('відмовлено у доступі: user %s', message.from_user.id if message.from_user else '?')
+        log.warning('відмовлено у доступі: user %s',
+                    message.from_user.id if message.from_user else '?')
+        if message.from_user is not None:
+            _повідомити_про_чужого(message.from_user, message.text or '')
     return ok
 
 
