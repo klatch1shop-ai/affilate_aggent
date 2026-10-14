@@ -22,7 +22,45 @@ import time
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
-from agents.scraper.market_price_analyzer import get_competitor_prices  # noqa
+import re as _re
+from playwright.sync_api import sync_playwright
+
+
+def ціни_з_назвами(артикул, timeout=45000):
+    """Ціни лише з карток, у назві яких є артикул.
+
+    Готовий `market_price_analyzer` бере ціни з УСІХ плиток сторінки
+    пошуку, а Prom показує там і сусідні товари. Через це медіана
+    виходила вища за РРЦ на 40 %: у вибірку потрапляли чужі товари, до
+    74 тис. грн при РРЦ 21 тис. Тому звіряємо назву картки з артикулом.
+    """
+    ключ = _re.sub(r'[^0-9a-zа-яіїєґ]+', '', артикул.lower())
+    with sync_playwright() as p:
+        b = p.chromium.launch(headless=True)
+        page = b.new_page()
+        try:
+            page.goto(f'https://prom.ua/ua/search?search_term={артикул}',
+                      wait_until='domcontentloaded', timeout=timeout)
+            page.wait_for_timeout(3000)
+            дані = page.evaluate('''() => {
+                const out = [];
+                document.querySelectorAll('[data-qaid="product_block"], .x-gallery-tile').forEach(el => {
+                    const t = el.querySelector('[data-qaid="product_name"], [class*=name]');
+                    const p = el.querySelector('[data-qaid="product_price"], [class*=price]');
+                    if (t && p) out.push([t.innerText, p.innerText]);
+                });
+                return out;
+            }''')
+        finally:
+            b.close()
+    свої = []
+    for назва, ціна in дані:
+        n = _re.sub(r'[^0-9a-zа-яіїєґ]+', '', назва.lower())
+        if ключ and ключ in n:
+            м = _re.findall(r'\d[\d\s]*', ціна.replace('\u00a0', ' '))
+            if м:
+                свої.append(int(м[0].replace(' ', '')))
+    return sorted(свої)
 
 СХОВИЩЕ = os.path.join(BASE, 'data', 'katran_competitors.json')
 КАНДИДАТИ = os.path.join(BASE, 'exports', 'katran_кандидати_старт.csv')
@@ -68,21 +106,22 @@ def main():
     for i, арт in enumerate(черга, 1):
         закуп = float(канд[арт]['закуп_пдв'])
         try:
-            r = get_competitor_prices(арт, закуп)
+            ціни = ціни_з_назвами(арт)
         except Exception as e:
             print(f'{i}/{len(черга)} {арт}: збій — {e}')
             continue
-        ціни = r.get('prices') or []
         наша = фід[арт]['наша']
         if not ціни:
             d[арт] = {'наша': наша, 'назва': фід[арт]['назва'],
                       'категорія': фід[арт]['категорія'], 'конкуренти': [],
                       'мін_конкурент': None, 'різниця_%': None,
-                      'не_знайдено': 'пошук Prom не дав цін',
+                      'не_знайдено': 'на Промі немає карток із цим артикулом',
                       'висновок': '', 'коли': time.strftime('%Y-%m-%d')}
             print(f'{i}/{len(черга)} {арт}: цін немає')
         else:
             мін = min(ціни)
+            import statistics
+            медіана = int(statistics.median(ціни))
             d[арт] = {
                 'наша': наша, 'назва': фід[арт]['назва'],
                 'категорія': фід[арт]['категорія'],
@@ -90,13 +129,14 @@ def main():
                                for c in ціни],
                 'мін_конкурент': мін,
                 'різниця_%': round((наша - мін) / мін * 100, 1),
-                'медіана_конкурентів': r.get('median'),
-                'скільки_пропозицій': r.get('count'),
+                'медіана_конкурентів': медіана,
+                'скільки_пропозицій': len(ціни),
                 'висновок': (f"закупівля з ПДВ {закуп:.0f}; "
-                             f"медіана ринку {r.get('median')}"),
+                             f"медіана ринку {медіана}; "
+                             f"лише картки з артикулом у назві"),
                 'коли': time.strftime('%Y-%m-%d')}
             print(f"{i}/{len(черга)} {арт}: наша {наша:.0f} · мін {мін} · "
-                  f"медіана {r.get('median')} · пропозицій {r.get('count')}")
+                  f"медіана {медіана} · карток {len(ціни)}")
         tmp = СХОВИЩЕ + '.tmp'
         with open(tmp, 'w', encoding='utf-8') as f:
             json.dump(d, f, ensure_ascii=False, indent=1)
