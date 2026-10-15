@@ -88,6 +88,8 @@ def товари():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--скільки', type=int, default=20)
+    ap.add_argument('--усі', action='store_true',
+                    help='уся черга фіду, а не лише кандидати на старт')
     ap.add_argument('--пауза', type=float, default=3.0)
     a = ap.parse_args()
 
@@ -97,14 +99,22 @@ def main():
     d = (json.load(open(СХОВИЩЕ, encoding='utf-8'))
          if os.path.exists(СХОВИЩЕ) else {})
 
-    черга = [k for k in канд if k in фід
-             and not d.get(k, {}).get('конкуренти')]
-    черга.sort(key=lambda k: -float(канд[k]['маржа']))
+    if a.усі:
+        # Кандидати потрібні для рішення про старт, решта — для розуміння
+        # ринку загалом. Порядок той самий: спершу дорожчі позиції, бо на
+        # них помилка в ціні коштує найбільше.
+        черга = [k for k in фід if not d.get(k, {}).get('конкуренти')
+                 and not d.get(k, {}).get('не_знайдено')]
+        черга.sort(key=lambda k: -фід[k]['наша'])
+    else:
+        черга = [k for k in канд if k in фід
+                 and not d.get(k, {}).get('конкуренти')]
+        черга.sort(key=lambda k: -float(канд[k]['маржа']))
     черга = черга[:a.скільки]
     print(f'у черзі {len(черга)} кандидатів')
 
     for i, арт in enumerate(черга, 1):
-        закуп = float(канд[арт]['закуп_пдв'])
+        закуп = float(канд[арт]['закуп_пдв']) if арт in канд else 0.0
         try:
             ціни = ціни_з_назвами(арт)
         except Exception as e:
