@@ -23,6 +23,7 @@ import time
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 import re as _re
+import statistics as _st
 from playwright.sync_api import sync_playwright
 
 
@@ -60,7 +61,15 @@ def ціни_з_назвами(артикул, timeout=45000):
             м = _re.findall(r'\d[\d\s]*', ціна.replace('\u00a0', ' '))
             if м:
                 свої.append(int(м[0].replace(' ', '')))
-    return sorted(свої)
+    свої.sort()
+    if len(свої) >= 3:
+        # Звірка назви лишає й аксесуари: на Промі продають скло, ручки й
+        # наліпки, у назві яких стоїть код моделі. Через них мінімум ставав
+        # 10 грн при медіані 4791, і «найдешевша пропозиція» переставала
+        # означати товар. Відкидаємо все, що дешевше за 40 % медіани.
+        сер = _st.median(свої)
+        свої = [c for c in свої if c >= 0.4 * сер]
+    return свої
 
 СХОВИЩЕ = os.path.join(BASE, 'data', 'katran_competitors.json')
 КАНДИДАТИ = os.path.join(BASE, 'exports', 'katran_кандидати_старт.csv')
