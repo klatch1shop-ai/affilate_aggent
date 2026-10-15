@@ -1661,7 +1661,18 @@ def main():
 
             orders = get_new_orders()
             if orders:
-                logger.info(f'Знайдено {len(orders)} нових замовлень')
+                # Rozetka віддає у «нових» і ті, що ми вже провели: статус у
+                # неї змінюється не одразу. Писати «знайдено 4 нових», коли
+                # три з них давно accepted, означає щоразу піднімати хибну
+                # тривогу — я сам на неї сьогодні наступив.
+                справді_нові = [o for o in orders
+                                if not get_db_status(o.get('id'))]
+                if справді_нові:
+                    logger.info(f'Знайдено {len(справді_нові)} нових замовлень'
+                                + (f' (ще {len(orders) - len(справді_нові)} '
+                                   f'уже оброблені)' if len(справді_нові) != len(orders) else ''))
+                else:
+                    logger.debug(f'Нових немає, {len(orders)} уже оброблені')
                 for order in orders:
                     process_order(order, feed)
             else:
