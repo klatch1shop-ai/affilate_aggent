@@ -60,3 +60,10 @@ logs/*.txt
 
 # знімки кабінету Епіцентру та інші великі дампи для пілотних скриптів — не код
 scratchpad/*.json
+# текстові файли в scratchpad/ (vscode_mail_cursor.txt потрапив у 6a1165c через git add -A)
+scratchpad/*.txt
+scratchpad/*.md
+
+# активно пишеться фоновим прогоном KATRAN на сервері → git pull = конфлікт (15.10.2026)
+data/katran_competitors.json
+data/katran_cat_map_llm.json
