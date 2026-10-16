@@ -49,6 +49,23 @@ def main():
     sets = json.load(open(os.path.join(BASE, 'data', 'epicentr_attribute_sets.json'),
                           encoding='utf-8'))
     targets = [p for p in prods.values() if p['status'] == 'enrich']
+    if '--noire' in sys.argv:
+        # У кабінеті 23039 карток, з них NOIRE лише 12203. Решта — TOPTUL і
+        # Carvol, які стоять «щоб не видалили» і цього року не активуються:
+        # заповнювати їм атрибути означає витратити вечір намарно.
+        # Зіставлення epicentr_sku_mapping для цього НЕ годиться — воно про
+        # TOPTUL. NOIRE впізнається за артикулами з фіду Єпіцентру.
+        import re as _re
+        фід = next((f for f in (
+            os.path.expanduser('~/noire-feed/noire_epicentr_stock.xml'),
+            os.path.join(BASE, 'data', 'noire_epicentr_stock.xml'),
+        ) if os.path.exists(f)), None)
+        if not фід:
+            sys.exit('не знайшов фід Єпіцентру — без нього NOIRE не відділити')
+        наші = set(_re.findall(r'<offer id="([^"]+)"', open(фід, encoding='utf-8').read()))
+        було = len(targets)
+        targets = [t for t in targets if str(t.get('sku')) in наші]
+        print(f'лише NOIRE: {len(targets)} з {було}')
     if '--sample' in sys.argv:
         targets = targets[:40]
     print(f'карток у «Наповнення контентом»: {len(targets)}')
