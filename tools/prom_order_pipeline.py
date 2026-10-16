@@ -124,6 +124,37 @@ def save_state(st):
     os.replace(tmp, STATE)
 
 
+def наші_артикули_prom() -> set:
+    """Артикули, які ми продаємо САМЕ НА ПРОМІ.
+
+    16.10.2026: конвеєр звіряв замовлення Prom зі списком фіду ROZETKA
+    (4147 артикулів) і відмовлявся обробляти замовлення 434052617 —
+    «не всі артикули з NOIRE». Товар SX3959 справді є наш: він у фіді
+    Prom, у базі, в наявності, і ціна 249 збігається з сумою замовлення.
+    Просто на Rozetka ми його не продаємо.
+
+    Фіди різні за складом: Prom 5998 позицій проти 4147 на Rozetka, бо
+    Фаза 2 (білизна й одяг) випущена лише на Промі. Перевіряти замовлення
+    Prom списком Rozetka означає блокувати кожне замовлення на ці 1851
+    позицію.
+    """
+    import re
+    шлях = next((f for f in (
+        os.path.expanduser('~/noire-feed/noire_prom.xml'),
+        os.path.join(BASE, 'data', 'noire_prom.xml')) if os.path.exists(f)), None)
+    if шлях:
+        with open(шлях, encoding='utf-8') as f:
+            арт = set(re.findall(r'<offer id="([^"]+)"', f.read()))
+        if len(арт) >= 100:
+            return арт
+    # Фіду немає під рукою — беремо базу, це те саме джерело, з якого він
+    # складається.
+    from shared.utils.db import get_connection
+    cur = get_connection().cursor()
+    cur.execute('select sku from sexopt_products where available')
+    return {r['sku'] for r in cur.fetchall()}
+
+
 def order_items(o):
     out = {}
     for p in (o.get('products') or []):
@@ -164,8 +195,7 @@ def plan(oid):
     if not items:
         return {'відмова': 'у замовленні немає артикулів'}
 
-    import rozetka_order_agent as RZ
-    noire = set(RZ.get_noire_articles())
+    noire = наші_артикули_prom()
     # Порожній перелік — це «не змогли прочитати», а НЕ «нічого немає».
     if len(noire) < 100:
         raise SystemExit(f'перелік артикулів NOIRE має лише {len(noire)} '
