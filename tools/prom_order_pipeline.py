@@ -334,6 +334,22 @@ def run(oid, execute=False, place=True):
             done['ttn_written'] = True
         save_state(st)
 
+    # 4. перевести замовлення у «прийнято»
+    # Порядок саме такий: спершу ТТН у замовленні, потім статус. Інакше
+    # покупець бачить «прийнято» без накладної.
+    if done.get('ttn_written') and not done.get('статус_прийнято'):
+        r = _prom('POST', 'orders/set_status',
+                  {'ids': [int(oid)], 'status': 'received'})
+        # Prom віддає 200 і на помилку. Єдиний доказ — наш id у
+        # `processed_ids`; код відповіді тут не означає нічого.
+        if int(oid) in (r.get('processed_ids') or []):
+            done['статус_прийнято'] = True
+        else:
+            done['статус_прийнято'] = False
+            tg(f'⚠️ Prom {oid}: статус НЕ змінено на «прийнято» — '
+               f'{r.get("warning_message") or r}')
+        save_state(st)
+
     written = ('записана автоматично' if done.get('ttn_written')
                else '❗ ВНЕСІТЬ ВРУЧНУ — автоматичний запис не вдався')
     tg(f'📦 <b>Замовлення Prom {oid}</b>\n'
@@ -341,12 +357,15 @@ def run(oid, execute=False, place=True):
        f'До сплати постачальнику: <b>{done.get("сума_постачальнику") or "—"}</b>\n'
        f'ТТН: <code>{ttn}</code> ({p["післяплата"]})\n'
        f'{p["відділення"]}\nПозиції: {p["_items"]}\n\n'
-       f'ТТН у замовленні: {written}', done.get('наклейка'))
+       f'ТТН у замовленні: {written}\n'
+       f'Статус: {"прийнято" if done.get("статус_прийнято") else "НЕ змінено"}',
+       done.get('наклейка'))
     return {'замовлення': oid, 'ттн': ttn,
             'постачальник_id': done.get('crm_id'),
             'до_сплати_постачальнику': done.get('сума_постачальнику'),
             'ттн_прикріплено': done.get('ттн_прикріплено'),
-            'ттн_записана_в_prom': done.get('ttn_written')}
+            'ттн_записана_в_prom': done.get('ttn_written'),
+            'статус_прийнято': done.get('статус_прийнято')}
 
 
 def open_orders():
