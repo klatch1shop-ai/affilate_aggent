@@ -1,136 +1,134 @@
 #!/usr/bin/env python3
+"""Характеристики категорій Rozetka → data/rozetka_category_options.json.
+
+Rozetka віддає їх сама: `/market-categories/download-options?category_id=X`
+повертає XLS із переліком характеристик категорії та допустимими
+значеннями. Токен кабінету в нас є, тож завантаження нічого не коштує і
+не потребує участі власника.
+
+Потрібно для фіду: без обовʼязкових характеристик картка не пройде
+модерацію, а дізнатись їх інакше можна лише очима в кабінеті.
+
+    venv/bin/python tools/rozetka_category_options.py --категорії 4626670,4627031
+    venv/bin/python tools/rozetka_category_options.py --з-каталогу-юк
 """
-tools/rozetka_category_options.py
-==================================
-Збирає перелік характеристик (фільтрів) категорій Rozetka і звіряє з тим,
-що ми віддаємо у фіді.
+import argparse
+import collections
+import json
+import os
+import sys
+import time
 
-Навіщо: зауваження менеджера Rozetka (#7253098, 24.08.2026) — «важливо, як
-мінімум, прописати всі параметри, які є фільтрами у категорії». Без них товар
-не потрапляє у відфільтровану вибірку покупця й лишається невидимим.
-
-    GET /market-categories/category-options?category_id={id}
-
-Токен ROZETKA_API_TOKEN є ТІЛЬКИ на сервері — запускати там.
-
-    python3 tools/rozetka_category_options.py --feed output/toptul_rozetka.xml
-"""
-import os, sys, json, time, argparse, collections
-import xml.etree.ElementTree as ET
 import requests
-from dotenv import load_dotenv
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(BASE, '.env'))
-# ДЕФІС, не крапка: хоста api.seller.rozetka.com.ua не існує взагалі
+sys.path.insert(0, BASE)
+from agents.orders import rozetka_order_agent as RZ   # noqa: E402
+
 API = 'https://api-seller.rozetka.com.ua'
-CACHE = os.path.join(BASE, 'data', 'rozetka_category_options.json')
+OUT = os.path.join(BASE, 'data', 'rozetka_category_options.json')
+ТЕКА = os.path.join(BASE, 'data', 'rozetka_options_xls')
 
 
-def fetch(s, cid):
-    for attempt in range(3):
-        try:
-            r = s.get(f'{API}/market-categories/category-options',
-                      params={'category_id': cid}, timeout=45)
-            if r.status_code != 200:
-                return None
-            d = r.json()
-            if not d.get('success'):
-                return None
-            c = d.get('content')
-            # content приходить РЯДКОМ із JSON усередині, а не масивом
-            return json.loads(c) if isinstance(c, str) else c
-        except Exception:
-            if attempt == 2:
-                return None
-            time.sleep(2 * (attempt + 1))
+def завантажити(cid, h):
+    os.makedirs(ТЕКА, exist_ok=True)
+    шлях = os.path.join(ТЕКА, f'{cid}.xls')
+    if os.path.exists(шлях) and os.path.getsize(шлях) > 1000:
+        return шлях
+    r = requests.get(f'{API}/market-categories/download-options',
+                     headers=h, params={'category_id': cid}, timeout=90)
+    if r.status_code != 200 or len(r.content) < 1000:
+        return None
+    with open(шлях, 'wb') as f:
+        f.write(r.content)
+    return шлях
+
+
+def розібрати(шлях):
+    """{id параметра: {назва, тип, одиниця, значення[]}} з файла Rozetka.
+
+    Будова файла: перший рядок — назва категорії, ДРУГИЙ — заголовок
+    (ID параметра · Назва параметра · Тип параметра · Тип фільтра ·
+    Одиниця вимірювання · ID значення), далі по рядку на кожне ДОПУСТИМЕ
+    ЗНАЧЕННЯ. Тобто один параметр займає стільки рядків, скільки в нього
+    значень, і читати перший рядок як заголовок не можна — так я спершу
+    і зробив, отримавши «1 характеристику» замість трьох десятків.
+
+    Rozetka віддає XLSX, але називає файл .xls, тому читаємо з памʼяті:
+    і openpyxl, і xlrd дивляться на розширення й відмовляються.
+    """
+    import io as _io
+    import openpyxl
+    with open(шлях, 'rb') as f:
+        байти = f.read()
+    if байти[:2] != b'PK':
+        return None
+    try:
+        wb = openpyxl.load_workbook(_io.BytesIO(байти), read_only=True, data_only=True)
+    except Exception:
+        return None
+    ws = wb[wb.sheetnames[0]]
+    рядки = list(ws.iter_rows(values_only=True))
+    шапка_i = next((i for i, r in enumerate(рядки[:5])
+                    if r and any('ID параметра' in str(c) for c in r if c)), None)
+    if шапка_i is None:
+        return None
+    шапка = [str(c).strip() if c else '' for c in рядки[шапка_i]]
+    i = {н: шапка.index(н) for н in шапка if н}
+    пар = collections.OrderedDict()
+    for row in рядки[шапка_i + 1:]:
+        if not row or not row[i.get('ID параметра', 0)]:
+            continue
+        pid = str(row[i['ID параметра']]).strip()
+        зап = пар.setdefault(pid, {
+            'назва': str(row[i.get('Назва параметра', 1)] or '').strip(),
+            'тип': str(row[i.get('Тип параметра', 2)] or '').strip(),
+            'одиниця': str(row[i.get('Одиниця вимірювання', 4)] or '').strip(),
+            'значення': []})
+        зн = row[i['ID значення']] if 'ID значення' in i and i['ID значення'] < len(row) else None
+        if зн is not None and str(зн).strip():
+            зап['значення'].append(str(зн).strip())
+    return пар
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--feed', required=True)
+    ap.add_argument('--категорії')
+    ap.add_argument('--з-каталогу-юк', action='store_true', dest='з_юк')
     a = ap.parse_args()
-
-    root = ET.parse(a.feed).getroot()
-    # У фіді <offer><categoryId> несе НАШ внутрішній номер, а справжній
-    # ідентифікатор Rozetka лежить у <category id="N" rz_id="...">.
-    # Перший прогін пішов із внутрішніми номерами й дав «не отримано» на всіх.
-    rz = {}
-    for c in root.findall('.//categories/category'):
-        if c.get('id') and c.get('rz_id'):
-            rz[c.get('id')] = (c.get('rz_id'), (c.text or '').strip())
-    print(f'категорій з rz_id: {len(rz)}')
-    cats = collections.Counter()
-    ours = collections.defaultdict(collections.Counter)
-    for o in root.findall('.//offer'):
-        cid = (o.findtext('categoryId') or '').strip()
-        if not cid:
+    cids = []
+    if a.категорії:
+        cids = [c.strip() for c in a.категорії.split(',') if c.strip()]
+    if a.з_юк:
+        d = json.load(open(os.path.join(BASE, 'data', 'yug_catalog.json'), encoding='utf-8'))
+        лічильник = collections.Counter(
+            str(t['rozetka_code']) for lst in (d.get('товари') or {}).values()
+            for t in lst if t.get('rozetka_code'))
+        cids = [c for c, _ in лічильник.most_common()]
+    if not cids:
+        sys.exit('не вказано категорій')
+    h = {'Authorization': f'Bearer {RZ.get_token()}', 'Accept': 'application/json'}
+    дані = json.load(open(OUT, encoding='utf-8')) if os.path.exists(OUT) else {}
+    нових = 0
+    for cid in cids:
+        if cid in дані:
             continue
-        cats[cid] += 1
-        for p in o.findall('param'):
-            nm = (p.get('name') or '').strip()
-            if nm:
-                ours[cid][nm] += 1
-    print(f'категорій у фіді: {len(cats)} | офферів: {sum(cats.values())}')
-
-    s = requests.Session()
-    s.headers.update({'Authorization': f"Bearer {os.getenv('ROZETKA_API_TOKEN')}",
-                      'Content-Language': 'uk', 'Accept': 'application/json'})
-    cache = json.load(open(CACHE, encoding='utf-8')) if os.path.exists(CACHE) else {}
-    gaps = []
-    for i, (cid, n) in enumerate(cats.most_common(), 1):
-        rz_id, rz_name = rz.get(cid, (None, ''))
-        if not rz_id:
+        шлях = завантажити(cid, h)
+        if not шлях:
+            print(f'{cid}: не віддалось', file=sys.stderr)
             continue
-        if rz_id not in cache:
-            d = fetch(s, rz_id)
-            if d is None:
-                print(f'  {rz_id} {rz_name}: не отримано', file=sys.stderr)
-                continue
-            cache[rz_id] = d
-            time.sleep(0.4)
-            if i % 20 == 0:
-                json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False)
-                print(f'  {i}/{len(cats)}', file=sys.stderr)
-        items = cache[rz_id]
-        if isinstance(items, dict):
-            items = items.get('options') or items.get('items') or []
-        # одна характеристика повторюється рядком на кожне своє значення —
-        # групуємо за назвою й окремо тримаємо ті, що є ФІЛЬТРАМИ категорії
-        allnames, filters = set(), set()
-        for x in items:
-            if not isinstance(x, dict):
-                continue
-            nm = str(x.get('name') or '').strip()
-            if not nm:
-                continue
-            allnames.add(nm)
-            if str(x.get('filter_type') or '').lower() not in ('disable', 'none', ''):
-                filters.add(nm)
-        have = set(ours[cid])
-        gaps.append({'category_id': rz_id, 'name': rz_name, 'offers': n,
-                     'rozetka_options': len(allnames), 'rozetka_filters': len(filters),
-                     'ours': len(have),
-                     'missing': sorted(allnames - have),
-                     'missing_filters': sorted(filters - have)})
-    json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False)
-    out = os.path.join(BASE, 'docs', 'rozetka_option_gaps.json')
-    json.dump(gaps, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-
-    tot_off = sum(g['offers'] for g in gaps)
-    print(f'\nрозібрано категорій: {len(gaps)} ({tot_off} офферів)')
-    print(f"{'офферів':>8} {'усього':>7} {'фільтрів':>9} {'у нас':>6} {'бракує фільтрів':>16}  категорія")
-    for g in sorted(gaps, key=lambda x: -x['offers'])[:15]:
-        print(f"{g['offers']:8} {g['rozetka_options']:7} {g['rozetka_filters']:9} "
-              f"{g['ours']:6} {len(g['missing_filters']):16}  {g.get('name','')[:30]}")
-    freq = collections.Counter()
-    for g in gaps:
-        for m in g['missing_filters']:
-            freq[m] += g['offers']
-    print('\nвідсутні ФІЛЬТРИ (зважено за офферами):')
-    for k, v in freq.most_common(20):
-        print(f'   {v:6}  {k}')
-    print(f'\n→ {out}')
+        розбір = розібрати(шлях)
+        if розбір is None:
+            print(f'{cid}: файл не читається', file=sys.stderr)
+            continue
+        дані[cid] = розбір
+        нових += 1
+        знач = sum(len(v['значення']) for v in розбір.values())
+        print(f'{cid}: параметрів {len(розбір)}, допустимих значень {знач}')
+        time.sleep(0.4)
+    with open(OUT, 'w', encoding='utf-8') as f:
+        json.dump(дані, f, ensure_ascii=False)
+    print(f'\nкатегорій у довіднику: {len(дані)} (нових {нових}) → {OUT}')
 
 
 if __name__ == '__main__':
